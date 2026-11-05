@@ -1,0 +1,2825 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta content="web_standard" name="shell-type" />
+  <title>ReadEssay - #1 Academic Support Platform</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@500;600;700;800&amp;display=swap"
+    rel="stylesheet" />
+  <style>
+    body,
+    .font-body-md,
+    .font-body-sm,
+    .font-body-lg,
+    .font-body-xl {
+      font-family: "Inter", sans-serif !important;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    .font-headline-xl,
+    .font-headline-lg,
+    .font-headline-md,
+    .font-headline-sm,
+    .font-display-hero,
+    .font-display-hero-mobile {
+      font-family: "Poppins", sans-serif !important;
+    }
+  </style>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <style>
+    @layer base {
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        overscroll-behavior: none;
+      }
+
+      main> :first-child {
+        margin-top: 0 !important;
+      }
+
+      main> :last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
+    @keyframes marquee-seamless {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    .ticker-wrapper {
+      display: flex;
+      width: 100%;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .ticker-track {
+      display: flex;
+      flex-shrink: 0;
+      align-items: center;
+      justify-content: space-around;
+      min-width: 100%;
+      animation: marquee-seamless 25s linear infinite;
+    }
+
+    .ticker-wrapper:hover .ticker-track {
+      animation-play-state: paused;
+    }
+  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-canvas": "#FFFFFF",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-tint": "#a73a00",
+            "surface-dim": "#cbdbf5",
+            "brand-orange-hover": "#E8540E",
+            "on-error": "#ffffff",
+            "on-secondary-container": "#5c647a",
+            "surface-variant": "#d3e4fe",
+            "surface-bright": "#f8f9ff",
+            "surface-container-high": "#dce9ff",
+            "brand-navy": "#0F172A",
+            "surface-container": "#e5eeff",
+            "brand-orange-subtle": "#FFF2EC",
+            "on-primary": "#ffffff",
+            background: "#f8f9ff",
+            "on-primary-fixed": "#370e00",
+            "text-primary": "#0F172A",
+            "tertiary-container": "#9393b8",
+            "on-background": "#0b1c30",
+            "border-strong": "#CBD5E1",
+            "accent-green": "#10B981",
+            primary: "#a73a00",
+            "on-secondary": "#ffffff",
+            "outline-variant": "#e3bfb2",
+            "on-primary-container": "#571a00",
+            "surface-muted": "#F1F5F9",
+            "inverse-primary": "#ffb599",
+            outline: "#8e7066",
+            "text-secondary": "#475569",
+            "primary-fixed-dim": "#ffb599",
+            "tertiary-fixed-dim": "#c3c3ea",
+            "primary-container": "#ff641a",
+            "on-secondary-fixed": "#131b2e",
+            surface: "#f8f9ff",
+            "on-tertiary-container": "#2b2c4b",
+            "on-tertiary-fixed": "#171836",
+            "primary-fixed": "#ffdbce",
+            "accent-green-subtle": "#ECFDF5",
+            "secondary-fixed-dim": "#bec6e0",
+            "surface-subtle": "#F8FAFC",
+            "surface-container-low": "#eff4ff",
+            "text-muted": "#94A3B8",
+            error: "#ba1a1a",
+            "on-secondary-fixed-variant": "#3f465c",
+            "tertiary-fixed": "#e1e0ff",
+            "brand-orange": "#FF641A",
+            "on-tertiary": "#ffffff",
+            "secondary-container": "#dae2fd",
+            "on-error-container": "#93000a",
+            "surface-card": "#FFFFFF",
+            "on-primary-fixed-variant": "#802a00",
+            "surface-container-highest": "#d3e4fe",
+            secondary: "#565e74",
+            "brand-slate": "#1E293B",
+            "error-container": "#ffdad6",
+            "on-surface": "#0b1c30",
+            "on-surface-variant": "#5a4138",
+            tertiary: "#5b5b7d",
+            "on-tertiary-fixed-variant": "#434464",
+            "inverse-surface": "#213145",
+            "border-subtle": "#E2E8F0",
+            "secondary-fixed": "#dae2fd",
+            "surface-container-lowest": "#ffffff",
+          },
+          borderRadius: {
+            DEFAULT: "1rem",
+            lg: "2rem",
+            xl: "3rem",
+            full: "9999px",
+          },
+          spacing: {
+            margin: "2rem",
+            "gutter-mobile": "1rem",
+            gutter: "1.5rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2.5rem",
+            "space-lg": "1.5rem",
+            "margin-mobile": "1.25rem",
+            "space-md": "1rem",
+            "space-3xl": "6rem",
+            "space-xs": "0.25rem",
+            "space-2xl": "4rem",
+          },
+          fontFamily: {
+            "body-xl": ["Plus Jakarta Sans"],
+            "headline-sm": ["Space Grotesk"],
+            "display-hero-mobile": ["Space Grotesk"],
+            "headline-xl": ["Space Grotesk"],
+            "body-lg": ["Plus Jakarta Sans"],
+            "headline-lg": ["Space Grotesk"],
+            "display-hero": ["Space Grotesk"],
+            "body-md": ["Plus Jakarta Sans"],
+            "label-md": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Plus Jakarta Sans"],
+            "headline-md": ["Space Grotesk"],
+            "body-sm": ["Plus Jakarta Sans"],
+            "headline-xl-mobile": ["Space Grotesk"],
+          },
+          fontSize: {
+            "body-xl": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+            "headline-sm": [
+              "20px",
+              {
+                lineHeight: "28px",
+                letterSpacing: "-0.01em",
+                fontWeight: "600",
+              },
+            ],
+            "display-hero-mobile": [
+              "36px",
+              {
+                lineHeight: "44px",
+                letterSpacing: "-0.02em",
+                fontWeight: "700",
+              },
+            ],
+            "headline-xl": [
+              "40px",
+              {
+                lineHeight: "48px",
+                letterSpacing: "-0.025em",
+                fontWeight: "700",
+              },
+            ],
+            "body-lg": ["16px", { lineHeight: "26px", fontWeight: "400" }],
+            "headline-lg": [
+              "32px",
+              {
+                lineHeight: "40px",
+                letterSpacing: "-0.02em",
+                fontWeight: "600",
+              },
+            ],
+            "display-hero": [
+              "56px",
+              {
+                lineHeight: "64px",
+                letterSpacing: "-0.03em",
+                fontWeight: "700",
+              },
+            ],
+            "body-md": ["14px", { lineHeight: "22px", fontWeight: "400" }],
+            "label-md": [
+              "13px",
+              {
+                lineHeight: "18px",
+                letterSpacing: "0.02em",
+                fontWeight: "600",
+              },
+            ],
+            "label-sm": [
+              "11px",
+              {
+                lineHeight: "16px",
+                letterSpacing: "0.04em",
+                fontWeight: "700",
+              },
+            ],
+            "label-lg": [
+              "15px",
+              {
+                lineHeight: "20px",
+                letterSpacing: "0.01em",
+                fontWeight: "600",
+              },
+            ],
+            "headline-md": [
+              "24px",
+              {
+                lineHeight: "32px",
+                letterSpacing: "-0.015em",
+                fontWeight: "600",
+              },
+            ],
+            "body-sm": ["12px", { lineHeight: "18px", fontWeight: "400" }],
+            "headline-xl-mobile": [
+              "28px",
+              {
+                lineHeight: "36px",
+                letterSpacing: "-0.02em",
+                fontWeight: "700",
+              },
+            ],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="bg-surface font-body-md text-on-surface antialiased">
+  <header class="fixed top-0 left-0 right-0 z-50 w-full">
+    <div class="w-full text-white py-2 overflow-hidden shadow-sm bg-[#243445]">
+      <div class="ticker-wrapper font-label-md text-label-md tracking-wide uppercase">
+        <!-- Track 1 -->
+        <div class="ticker-track">
+          <span class="flex items-center gap-2 px-6">
+            <span class="material-symbols-outlined text-[16px]">celebration</span>
+            🎉 Great Deal! GET First 2 Pages Assignment or Essay Absolutely Free!
+          </span>
+          <span class="text-white/40">•</span>
+          <span class="flex items-center gap-2 px-6">
+            <span class="material-symbols-outlined text-[16px]">verified</span>
+            ⚡ USA's No.1 Academic Platform
+          </span>
+          <span class="text-white/40">•</span>
+          <span class="flex items-center gap-2 px-6">
+            <span class="material-symbols-outlined text-[16px]">support_agent</span>
+            24/7 Dedicated Support &amp; Ph.D. Experts
+          </span>
+          <span class="text-white/40">•</span>
+          <span class="flex items-center gap-2 px-6">
+            <span class="material-symbols-outlined text-[16px]">security</span>
+            100% Unique &amp; Plagiarism-Free Content Guaranteed
+          </span>
+          <span class="text-white/40">•</span>
+        </div>
+
+        <!-- Track 2 (Exact duplicate for seamless looping) -->
+        <div class="ticker-track" aria-hidden="true">
+          <span class="flex items-center gap-2 px-6">
+            <span class="material-symbols-outlined text-[16px]">celebration</span>
+            🎉 Great Deal! GET First 2 Pages Assignment or Essay Absolutely Free!
+          </span>
+          <span class="text-white/40">•</span>
+          <span class="flex items-center gap-2 px-6">
+            <span class="material-symbols-outlined text-[16px]">verified</span>
+            ⚡ USA's No.1 Academic Platform
+          </span>
+          <span class="text-white/40">•</span>
+          <span class="flex items-center gap-2 px-6">
+            <span class="material-symbols-outlined text-[16px]">support_agent</span>
+            24/7 Dedicated Support &amp; Ph.D. Experts
+          </span>
+          <span class="text-white/40">•</span>
+          <span class="flex items-center gap-2 px-6">
+            <span class="material-symbols-outlined text-[16px]">security</span>
+            100% Unique &amp; Plagiarism-Free Content Guaranteed
+          </span>
+          <span class="text-white/40">•</span>
+        </div>
+      </div>
+    </div>
+    <nav class="w-full bg-[#FF641A] shadow-md" data-active-classes="text-brand-orange font-label-lg font-bold">
+      <div class="h-20 max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between gap-6">
+        <div class="flex items-center gap-4 shrink-0">
+          <a aria-current="page" class="flex items-center gap-3" data-path="home" href="#"><img alt="ReadEssay Logo"
+              class="h-20 w-auto object-contain"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgfYhQti4HozFTbr_BeMVC6BGONTPlApB6zmAlRMhovIfGZn5gacqOON7rtXUAYbdjYyrI8M8oZJCIgNZnBntUPaN7e55_ZirHjarjj6NVfFfGzrlpO4dpZb9L6oFG0QO3F_tZL-tgW2dZgAoJgvPxsmCqrfIXcP74KnrEP2jGjmSmbEBWbucPu5uKQVgAX-FzgP_o4-EGnm_q0UkbMfMx09BM4pN5kTr_CwPb8QJwbjhKgfqMkszD" /></a>
+        </div>
+        <div class="hidden xl:flex items-center gap-7 whitespace-nowrap text-white">
+          <div class="relative group py-6">
+            <a class="flex items-center gap-1 font-label-lg text-label-lg text-white hover:text-white/80 transition-colors"
+              data-path="online-class-help" href="#">Online Class Help<span
+                class="material-symbols-outlined text-[18px] text-white/80 group-hover:rotate-180 transition-transform duration-200">expand_more</span></a>
+            <div
+              class="absolute top-full left-0 w-64 bg-white rounded-2xl shadow-xl p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
+              <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                data-path="take-my-class" href="#"><span
+                  class="material-symbols-outlined text-brand-orange text-[20px]">school</span><span
+                  class="font-body-md text-body-md font-medium">Take My Class</span></a><a
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                data-path="course-assistance" href="#"><span
+                  class="material-symbols-outlined text-brand-orange text-[20px]">laptop_chromebook</span><span
+                  class="font-body-md text-body-md font-medium">Course Assistance</span></a><a
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                data-path="protected-exams" href="#"><span
+                  class="material-symbols-outlined text-brand-orange text-[20px]">verified_user</span><span
+                  class="font-body-md text-body-md font-medium">Protected Exams</span></a>
+            </div>
+          </div>
+          <div class="relative group py-6">
+            <a class="flex items-center gap-1 font-label-lg text-label-lg text-white hover:text-white/80 transition-colors"
+              data-path="exam-help" href="#">Exam Help<span
+                class="material-symbols-outlined text-[18px] text-white/80 group-hover:rotate-180 transition-transform duration-200">expand_more</span></a>
+            <div
+              class="absolute top-full left-0 w-64 bg-white rounded-2xl shadow-xl p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
+              <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                data-path="protected-exam-help" href="#"><span
+                  class="material-symbols-outlined text-brand-orange text-[20px]">lock_open</span><span
+                  class="font-body-md text-body-md font-medium">Protected Exam Help</span></a><a
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                data-path="quiz-test-assistance" href="#"><span
+                  class="material-symbols-outlined text-brand-orange text-[20px]">quiz</span><span
+                  class="font-body-md text-body-md font-medium">Quiz &amp; Test Assistance</span></a><a
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                data-path="proctored-tests" href="#"><span
+                  class="material-symbols-outlined text-brand-orange text-[20px]">timer</span><span
+                  class="font-body-md text-body-md font-medium">Proctored Tests</span></a>
+            </div>
+          </div>
+          <div class="relative group py-6">
+            <a class="flex items-center gap-1 font-label-lg text-label-lg text-white hover:text-white/80 transition-colors"
+              data-path="assignment-help" href="#">Assignment Help<span
+                class="material-symbols-outlined text-[18px] text-white/80 group-hover:rotate-180 transition-transform duration-200">expand_more</span></a>
+            <div
+              class="absolute top-full -left-20 w-[480px] bg-white rounded-2xl shadow-xl p-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
+              <div class="grid grid-cols-2 gap-2">
+                <a class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                  data-path="assignment-statistics" href="#"><span
+                    class="material-symbols-outlined text-brand-orange text-[18px]">bar_chart</span><span
+                    class="font-body-md text-body-md font-medium">Statistics</span></a><a
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                  data-path="assignment-cs" href="#"><span
+                    class="material-symbols-outlined text-brand-orange text-[18px]">code</span><span
+                    class="font-body-md text-body-md font-medium">Computer Science</span></a><a
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                  data-path="assignment-business" href="#"><span
+                    class="material-symbols-outlined text-brand-orange text-[18px]">business_center</span><span
+                    class="font-body-md text-body-md font-medium">Business Mgmt</span></a><a
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                  data-path="assignment-accounting" href="#"><span
+                    class="material-symbols-outlined text-brand-orange text-[18px]">calculate</span><span
+                    class="font-body-md text-body-md font-medium">Accounting</span></a><a
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                  data-path="assignment-math" href="#"><span
+                    class="material-symbols-outlined text-brand-orange text-[18px]">functions</span><span
+                    class="font-body-md text-body-md font-medium">Mathematics</span></a><a
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                  data-path="assignment-humanities" href="#"><span
+                    class="material-symbols-outlined text-brand-orange text-[18px]">menu_book</span><span
+                    class="font-body-md text-body-md font-medium">Humanities</span></a><a
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                  data-path="assignment-science" href="#"><span
+                    class="material-symbols-outlined text-brand-orange text-[18px]">biotech</span><span
+                    class="font-body-md text-body-md font-medium">Natural Science</span></a><a
+                  class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                  data-path="assignment-essay" href="#"><span
+                    class="material-symbols-outlined text-brand-orange text-[18px]">edit_document</span><span
+                    class="font-body-md text-body-md font-medium">Essay Writing</span></a>
+              </div>
+            </div>
+          </div>
+          <div class="relative group py-6">
+            <a class="flex items-center gap-1 font-label-lg text-label-lg text-white hover:text-white/80 transition-colors"
+              data-path="homework-help" href="#">Homework Help<span
+                class="material-symbols-outlined text-[18px] text-white/80 group-hover:rotate-180 transition-transform duration-200">expand_more</span></a>
+            <div
+              class="absolute top-full -left-10 w-[420px] bg-white rounded-2xl shadow-xl p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
+              <div class="grid grid-cols-2 gap-2">
+                <a class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                  data-path="hw-statistics" href="#"><span
+                    class="material-symbols-outlined text-brand-orange text-[18px]">analytics</span><span
+                    class="font-body-md text-body-md font-medium">Statistics</span></a><a
+                  class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                  data-path="hw-economics" href="#"><span
+                    class="material-symbols-outlined text-brand-orange text-[18px]">trending_up</span><span
+                    class="font-body-md text-body-md font-medium">Economics</span></a><a
+                  class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                  data-path="hw-college" href="#"><span
+                    class="material-symbols-outlined text-brand-orange text-[18px]">auto_stories</span><span
+                    class="font-body-md text-body-md font-medium">College Homework</span></a><a
+                  class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                  data-path="hw-cs" href="#"><span
+                    class="material-symbols-outlined text-brand-orange text-[18px]">terminal</span><span
+                    class="font-body-md text-body-md font-medium">CS &amp; Coding</span></a><a
+                  class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                  data-path="hw-engineering" href="#"><span
+                    class="material-symbols-outlined text-brand-orange text-[18px]">precision_manufacturing</span><span
+                    class="font-body-md text-body-md font-medium">Engineering</span></a><a
+                  class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                  data-path="hw-finance" href="#"><span
+                    class="material-symbols-outlined text-brand-orange text-[18px]">payments</span><span
+                    class="font-body-md text-body-md font-medium">Finance</span></a>
+              </div>
+            </div>
+          </div>
+          <a class="font-label-lg text-label-lg text-white hover:text-white/80 transition-colors whitespace-nowrap"
+            data-path="reviews" href="#">Reviews</a><a
+            class="font-label-lg text-label-lg text-white hover:text-white/80 transition-colors whitespace-nowrap"
+            data-path="samples" href="#">Samples</a>
+        </div>
+        <div class="flex flex-col items-end justify-center shrink-0 text-white">
+          <a class="flex items-center gap-1.5 text-white hover:text-white/80 text-body-sm font-semibold transition-colors"
+            href="tel:+923138400066"><span class="material-symbols-outlined text-[16px] text-white">call</span><span>+92
+              3138400066</span></a><a
+            class="flex items-center gap-1.5 text-white/90 hover:text-white text-xs font-medium transition-colors mt-0.5"
+            href="mailto:support@readessay.com"><span
+              class="material-symbols-outlined text-[14px] text-white/90">mail</span><span>support@readessay.com</span></a>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main class="w-full pt-28 bg-surface">
+    <div class="flex flex-col w-full">
+      <!-- HERO SECTION -->
+      <section class="relative w-full bg-surface-canvas overflow-hidden py-12 lg:py-20">
+        <div
+          class="absolute -top-32 right-10 w-96 h-96 bg-brand-orange-subtle rounded-full blur-3xl pointer-events-none -z-0">
+        </div>
+        <div
+          class="absolute -bottom-20 -left-20 w-80 h-80 bg-surface-container rounded-full blur-3xl pointer-events-none -z-0">
+        </div>
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            <!-- Left: Copy & Value Props -->
+            <div class="lg:col-span-7 flex flex-col space-y-6">
+              <div
+                class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-orange-subtle text-brand-orange text-label-md font-label-md self-start">
+                <span class="material-symbols-outlined text-[18px]">verified_user</span>
+                <span class="">Professional Assignment Help Designed Around Your Academic Needs</span>
+              </div>
+              <h1
+                class="font-headline-xl text-headline-xl lg:text-display-hero text-text-primary tracking-tight !leading-tight">
+                Top-Rated Assignment Help For High Grades & Academic Peace of Mind
+              </h1>
+
+              <p class="font-body-xl text-body-xl text-text-secondary max-w-2xl">
+                Get expert assignment help across multiple subjects from experienced academic specialists. Receive
+                quality support, meet deadlines, and work towards better grades with confidence.
+              </p>
+              <!-- 5 Value Checkmarks -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 pb-2">
+                <div class="flex items-center gap-3">
+                  <span class="material-symbols-outlined text-accent-green text-[20px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">check_circle</span>
+                  <span class="font-body-md text-body-md text-text-primary font-medium">Subject-Specific Assignment
+                    Experts</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="material-symbols-outlined text-accent-green text-[20px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">check_circle</span>
+                  <span class="font-body-md text-body-md text-text-primary font-medium">On-Time Assignment
+                    Delivery</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="material-symbols-outlined text-accent-green text-[20px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">check_circle</span>
+                  <span class="font-body-md text-body-md text-text-primary font-medium">24/7 Student Support</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="material-symbols-outlined text-accent-green text-[20px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">check_circle</span>
+                  <span class="font-body-md text-body-md text-text-primary font-medium">100% Money Back Guarantee</span>
+                </div>
+                <div class="flex items-center gap-3 sm:col-span-2">
+                  <span class="material-symbols-outlined text-accent-green text-[20px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">check_circle</span>
+                  <span class="font-body-md text-body-md text-text-primary font-medium">Free Revisions as
+                    Required</span>
+                </div>
+              </div>
+              <!-- CTAs -->
+              <div class="flex flex-wrap items-center gap-4 pt-4">
+                <a class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-accent-green text-on-primary font-label-lg text-label-lg shadow-lg hover:bg-emerald-600 transition-transform hover:-translate-y-0.5"
+                  href="https://wa.me/923138400066" target="_blank"><svg class="w-5 h-5 fill-current"
+                    viewbox="0 0 24 24">
+                    <path
+                      d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z">
+                    </path>
+                  </svg><span class="">WhatsApp Now</span></a><a
+                  class="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-brand-orange text-on-primary font-label-lg text-label-lg shadow-md hover:bg-brand-orange-hover transition-colors hover:-translate-y-0.5"
+                  href="#"><span class="material-symbols-outlined text-on-primary text-[20px]">chat</span><span
+                    class="">Live Chat with Expert</span></a>
+              </div>
+            </div>
+            <!-- Right: Interactive Hero Form Card -->
+            <div class="lg:col-span-5">
+              <div class="bg-surface-card rounded-2xl p-6 sm:p-8 shadow-2xl relative">
+                <div
+                  class="absolute -top-3 right-6 bg-brand-orange text-on-primary font-label-sm text-label-sm px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
+                  Price Calculator
+                </div>
+                <div class="flex flex-col mb-5">
+                  <h2 class="font-headline-md text-headline-md text-text-primary tracking-tight">
+                    Calculate Order Price
+                  </h2>
+                  <p class="font-body-md text-body-md text-text-secondary mt-1">
+                    Instant estimate tailored to your exact academic needs
+                  </p>
+                </div>
+                <form class="space-y-4" onsubmit="event.preventDefault()">
+                  <div class="grid grid-cols-2 gap-3">
+                    <div>
+                      <label class="block font-label-md text-label-md text-text-primary mb-1.5"
+                        for="calc-academic-level">Academic Level</label>
+                      <div class="relative">
+                        <select
+                          class="w-full h-11 bg-surface-subtle text-text-primary pl-3 pr-9 rounded-xl appearance-none focus:outline-none focus:ring-2 focus:ring-brand-orange text-body-md font-body-md cursor-pointer"
+                          id="calc-academic-level">
+                          <option value="1.0">High School</option>
+                          <option selected="" value="1.15">
+                            College / Undergrad
+                          </option>
+                          <option value="1.35">Master's / Graduate</option>
+                          <option value="1.6">Doctoral / Ph.D.</option>
+                        </select>
+                        <span
+                          class="material-symbols-outlined text-[20px] text-text-secondary pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2">expand_more</span>
+                      </div>
+                    </div>
+                    <div>
+                      <label class="block font-label-md text-label-md text-text-primary mb-1.5"
+                        for="calc-service-type">Service Type</label>
+                      <div class="relative">
+                        <select
+                          class="w-full h-11 bg-surface-subtle text-text-primary pl-3 pr-9 rounded-xl appearance-none focus:outline-none focus:ring-2 focus:ring-brand-orange text-body-md font-body-md cursor-pointer"
+                          id="calc-service-type">
+                          <option selected="" value="9.50">
+                            Essay Writing ($9.50)
+                          </option>
+                          <option value="12.00">
+                            Assignment Help ($12.00)
+                          </option>
+                          <option value="14.00">
+                            Online Class Help ($14.00)
+                          </option>
+                          <option value="18.00">
+                            Exam &amp; Quiz Help ($18.00)
+                          </option>
+                          <option value="15.50">
+                            Dissertation / Thesis ($15.50)
+                          </option>
+                          <option value="5.50">
+                            Editing / Proofreading ($5.50)
+                          </option>
+                        </select>
+                        <span
+                          class="material-symbols-outlined text-[20px] text-text-secondary pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2">expand_more</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-2 gap-3">
+                    <div>
+                      <label class="block font-label-md text-label-md text-text-primary mb-1.5"
+                        for="calc-deadline">Deadline</label>
+                      <div class="relative">
+                        <select
+                          class="w-full h-11 bg-surface-subtle text-text-primary pl-3 pr-9 rounded-xl appearance-none focus:outline-none focus:ring-2 focus:ring-brand-orange text-body-md font-body-md cursor-pointer"
+                          id="calc-deadline">
+                          <option value="1.5">6 Hours (Urgent)</option>
+                          <option value="1.3">24 Hours</option>
+                          <option value="1.15">3 Days</option>
+                          <option selected="" value="1.0">7 Days</option>
+                          <option value="0.9">14 Days</option>
+                        </select>
+                        <span
+                          class="material-symbols-outlined text-[20px] text-text-secondary pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2">expand_more</span>
+                      </div>
+                    </div>
+                    <div>
+                      <label class="block font-label-md text-label-md text-text-primary mb-1.5" for="calc-pages">Pages /
+                        Words</label>
+                      <div class="relative">
+                        <select
+                          class="w-full h-11 bg-surface-subtle text-text-primary pl-3 pr-9 rounded-xl appearance-none focus:outline-none focus:ring-2 focus:ring-brand-orange text-body-md font-body-md cursor-pointer"
+                          id="calc-pages">
+                          <option value="1">1 Page / 275 Words</option>
+                          <option selected="" value="2">
+                            2 Pages / 550 Words
+                          </option>
+                          <option value="3">3 Pages / 825 Words</option>
+                          <option value="5">5 Pages / 1375 Words</option>
+                          <option value="10">10 Pages / 2750 Words</option>
+                        </select>
+                        <span
+                          class="material-symbols-outlined text-[20px] text-text-secondary pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2">expand_more</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-4 rounded-xl bg-brand-orange-subtle flex items-center justify-between mt-2">
+                    <span class="font-label-lg text-label-lg text-text-secondary font-semibold">Calculated Price:</span>
+                    <div class="flex items-baseline gap-1">
+                      <span class="font-headline-lg text-headline-lg font-bold text-brand-orange"
+                        id="calc-total-price">$21.85</span><span
+                        class="font-body-sm text-body-sm text-text-muted">USD</span>
+                    </div>
+                  </div>
+                  <button
+                    class="w-full py-4 rounded-full bg-brand-orange hover:bg-brand-orange-hover text-on-primary font-label-lg text-label-lg shadow-lg flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5 mt-2"
+                    type="button">
+                    <span>Continue with Order</span><span
+                      class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                  </button>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- RATINGS & INSTITUTIONAL TRUST BAR -->
+      <section class="w-full bg-surface-subtle py-10 shadow-inner">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+          <!-- Ratings Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-surface-card p-5 rounded-2xl shadow-sm flex items-center justify-between">
+              <div>
+                <div class="flex items-center gap-2">
+                  <img alt="AS Reviews" class="w-7 h-7 object-contain rounded"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSk51D_mh8disIUEJFYjNMbgHaTkBgM6S3oLdPRfyRn4sRC6M7l7IFRp7CvbZincEdSuGlGm8_5sUtnuquHLmSCLbcUk2KNntgM_CIDPcaPTWeujsGgs7_Kgf6EYt9FfUIVLMpBan8CYcl_7Ms3EHNueENpUGtwD-ZyBZpgbnsZZIiV1nzLTA2kOwETK-YnkOaLCv22xdcl81UR83FNVyjOCIhcl5g3KFwp0qEiFHW4JO0NW3DuSqa" /><span
+                    class="font-headline-sm text-headline-sm text-text-primary font-bold">AS Reviews</span>
+                </div>
+                <div class="flex items-center gap-1 text-brand-orange mt-1">
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="font-headline-lg text-headline-lg text-brand-navy font-bold">4.8</span>
+                <span class="block font-body-sm text-body-sm text-text-muted">out of 5.0</span>
+              </div>
+            </div>
+            <div class="bg-surface-card p-5 rounded-2xl shadow-sm flex items-center justify-between">
+              <div>
+                <div class="flex items-center gap-2">
+                  <img alt="Sitejabber" class="w-7 h-7 object-contain rounded"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFfRJjV6lbsyedo6QZbIqtsISHK-VZpCVBz09Bygj16890bhKosyg6-NhbKPKLY1SiM2UK6ptFty0AjXVXO3toclUzIy36jGCjS46P0GcCBZh0zA55VJefcbOwpQnuT5nj1KhTo8DzaKyU3dI6Mc5T5oLVd5DCalroPS8fyEFNSrj-vT61rkaZYJS79FLEenCY4913m29JWGXwMPKhKAoWNC06EWfrSZtaPx7jW1o_qF36dcA9RWwq" /><span
+                    class="font-headline-sm text-headline-sm text-text-primary font-bold">Sitejabber</span>
+                </div>
+                <div class="flex items-center gap-1 text-brand-orange mt-1">
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star_half</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="font-headline-lg text-headline-lg text-brand-navy font-bold">4.6</span>
+                <span class="block font-body-sm text-body-sm text-text-muted">out of 5.0</span>
+              </div>
+            </div>
+            <div class="bg-surface-card p-5 rounded-2xl shadow-sm flex items-center justify-between">
+              <div>
+                <div class="flex items-center gap-2">
+                  <img alt="Trustpilot" class="w-7 h-7 object-contain rounded"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFo8fu5qq65IKaO962ZWj37iI-BSTm98wcSc4xyQaGatIrCloxP_Wx3CsogSh81oLeGyWnPGLG13jbbIK6WVjKsLZULngtP1XfH3ch1C0nSgJ0j3buXp3nJNnm8FTWp5E3Y7JdX72ZsTsa7TgXtecnd5oFp_Mh-Bi6s9APovyCCkG39os1RDRZnT9YtKQ1qRPDjdOzS-JFtWgi4A0ktIUaCmYmtIhjKosbFyK6oVuRJD3G2W2Hv_mJ" /><span
+                    class="font-headline-sm text-headline-sm text-text-primary font-bold">Trustpilot</span>
+                </div>
+                <div class="flex items-center gap-1 text-accent-green mt-1">
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="font-headline-lg text-headline-lg text-brand-navy font-bold">4.7</span>
+                <span class="block font-body-sm text-body-sm text-text-muted">out of 5.0</span>
+              </div>
+            </div>
+          </div>
+          <!-- LMS Badges & University Connect -->
+          <div
+            class="bg-surface-card rounded-2xl p-6 shadow-sm flex flex-col lg:flex-row items-center justify-between gap-6">
+            <div class="w-full flex flex-col items-center text-center">
+              <div
+                class="font-headline-md text-headline-md font-bold text-brand-orange flex items-center justify-center gap-2 mb-2">
+                <span class="material-symbols-outlined text-[24px]">groups</span>Connect with Seniors
+              </div>
+              <p class="font-body-md text-body-md text-text-secondary max-w-2xl mx-auto mb-6 text-center">
+                10,000+ Students across American, Australian, Canadian and
+                Middle East Universities. Connect to ask anything. Absolutely
+                Free. Fast.
+              </p>
+
+              <div id="senior-slider-container"
+                class="w-full overflow-hidden py-3 bg-surface-subtle rounded-xl cursor-grab active:cursor-grabbing select-none"
+                style="touch-action: pan-y;">
+                <div id="senior-slider-track" class="flex items-center gap-10 opacity-90 w-max">
+                  <!-- Group 1 -->
+                  <div class="senior-group flex items-center gap-10">
+                    <img alt="University of Queensland" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBugeYNbrXUrq61guEnRvH_CW3urE46tdBBd2x1BS3lF-zAQymubZezrILTE2b2xvgcPU9dhR0-5Dy12H_Cg6UyfDmoLlEcYib-AzL46b3hlLIzto75DSXP82979P42Zxu0bJpz2_xxXrlv2K2A7fX-QGTNOhcr8aGkzKhJCTMqAsQdveMHUuwZlm0owYt495y4TlC6vFpdFdEMUPqEJZ0su8gHp-fUbFc-72HKvpH86X_99xdIZvME" /><img
+                      alt="Florida International University" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1rpKYJ2ziG37_XK28Pm4obfE0h7-Hhu_lU4EvWtHYMbv6GQ0QKFHMtlhZ4BWDH0IsPnysa9zdeDUNUsyUWJqz4AunQ7sNN9qLW5gZ_ffCgOZj5mrNMXUSFWxul84et1i4hAYcFexJYU5I9kKF_QWaPHEt061RM5S9NCKscvRAO2u0GPjLn7mG37buwP0_d6EZLMGijFQOkuDoHCMSFNVGV1gqFGz1j5lU2YrtjBGHt9uaAXZlqY2_" /><img
+                      alt="American University of the Middle East" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWrS6fuhwzy7Rf9Rr81OeYet9zXi1RbrK4IhVNeq_hEAGLjlYo3K5l9rLmd-9AuWthoIexRWU_tVfLUjeBePFXfXVTSZgpLLvOAs1DZXZ60icU_wO9vkwDDLWO9yK4giRe9tiM22rUu8GODGQg-UGpREm7ieS6luCmKpNLoWFIsldmF3svuMs4UtxJ49YZemD53-VfSq9Sduuejv_-eYQsOGavcBVLwaRMN4sYCt39CFsj8Qs2nKyF" /><img
+                      alt="Vol State Community College" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzTCRh-XY12i5qQefytVOfQRxU9mvw-vKyue84p03uCezQ3ezQn49axTcsmT2VkRXXlxTw3p7DmFwZBWhZTHfaViCHnqK6hRLCjWhlDBqV9dRzc3p5FIAR4G4BqkxXLoa4ttdtzBplQk0JK_wAstoJJaIBkbCpVQyG3M_BTRiLDfFb1wFrPHSeh9klc7qWHsfPaEFVqjC5DBqWr0SRsGslX3tZhHZPl1A0wBPavux2iYv8BGUksIh9" /><img
+                      alt="Auburn University at Montgomery" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKIr_zZnw6ZYUtvyPzt96-yzb69brHXRxj7qN54IH3jFdS93WIBc5w1XWtV26X9zfD3aD0Meujy_TNQqDdZNtwZdNXEgj-GiEVlI8kXIbLRCLQtJYU_BUu9GnQKhlrXt2A46X64HVGTBzPPYGKJ3TEn24_CJUqF4Zp5RIWL731l7hD8yQOkq7QHsJAfMg-L2FVfGSowM59WxhPMe_x_HgH-r8ZXc5lconIjubI5kdWMYBaPvjcl7PA" /><img
+                      alt="Federation University Australia" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUzGWcD02yJjE0Mjupz-33MJBKyYOt9c10yd3a6nos0_LUZ9yebWLCA7kv46mm6eSBJP7tHAL5WABxDmdY8LIncg41gKP0jqbWVS9pQzdxXTO4nRatafiC3Ns7XlkvWl9JcwOn-1UtfB3XcyCM6XjnO-NtQX4Fm5WJ0TdDIx-1qL7F2dKM-1n5DDlS28-Mr7sIeX1NeRvx3ONBDPQKB-2RWy6BDxWT1SelEay4jdYfSxYeWMFh0tNH" /><img
+                      alt="Coventry University" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPzUwGoaeKG6QgQXgeMN6Joc6NMbAFGmTek_N6M-XWJnI6FXK_gEUkJ9Ty3nN2UA0Twsg-GMp6dYu2TuySO1Vzesl4A8nY0z9KDHlimifXuwl8Juq6tgYlkWjFdQqsqIvdhHAhHXs8ZrARvBtBswBOnmr5UxAdqGoRywFYGwSLABdjylud7DOJ_u1xw02CjtMA17BymocXBTYvp4Gmldkp-Bc8vko4esUf1SadSNYDckFmzDTaXhdk" /><img
+                      alt="CQ University Australia" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPW9-8s1ExNJD4ngdD1z5e5hiTFQsTXRmLl1zPvnA2BgXZ_K5KV5Wor4V4pI16ACe325RKU4V67f5qTUFZk1izqbslPGoTLEt21rkbeh2T2oXdewBPOrHkVqWdIl7QgmtHfmtZ5cdISCLOnM7jEkPbz1sfPXhVFezwt4-SLj-vEvtha1o5M4XcFC-3K4jsu14Kp1iLFc3Mu5_vl3qeVM5B8ERsmkAnF5F8Mfd_CKNc3bwRscHIg_5m" /><img
+                      alt="La Trobe University" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzT3ErEwTMtwSUxINDFe8OBtIYEk-GypzTl5_P1r95irKfuiGe-cdle2ZLH1CdFoEA3Lh_t6gSE7oGydQun5EsQFlpZNLyGcIWRcXvZxqjn5lyb1-aluczJ39hS2OQwnEJ4XlvBh_YriXW5eFu6JXIZhKuWnyN-EukJ5MiuOf65kiTdJ8CkSwrxP6LpDIs2jT1V7nO5YkslflDP0Cd9r_H0a8xLGTo5MVussnX4WzODkjBTtaHocka" /><img
+                      alt="The University of Tampa" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8__If31gZeUDbowCwzVN2Kgrgz6lsoly-hD9UdgKmYJRZtzQpjH55FiWPS75jVhmdFPsJ4EyRScVGQep3j-8oCU2HcFwy1YeetaHMkR30PO6Uy4SS3lEZnU4I1P0IRwEsYkaqJzdYyaIF6b_1XumS8JB5rB7agXhu0gPBTC1gAsziQKCn25Ygwn0fxsMZI8fNwy_sIMJ-mh5Z8sp51T7fHsQn0Xm4GZP21MS_bJJBeI-pMKvmGBPh" />
+                  </div>
+                  <!-- Group 2 (Clone for infinite seamless scroll) -->
+                  <div class="senior-group flex items-center gap-10" aria-hidden="true">
+                    <img alt="University of Queensland" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBugeYNbrXUrq61guEnRvH_CW3urE46tdBBd2x1BS3lF-zAQymubZezrILTE2b2xvgcPU9dhR0-5Dy12H_Cg6UyfDmoLlEcYib-AzL46b3hlLIzto75DSXP82979P42Zxu0bJpz2_xxXrlv2K2A7fX-QGTNOhcr8aGkzKhJCTMqAsQdveMHUuwZlm0owYt495y4TlC6vFpdFdEMUPqEJZ0su8gHp-fUbFc-72HKvpH86X_99xdIZvME" /><img
+                      alt="Florida International University" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1rpKYJ2ziG37_XK28Pm4obfE0h7-Hhu_lU4EvWtHYMbv6GQ0QKFHMtlhZ4BWDH0IsPnysa9zdeDUNUsyUWJqz4AunQ7sNN9qLW5gZ_ffCgOZj5mrNMXUSFWxul84et1i4hAYcFexJYU5I9kKF_QWaPHEt061RM5S9NCKscvRAO2u0GPjLn7mG37buwP0_d6EZLMGijFQOkuDoHCMSFNVGV1gqFGz1j5lU2YrtjBGHt9uaAXZlqY2_" /><img
+                      alt="American University of the Middle East" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWrS6fuhwzy7Rf9Rr81OeYet9zXi1RbrK4IhVNeq_hEAGLjlYo3K5l9rLmd-9AuWthoIexRWU_tVfLUjeBePFXfXVTSZgpLLvOAs1DZXZ60icU_wO9vkwDDLWO9yK4giRe9tiM22rUu8GODGQg-UGpREm7ieS6luCmKpNLoWFIsldmF3svuMs4UtxJ49YZemD53-VfSq9Sduuejv_-eYQsOGavcBVLwaRMN4sYCt39CFsj8Qs2nKyF" /><img
+                      alt="Vol State Community College" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzTCRh-XY12i5qQefytVOfQRxU9mvw-vKyue84p03uCezQ3ezQn49axTcsmT2VkRXXlxTw3p7DmFwZBWhZTHfaViCHnqK6hRLCjWhlDBqV9dRzc3p5FIAR4G4BqkxXLoa4ttdtzBplQk0JK_wAstoJJaIBkbCpVQyG3M_BTRiLDfFb1wFrPHSeh9klc7qWHsfPaEFVqjC5DBqWr0SRsGslX3tZhHZPl1A0wBPavux2iYv8BGUksIh9" /><img
+                      alt="Auburn University at Montgomery" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDKIr_zZnw6ZYUtvyPzt96-yzb69brHXRxj7qN54IH3jFdS93WIBc5w1XWtV26X9zfD3aD0Meujy_TNQqDdZNtwZdNXEgj-GiEVlI8kXIbLRCLQtJYU_BUu9GnQKhlrXt2A46X64HVGTBzPPYGKJ3TEn24_CJUqF4Zp5RIWL731l7hD8yQOkq7QHsJAfMg-L2FVfGSowM59WxhPMe_x_HgH-r8ZXc5lconIjubI5kdWMYBaPvjcl7PA" /><img
+                      alt="Federation University Australia" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUzGWcD02yJjE0Mjupz-33MJBKyYOt9c10yd3a6nos0_LUZ9yebWLCA7kv46mm6eSBJP7tHAL5WABxDmdY8LIncg41gKP0jqbWVS9pQzdxXTO4nRatafiC3Ns7XlkvWl9JcwOn-1UtfB3XcyCM6XjnO-NtQX4Fm5WJ0TdDIx-1qL7F2dKM-1n5DDlS28-Mr7sIeX1NeRvx3ONBDPQKB-2RWy6BDxWT1SelEay4jdYfSxYeWMFh0tNH" /><img
+                      alt="Coventry University" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPzUwGoaeKG6QgQXgeMN6Joc6NMbAFGmTek_N6M-XWJnI6FXK_gEUkJ9Ty3nN2UA0Twsg-GMp6dYu2TuySO1Vzesl4A8nY0z9KDHlimifXuwl8Juq6tgYlkWjFdQqsqIvdhHAhHXs8ZrARvBtBswBOnmr5UxAdqGoRywFYGwSLABdjylud7DOJ_u1xw02CjtMA17BymocXBTYvp4Gmldkp-Bc8vko4esUf1SadSNYDckFmzDTaXhdk" /><img
+                      alt="CQ University Australia" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPW9-8s1ExNJD4ngdD1z5e5hiTFQsTXRmLl1zPvnA2BgXZ_K5KV5Wor4V4pI16ACe325RKU4V67f5qTUFZk1izqbslPGoTLEt21rkbeh2T2oXdewBPOrHkVqWdIl7QgmtHfmtZ5cdISCLOnM7jEkPbz1sfPXhVFezwt4-SLj-vEvtha1o5M4XcFC-3K4jsu14Kp1iLFc3Mu5_vl3qeVM5B8ERsmkAnF5F8Mfd_CKNc3bwRscHIg_5m" /><img
+                      alt="La Trobe University" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzT3ErEwTMtwSUxINDFe8OBtIYEk-GypzTl5_P1r95irKfuiGe-cdle2ZLH1CdFoEA3Lh_t6gSE7oGydQun5EsQFlpZNLyGcIWRcXvZxqjn5lyb1-aluczJ39hS2OQwnEJ4XlvBh_YriXW5eFu6JXIZhKuWnyN-EukJ5MiuOf65kiTdJ8CkSwrxP6LpDIs2jT1V7nO5YkslflDP0Cd9r_H0a8xLGTo5MVussnX4WzODkjBTtaHocka" /><img
+                      alt="The University of Tampa" draggable="false"
+                      class="h-12 w-auto object-contain shrink-0 pointer-events-none"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8__If31gZeUDbowCwzVN2Kgrgz6lsoly-hD9UdgKmYJRZtzQpjH55FiWPS75jVhmdFPsJ4EyRScVGQep3j-8oCU2HcFwy1YeetaHMkR30PO6Uy4SS3lEZnU4I1P0IRwEsYkaqJzdYyaIF6b_1XumS8JB5rB7agXhu0gPBTC1gAsziQKCn25Ygwn0fxsMZI8fNwy_sIMJ-mh5Z8sp51T7fHsQn0Xm4GZP21MS_bJJBeI-pMKvmGBPh" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- ALL 26 ASSIGNMENT HELP SERVICES CARD GRID (TABS REMOVED, ROUNDED-2XL, SHADOW-MD, HOVER LIFT) -->
+      <section class="w-full bg-surface-subtle py-20 scroll-mt-24" id="assignment-services">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+          <!-- Section Header (Tabs Removed as requested) -->
+          <div class="text-center max-w-3xl mx-auto mb-14">
+            <span class="text-xs font-bold text-brand-orange tracking-wider uppercase">Comprehensive Subject
+              Specializations</span>
+            <h2 class="font-headline text-3xl lg:text-4xl font-bold text-text-primary mt-2">Explore Our Assignment Help
+              Services Across 26 Core Disciplines &amp; Universities</h2>
+            <p class="text-text-secondary text-base mt-3">Browse our specialized assignment solutions tailored for
+              undergraduate, postgraduate, and university-specific curricula.</p>
+          </div>
+
+          <!-- 26 Services Grid with rounded-2xl, shadow-md, and hover lift -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="services-grid">
+            <!-- 1. Accounting Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">account_balance_wallet</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">Accounting Assignment Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Master balance sheets, financial reporting,
+                  taxation, and auditing with accurate balance-matching solutions.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 2. Business Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">business_center</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">Business Assignment Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Strategic analysis, marketing plans, MBA case
+                  evaluations, and corporate feasibility reports.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 3. Corporate Finance Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">trending_up</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">Corporate Finance Assignment Help
+                </h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Advanced capital budgeting, DCF valuation models,
+                  M&amp;A cases, and WACC calculations.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 4. CS Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">terminal</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">CS Assignment Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Clean and tested Python, Java, C++, SQL scripts,
+                  database ERDs, and algorithm documentation.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 5. Finance Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">pie_chart</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">Finance Assignment Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Portfolio management, risk hedging, asset
+                  pricing, and financial statement ratio analysis.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 6. History Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">history_edu</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">History Assignment Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Primary source critiques, historiographical
+                  reviews, archival citations, and chronological thesis papers.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 7. Human Resource Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">groups</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">Human Resource Assignment Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Talent acquisition models, workplace dispute
+                  resolution, OSHA policies, and HR strategy briefs.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 8. Humanities Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">auto_stories</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">Humanities Assignment Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Deep textual synthesis, cultural critiques,
+                  ethics frameworks, and philosophy term essays.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 9. Management Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">manage_accounts</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">Management Assignment Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Organizational leadership frameworks, SWOT/PESTLE
+                  reviews, and supply chain logistics papers.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 10. Marketing Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">campaign</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">Marketing Assignment Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Omnichannel consumer persona studies, brand
+                  positioning roadmaps, and digital marketing pitches.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 11. Mathematics Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">functions</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">Mathematics Assignment Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Step-by-step calculus derivations, linear
+                  algebra, discrete math, and differential proofs.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 12. Online Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">devices</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">Online Assignment Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Full-term online coursework monitoring, weekly
+                  portal submissions, and quick turnaround tasks.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 13. BTEC HND Business Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">workspace_premium</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">BTEC HND Business Assignment Help
+                </h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Unit-aligned Pass/Merit/Distinction criteria
+                  solutions with full referencing and rubrics.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 14. Science Assignment -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">science</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">Science Assignment</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Biology lab reports, chemistry synthesis
+                  write-ups, physics simulations, and scientific papers.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 15. Statistics Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">insights</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">Statistics Assignment Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Rigorous SPSS, R, Stata, and Python data
+                  pipelines, ANOVA tests, and APA summary charts.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 16. Bournemouth University Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">school</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">Bournemouth University Assignment
+                  Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Bespoke coursework crafted strictly according to
+                  BU assessment briefs and grading rubrics.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 17. Business Strategy Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">schema</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">Business Strategy Assignment Help
+                </h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Porter's Five Forces, Blue Ocean frameworks, and
+                  corporate turnaround strategy roadmaps.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 18. Coventry University Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">account_balance</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">Coventry University Assignment Help
+                </h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Tailored module coursework crafted to meet
+                  Coventry academic criteria and CU Harvard citation styles.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 19. Management and Operations Assignment -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">precision_manufacturing</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">Management and Operations Assignment
+                </h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Lean Six Sigma workflows, inventory modeling,
+                  bottleneck mitigation, and operations planning.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 20. UK Business Law Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">gavel</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">UK Business Law Assignment Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Comprehensive IRAC legal analysis covering
+                  English contract law, company law, and tort liability.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 21. University College Birmingham Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">hotel_class</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">University College Birmingham
+                  Assignment Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Coursework customized to UCB vocational,
+                  business, and hospitality module requirements.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 22. University of Central Lancashire Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">local_library</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">University of Central Lancashire
+                  Assignment Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">UCLan-specific module assignments adhering
+                  strictly to department learning outcomes.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 23. University of East Anglia Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">history</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">University of East Anglia Assignment
+                  Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Research-backed assignments formatted in exact
+                  UEA citation protocols and assessment matrices.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 24. University of Westminster Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">apartment</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">University of Westminster Assignment
+                  Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">High-scoring Westminster coursework solutions
+                  across London business and tech modules.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 25. International Marketing Assignment Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">public</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">International Marketing Assignment
+                  Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Cross-cultural consumer behavior studies, global
+                  entry strategies, and foreign market analysis.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- 26. Research Project Help -->
+            <div
+              class="service-card group bg-white rounded-2xl p-6 shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-orange-300 cursor-pointer flex flex-col justify-between border border-transparent">
+              <div>
+                <div
+                  class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                  <span class="material-symbols-outlined text-[26px]">query_stats</span>
+                </div>
+                <h3 class="font-headline text-lg font-bold text-text-primary mb-2">Research Project Help</h3>
+                <p class="text-sm text-text-secondary leading-relaxed">Literature reviews, empirical methodology design,
+                  statistical validation, and final dissertation writeups.</p>
+              </div>
+              <div class="pt-5 mt-4 border-t border-slate-100">
+                <a class="inline-flex items-center gap-1.5 text-sm text-brand-orange group-hover:text-brand-orange-hover font-semibold transition-colors"
+                  href="#assignment-calc-form">
+                  <span>Explore Service</span>
+                  <span
+                    class="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- FEATURED DEDICATED SERVICE MODULES -->
+      <section class="w-full bg-surface-subtle py-16 lg:py-24">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+          <div class="text-center  mx-auto mb-14">
+            <span class="font-label-md text-label-md uppercase tracking-wider text-brand-orange font-bold">CORE ACADEMIC
+              SOLUTIONS</span>
+            <h2 class="font-headline-xl text-headline-xl text-brand-navy mt-2 leading-tight">
+              Achieving success was never so easy. Get started with the best
+              online class services today and make your academic journey
+              stress-free!
+            </h2>
+            <p class="font-body-lg text-body-lg text-text-secondary mt-3">
+              Select your service module to lock in dedicated doctoral-level
+              assistance today.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div
+              class="bg-surface-card rounded-2xl p-6 shadow-md flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-border-subtle">
+              <div>
+                <div
+                  class="w-10 h-10 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-4">
+                  <span class="material-symbols-outlined text-[22px]">description</span>
+                </div>
+                <h3 class="font-headline-sm text-headline-sm text-brand-navy mb-2">
+                  Pay to do My Assignment Help
+                </h3>
+                <p class="font-body-sm text-body-sm text-text-secondary leading-relaxed mb-4">
+                  If you’re tired and have multiple coursework lined up, don’t
+                  fret. ReadEssay has writers trained across all disciplines
+                  ready to cater to urgent guidelines.
+                </p>
+                <a class="font-label-md text-label-md text-brand-orange font-semibold hover:underline block mb-6 flex items-center gap-1"
+                  href="https://readessay.com/assignment-help/">Continue Reading....
+                  <span class="material-symbols-outlined text-[16px]">arrow_forward</span></a>
+              </div>
+              <a class="w-full py-2.5 rounded-full bg-brand-orange hover:bg-brand-orange-hover text-on-primary font-label-md text-label-md font-bold text-center transition-colors shadow-sm block"
+                href="#">Order Now</a>
+            </div>
+            <div
+              class="bg-surface-card rounded-2xl p-6 shadow-md flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-border-subtle">
+              <div>
+                <div
+                  class="w-10 h-10 rounded-xl bg-surface-container text-primary flex items-center justify-center mb-4">
+                  <span class="material-symbols-outlined text-[22px]">verified_user</span>
+                </div>
+                <h3 class="font-headline-sm text-headline-sm text-brand-navy mb-2">
+                  Online Protected Exam Help
+                </h3>
+                <p class="font-body-sm text-body-sm text-text-secondary leading-relaxed mb-4">
+                  Are online proctored exams too stressful? Deadlines
+                  intimidating? Find verified experts ready to take
+                  assessments with total privacy.
+                </p>
+                <a class="font-label-md text-label-md text-brand-orange font-semibold hover:underline block mb-6 flex items-center gap-1"
+                  href="https://readessay.com/assignment-help/online-exam-assistance/">Continue Reading....
+                  <span class="material-symbols-outlined text-[16px]">arrow_forward</span></a>
+              </div>
+              <a class="w-full py-2.5 rounded-full bg-brand-orange hover:bg-brand-orange-hover text-on-primary font-label-md text-label-md font-bold text-center transition-colors shadow-sm block"
+                href="#">Order Now</a>
+            </div>
+            <div
+              class="bg-surface-card rounded-2xl p-6 shadow-md flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-border-subtle">
+              <div>
+                <div class="w-10 h-10 rounded-xl bg-brand-navy text-on-primary flex items-center justify-center mb-4">
+                  <span class="material-symbols-outlined text-[22px]">school</span>
+                </div>
+                <h3 class="font-headline-sm text-headline-sm text-brand-navy mb-2">
+                  Take My Class Help
+                </h3>
+                <p class="font-body-sm text-body-sm text-text-secondary leading-relaxed mb-4">
+                  Lengthy coursework and endless discussions can overwhelm
+                  busy schedules. ReadEssay is ready to share the entire term
+                  workload for guaranteed A/B grades.
+                </p>
+                <a class="font-label-md text-label-md text-brand-orange font-semibold hover:underline block mb-6 flex items-center gap-1"
+                  href="https://readessay.com/assignment-help/online-exam-assistance/">Continue Reading....
+                  <span class="material-symbols-outlined text-[16px]">arrow_forward</span></a>
+              </div>
+              <a class="w-full py-2.5 rounded-full bg-brand-orange hover:bg-brand-orange-hover text-on-primary font-label-md text-label-md font-bold text-center transition-colors shadow-sm block"
+                href="#">Order Now</a>
+            </div>
+            <div
+              class="bg-surface-card rounded-2xl p-6 shadow-md flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-border-subtle">
+              <div>
+                <div
+                  class="w-10 h-10 rounded-xl bg-accent-green-subtle text-accent-green flex items-center justify-center mb-4">
+                  <span class="material-symbols-outlined text-[22px]">quiz</span>
+                </div>
+                <h3 class="font-headline-sm text-headline-sm text-brand-navy mb-2">
+                  Do my Online Quiz &amp; Test Help
+                </h3>
+                <p class="font-body-sm text-body-sm text-text-secondary leading-relaxed mb-4">
+                  College and high school virtual facilities test knowledge
+                  under strict timers. Let our subject experts handle your
+                  weekly tests and secure top scores.
+                </p>
+                <a class="font-label-md text-label-md text-brand-orange font-semibold hover:underline block mb-6 flex items-center gap-1"
+                  href="https://readessay.com/homework-help/online-quiz-and-test-help/">Continue Reading....
+                  <span class="material-symbols-outlined text-[16px]">arrow_forward</span></a>
+              </div>
+              <a class="w-full py-2.5 rounded-full bg-brand-orange hover:bg-brand-orange-hover text-on-primary font-label-md text-label-md font-bold text-center transition-colors shadow-sm block"
+                href="#">Order Now</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- WHY CHOOSE READESSAY (6 PILLARS) -->
+      <section class="w-full bg-surface-canvas py-16 lg:py-24">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+          <div class="text-center max-w-3xl mx-auto mb-16">
+            <span
+              class="font-label-md text-label-md uppercase tracking-wider text-brand-orange font-bold">Uncompromising
+              Quality</span>
+            <h2 class="font-headline-xl text-headline-xl text-brand-navy mt-2">
+              Why Choose ReadEssay?
+            </h2>
+            <p class="font-body-lg text-body-lg text-text-secondary mt-3">
+              ReadEssay provides robust services at the most competitive,
+              transparent rates. Here is what establishes our long-standing
+              standing among thousands of collegiate students:
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div
+              class="bg-surface-card p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200 hover:shadow-md transition-shadow">
+              <div
+                class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-5">
+                <span class="material-symbols-outlined text-[26px]">grade</span>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-brand-navy mb-2">
+                High-Quality Work
+              </h3>
+              <p class="font-body-md text-body-md text-text-secondary leading-relaxed">
+                We deliver only high-quality services. When you hand over your
+                work, it is in safe hands with well-researched, accurate, and
+                properly formatted submissions.
+              </p>
+            </div>
+            <div
+              class="bg-surface-card p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200 hover:shadow-md transition-shadow">
+              <div
+                class="w-12 h-12 rounded-xl bg-accent-green-subtle text-accent-green flex items-center justify-center mb-5">
+                <span class="material-symbols-outlined text-[26px]">fact_check</span>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-brand-navy mb-2">
+                100% Original Content
+              </h3>
+              <p class="font-body-md text-body-md text-text-secondary leading-relaxed">
+                We understand the cost of submitting plagiarized work. No
+                plagiarism, no AI shortcuts; only custom solutions crafted
+                according to your precise prompt.
+              </p>
+            </div>
+            <div
+              class="bg-surface-card p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200 hover:shadow-md transition-shadow">
+              <div class="w-12 h-12 rounded-xl bg-surface-container text-primary flex items-center justify-center mb-5">
+                <span class="material-symbols-outlined text-[26px]">lock</span>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-brand-navy mb-2">
+                100% Confidential
+              </h3>
+              <p class="font-body-md text-body-md text-text-secondary leading-relaxed">
+                Your personal information, login credentials, and academic
+                details remain protected under strict domestic VPN security
+                and privacy agreements.
+              </p>
+            </div>
+            <div
+              class="bg-surface-card p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200 hover:shadow-md transition-shadow">
+              <div class="w-12 h-12 rounded-xl bg-brand-navy text-on-primary flex items-center justify-center mb-5">
+                <span class="material-symbols-outlined text-[26px]">price_check</span>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-brand-navy mb-2">
+                Affordable Pricing
+              </h3>
+              <p class="font-body-md text-body-md text-text-secondary leading-relaxed">
+                Looking for an affordable provider? ReadEssay offers upfront,
+                honest pricing starting from $5.50 with zero surprise costs or
+                hidden platform fees.
+              </p>
+            </div>
+            <div
+              class="bg-surface-card p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200 hover:shadow-md transition-shadow">
+              <div
+                class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-5">
+                <span class="material-symbols-outlined text-[26px]">support_agent</span>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-brand-navy mb-2">
+                Live Chat Support
+              </h3>
+              <p class="font-body-md text-body-md text-text-secondary leading-relaxed">
+                Our support team is online 24/7 to resolve questions, handle
+                sudden deadline changes, and relay instructions straight to
+                your assigned tutor.
+              </p>
+            </div>
+            <div
+              class="bg-surface-card p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200 hover:shadow-md transition-shadow">
+              <div
+                class="w-12 h-12 rounded-xl bg-accent-green-subtle text-accent-green flex items-center justify-center mb-5">
+                <span class="material-symbols-outlined text-[26px]">psychology</span>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-brand-navy mb-2">
+                Skilled Subject Experts
+              </h3>
+              <p class="font-body-md text-body-md text-text-secondary leading-relaxed">
+                From STEM, Python, and Statistics to Nursing and Business, our
+                specialists possess advanced degrees and extensive teaching
+                backgrounds.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- PROMOTIONAL BANNER (ASSET IMAGE_3) -->
+      <section class="w-full relative overflow-hidden py-16 bg-brand-navy text-on-primary">
+        <div class="absolute inset-0 z-0 opacity-25">
+          <img alt="Academic Support Background Banner" class="w-full h-full object-cover object-center"
+            src="images/fast-turnaround-bg.jpg" />
+        </div>
+        <div
+          class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div>
+            <span class="font-label-md text-label-md uppercase tracking-wider text-brand-orange font-bold">Fast
+              Turnaround Guaranteed</span>
+            <h2 class="font-headline-xl text-headline-xl text-on-primary mt-1">
+              Get your papers created by real professionals!
+            </h2>
+            <p class="font-body-lg text-body-lg text-surface-container-high mt-2">
+              Join thousands of university students scoring A and B grades
+              this semester.
+            </p>
+          </div>
+          <a class="px-8 py-4 rounded-full bg-brand-orange hover:bg-brand-orange-hover text-on-primary font-label-lg text-label-lg shadow-xl whitespace-nowrap transition-transform hover:scale-105"
+            href="#">
+            Place Your Order
+          </a>
+        </div>
+      </section>
+      <!-- CLIENT SUCCESS STORIES & VERIFIED TESTIMONIALS -->
+      <section class="w-full bg-surface-subtle py-16 lg:py-24">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+          <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="font-label-md text-label-md uppercase tracking-wider text-brand-orange font-bold">Student
+              Testimonials</span>
+            <h2 class="font-headline-xl text-headline-xl text-brand-navy mt-2">
+              Success Stories Directly From Our Clients
+            </h2>
+            <p class="font-body-lg text-body-lg text-text-secondary mt-3">
+              ReadEssay is the trusted partner for college learners worldwide.
+              See what real students say after partnering with our subject
+              scholars:
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            <!-- Testimonial 1 -->
+            <div
+              class="bg-surface-card p-6 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-1 text-brand-orange mb-4">
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                </div>
+                <p class="font-body-md text-body-md text-text-secondary italic mb-6">
+                  "ReadEssay helped me with the most challenging course. Their
+                  experts took care of everything while I focused on my job."
+                </p>
+              </div>
+              <div>
+                <div class="font-headline-sm text-headline-sm text-brand-navy">
+                  Natasha
+                </div>
+                <div class="font-body-sm text-body-sm text-text-muted">
+                  Online Course Service
+                </div>
+              </div>
+            </div>
+            <!-- Testimonial 2 -->
+            <div
+              class="bg-surface-card p-6 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-1 text-brand-orange mb-4">
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                </div>
+                <p class="font-body-md text-body-md text-text-secondary italic mb-6">
+                  "Their exam help is a lifesaver. I didn't expect to ace the
+                  subject. But I did! Hats off to you!"
+                </p>
+              </div>
+              <div>
+                <div class="font-headline-sm text-headline-sm text-brand-navy">
+                  John
+                </div>
+                <div class="font-body-sm text-body-sm text-text-muted">
+                  Protected Exams Service
+                </div>
+              </div>
+            </div>
+            <!-- Testimonial 3 -->
+            <div
+              class="bg-surface-card p-6 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-1 text-brand-orange mb-4">
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                </div>
+                <p class="font-body-md text-body-md text-text-secondary italic mb-6">
+                  "Their academic helpers are not only professional and
+                  reliable but also affordable. I was really scared at first,
+                  but now I recommend them to everyone."
+                </p>
+              </div>
+              <div>
+                <div class="font-headline-sm text-headline-sm text-brand-navy">
+                  Abraham
+                </div>
+                <div class="font-body-sm text-body-sm text-text-muted">
+                  Academic Helpers
+                </div>
+              </div>
+            </div>
+            <!-- Testimonial 4 -->
+            <div
+              class="bg-surface-card p-6 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-1 text-brand-orange mb-4">
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                  <span class="material-symbols-outlined text-[18px]"
+                    style="font-variation-settings: &quot;FILL&quot; 1">star</span>
+                </div>
+                <p class="font-body-md text-body-md text-text-secondary italic mb-6">
+                  "One of my friends referred me to ReadEssay for their online
+                  class services. I couldn't handle online classes with a
+                  full-time job, but now I love their services."
+                </p>
+              </div>
+              <div>
+                <div class="font-headline-sm text-headline-sm text-brand-navy">
+                  Stevia
+                </div>
+                <div class="font-body-sm text-body-sm text-text-muted">
+                  Online Class Services
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Real Grade Transcript Proof Showcase -->
+          <div class="bg-surface-card rounded-3xl p-8 lg:p-10 shadow-lg">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between pb-8 gap-4">
+              <div>
+                <div
+                  class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent-green-subtle text-accent-green font-label-md text-label-md mb-2">
+                  <span class="material-symbols-outlined text-[16px]">verified</span>
+                  Live Academic Evidence
+                </div>
+                <h3 class="font-headline-lg text-headline-lg text-brand-navy">
+                  Verified Portal Grade Submissions
+                </h3>
+              </div>
+              <div class="flex items-center gap-3">
+                <span
+                  class="px-4 py-2 rounded-xl bg-surface-subtle font-label-md text-label-md text-text-primary font-bold">Canvas
+                  Gradebook</span>
+                <span
+                  class="px-4 py-2 rounded-xl bg-accent-green-subtle font-label-md text-label-md text-accent-green font-bold">96.38%
+                  A+ Average</span>
+              </div>
+            </div>
+            <!-- Verified Grade Submissions Slider -->
+            <div id="grade-slider-container"
+              class="w-full overflow-hidden py-4 cursor-grab active:cursor-grabbing select-none"
+              style="touch-action: pan-y;">
+              <div id="grade-slider-track" class="flex items-center gap-6 w-max">
+                <!-- Group 1 -->
+                <div class="grade-group flex items-center gap-6">
+                  <div
+                    class="w-72 sm:w-80 h-96 shrink-0 bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="w-full h-full p-2 bg-surface-subtle flex items-center justify-center overflow-hidden">
+                      <img draggable="false" class="w-full h-full object-contain rounded-xl pointer-events-none"
+                        src="images/grade-cipd.png" alt="CIPD Grade Evidence" />
+                    </div>
+                    <div class="p-3 bg-white border-t border-border-subtle flex items-center justify-between">
+                      <span class="font-label-md text-label-md font-semibold text-brand-navy">CIPD Assessment</span>
+                      <span
+                        class="px-2.5 py-0.5 rounded-full bg-accent-green-subtle text-accent-green text-xs font-bold">Passed</span>
+                    </div>
+                  </div>
+
+                  <div
+                    class="w-72 sm:w-80 h-96 shrink-0 bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="w-full h-full p-2 bg-surface-subtle flex items-center justify-center overflow-hidden">
+                      <img draggable="false" class="w-full h-full object-contain rounded-xl pointer-events-none"
+                        src="images/grade-whatsapp.png" alt="WhatsApp Result Proof" />
+                    </div>
+                    <div class="p-3 bg-white border-t border-border-subtle flex items-center justify-between">
+                      <span class="font-label-md text-label-md font-semibold text-brand-navy">Assignment Score</span>
+                      <span
+                        class="px-2.5 py-0.5 rounded-full bg-accent-green-subtle text-accent-green text-xs font-bold">27
+                        / 30</span>
+                    </div>
+                  </div>
+
+                  <div
+                    class="w-72 sm:w-80 h-96 shrink-0 bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="w-full h-full p-2 bg-surface-subtle flex items-center justify-center overflow-hidden">
+                      <img draggable="false" class="w-full h-full object-contain rounded-xl pointer-events-none"
+                        src="images/grade119.png" alt="Blackboard Grade Proof" />
+                    </div>
+                    <div class="p-3 bg-white border-t border-border-subtle flex items-center justify-between">
+                      <span class="font-label-md text-label-md font-semibold text-brand-navy">Critical Thinking</span>
+                      <span
+                        class="px-2.5 py-0.5 rounded-full bg-accent-green-subtle text-accent-green text-xs font-bold">119
+                        / 125 (95%)</span>
+                    </div>
+                  </div>
+
+                  <div
+                    class="w-72 sm:w-80 h-96 shrink-0 bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="w-full h-full p-2 bg-surface-subtle flex items-center justify-center overflow-hidden">
+                      <img draggable="false" class="w-full h-full object-contain rounded-xl pointer-events-none"
+                        src="images/grade-laptop.png" alt="Canvas Portal Grade" />
+                    </div>
+                    <div class="p-3 bg-white border-t border-border-subtle flex items-center justify-between">
+                      <span class="font-label-md text-label-md font-semibold text-brand-navy">Graded Assessment</span>
+                      <span
+                        class="px-2.5 py-0.5 rounded-full bg-accent-green-subtle text-accent-green text-xs font-bold">49.00
+                        / 50</span>
+                    </div>
+                  </div>
+
+                  <div
+                    class="w-72 sm:w-80 h-96 shrink-0 bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="w-full h-full p-2 bg-surface-subtle flex items-center justify-center overflow-hidden">
+                      <img draggable="false" class="w-full h-full object-contain rounded-xl pointer-events-none"
+                        src="images/grade162.png" alt="Mobile Grade Evidence" />
+                    </div>
+                    <div class="p-3 bg-white border-t border-border-subtle flex items-center justify-between">
+                      <span class="font-label-md text-label-md font-semibold text-brand-navy">Organizational
+                        Behavior</span>
+                      <span
+                        class="px-2.5 py-0.5 rounded-full bg-accent-green-subtle text-accent-green text-xs font-bold">126
+                        / 130</span>
+                    </div>
+                  </div>
+
+                  <div
+                    class="w-72 sm:w-80 h-96 shrink-0 bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="w-full h-full p-2 bg-surface-subtle flex items-center justify-center overflow-hidden">
+                      <img draggable="false" class="w-full h-full object-contain rounded-xl pointer-events-none"
+                        src="images/grade191.png" alt="Operation Management Score" />
+                    </div>
+                    <div class="p-3 bg-white border-t border-border-subtle flex items-center justify-between">
+                      <span class="font-label-md text-label-md font-semibold text-brand-navy">Operations Mgmt</span>
+                      <span
+                        class="px-2.5 py-0.5 rounded-full bg-accent-green-subtle text-accent-green text-xs font-bold">191
+                        / 200 (95.5%)</span>
+                    </div>
+                  </div>
+
+                  <div
+                    class="w-72 sm:w-80 h-96 shrink-0 bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="w-full h-full p-2 bg-surface-subtle flex items-center justify-center overflow-hidden">
+                      <img draggable="false" class="w-full h-full object-contain rounded-xl pointer-events-none"
+                        src="images/faisal-alhad.png" alt="Principles of Finance Grade" />
+                    </div>
+                    <div class="p-3 bg-white border-t border-border-subtle flex items-center justify-between">
+                      <span class="font-label-md text-label-md font-semibold text-brand-navy">Principles of
+                        Finance</span>
+                      <span
+                        class="px-2.5 py-0.5 rounded-full bg-accent-green-subtle text-accent-green text-xs font-bold">69.3
+                        / 70 (99%)</span>
+                    </div>
+                  </div>
+
+                  <div
+                    class="w-72 sm:w-80 h-96 shrink-0 bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="w-full h-full p-2 bg-surface-subtle flex items-center justify-center overflow-hidden">
+                      <img draggable="false" class="w-full h-full object-contain rounded-xl pointer-events-none"
+                        src="images/kimberley-wood.png" alt="Tutor Feedback and Grade" />
+                    </div>
+                    <div class="p-3 bg-white border-t border-border-subtle flex items-center justify-between">
+                      <span class="font-label-md text-label-md font-semibold text-brand-navy">Instructor Feedback</span>
+                      <span
+                        class="px-2.5 py-0.5 rounded-full bg-accent-green-subtle text-accent-green text-xs font-bold">33
+                        / 40 (A Grade)</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Group 2 (Clone for infinite seamless loop) -->
+                <div class="grade-group flex items-center gap-6" aria-hidden="true">
+                  <div
+                    class="w-72 sm:w-80 h-96 shrink-0 bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="w-full h-full p-2 bg-surface-subtle flex items-center justify-center overflow-hidden">
+                      <img draggable="false" class="w-full h-full object-contain rounded-xl pointer-events-none"
+                        src="images/grade-cipd.png" alt="CIPD Grade Evidence" />
+                    </div>
+                    <div class="p-3 bg-white border-t border-border-subtle flex items-center justify-between">
+                      <span class="font-label-md text-label-md font-semibold text-brand-navy">CIPD Assessment</span>
+                      <span
+                        class="px-2.5 py-0.5 rounded-full bg-accent-green-subtle text-accent-green text-xs font-bold">Passed</span>
+                    </div>
+                  </div>
+
+                  <div
+                    class="w-72 sm:w-80 h-96 shrink-0 bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="w-full h-full p-2 bg-surface-subtle flex items-center justify-center overflow-hidden">
+                      <img draggable="false" class="w-full h-full object-contain rounded-xl pointer-events-none"
+                        src="images/grade-whatsapp.png" alt="WhatsApp Result Proof" />
+                    </div>
+                    <div class="p-3 bg-white border-t border-border-subtle flex items-center justify-between">
+                      <span class="font-label-md text-label-md font-semibold text-brand-navy">Assignment Score</span>
+                      <span
+                        class="px-2.5 py-0.5 rounded-full bg-accent-green-subtle text-accent-green text-xs font-bold">27
+                        / 30</span>
+                    </div>
+                  </div>
+
+                  <div
+                    class="w-72 sm:w-80 h-96 shrink-0 bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="w-full h-full p-2 bg-surface-subtle flex items-center justify-center overflow-hidden">
+                      <img draggable="false" class="w-full h-full object-contain rounded-xl pointer-events-none"
+                        src="images/grade119.png" alt="Blackboard Grade Proof" />
+                    </div>
+                    <div class="p-3 bg-white border-t border-border-subtle flex items-center justify-between">
+                      <span class="font-label-md text-label-md font-semibold text-brand-navy">Critical Thinking</span>
+                      <span
+                        class="px-2.5 py-0.5 rounded-full bg-accent-green-subtle text-accent-green text-xs font-bold">119
+                        / 125 (95%)</span>
+                    </div>
+                  </div>
+
+                  <div
+                    class="w-72 sm:w-80 h-96 shrink-0 bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="w-full h-full p-2 bg-surface-subtle flex items-center justify-center overflow-hidden">
+                      <img draggable="false" class="w-full h-full object-contain rounded-xl pointer-events-none"
+                        src="images/grade-laptop.png" alt="Canvas Portal Grade" />
+                    </div>
+                    <div class="p-3 bg-white border-t border-border-subtle flex items-center justify-between">
+                      <span class="font-label-md text-label-md font-semibold text-brand-navy">Graded Assessment</span>
+                      <span
+                        class="px-2.5 py-0.5 rounded-full bg-accent-green-subtle text-accent-green text-xs font-bold">49.00
+                        / 50</span>
+                    </div>
+                  </div>
+
+                  <div
+                    class="w-72 sm:w-80 h-96 shrink-0 bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="w-full h-full p-2 bg-surface-subtle flex items-center justify-center overflow-hidden">
+                      <img draggable="false" class="w-full h-full object-contain rounded-xl pointer-events-none"
+                        src="images/grade162.png" alt="Mobile Grade Evidence" />
+                    </div>
+                    <div class="p-3 bg-white border-t border-border-subtle flex items-center justify-between">
+                      <span class="font-label-md text-label-md font-semibold text-brand-navy">Organizational
+                        Behavior</span>
+                      <span
+                        class="px-2.5 py-0.5 rounded-full bg-accent-green-subtle text-accent-green text-xs font-bold">126
+                        / 130</span>
+                    </div>
+                  </div>
+
+                  <div
+                    class="w-72 sm:w-80 h-96 shrink-0 bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="w-full h-full p-2 bg-surface-subtle flex items-center justify-center overflow-hidden">
+                      <img draggable="false" class="w-full h-full object-contain rounded-xl pointer-events-none"
+                        src="images/grade191.png" alt="Operation Management Score" />
+                    </div>
+                    <div class="p-3 bg-white border-t border-border-subtle flex items-center justify-between">
+                      <span class="font-label-md text-label-md font-semibold text-brand-navy">Operations Mgmt</span>
+                      <span
+                        class="px-2.5 py-0.5 rounded-full bg-accent-green-subtle text-accent-green text-xs font-bold">191
+                        / 200 (95.5%)</span>
+                    </div>
+                  </div>
+
+                  <div
+                    class="w-72 sm:w-80 h-96 shrink-0 bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="w-full h-full p-2 bg-surface-subtle flex items-center justify-center overflow-hidden">
+                      <img draggable="false" class="w-full h-full object-contain rounded-xl pointer-events-none"
+                        src="images/faisal-alhad.png" alt="Principles of Finance Grade" />
+                    </div>
+                    <div class="p-3 bg-white border-t border-border-subtle flex items-center justify-between">
+                      <span class="font-label-md text-label-md font-semibold text-brand-navy">Principles of
+                        Finance</span>
+                      <span
+                        class="px-2.5 py-0.5 rounded-full bg-accent-green-subtle text-accent-green text-xs font-bold">69.3
+                        / 70 (99%)</span>
+                    </div>
+                  </div>
+
+                  <div
+                    class="w-72 sm:w-80 h-96 shrink-0 bg-white border border-border-subtle rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="w-full h-full p-2 bg-surface-subtle flex items-center justify-center overflow-hidden">
+                      <img draggable="false" class="w-full h-full object-contain rounded-xl pointer-events-none"
+                        src="images/kimberley-wood.png" alt="Tutor Feedback and Grade" />
+                    </div>
+                    <div class="p-3 bg-white border-t border-border-subtle flex items-center justify-between">
+                      <span class="font-label-md text-label-md font-semibold text-brand-navy">Instructor Feedback</span>
+                      <span
+                        class="px-2.5 py-0.5 rounded-full bg-accent-green-subtle text-accent-green text-xs font-bold">33
+                        / 40 (A Grade)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- CORE QUALITY GUARANTEES (2x3 GRID) -->
+      <section class="w-full bg-surface-canvas py-16 lg:py-24">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+          <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="font-label-md text-label-md uppercase tracking-wider text-brand-orange font-bold">Unmatched
+              Standards</span>
+            <h2 class="font-headline-xl text-headline-xl text-brand-navy mt-2">
+              Core Quality Guarantees
+            </h2>
+            <p class="font-body-lg text-body-lg text-text-secondary mt-3">
+              Our service commitment ensures every single assignment or test
+              assistance request is delivered under airtight guarantees.
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div
+              class="bg-surface-card p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200">
+              <div
+                class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-5">
+                <span class="material-symbols-outlined text-[26px]">workspace_premium</span>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-brand-navy mb-2">
+                Best Quality Assignments &amp; Papers
+              </h3>
+              <p class="font-body-md text-body-md text-text-secondary leading-relaxed">
+                The writers hired by ReadEssay are experienced specialists.
+                This assures intensive research behind each order, designed
+                specifically to secure high grades.
+              </p>
+            </div>
+            <div
+              class="bg-surface-card p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200">
+              <div
+                class="w-12 h-12 rounded-xl bg-accent-green-subtle text-accent-green flex items-center justify-center mb-5">
+                <span class="material-symbols-outlined text-[26px]">task_alt</span>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-brand-navy mb-2">
+                Plagiarism-Free Work
+              </h3>
+              <p class="font-body-md text-body-md text-text-secondary leading-relaxed">
+                It is against our core values to deliver any project without
+                screening. All work is 100% original and verified through
+                industry-grade scanners.
+              </p>
+            </div>
+            <div
+              class="bg-surface-card p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200">
+              <div class="w-12 h-12 rounded-xl bg-surface-container text-primary flex items-center justify-center mb-5">
+                <span class="material-symbols-outlined text-[26px]">find_in_page</span>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-brand-navy mb-2">
+                Proofreading &amp; Revisions
+              </h3>
+              <p class="font-body-md text-body-md text-text-secondary leading-relaxed">
+                Specialized editors inspect every document prior to final
+                submission. We ensure zero grammatical, formatting, or
+                contextual errors remain.
+              </p>
+            </div>
+            <div
+              class="bg-surface-card p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200">
+              <div class="w-12 h-12 rounded-xl bg-brand-navy text-on-primary flex items-center justify-center mb-5">
+                <span class="material-symbols-outlined text-[26px]">alarm_on</span>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-brand-navy mb-2">
+                Meeting All Deadlines
+              </h3>
+              <p class="font-body-md text-body-md text-text-secondary leading-relaxed">
+                Our writers complete assignments at least 24 hours prior to
+                your cutoff whenever possible, eliminating anxiety and giving
+                you ample time for review.
+              </p>
+            </div>
+            <div
+              class="bg-surface-card p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200">
+              <div
+                class="w-12 h-12 rounded-xl bg-brand-orange-subtle text-brand-orange flex items-center justify-center mb-5">
+                <span class="material-symbols-outlined text-[26px]">headset_mic</span>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-brand-navy mb-2">
+                24/7 Customer Support Availability
+              </h3>
+              <p class="font-body-md text-body-md text-text-secondary leading-relaxed">
+                Regardless of your time zone, log onto ReadEssay any time. Our
+                responsive operators provide instant answers and seamless
+                order status updates.
+              </p>
+            </div>
+            <div
+              class="bg-surface-card p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200">
+              <div
+                class="w-12 h-12 rounded-xl bg-accent-green-subtle text-accent-green flex items-center justify-center mb-5">
+                <span class="material-symbols-outlined text-[26px]">published_with_changes</span>
+              </div>
+              <h3 class="font-headline-sm text-headline-sm text-brand-navy mb-2">
+                On-Time Delivery &amp; Free Revisions
+              </h3>
+              <p class="font-body-md text-body-md text-text-secondary leading-relaxed">
+                Even after delivery, you have continuous access to fast
+                adjustments. Writers make any required instructor amendments
+                without additional fees.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FREQUENTLY ASKED QUESTIONS (10 ACCORDIONS) -->
+      <section class="w-full bg-surface-canvas py-16 lg:py-24">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8">
+          <div class="text-center mb-16">
+            <span
+              class="font-label-md text-label-md uppercase tracking-wider text-brand-orange font-bold">Clarifications
+              &amp; Help</span>
+            <h2 class="font-headline-xl text-headline-xl text-brand-navy mt-2">
+              Frequently Asked Questions FAQ
+            </h2>
+            <p class="font-body-lg text-body-lg text-text-secondary mt-3">
+              Find rapid answers about our order placement, security, and
+              class handling policies.
+            </p>
+          </div>
+          <div class="space-y-4" id="faq-container">
+            <!-- FAQ 1 -->
+            <div class="bg-surface-card rounded-2xl shadow-sm overflow-hidden faq-item">
+              <button
+                class="w-full px-6 py-5 flex items-center justify-between text-left font-headline-sm text-headline-sm text-brand-navy focus:outline-none"
+                onclick="toggleFaq(this)" type="button">
+                <span>1. How do you guarantee plagiarism-free and AI-free assignments?</span>
+                <span
+                  class="material-symbols-outlined text-brand-orange transform transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+              </button>
+              <div class="px-6 pb-6 text-text-secondary font-body-md text-body-md leading-relaxed hidden">
+                Each assignment is researched from scratch and written by human academic professionals. Before release,
+                the document runs through our internal Turnitin non-repository license and advanced AI detection filters
+                to ensure a 0% AI and &lt; 5% raw plagiarism score. A complimentary digital verification report is
+                included.
+              </div>
+            </div>
+            <!-- FAQ 2 -->
+            <div class="bg-surface-card rounded-2xl shadow-sm overflow-hidden faq-item">
+              <button
+                class="w-full px-6 py-5 flex items-center justify-between text-left font-headline-sm text-headline-sm text-brand-navy focus:outline-none"
+                onclick="toggleFaq(this)" type="button">
+                <span>2. Can I communicate directly with the assignment specialist assigned to me?</span>
+                <span
+                  class="material-symbols-outlined text-brand-orange transform transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+              </button>
+              <div class="px-6 pb-6 text-text-secondary font-body-md text-body-md leading-relaxed hidden">
+                Yes. You can relay notes, lecture presentations, and revision prompts directly through your assigned
+                student dashboard or coordinate via our 24/7 WhatsApp academic concierge desk.
+              </div>
+            </div>
+            <!-- FAQ 3 -->
+            <div class="bg-surface-card rounded-2xl shadow-sm overflow-hidden faq-item">
+              <button
+                class="w-full px-6 py-5 flex items-center justify-between text-left font-headline-sm text-headline-sm text-brand-navy focus:outline-none"
+                onclick="toggleFaq(this)" type="button">
+                <span>3. What referencing styles do you support (APA, Harvard, OSCOLA, IEEE, Chicago)?</span>
+                <span
+                  class="material-symbols-outlined text-brand-orange transform transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+              </button>
+              <div class="px-6 pb-6 text-text-secondary font-body-md text-body-md leading-relaxed hidden">
+                Our Ph.D. scholars are certified in every major global formatting guideline: APA 7th edition, Harvard
+                (including university-specific variants such as Coventry Harvard), OSCOLA for UK law, IEEE for computer
+                science and engineering, Chicago, MLA 9, and Vancouver.
+              </div>
+            </div>
+            <!-- FAQ 4 -->
+            <div class="bg-surface-card rounded-2xl shadow-sm overflow-hidden faq-item">
+              <button
+                class="w-full px-6 py-5 flex items-center justify-between text-left font-headline-sm text-headline-sm text-brand-navy focus:outline-none"
+                onclick="toggleFaq(this)" type="button">
+                <span>4. What happens if my tutor requests amendments or revisions after submission?</span>
+                <span
+                  class="material-symbols-outlined text-brand-orange transform transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+              </button>
+              <div class="px-6 pb-6 text-text-secondary font-body-md text-body-md leading-relaxed hidden">
+                We provide unlimited free revisions. Simply provide your professor's feedback sheet or rubric
+                commentary, and your assigned writer will implement the changes within 12 to 24 hours at no extra
+                charge.
+              </div>
+            </div>
+            <!-- FAQ 5 -->
+            <div class="bg-surface-card rounded-2xl shadow-sm overflow-hidden faq-item">
+              <button
+                class="w-full px-6 py-5 flex items-center justify-between text-left font-headline-sm text-headline-sm text-brand-navy focus:outline-none"
+                onclick="toggleFaq(this)" type="button">
+                <span>5. Can you handle urgent assignments with 6 to 12 hour deadlines?</span>
+                <span
+                  class="material-symbols-outlined text-brand-orange transform transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+              </button>
+              <div class="px-6 pb-6 text-text-secondary font-body-md text-body-md leading-relaxed hidden">
+                Yes. Our rapid deployment team operates 24/7 across multiple time zones. We routinely deliver completed
+                undergraduate papers, case analyses, and coding solutions in under 6 to 12 hours while maintaining
+                strict academic quality.
+              </div>
+            </div>
+            <!-- FAQ 6 -->
+            <div class="bg-surface-card rounded-2xl shadow-sm overflow-hidden faq-item">
+              <button
+                class="w-full px-6 py-5 flex items-center justify-between text-left font-headline-sm text-headline-sm text-brand-navy focus:outline-none"
+                onclick="toggleFaq(this)" type="button">
+                <span>6. Is my student identity and university portal login kept confidential?</span>
+                <span
+                  class="material-symbols-outlined text-brand-orange transform transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+              </button>
+              <div class="px-6 pb-6 text-text-secondary font-body-md text-body-md leading-relaxed hidden">
+                Confidentiality is total. We execute military-grade 256-bit encryption and strict internal NDAs. We
+                never request identifying personal information beyond what is necessary to deliver your assignment, and
+                data is permanently purged post-completion.
+              </div>
+            </div>
+            <!-- FAQ 7 -->
+            <div class="bg-surface-card rounded-2xl shadow-sm overflow-hidden faq-item">
+              <button
+                class="w-full px-6 py-5 flex items-center justify-between text-left font-headline-sm text-headline-sm text-brand-navy focus:outline-none"
+                onclick="toggleFaq(this)" type="button">
+                <span>7. Do you provide complete raw code files, datasets, and calculation worksheets?</span>
+                <span
+                  class="material-symbols-outlined text-brand-orange transform transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+              </button>
+              <div class="px-6 pb-6 text-text-secondary font-body-md text-body-md leading-relaxed hidden">
+                Absolutely. If your assignment involves Excel spreadsheets, SPSS syntax, Python scripts, SQL queries, or
+                MATLAB simulations, all raw editable files, clean dependencies, and step-by-step documentation are
+                packaged with the final report.
+              </div>
+            </div>
+            <!-- FAQ 8 -->
+            <div class="bg-surface-card rounded-2xl shadow-sm overflow-hidden faq-item">
+              <button
+                class="w-full px-6 py-5 flex items-center justify-between text-left font-headline-sm text-headline-sm text-brand-navy focus:outline-none"
+                onclick="toggleFaq(this)" type="button">
+                <span>8. How do your university-specific assignment services work?</span>
+                <span
+                  class="material-symbols-outlined text-brand-orange transform transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+              </button>
+              <div class="px-6 pb-6 text-text-secondary font-body-md text-body-md leading-relaxed hidden">
+                For institutions like Bournemouth, Coventry, UCLan, and Westminster, we maintain a dedicated bench of
+                alumni and adjunct researchers who understand the university's distinct module descriptors, grading
+                matrices, and reference styles.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- CONVERSION FINAL SECTION & DIRECT HOTLINES -->
+      <section class="w-full bg-surface-subtle py-16 lg:py-24">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+          <div class="bg-brand-navy text-on-primary rounded-3xl p-8 lg:p-14 relative overflow-hidden shadow-2xl">
+            <div
+              class="absolute -right-20 -bottom-20 w-80 h-80 bg-brand-orange/20 rounded-full blur-3xl pointer-events-none">
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+              <div class="lg:col-span-8">
+                <span class="font-label-md text-label-md uppercase tracking-wider text-brand-orange font-bold">Get In
+                  Touch With Us</span>
+                <h2 class="font-headline-xl text-headline-xl text-on-primary mt-2 leading-tight">
+                  Excel your academic journey today with ReadEssay's online
+                  class service and protected exam service.
+                </h2>
+                <p class="font-body-lg text-body-lg text-surface-container-high mt-4 leading-relaxed max-w-2xl">
+                  Don't let coursework weigh you down. We are your partners in
+                  your academic journey. Ordering from ReadEssay.com is
+                  absolutely safe and secure. We do not disclose any customer
+                  information.
+                </p>
+                <div class="flex flex-wrap items-center gap-6 mt-8 pt-4">
+                  <a class="flex items-center gap-3 px-5 py-3 rounded-full bg-brand-slate text-on-primary hover:bg-slate-700 transition-colors"
+                    href="tel:+923138400066">
+                    <span class="material-symbols-outlined text-brand-orange text-[22px]">phone_iphone</span>
+                    <div>
+                      <span class="text-[10px] block uppercase tracking-wider text-text-muted">PK WhatsApp
+                        Hotline</span>
+                      <span class="font-label-md text-label-md font-bold">+92 3138400066</span>
+                    </div>
+                  </a>
+                  <a class="flex items-center gap-3 px-5 py-3 rounded-full bg-brand-slate text-on-primary hover:bg-slate-700 transition-colors"
+                    href="tel:+447460674811">
+                    <span class="material-symbols-outlined text-brand-orange text-[22px]">call</span>
+                    <div>
+                      <span class="text-[10px] block uppercase tracking-wider text-text-muted">UK Support Desk</span>
+                      <span class="font-label-md text-label-md font-bold">+44 7460 674811</span>
+                    </div>
+                  </a>
+                  <a class="flex items-center gap-3 px-5 py-3 rounded-full bg-brand-slate text-on-primary hover:bg-slate-700 transition-colors"
+                    href="mailto:support@readessay.com">
+                    <span class="material-symbols-outlined text-brand-orange text-[22px]">mail</span>
+                    <div>
+                      <span class="text-[10px] block uppercase tracking-wider text-text-muted">Official Email</span>
+                      <span class="font-label-md text-label-md font-bold">support@readessay.com</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              <div class="lg:col-span-4 flex flex-col justify-center items-start lg:items-end">
+                <a class="px-8 py-5 rounded-full bg-brand-orange hover:bg-brand-orange-hover text-on-primary font-headline-sm text-headline-sm shadow-xl transition-all transform hover:-translate-y-1 text-center w-full lg:w-auto"
+                  href="#">
+                  Place Your Order Now
+                </a>
+                <span
+                  class="text-surface-container-high font-body-sm text-body-sm mt-3 text-center lg:text-right block w-full">
+                  Grade A or B Guaranteed • 100% Refundable
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Interactive Accordion Script -->
+      <script>
+        function toggleFaq(button) {
+          const content = button.nextElementSibling;
+          const icon = button.querySelector(".material-symbols-outlined");
+          const isHidden = content.classList.contains("hidden");
+
+          // Close all FAQs first
+          document
+            .querySelectorAll(
+              "#faq-container .faq-item div.text-text-secondary",
+            )
+            .forEach((item) => {
+              item.classList.add("hidden");
+            });
+          document
+            .querySelectorAll(
+              "#faq-container .faq-item .material-symbols-outlined",
+            )
+            .forEach((i) => {
+              i.classList.remove("rotate-180");
+            });
+
+          // If clicked item was hidden, show it
+          if (isHidden) {
+            content.classList.remove("hidden");
+            icon.classList.add("rotate-180");
+          }
+        }
+      </script>
+    </div>
+  </main>
+  <footer class="w-full bg-brand-navy text-on-primary">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 pt-16 pb-12">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12">
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center gap-3">
+            <img alt="ReadEssay Logo" class="h-20 w-auto rounded-lg p-1" src="images/readessay-logo.png" />
+          </div>
+          <div class="pt-2 space-y-2 text-surface-container-high font-body-sm text-body-sm">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-brand-orange text-[18px]">corporate_fare</span><span
+                class="">Operated by 786outsource Ltd</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-brand-orange text-[18px]">mail</span><a
+                class="hover:text-brand-orange transition-colors"
+                href="mailto:support@readessay.com">support@readessay.com</a>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-brand-orange text-[18px]">call</span><span class="">UK
+                WhatsApp: +44 7460 674811</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-brand-orange text-[18px]">phone_iphone</span><span class="">PK
+                WhatsApp: +92 3138400066</span>
+            </div>
+          </div>
+          <!-- Social Media Links -->
+          <div class="pt-3">
+            <span class="block text-xs uppercase tracking-wider text-text-muted mb-2.5 font-semibold">Connect with
+              us</span>
+            <div class="flex items-center gap-2.5">
+              <!-- Facebook -->
+              <a href="https://www.facebook.com/readessayofficial/" target="_blank" rel="noopener noreferrer"
+                aria-label="Facebook"
+                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path
+                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                </svg>
+              </a>
+
+              <!-- Instagram -->
+              <a href="https://www.instagram.com/readessay_official/" target="_blank" rel="noopener noreferrer"
+                aria-label="Instagram"
+                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                </svg>
+              </a>
+
+              <!-- LinkedIn -->
+              <a href="https://www.linkedin.com/company/readessay/" target="_blank" rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path
+                    d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                </svg>
+              </a>
+
+              <!-- Pinterest -->
+              <a href="https://www.pinterest.com/readessayofficial/" target="_blank" rel="noopener noreferrer"
+                aria-label="Pinterest"
+                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path
+                    d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z" />
+                </svg>
+              </a>
+
+              <!-- X (Twitter) -->
+              <a href="https://x.com/readessay" target="_blank" rel="noopener noreferrer"
+                aria-label="X (formerly Twitter)"
+                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                  <path
+                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+              </a>
+
+              <!-- YouTube -->
+              <a href="https://www.youtube.com/@ReadEssayusa" target="_blank" rel="noopener noreferrer"
+                aria-label="YouTube"
+                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path
+                    d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+        </div>
+        <div>
+          <div class="font-headline-sm text-headline-sm text-on-primary mb-4">
+            Core Services
+          </div>
+          <ul class="space-y-2.5 font-body-md text-body-md text-surface-container-high">
+            <li class="">
+              <a class="hover:text-brand-orange transition-colors" data-path="online-class-help" href="#">Online Class
+                Help</a>
+            </li>
+            <li class="">
+              <a class="hover:text-brand-orange transition-colors" data-path="take-my-class" href="#">Exam Help</a>
+            </li>
+            <li class="">
+              <a class="hover:text-brand-orange transition-colors" data-path="exam-help" href="#">Assignment Help</a>
+            </li>
+            <li class="">
+              <a class="hover:text-brand-orange transition-colors" data-path="protected-exams" href="#">Homework
+                Help</a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <div class="font-headline-sm text-headline-sm text-on-primary mb-4">
+            Company
+          </div>
+          <ul class="space-y-2.5 font-body-md text-body-md text-surface-container-high">
+            <li class="">
+              <a class="hover:text-brand-orange transition-colors" data-path="assignment-statistics" href="#">About</a>
+            </li>
+            <li class="">
+              <a class="hover:text-brand-orange transition-colors" data-path="assignment-cs" href="#">Reviews</a>
+            </li>
+            <li class="">
+              <a class="hover:text-brand-orange transition-colors" data-path="assignment-business" href="#">Samples</a>
+            </li>
+            <li class="">
+              <a class="hover:text-brand-orange transition-colors" data-path="assignment-business" href="#">Exam
+                Grades</a>
+            </li>
+            <li class="">
+              <a class="hover:text-brand-orange transition-colors" data-path="assignment-accounting" href="#">Blog</a>
+            </li>
+            <li class="">
+              <a class="hover:text-brand-orange transition-colors" data-path="assignment-math" href="#">Contact</a>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <div class="font-headline-sm text-headline-sm text-on-primary mb-4">
+            Policy
+          </div>
+          <ul class="space-y-2.5 font-body-md text-body-md text-surface-container-high">
+            <li class="">
+              <a class="hover:text-brand-orange transition-colors" data-path="reviews-samples" href="#">Privacy
+                Policy</a>
+            </li>
+            <li class="">
+              <a class="hover:text-brand-orange transition-colors" data-path="pricing-guarantee" href="#">Terms of
+                Use</a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+      <div class="pt-8 mt-4 flex flex-col md:flex-row items-center justify-between gap-6">
+
+        <div class="font-body-sm text-body-sm text-text-muted">
+          Copyright © 2026 Readessay.com. All rights reserved | Readessay.com is owned and operated by 786outsource Ltd.
+        </div>
+      </div>
+    </div>
+  </footer>
+  <div class="fixed bottom-6 right-6 z-50 flex items-center">
+    <a class="flex items-center gap-2.5 px-4 py-3 rounded-full bg-accent-green text-on-primary font-label-lg text-label-lg shadow-[0_12px_28px_rgba(16,185,129,0.4)] hover:bg-emerald-600 transition-all transform hover:scale-105"
+      href="https://wa.me/447460674811" target="_blank"><span
+        class="material-symbols-outlined text-[24px]">chat</span><span class="">WhatsApp Expert</span></a>
+  </div>
+  <script>
+    // Calculator logic
+    (function initCalculator() {
+      const pageInput = document.getElementById('calc-pages');
+      const levelSelect = document.getElementById('calc-academic-level');
+      const deadlineSelect = document.getElementById('calc-deadline');
+      const priceDisplay = document.getElementById('price-display');
+      const strikePrice = document.getElementById('strike-price');
+      const btnInc = document.getElementById('btn-inc');
+      const btnDec = document.getElementById('btn-dec');
+
+      if (!pageInput || !priceDisplay) return;
+
+      const baseRates = { undergraduate: 14, masters: 18, doctorate: 24, hnd: 15 };
+      const deadlineMultipliers = { '12h': 1.6, '24h': 1.35, '3d': 1.0, '7d': 0.9, '14d': 0.8 };
+
+      function updatePrice() {
+        const pages = Math.max(1, parseInt(pageInput.value) || 1);
+        const level = levelSelect ? levelSelect.value : 'undergraduate';
+        const deadline = deadlineSelect ? deadlineSelect.value : '3d';
+        const base = baseRates[level] || 14;
+        const multiplier = deadlineMultipliers[deadline] || 1.0;
+        const discountedRate = base * multiplier;
+        const originalRate = discountedRate / 0.7;
+        const totalDiscounted = Math.round(discountedRate * pages);
+        const totalOriginal = Math.round(originalRate * pages);
+        priceDisplay.textContent = '$' + totalDiscounted + '.00';
+        if (strikePrice) strikePrice.textContent = '$' + totalOriginal + '.00';
+      }
+
+      if (btnInc) btnInc.addEventListener('click', () => { pageInput.value = parseInt(pageInput.value || 1) + 1; updatePrice(); });
+      if (btnDec) btnDec.addEventListener('click', () => { const v = parseInt(pageInput.value || 1); if (v > 1) { pageInput.value = v - 1; updatePrice(); } });
+      if (pageInput) pageInput.addEventListener('input', updatePrice);
+      if (levelSelect) levelSelect.addEventListener('change', updatePrice);
+      if (deadlineSelect) deadlineSelect.addEventListener('change', updatePrice);
+      updatePrice();
+    })();
+  </script>
+  <!-- Price Calculator Script -->
+  <script id="price-calc-script">
+    (function () {
+      function recalculatePrice() {
+        const level = parseFloat(
+          document.getElementById("calc-academic-level")?.value || 1.15,
+        );
+        const baseRate = parseFloat(
+          document.getElementById("calc-service-type")?.value || 9.5,
+        );
+        const deadline = parseFloat(
+          document.getElementById("calc-deadline")?.value || 1.0,
+        );
+        const pages = parseFloat(
+          document.getElementById("calc-pages")?.value || 2,
+        );
+        const totalPrice = (baseRate * level * deadline * pages).toFixed(2);
+        const priceDisplay = document.getElementById("calc-total-price");
+        if (priceDisplay) {
+          priceDisplay.textContent = "$" + totalPrice;
+        }
+      }
+      [
+        "calc-academic-level",
+        "calc-service-type",
+        "calc-deadline",
+        "calc-pages",
+      ].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener("change", recalculatePrice);
+          el.addEventListener("input", recalculatePrice);
+        }
+      });
+      recalculatePrice();
+    })();
+  </script>
+  <!-- Unified Independent Infinite Drag & Auto-Scroll Slider -->
+  <script id="infinite-sliders-script">
+    (function () {
+      function setupInfiniteSlider(config) {
+        const container = document.getElementById(config.containerId);
+        const track = document.getElementById(config.trackId);
+        if (!container || !track) return;
+
+        let isDown = false;
+        let startX = 0;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+        let isHovered = false;
+        let halfWidth = 0;
+
+        // Measure group width dynamically
+        function updateHalfWidth() {
+          const firstGroup = track.querySelector(config.groupSelector);
+          if (firstGroup) {
+            halfWidth = firstGroup.offsetWidth + config.gap;
+          }
+        }
+
+        window.addEventListener("load", updateHalfWidth);
+        window.addEventListener("resize", updateHalfWidth);
+        updateHalfWidth();
+
+        // Seamless loop boundary control
+        function wrapPosition() {
+          if (halfWidth <= 0) return;
+          while (currentTranslate <= -halfWidth) {
+            currentTranslate += halfWidth;
+            prevTranslate += halfWidth;
+          }
+          while (currentTranslate > 0) {
+            currentTranslate -= halfWidth;
+            prevTranslate -= halfWidth;
+          }
+        }
+
+        // Independent animation loop
+        function animate() {
+          if (!isDown && !isHovered && halfWidth > 0) {
+            currentTranslate -= config.speed;
+            prevTranslate = currentTranslate;
+            wrapPosition();
+            track.style.transform = `translateX(${currentTranslate}px)`;
+          }
+          requestAnimationFrame(animate);
+        }
+        requestAnimationFrame(animate);
+
+        // Left-click mouse drag
+        container.addEventListener("mousedown", (e) => {
+          if (e.button !== 0) return;
+          isDown = true;
+          startX = e.pageX;
+          prevTranslate = currentTranslate;
+        });
+
+        window.addEventListener("mousemove", (e) => {
+          if (!isDown) return;
+          const deltaX = e.pageX - startX;
+          currentTranslate = prevTranslate + deltaX;
+          wrapPosition();
+          track.style.transform = `translateX(${currentTranslate}px)`;
+        });
+
+        window.addEventListener("mouseup", () => {
+          if (!isDown) return;
+          isDown = false;
+          prevTranslate = currentTranslate;
+        });
+
+        // Hover pause
+        container.addEventListener("mouseenter", () => {
+          isHovered = true;
+        });
+        container.addEventListener("mouseleave", () => {
+          isHovered = false;
+        });
+
+        // Mobile touch drag
+        container.addEventListener(
+          "touchstart",
+          (e) => {
+            isDown = true;
+            startX = e.touches[0].pageX;
+            prevTranslate = currentTranslate;
+          },
+          { passive: true }
+        );
+
+        container.addEventListener(
+          "touchmove",
+          (e) => {
+            if (!isDown) return;
+            const deltaX = e.touches[0].pageX - startX;
+            currentTranslate = prevTranslate + deltaX;
+            wrapPosition();
+            track.style.transform = `translateX(${currentTranslate}px)`;
+          },
+          { passive: true }
+        );
+
+        container.addEventListener("touchend", () => {
+          isDown = false;
+          prevTranslate = currentTranslate;
+        });
+      }
+
+      // Initialize Slider 1: Connect With Seniors
+      setupInfiniteSlider({
+        containerId: "senior-slider-container",
+        trackId: "senior-slider-track",
+        groupSelector: ".senior-group",
+        gap: 40, // 40px gap (gap-10)
+        speed: 1.0,
+      });
+
+      // Initialize Slider 2: Verified Grade Submissions
+      setupInfiniteSlider({
+        containerId: "grade-slider-container",
+        trackId: "grade-slider-track",
+        groupSelector: ".grade-group",
+        gap: 24, // 24px gap (gap-6)
+        speed: 0.85,
+      });
+    })();
+  </script>
+</body>
+
+</html>
