@@ -1,0 +1,1277 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="web_standard" name="shell-type" />
+    <title>ReadEssay - #1 Academic Support Platform</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        body,
+        .font-body-md,
+        .font-body-sm,
+        .font-body-lg,
+        .font-body-xl {
+            font-family: "Inter", sans-serif !important;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-headline-xl,
+        .font-headline-lg,
+        .font-headline-md,
+        .font-headline-sm,
+        .font-display-hero,
+        .font-display-hero-mobile {
+            font-family: "Poppins", sans-serif !important;
+        }
+    </style>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        @layer base {
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                overscroll-behavior: none;
+            }
+
+            main> :first-child {
+                margin-top: 0 !important;
+            }
+
+            main> :last-child {
+                margin-bottom: 0 !important;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        @keyframes marquee-seamless {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .ticker-wrapper {
+            display: flex;
+            width: 100%;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .ticker-track {
+            display: flex;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: space-around;
+            min-width: 100%;
+            animation: marquee-seamless 25s linear infinite;
+        }
+
+        .ticker-wrapper:hover .ticker-track {
+            animation-play-state: paused;
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-canvas": "#FFFFFF",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-tint": "#a73a00",
+                        "surface-dim": "#cbdbf5",
+                        "brand-orange-hover": "#E8540E",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#5c647a",
+                        "surface-variant": "#d3e4fe",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "brand-navy": "#0F172A",
+                        "surface-container": "#e5eeff",
+                        "brand-orange-subtle": "#FFF2EC",
+                        "on-primary": "#ffffff",
+                        background: "#f8f9ff",
+                        "on-primary-fixed": "#370e00",
+                        "text-primary": "#0F172A",
+                        "tertiary-container": "#9393b8",
+                        "on-background": "#0b1c30",
+                        "border-strong": "#CBD5E1",
+                        "accent-green": "#10B981",
+                        primary: "#a73a00",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#e3bfb2",
+                        "on-primary-container": "#571a00",
+                        "surface-muted": "#F1F5F9",
+                        "inverse-primary": "#ffb599",
+                        outline: "#8e7066",
+                        "text-secondary": "#475569",
+                        "primary-fixed-dim": "#ffb599",
+                        "tertiary-fixed-dim": "#c3c3ea",
+                        "primary-container": "#ff641a",
+                        "on-secondary-fixed": "#131b2e",
+                        surface: "#f8f9ff",
+                        "on-tertiary-container": "#2b2c4b",
+                        "on-tertiary-fixed": "#171836",
+                        "primary-fixed": "#ffdbce",
+                        "accent-green-subtle": "#ECFDF5",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "surface-subtle": "#F8FAFC",
+                        "surface-container-low": "#eff4ff",
+                        "text-muted": "#94A3B8",
+                        error: "#ba1a1a",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "tertiary-fixed": "#e1e0ff",
+                        "brand-orange": "#FF641A",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#dae2fd",
+                        "on-error-container": "#93000a",
+                        "surface-card": "#FFFFFF",
+                        "on-primary-fixed-variant": "#802a00",
+                        "surface-container-highest": "#d3e4fe",
+                        secondary: "#565e74",
+                        "brand-slate": "#1E293B",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#0b1c30",
+                        "on-surface-variant": "#5a4138",
+                        tertiary: "#5b5b7d",
+                        "on-tertiary-fixed-variant": "#434464",
+                        "inverse-surface": "#213145",
+                        "border-subtle": "#E2E8F0",
+                        "secondary-fixed": "#dae2fd",
+                        "surface-container-lowest": "#ffffff",
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                        lg: "2rem",
+                        xl: "3rem",
+                        full: "9999px",
+                    },
+                    spacing: {
+                        margin: "2rem",
+                        "gutter-mobile": "1rem",
+                        gutter: "1.5rem",
+                        "space-sm": "0.5rem",
+                        "space-xl": "2.5rem",
+                        "space-lg": "1.5rem",
+                        "margin-mobile": "1.25rem",
+                        "space-md": "1rem",
+                        "space-3xl": "6rem",
+                        "space-xs": "0.25rem",
+                        "space-2xl": "4rem",
+                    },
+                    fontFamily: {
+                        "body-xl": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Space Grotesk"],
+                        "display-hero-mobile": ["Space Grotesk"],
+                        "headline-xl": ["Space Grotesk"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Space Grotesk"],
+                        "display-hero": ["Space Grotesk"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "label-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Space Grotesk"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "headline-xl-mobile": ["Space Grotesk"],
+                    },
+                    fontSize: {
+                        "body-xl": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "headline-sm": [
+                            "20px",
+                            {
+                                lineHeight: "28px",
+                                letterSpacing: "-0.01em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "display-hero-mobile": [
+                            "36px",
+                            {
+                                lineHeight: "44px",
+                                letterSpacing: "-0.02em",
+                                fontWeight: "700",
+                            },
+                        ],
+                        "headline-xl": [
+                            "40px",
+                            {
+                                lineHeight: "48px",
+                                letterSpacing: "-0.025em",
+                                fontWeight: "700",
+                            },
+                        ],
+                        "body-lg": ["16px", { lineHeight: "26px", fontWeight: "400" }],
+                        "headline-lg": [
+                            "32px",
+                            {
+                                lineHeight: "40px",
+                                letterSpacing: "-0.02em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "display-hero": [
+                            "56px",
+                            {
+                                lineHeight: "64px",
+                                letterSpacing: "-0.03em",
+                                fontWeight: "700",
+                            },
+                        ],
+                        "body-md": ["14px", { lineHeight: "22px", fontWeight: "400" }],
+                        "label-md": [
+                            "13px",
+                            {
+                                lineHeight: "18px",
+                                letterSpacing: "0.02em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "label-sm": [
+                            "11px",
+                            {
+                                lineHeight: "16px",
+                                letterSpacing: "0.04em",
+                                fontWeight: "700",
+                            },
+                        ],
+                        "label-lg": [
+                            "15px",
+                            {
+                                lineHeight: "20px",
+                                letterSpacing: "0.01em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "headline-md": [
+                            "24px",
+                            {
+                                lineHeight: "32px",
+                                letterSpacing: "-0.015em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "body-sm": ["12px", { lineHeight: "18px", fontWeight: "400" }],
+                        "headline-xl-mobile": [
+                            "28px",
+                            {
+                                lineHeight: "36px",
+                                letterSpacing: "-0.02em",
+                                fontWeight: "700",
+                            },
+                        ],
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body class="bg-surface font-body-md text-on-surface antialiased">
+    <header class="fixed top-0 left-0 right-0 z-50 w-full">
+        <div class="w-full text-white py-2 overflow-hidden shadow-sm bg-[#243445]">
+            <div class="ticker-wrapper font-label-md text-label-md tracking-wide uppercase">
+                <!-- Track 1 -->
+                <div class="ticker-track">
+                    <span class="flex items-center gap-2 px-6">
+                        <span class="material-symbols-outlined text-[16px]">celebration</span>
+                        🎉 Great Deal! GET First 2 Pages Assignment or Essay Absolutely Free!
+                    </span>
+                    <span class="text-white/40">•</span>
+                    <span class="flex items-center gap-2 px-6">
+                        <span class="material-symbols-outlined text-[16px]">verified</span>
+                        ⚡ USA's No.1 Academic Platform
+                    </span>
+                    <span class="text-white/40">•</span>
+                    <span class="flex items-center gap-2 px-6">
+                        <span class="material-symbols-outlined text-[16px]">support_agent</span>
+                        24/7 Dedicated Support &amp; Ph.D. Experts
+                    </span>
+                    <span class="text-white/40">•</span>
+                    <span class="flex items-center gap-2 px-6">
+                        <span class="material-symbols-outlined text-[16px]">security</span>
+                        100% Unique &amp; Plagiarism-Free Content Guaranteed
+                    </span>
+                    <span class="text-white/40">•</span>
+                </div>
+
+                <!-- Track 2 (Exact duplicate for seamless looping) -->
+                <div class="ticker-track" aria-hidden="true">
+                    <span class="flex items-center gap-2 px-6">
+                        <span class="material-symbols-outlined text-[16px]">celebration</span>
+                        🎉 Great Deal! GET First 2 Pages Assignment or Essay Absolutely Free!
+                    </span>
+                    <span class="text-white/40">•</span>
+                    <span class="flex items-center gap-2 px-6">
+                        <span class="material-symbols-outlined text-[16px]">verified</span>
+                        ⚡ USA's No.1 Academic Platform
+                    </span>
+                    <span class="text-white/40">•</span>
+                    <span class="flex items-center gap-2 px-6">
+                        <span class="material-symbols-outlined text-[16px]">support_agent</span>
+                        24/7 Dedicated Support &amp; Ph.D. Experts
+                    </span>
+                    <span class="text-white/40">•</span>
+                    <span class="flex items-center gap-2 px-6">
+                        <span class="material-symbols-outlined text-[16px]">security</span>
+                        100% Unique &amp; Plagiarism-Free Content Guaranteed
+                    </span>
+                    <span class="text-white/40">•</span>
+                </div>
+            </div>
+        </div>
+        <nav class="w-full bg-[#FF641A] shadow-md" data-active-classes="text-brand-orange font-label-lg font-bold">
+            <div class="h-20 mx-auto px-6 lg:px-12 flex items-center justify-between gap-6">
+                <div class="flex items-center gap-4 shrink-0">
+                    <a aria-current="page" class="flex items-center gap-3" data-path="home" href="#"><img
+                            alt="ReadEssay Logo" class="h-20 w-auto object-contain"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgfYhQti4HozFTbr_BeMVC6BGONTPlApB6zmAlRMhovIfGZn5gacqOON7rtXUAYbdjYyrI8M8oZJCIgNZnBntUPaN7e55_ZirHjarjj6NVfFfGzrlpO4dpZb9L6oFG0QO3F_tZL-tgW2dZgAoJgvPxsmCqrfIXcP74KnrEP2jGjmSmbEBWbucPu5uKQVgAX-FzgP_o4-EGnm_q0UkbMfMx09BM4pN5kTr_CwPb8QJwbjhKgfqMkszD" /></a>
+                </div>
+                <div class="hidden xl:flex items-center gap-7 whitespace-nowrap text-white">
+                    <div class="relative group py-6">
+                        <a class="flex items-center gap-1 font-label-lg text-label-lg text-white hover:text-white/80 transition-colors"
+                            data-path="online-class-help" href="#">Online Class Help<span
+                                class="material-symbols-outlined text-[18px] text-white/80 group-hover:rotate-180 transition-transform duration-200">expand_more</span></a>
+                        <div
+                            class="absolute top-full left-0 w-64 bg-white rounded-2xl shadow-xl p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
+                            <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                data-path="take-my-class" href="#"><span
+                                    class="material-symbols-outlined text-brand-orange text-[20px]">school</span><span
+                                    class="font-body-md text-body-md font-medium">Take My Class</span></a><a
+                                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                data-path="course-assistance" href="#"><span
+                                    class="material-symbols-outlined text-brand-orange text-[20px]">laptop_chromebook</span><span
+                                    class="font-body-md text-body-md font-medium">Course Assistance</span></a><a
+                                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                data-path="protected-exams" href="#"><span
+                                    class="material-symbols-outlined text-brand-orange text-[20px]">verified_user</span><span
+                                    class="font-body-md text-body-md font-medium">Protected Exams</span></a>
+                        </div>
+                    </div>
+                    <div class="relative group py-6">
+                        <a class="flex items-center gap-1 font-label-lg text-label-lg text-white hover:text-white/80 transition-colors"
+                            data-path="exam-help" href="#">Exam Help<span
+                                class="material-symbols-outlined text-[18px] text-white/80 group-hover:rotate-180 transition-transform duration-200">expand_more</span></a>
+                        <div
+                            class="absolute top-full left-0 w-64 bg-white rounded-2xl shadow-xl p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
+                            <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                data-path="protected-exam-help" href="#"><span
+                                    class="material-symbols-outlined text-brand-orange text-[20px]">lock_open</span><span
+                                    class="font-body-md text-body-md font-medium">Protected Exam Help</span></a><a
+                                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                data-path="quiz-test-assistance" href="#"><span
+                                    class="material-symbols-outlined text-brand-orange text-[20px]">quiz</span><span
+                                    class="font-body-md text-body-md font-medium">Quiz &amp; Test
+                                    Assistance</span></a><a
+                                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                data-path="proctored-tests" href="#"><span
+                                    class="material-symbols-outlined text-brand-orange text-[20px]">timer</span><span
+                                    class="font-body-md text-body-md font-medium">Proctored Tests</span></a>
+                        </div>
+                    </div>
+                    <div class="relative group py-6">
+                        <a class="flex items-center gap-1 font-label-lg text-label-lg text-white hover:text-white/80 transition-colors"
+                            data-path="assignment-help" href="#">Assignment Help<span
+                                class="material-symbols-outlined text-[18px] text-white/80 group-hover:rotate-180 transition-transform duration-200">expand_more</span></a>
+                        <div
+                            class="absolute top-full -left-20 w-[480px] bg-white rounded-2xl shadow-xl p-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
+                            <div class="grid grid-cols-2 gap-2">
+                                <a class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="assignment-statistics" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">bar_chart</span><span
+                                        class="font-body-md text-body-md font-medium">Statistics</span></a><a
+                                    class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="assignment-cs" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">code</span><span
+                                        class="font-body-md text-body-md font-medium">Computer Science</span></a><a
+                                    class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="assignment-business" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">business_center</span><span
+                                        class="font-body-md text-body-md font-medium">Business Mgmt</span></a><a
+                                    class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="assignment-accounting" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">calculate</span><span
+                                        class="font-body-md text-body-md font-medium">Accounting</span></a><a
+                                    class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="assignment-math" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">functions</span><span
+                                        class="font-body-md text-body-md font-medium">Mathematics</span></a><a
+                                    class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="assignment-humanities" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">menu_book</span><span
+                                        class="font-body-md text-body-md font-medium">Humanities</span></a><a
+                                    class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="assignment-science" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">biotech</span><span
+                                        class="font-body-md text-body-md font-medium">Natural Science</span></a><a
+                                    class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="assignment-essay" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">edit_document</span><span
+                                        class="font-body-md text-body-md font-medium">Essay Writing</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative group py-6">
+                        <a class="flex items-center gap-1 font-label-lg text-label-lg text-white hover:text-white/80 transition-colors"
+                            data-path="homework-help" href="#">Homework Help<span
+                                class="material-symbols-outlined text-[18px] text-white/80 group-hover:rotate-180 transition-transform duration-200">expand_more</span></a>
+                        <div
+                            class="absolute top-full -left-10 w-[420px] bg-white rounded-2xl shadow-xl p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
+                            <div class="grid grid-cols-2 gap-2">
+                                <a class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="hw-statistics" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">analytics</span><span
+                                        class="font-body-md text-body-md font-medium">Statistics</span></a><a
+                                    class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="hw-economics" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">trending_up</span><span
+                                        class="font-body-md text-body-md font-medium">Economics</span></a><a
+                                    class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="hw-college" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">auto_stories</span><span
+                                        class="font-body-md text-body-md font-medium">College Homework</span></a><a
+                                    class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="hw-cs" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">terminal</span><span
+                                        class="font-body-md text-body-md font-medium">CS &amp; Coding</span></a><a
+                                    class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="hw-engineering" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">precision_manufacturing</span><span
+                                        class="font-body-md text-body-md font-medium">Engineering</span></a><a
+                                    class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="hw-finance" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">payments</span><span
+                                        class="font-body-md text-body-md font-medium">Finance</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="font-label-lg text-label-lg text-white hover:text-white/80 transition-colors whitespace-nowrap"
+                        data-path="reviews" href="#">Reviews</a>
+
+                    <a class="font-label-lg text-label-lg text-white hover:text-white/80 transition-colors whitespace-nowrap"
+                        data-path="samples" href="#">Samples</a>
+                    <a class="font-label-lg text-label-lg text-white hover:text-white/80 transition-colors whitespace-nowrap"
+                        data-path="top-experts" href="#">Top Experts</a>
+                </div>
+                <div class="flex flex-col items-end justify-center shrink-0 text-white">
+                    <a class="flex items-center gap-1.5 text-white hover:text-white/80 text-body-sm font-semibold transition-colors"
+                        href="tel:+923138400066"><span
+                            class="material-symbols-outlined text-[16px] text-white">call</span><span>+92
+                            3138400066</span></a><a
+                        class="flex items-center gap-1.5 text-white/90 hover:text-white text-xs font-medium transition-colors mt-0.5"
+                        href="mailto:support@readessay.com"><span
+                            class="material-symbols-outlined text-[14px] text-white/90">mail</span><span>support@readessay.com</span></a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="w-full pt-28 bg-canvas-bg min-h-screen">
+        <div class="flex flex-col w-full">
+            <!-- Top Breadcrumb Bar -->
+            <section class="w-full bg-surface-white py-space-sm shadow-sm">
+                <div class="max-w-7xl mx-auto px-gutter flex items-center justify-between">
+                    <nav aria-label="Breadcrumb" class="flex items-center gap-space-xs font-label-md text-label-md">
+                        <a class="text-text-secondary hover:text-primary-container transition-colors flex items-center gap-1"
+                            href="#">
+                            <span class="material-symbols-outlined text-[16px]">home</span>
+                            Home
+                        </a>
+                        <span class="material-symbols-outlined text-[15px] text-text-muted">chevron_right</span>
+                        <span class="text-slate-supporting font-semibold">Contact Us</span>
+                    </nav>
+                    <div class="hidden sm:flex items-center gap-2 font-label-sm text-label-sm text-text-secondary">
+                        <span class="w-2 h-2 rounded-full bg-verification-green animate-pulse"></span>
+                        <span>Advisory Desks Online Worldwide</span>
+                    </div>
+                </div>
+            </section>
+            <!-- Hero Header Section -->
+            <section class="w-full bg-canvas-bg pt-10 pb-8 sm:pt-14 sm:pb-12">
+                <div class="max-w-7xl mx-auto px-gutter text-center flex flex-col items-center">
+                    <!-- Eyebrow Pill -->
+                    <div
+                        class="inline-flex items-center gap-2 bg-orange-tint text-primary-container px-4 py-1.5 rounded-full font-label-sm text-label-sm uppercase tracking-wider mb-4 shadow-sm">
+                        <span class="material-symbols-outlined text-[16px] text-primary-container animate-spin"
+                            style="animation-duration: 9s">schedule</span>
+                        <span>24/7 STUDENT SUPPORT DESK</span>
+                    </div>
+                    <!-- Main Heading -->
+                    <h1 class="font-headline-xl text-headline-xl text-slate-supporting tracking-tight max-w-3xl">
+                        Get in Touch With Our
+                        <span class="text-primary-container">Academic Advisory</span> Team
+                    </h1>
+                    <!-- Subheadline -->
+                    <p class="font-body-lg text-body-lg text-text-secondary max-w-2xl mt-3">
+                        Have a question or need assistance? Our support team is available
+                        24/7 to help you with assignment outlines, doctoral consultations,
+                        and urgent coursework deadlines.
+                    </p>
+
+                </div>
+            </section>
+            <!-- Main Contact Experience (2-Column Grid) -->
+            <section class="w-full pb-16">
+                <div class="max-w-7xl mx-auto px-gutter">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                        <!-- Column 1: Direct Channels & Reachability (5 Cols) -->
+                        <div class="lg:col-span-5 flex flex-col gap-6">
+                            <div class="space-y-2">
+                                <h2
+                                    class="font-headline-lg text-headline-lg text-slate-supporting font-bold tracking-tight">
+                                    Direct Channels &amp; Contact Info
+                                </h2>
+                                <p class="font-body-md text-body-md text-text-secondary">
+                                    Our specialized academic support coordinators are standing
+                                    by around the clock across all UK, European, and North
+                                    American academic time zones.
+                                </p>
+                            </div>
+                            <!-- Channel Cards Stack -->
+                            <div class="flex flex-col gap-4">
+                                <!-- Card 1: Phone UK -->
+                                <a class="group bg-surface-white p-5 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 flex items-start gap-4"
+                                    href="tel:+447706510910">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-orange-tint text-primary-container flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                                        <span class="material-symbols-outlined text-[24px]">call</span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center justify-between">
+                                            <span
+                                                class="font-label-sm text-label-sm uppercase tracking-wider text-text-muted">Helpline
+                                                (UK &amp; Global)</span>
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-text-muted group-hover:text-primary-container transition-colors">arrow_outward</span>
+                                        </div>
+                                        <div
+                                            class="font-headline-sm text-headline-sm text-slate-supporting font-bold mt-0.5 tracking-tight group-hover:text-primary-container transition-colors">
+                                            +447706510910
+                                        </div>
+                                        <p class="font-body-sm text-body-sm text-text-secondary mt-1">
+                                            Available 24/7 for urgent order updates, dissertation
+                                            scheduling, and oral exam prep.
+                                        </p>
+                                    </div>
+                                </a>
+                                <!-- Card 2: WhatsApp Desk -->
+                                <a class="group bg-surface-white p-5 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 flex items-start gap-4"
+                                    href="https://wa.me/923138400066" rel="noopener noreferrer" target="_blank">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-verification-tint text-verification-green flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                                        <span class="material-symbols-outlined text-[24px]">chat</span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center justify-between">
+                                            <span
+                                                class="font-label-sm text-label-sm uppercase tracking-wider text-verification-green font-semibold">WhatsApp
+                                                Direct Desk</span>
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-text-muted group-hover:text-verification-green transition-colors">arrow_outward</span>
+                                        </div>
+                                        <div
+                                            class="font-headline-sm text-headline-sm text-slate-supporting font-bold mt-0.5 tracking-tight group-hover:text-verification-green transition-colors">
+                                            +923138400066
+                                        </div>
+                                        <p class="font-body-sm text-body-sm text-text-secondary mt-1">
+                                            Instant responses, quick rubric file uploads, syllabus
+                                            review &amp; senior tutor direct chats.
+                                        </p>
+                                    </div>
+                                </a>
+                                <!-- Card 3: Email Support -->
+                                <a class="group bg-surface-white p-5 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 flex items-start gap-4"
+                                    href="mailto:info@readessay.com">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                                        <span class="material-symbols-outlined text-[24px]">mail</span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center justify-between">
+                                            <span
+                                                class="font-label-sm text-label-sm uppercase tracking-wider text-text-muted">Official
+                                                Inquiries &amp; Support</span>
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-text-muted group-hover:text-slate-supporting transition-colors">arrow_outward</span>
+                                        </div>
+                                        <div
+                                            class="font-headline-sm text-headline-sm text-slate-supporting font-bold mt-0.5 tracking-tight">
+                                            info@readessay.com
+                                        </div>
+                                        <p class="font-body-sm text-body-sm text-text-secondary mt-1">
+                                            Expect detailed written replies, price breakdowns, and
+                                            editorial feedback within 15–30 minutes.
+                                        </p>
+                                    </div>
+                                </a>
+                                <!-- Card 4: Web Platform -->
+                                <a class="group bg-surface-white p-5 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 flex items-start gap-4"
+                                    href="https://readessay.com">
+                                    <div
+                                        class="w-12 h-12 rounded-full bg-surface-muted text-slate-supporting flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                                        <span class="material-symbols-outlined text-[24px]">language</span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <div class="flex items-center justify-between">
+                                            <span
+                                                class="font-label-sm text-label-sm uppercase tracking-wider text-text-muted">Official
+                                                Web Portal</span>
+                                            <span
+                                                class="material-symbols-outlined text-[16px] text-text-muted group-hover:text-primary-container transition-colors">arrow_outward</span>
+                                        </div>
+                                        <div
+                                            class="font-headline-sm text-headline-sm text-slate-supporting font-bold mt-0.5 tracking-tight">
+                                            readessay.com
+                                        </div>
+                                        <p class="font-body-sm text-body-sm text-text-secondary mt-1">
+                                            Encrypted 256-bit SSL student client platform with
+                                            real-time assignment progress tracking.
+                                        </p>
+                                    </div>
+                                </a>
+                            </div>
+
+                        </div>
+                        <!-- Column 2: Interactive Contact Form (7 Cols) -->
+                        <div class="lg:col-span-7">
+                            <div class="bg-surface-white p-6 sm:p-10 rounded-3xl shadow-xl space-y-6">
+                                <!-- Form Header -->
+                                <div class="space-y-1">
+                                    <div
+                                        class="inline-flex items-center gap-1.5 font-label-sm text-label-sm text-primary-container uppercase font-bold tracking-wider">
+                                        <span class="material-symbols-outlined text-[16px]">edit_note</span>
+                                        Direct Scholastic Request
+                                    </div>
+                                    <h2
+                                        class="font-headline-lg text-headline-lg text-slate-supporting font-bold tracking-tight">
+                                        Send Us a Message
+                                    </h2>
+                                    <p class="font-body-md text-body-md text-text-secondary">
+                                        Fill out the form below with your academic inquiry or
+                                        assignment details, and our senior coordinator will reach
+                                        out promptly.
+                                    </p>
+                                </div>
+                                <!-- Form -->
+                                <form class="space-y-5" id="inquiryForm" onsubmit="
+                      event.preventDefault();
+                      const alertBox =
+                        document.getElementById('formSuccessMessage');
+                      alertBox.classList.remove('hidden');
+                      this.reset();
+                    ">
+                                    <!-- Row 1: Name -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div class="space-y-1.5">
+                                            <label class="block font-label-md text-label-md text-slate-supporting"
+                                                for="firstName">
+                                                First Name
+                                                <span class="text-primary-container">*</span>
+                                            </label>
+                                            <input
+                                                class="w-full h-10 px-4 bg-canvas-bg text-slate-supporting placeholder-text-muted rounded-2xl outline-none focus:bg-surface-white focus:ring-2 focus:ring-primary-container/20 transition-all font-body-md text-body-md shadow-inner"
+                                                id="firstName" placeholder="e.g., Alexander" required="" type="text" />
+                                        </div>
+                                        <div class="space-y-1.5">
+                                            <label class="block font-label-md text-label-md text-slate-supporting"
+                                                for="lastName">
+                                                Last Name
+                                                <span class="text-primary-container">*</span>
+                                            </label>
+                                            <input
+                                                class="w-full h-10 px-4 bg-canvas-bg text-slate-supporting placeholder-text-muted rounded-2xl outline-none focus:bg-surface-white focus:ring-2 focus:ring-primary-container/20 transition-all font-body-md text-body-md shadow-inner"
+                                                id="lastName" placeholder="e.g., Vance" required="" type="text" />
+                                        </div>
+                                    </div>
+                                    <!-- Row 2: Email & Phone -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div class="space-y-1.5">
+                                            <label class="block font-label-md text-label-md text-slate-supporting"
+                                                for="emailAddress">
+                                                Email Address
+                                                <span class="text-primary-container">*</span>
+                                            </label>
+                                            <input
+                                                class="w-full h-10 px-4 bg-canvas-bg text-slate-supporting placeholder-text-muted rounded-2xl outline-none focus:bg-surface-white focus:ring-2 focus:ring-primary-container/20 transition-all font-body-md text-body-md shadow-inner"
+                                                id="emailAddress" placeholder="e.g., student@university.edu" required=""
+                                                type="email" />
+                                        </div>
+                                        <div class="space-y-1.5">
+                                            <label class="block font-label-md text-label-md text-slate-supporting"
+                                                for="phoneNumber">
+                                                Phone / Mobile Number
+                                                <span class="text-primary-container">*</span>
+                                            </label>
+                                            <input
+                                                class="w-full h-10 px-4 bg-canvas-bg text-slate-supporting placeholder-text-muted rounded-2xl outline-none focus:bg-surface-white focus:ring-2 focus:ring-primary-container/20 transition-all font-body-md text-body-md shadow-inner"
+                                                id="phoneNumber" placeholder="e.g., +44 7700 900077" required=""
+                                                type="tel" />
+                                        </div>
+                                    </div>
+                                    <!-- Row 3: Subject Selection -->
+                                    <div class="space-y-1.5">
+                                        <label class="block font-label-md text-label-md text-slate-supporting"
+                                            for="subjectSelect">
+                                            Inquiry Topic / Subject
+                                            <span class="text-primary-container">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <select
+                                                class="w-full h-10 px-4 bg-canvas-bg text-slate-supporting rounded-2xl outline-none focus:bg-surface-white focus:ring-2 focus:ring-primary-container/20 appearance-none font-body-md text-body-md shadow-inner cursor-pointer"
+                                                id="subjectSelect" required="">
+                                                <option disabled="" selected="" value="">
+                                                    Select topic or consultation category
+                                                </option>
+                                                <option value="assignment">
+                                                    New Assignment Inquiry (Essay, Coursework, Report)
+                                                </option>
+                                                <option value="status">
+                                                    Order Status &amp; Progress Consultation
+                                                </option>
+                                                <option value="dissertation">
+                                                    Dissertation &amp; Thesis Doctoral Support
+                                                </option>
+                                                <option value="exam">
+                                                    Urgent Online Exam &amp; Quiz Assistance
+                                                </option>
+                                                <option value="billing">
+                                                    Billing, Pricing Calculator &amp; Payment Inquiry
+                                                </option>
+                                                <option value="other">
+                                                    Other Academic Guidance Questions
+                                                </option>
+                                            </select>
+                                            <span
+                                                class="material-symbols-outlined pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-text-muted">expand_more</span>
+                                        </div>
+                                    </div>
+                                    <!-- Row 4: Message -->
+                                    <div class="space-y-1.5">
+                                        <div class="flex items-center justify-between">
+                                            <label class="block font-label-md text-label-md text-slate-supporting"
+                                                for="inquiryMessage">
+                                                Assignment Brief / Inquiries
+                                                <span class="text-primary-container">*</span>
+                                            </label>
+                                            <span class="font-body-sm text-body-sm text-text-muted">Attach rubrics via
+                                                WhatsApp</span>
+                                        </div>
+                                        <textarea
+                                            class="w-full p-4 bg-canvas-bg text-slate-supporting placeholder-text-muted rounded-2xl outline-none focus:bg-surface-white focus:ring-2 focus:ring-primary-container/20 transition-all font-body-md text-body-md resize-none shadow-inner"
+                                            id="inquiryMessage"
+                                            placeholder="Provide details about your subject, academic level (Undergraduate / Postgraduate), deadline date, word count target, or any specific questions..."
+                                            required="" rows="5"></textarea>
+                                    </div>
+                                    <!-- Reassurance Statement -->
+                                    <div class="flex items-start gap-3 p-3.5 bg-canvas-bg rounded-2xl">
+                                        <span
+                                            class="material-symbols-outlined text-verification-green text-[20px] shrink-0 mt-0.5">verified_user</span>
+                                        <p class="font-body-sm text-body-sm text-text-secondary leading-relaxed">
+                                            Your information is protected by our
+                                            <strong class="text-slate-supporting">100% strict Non-Disclosure Agreement
+                                                (NDA)</strong>
+                                            and rigorous university privacy protocol. No academic
+                                            data is ever shared with third parties.
+                                        </p>
+                                    </div>
+                                    <!-- Submit Button -->
+                                    <div class="pt-2">
+                                        <button
+                                            class="w-full flex items-center justify-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-headline-sm text-headline-sm font-bold py-4 rounded-full shadow-lg transition-all duration-200 hover:-translate-y-0.5 cursor-pointer"
+                                            type="submit">
+                                            <span>Submit Inquiry</span>
+                                            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+                                        </button>
+                                    </div>
+                                    <!-- Success Alert (Hidden by default) -->
+                                    <div class="hidden p-4 bg-verification-tint text-tertiary rounded-2xl flex items-center gap-3"
+                                        id="formSuccessMessage">
+                                        <span
+                                            class="material-symbols-outlined text-verification-green text-[24px]">check_circle</span>
+                                        <div class="text-left font-body-md text-body-md">
+                                            <strong>Inquiry Dispatched Successfully!</strong> An
+                                            academic coordinator will review your syllabus request
+                                            and email you in less than 15 minutes.
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Compact FAQ Micro-Strip -->
+            <section class="w-full bg-surface-white py-12 shadow-sm">
+                <div class="max-w-7xl mx-auto px-gutter">
+                    <div class="text-center max-w-xl mx-auto mb-8 space-y-2">
+                        <h3 class="font-headline-md text-headline-md text-slate-supporting font-bold tracking-tight">
+                            Frequently Asked Contact Inquiries
+                        </h3>
+                        <p class="font-body-md text-body-md text-text-secondary">
+                            Common procedural questions regarding our response turnaround
+                            and client confidentiality.
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- FAQ 1 -->
+                        <div class="bg-canvas-bg p-6 rounded-3xl space-y-2 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div
+                                    class="w-9 h-9 rounded-full bg-orange-tint text-primary-container flex items-center justify-center font-bold font-label-md text-label-md">
+                                    01
+                                </div>
+                                <h4 class="font-headline-sm text-headline-sm text-slate-supporting font-semibold">
+                                    How quickly will I get a response?
+                                </h4>
+                                <p class="font-body-md text-body-md text-text-secondary">
+                                    Typically within 5 to 15 minutes via WhatsApp or live chat,
+                                    and under 30 minutes via email. Urgent overnight assignments
+                                    receive immediate dispatch priority.
+                                </p>
+                            </div>
+                            <div
+                                class="pt-2 flex items-center gap-1 font-label-sm text-label-sm text-primary-container font-semibold">
+                                <span class="material-symbols-outlined text-[16px]">bolt</span>
+                                Instant Queue Matching
+                            </div>
+                        </div>
+                        <!-- FAQ 2 -->
+                        <div class="bg-canvas-bg p-6 rounded-3xl space-y-2 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div
+                                    class="w-9 h-9 rounded-full bg-verification-tint text-verification-green flex items-center justify-center font-bold font-label-md text-label-md">
+                                    02
+                                </div>
+                                <h4 class="font-headline-sm text-headline-sm text-slate-supporting font-semibold">
+                                    Is my contact information confidential?
+                                </h4>
+                                <p class="font-body-md text-body-md text-text-secondary">
+                                    Yes. All student communication is protected under 256-bit
+                                    banking-grade SSL encryption, rigorous NDA standards, and
+                                    strict institutional privacy policies.
+                                </p>
+                            </div>
+                            <div
+                                class="pt-2 flex items-center gap-1 font-label-sm text-label-sm text-verification-green font-semibold">
+                                <span class="material-symbols-outlined text-[16px]">verified</span>
+                                Strict NDA Protected
+                            </div>
+                        </div>
+                        <!-- FAQ 3 -->
+                        <div class="bg-canvas-bg p-6 rounded-3xl space-y-2 flex flex-col justify-between">
+                            <div class="space-y-2">
+                                <div
+                                    class="w-9 h-9 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold font-label-md text-label-md">
+                                    03
+                                </div>
+                                <h4 class="font-headline-sm text-headline-sm text-slate-supporting font-semibold">
+                                    Can I submit urgent assignment guidelines?
+                                </h4>
+                                <p class="font-body-md text-body-md text-text-secondary">
+                                    Yes. You can describe your brief in this contact form, send
+                                    syllabus PDFs directly to our WhatsApp desk, or attach them
+                                    in the student portal after instant quote checkout.
+                                </p>
+                            </div>
+                            <div
+                                class="pt-2 flex items-center gap-1 font-label-sm text-label-sm text-slate-supporting font-semibold">
+                                <span class="material-symbols-outlined text-[16px]">upload_file</span>
+                                PDF, DOCX &amp; Slides Accepted
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+    </main>
+    <footer class="w-full bg-brand-navy text-on-primary">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 pt-16 pb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12">
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <img alt="ReadEssay Logo" class="h-20 w-auto rounded-lg p-1" src="images/readessay-logo.png" />
+                    </div>
+                    <div class="pt-2 space-y-2 text-surface-container-high font-body-sm text-body-sm">
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="material-symbols-outlined text-brand-orange text-[18px]">corporate_fare</span><span
+                                class="">Operated by 786outsource Ltd</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-brand-orange text-[18px]">mail</span><a
+                                class="hover:text-brand-orange transition-colors"
+                                href="mailto:support@readessay.com">support@readessay.com</a>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-brand-orange text-[18px]">call</span><span
+                                class="">UK
+                                WhatsApp: +44 7460 674811</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="material-symbols-outlined text-brand-orange text-[18px]">phone_iphone</span><span
+                                class="">PK
+                                WhatsApp: +92 3138400066</span>
+                        </div>
+                    </div>
+                    <!-- Social Media Links -->
+                    <div class="pt-3">
+                        <span
+                            class="block text-xs uppercase tracking-wider text-text-muted mb-2.5 font-semibold">Connect
+                            with
+                            us</span>
+                        <div class="flex items-center gap-2.5">
+                            <!-- Facebook -->
+                            <a href="https://www.facebook.com/readessayofficial/" target="_blank"
+                                rel="noopener noreferrer" aria-label="Facebook"
+                                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path
+                                        d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                </svg>
+                            </a>
+
+                            <!-- Instagram -->
+                            <a href="https://www.instagram.com/readessay_official/" target="_blank"
+                                rel="noopener noreferrer" aria-label="Instagram"
+                                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                                </svg>
+                            </a>
+
+                            <!-- LinkedIn -->
+                            <a href="https://www.linkedin.com/company/readessay/" target="_blank"
+                                rel="noopener noreferrer" aria-label="LinkedIn"
+                                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path
+                                        d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                                </svg>
+                            </a>
+
+                            <!-- Pinterest -->
+                            <a href="https://www.pinterest.com/readessayofficial/" target="_blank"
+                                rel="noopener noreferrer" aria-label="Pinterest"
+                                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z" />
+                                </svg>
+                            </a>
+
+                            <!-- X (Twitter) -->
+                            <a href="https://x.com/readessay" target="_blank" rel="noopener noreferrer"
+                                aria-label="X (formerly Twitter)"
+                                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                                    <path
+                                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                                </svg>
+                            </a>
+
+                            <!-- YouTube -->
+                            <a href="https://www.youtube.com/@ReadEssayusa" target="_blank" rel="noopener noreferrer"
+                                aria-label="YouTube"
+                                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path
+                                        d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+                <div>
+                    <div class="font-headline-sm text-headline-sm text-on-primary mb-4">
+                        Core Services
+                    </div>
+                    <ul class="space-y-2.5 font-body-md text-body-md text-surface-container-high">
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="online-class-help"
+                                href="#">Online Class
+                                Help</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="take-my-class" href="#">Exam
+                                Help</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="exam-help"
+                                href="#">Assignment Help</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="protected-exams"
+                                href="#">Homework
+                                Help</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="font-headline-sm text-headline-sm text-on-primary mb-4">
+                        Company
+                    </div>
+                    <ul class="space-y-2.5 font-body-md text-body-md text-surface-container-high">
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="assignment-statistics"
+                                href="#">About</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="assignment-cs"
+                                href="#">Reviews</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="assignment-business"
+                                href="#">Samples</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="assignment-business"
+                                href="#">Exam
+                                Grades</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="assignment-accounting"
+                                href="#">Blog</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="assignment-math"
+                                href="#">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="font-headline-sm text-headline-sm text-on-primary mb-4">
+                        Policy
+                    </div>
+                    <ul class="space-y-2.5 font-body-md text-body-md text-surface-container-high">
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="reviews-samples"
+                                href="#">Privacy
+                                Policy</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="pricing-guarantee"
+                                href="#">Terms of
+                                Use</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 mt-4 flex flex-col md:flex-row items-center justify-between gap-6">
+
+                <div class="font-body-sm text-body-sm text-text-muted">
+                    Copyright © 2026 Readessay.com. All rights reserved | Readessay.com is owned and operated by
+                    786outsource Ltd.
+                </div>
+            </div>
+        </div>
+    </footer>
+    <div class="fixed bottom-6 right-6 z-50 flex items-center">
+        <a class="flex items-center gap-2.5 px-4 py-3 rounded-full bg-accent-green text-on-primary font-label-lg text-label-lg shadow-[0_12px_28px_rgba(16,185,129,0.4)] hover:bg-emerald-600 transition-all transform hover:scale-105"
+            href="https://wa.me/447460674811" target="_blank"><span
+                class="material-symbols-outlined text-[24px]">chat</span><span class="">WhatsApp Expert</span></a>
+    </div>
+    <!-- Price Calculator Script -->
+    <script id="price-calc-script">
+        (function () {
+            function recalculatePrice() {
+                const level = parseFloat(
+                    document.getElementById("calc-academic-level")?.value || 1.15,
+                );
+                const baseRate = parseFloat(
+                    document.getElementById("calc-service-type")?.value || 9.5,
+                );
+                const deadline = parseFloat(
+                    document.getElementById("calc-deadline")?.value || 1.0,
+                );
+                const pages = parseFloat(
+                    document.getElementById("calc-pages")?.value || 2,
+                );
+                const totalPrice = (baseRate * level * deadline * pages).toFixed(2);
+                const priceDisplay = document.getElementById("calc-total-price");
+                if (priceDisplay) {
+                    priceDisplay.textContent = "$" + totalPrice;
+                }
+            }
+            [
+                "calc-academic-level",
+                "calc-service-type",
+                "calc-deadline",
+                "calc-pages",
+            ].forEach((id) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener("change", recalculatePrice);
+                    el.addEventListener("input", recalculatePrice);
+                }
+            });
+            recalculatePrice();
+        })();
+    </script>
+    <!-- Unified Independent Infinite Drag & Auto-Scroll Slider -->
+    <script id="infinite-sliders-script">
+        (function () {
+            function setupInfiniteSlider(config) {
+                const container = document.getElementById(config.containerId);
+                const track = document.getElementById(config.trackId);
+                if (!container || !track) return;
+
+                let isDown = false;
+                let startX = 0;
+                let currentTranslate = 0;
+                let prevTranslate = 0;
+                let isHovered = false;
+                let halfWidth = 0;
+
+                // Measure group width dynamically
+                function updateHalfWidth() {
+                    const firstGroup = track.querySelector(config.groupSelector);
+                    if (firstGroup) {
+                        halfWidth = firstGroup.offsetWidth + config.gap;
+                    }
+                }
+
+                window.addEventListener("load", updateHalfWidth);
+                window.addEventListener("resize", updateHalfWidth);
+                updateHalfWidth();
+
+                // Seamless loop boundary control
+                function wrapPosition() {
+                    if (halfWidth <= 0) return;
+                    while (currentTranslate <= -halfWidth) {
+                        currentTranslate += halfWidth;
+                        prevTranslate += halfWidth;
+                    }
+                    while (currentTranslate > 0) {
+                        currentTranslate -= halfWidth;
+                        prevTranslate -= halfWidth;
+                    }
+                }
+
+                // Independent animation loop
+                function animate() {
+                    if (!isDown && !isHovered && halfWidth > 0) {
+                        currentTranslate -= config.speed;
+                        prevTranslate = currentTranslate;
+                        wrapPosition();
+                        track.style.transform = `translateX(${currentTranslate}px)`;
+                    }
+                    requestAnimationFrame(animate);
+                }
+                requestAnimationFrame(animate);
+
+                // Left-click mouse drag
+                container.addEventListener("mousedown", (e) => {
+                    if (e.button !== 0) return;
+                    isDown = true;
+                    startX = e.pageX;
+                    prevTranslate = currentTranslate;
+                });
+
+                window.addEventListener("mousemove", (e) => {
+                    if (!isDown) return;
+                    const deltaX = e.pageX - startX;
+                    currentTranslate = prevTranslate + deltaX;
+                    wrapPosition();
+                    track.style.transform = `translateX(${currentTranslate}px)`;
+                });
+
+                window.addEventListener("mouseup", () => {
+                    if (!isDown) return;
+                    isDown = false;
+                    prevTranslate = currentTranslate;
+                });
+
+                // Hover pause
+                container.addEventListener("mouseenter", () => {
+                    isHovered = true;
+                });
+                container.addEventListener("mouseleave", () => {
+                    isHovered = false;
+                });
+
+                // Mobile touch drag
+                container.addEventListener(
+                    "touchstart",
+                    (e) => {
+                        isDown = true;
+                        startX = e.touches[0].pageX;
+                        prevTranslate = currentTranslate;
+                    },
+                    { passive: true }
+                );
+
+                container.addEventListener(
+                    "touchmove",
+                    (e) => {
+                        if (!isDown) return;
+                        const deltaX = e.touches[0].pageX - startX;
+                        currentTranslate = prevTranslate + deltaX;
+                        wrapPosition();
+                        track.style.transform = `translateX(${currentTranslate}px)`;
+                    },
+                    { passive: true }
+                );
+
+                container.addEventListener("touchend", () => {
+                    isDown = false;
+                    prevTranslate = currentTranslate;
+                });
+            }
+
+            // Initialize Slider 1: Connect With Seniors
+            setupInfiniteSlider({
+                containerId: "senior-slider-container",
+                trackId: "senior-slider-track",
+                groupSelector: ".senior-group",
+                gap: 40, // 40px gap (gap-10)
+                speed: 1.0,
+            });
+
+            // Initialize Slider 2: Verified Grade Submissions
+            setupInfiniteSlider({
+                containerId: "grade-slider-container",
+                trackId: "grade-slider-track",
+                groupSelector: ".grade-group",
+                gap: 24, // 24px gap (gap-6)
+                speed: 0.85,
+            });
+        })();
+    </script>
+</body>
+
+</html>
