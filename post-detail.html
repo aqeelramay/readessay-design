@@ -1,0 +1,1842 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="web_standard" name="shell-type" />
+    <title>ReadEssay - #1 Academic Support Platform</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body,
+        .font-body-md,
+        .font-body-sm,
+        .font-body-lg,
+        .font-body-xl {
+            font-family: "Inter", sans-serif !important;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-headline-xl,
+        .font-headline-lg,
+        .font-headline-md,
+        .font-headline-sm,
+        .font-display-hero,
+        .font-display-hero-mobile {
+            font-family: "Poppins", sans-serif !important;
+        }
+    </style>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        @layer base {
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                overscroll-behavior: none;
+            }
+
+            main> :first-child {
+                margin-top: 0 !important;
+            }
+
+            main> :last-child {
+                margin-bottom: 0 !important;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        @keyframes marquee-seamless {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .ticker-wrapper {
+            display: flex;
+            width: 100%;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .ticker-track {
+            display: flex;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: space-around;
+            min-width: 100%;
+            animation: marquee-seamless 25s linear infinite;
+        }
+
+        .ticker-wrapper:hover .ticker-track {
+            animation-play-state: paused;
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        // --- Shared & Brand Primaries ---
+                        primary: "#a73a00",
+                        "primary-container": "#ff641a",
+                        "primary-fixed": "#ffdbce",
+                        "primary-fixed-dim": "#ffb599",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#571a00",
+                        "on-primary-fixed": "#370e00",
+                        "on-primary-fixed-variant": "#802a00",
+                        "inverse-primary": "#ffb599",
+
+                        // --- Secondaries ---
+                        secondary: "#565e74",
+                        "secondary-alt": "#506072",
+                        "secondary-container": "#dae2fd",
+                        "secondary-container-alt": "#d0e1f7",
+                        "secondary-fixed": "#dae2fd",
+                        "secondary-fixed-alt": "#d3e4fa",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "secondary-fixed-dim-alt": "#b7c8de",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#5c647a",
+                        "on-secondary-container-alt": "#546477",
+                        "on-secondary-fixed": "#131b2e",
+                        "on-secondary-fixed-alt": "#0c1d2d",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-secondary-fixed-variant-alt": "#38485a",
+
+                        // --- Tertiaries ---
+                        tertiary: "#5b5b7d",
+                        "tertiary-alt": "#006c49",
+                        "tertiary-container": "#9393b8",
+                        "tertiary-container-alt": "#00ab76",
+                        "tertiary-fixed": "#e1e0ff",
+                        "tertiary-fixed-alt": "#6ffbbe",
+                        "tertiary-fixed-dim": "#c3c3ea",
+                        "tertiary-fixed-dim-alt": "#4edea3",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#2b2c4b",
+                        "on-tertiary-container-alt": "#003623",
+                        "on-tertiary-fixed": "#171836",
+                        "on-tertiary-fixed-alt": "#002113",
+                        "on-tertiary-fixed-variant": "#434464",
+                        "on-tertiary-fixed-variant-alt": "#005236",
+
+                        // --- Surfaces & Backgrounds ---
+                        background: "#f8f9ff",
+                        "background-alt": "#faf8ff",
+                        "on-background": "#0b1c30",
+                        "on-background-alt": "#131b2e",
+                        surface: "#f8f9ff",
+                        "surface-alt": "#faf8ff",
+                        "on-surface": "#0b1c30",
+                        "on-surface-alt": "#131b2e",
+                        "on-surface-variant": "#5a4138",
+                        "surface-tint": "#a73a00",
+                        "surface-dim": "#cbdbf5",
+                        "surface-dim-alt": "#d2d9f4",
+                        "surface-bright": "#f8f9ff",
+                        "surface-bright-alt": "#faf8ff",
+                        "surface-variant": "#d3e4fe",
+                        "surface-variant-alt": "#dae2fd",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container-low-alt": "#f2f3ff",
+                        "surface-container": "#e5eeff",
+                        "surface-container-alt": "#eaedff",
+                        "surface-container-high": "#dce9ff",
+                        "surface-container-high-alt": "#e2e7ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-container-highest-alt": "#dae2fd",
+                        "surface-muted": "#F1F5F9",
+                        "surface-canvas": "#FFFFFF",
+                        "surface-card": "#FFFFFF",
+                        "surface-white": "#FFFFFF",
+                        "surface-subtle": "#F8FAFC",
+                        "canvas-bg": "#F8FAFC",
+                        "inverse-surface": "#213145",
+                        "inverse-surface-alt": "#283044",
+                        "inverse-on-surface": "#eaf1ff",
+                        "inverse-on-surface-alt": "#eef0ff",
+
+                        // --- Borders & Outlines ---
+                        outline: "#8e7066",
+                        "outline-variant": "#e3bfb2",
+                        "border-subtle": "#E2E8F0",
+                        "border-strong": "#CBD5E1",
+
+                        // --- Text Utilities ---
+                        "text-primary": "#0F172A",
+                        "text-secondary": "#475569",
+                        "text-muted": "#94A3B8",
+
+                        // --- Errors ---
+                        error: "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+
+                        // --- Brand & Custom Utilities ---
+                        "brand-orange": "#FF641A",
+                        "brand-orange-hover": "#E8540E",
+                        "orange-hover": "#E8540E",
+                        "brand-orange-subtle": "#FFF2EC",
+                        "orange-tint": "#FFF2EC",
+                        "brand-navy": "#0F172A",
+                        "brand-slate": "#1E293B",
+                        "slate-supporting": "#1E293B",
+                        "accent-green": "#10B981",
+                        "verification-green": "#10B981",
+                        "accent-green-subtle": "#ECFDF5",
+                        "verification-tint": "#ECFDF5",
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                        lg: "2rem",
+                        xl: "3rem",
+                        full: "9999px",
+                    },
+                    spacing: {
+                        "space-xs": "0.25rem",
+                        "space-sm": "0.5rem",
+                        "space-md": "1rem",
+                        "space-lg": "1.5rem",
+                        "space-xl": "2.5rem",
+                        "space-xl-compact": "2rem",
+                        "space-2xl": "4rem",
+                        "space-3xl": "6rem",
+                        gutter: "1.5rem",
+                        "gutter-mobile": "1rem",
+                        margin: "2rem",
+                        "margin-mobile": "1.25rem",
+                    },
+                    fontFamily: {
+                        // Direct Utility Classes
+                        headline: ["Poppins", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
+
+                        // Headline & Display Roles -> Poppins
+                        "display-hero": ["Poppins", "sans-serif"],
+                        "display-hero-mobile": ["Poppins", "sans-serif"],
+                        "headline-xl": ["Poppins", "sans-serif"],
+                        "headline-xl-mobile": ["Poppins", "sans-serif"],
+                        "headline-lg": ["Poppins", "sans-serif"],
+                        "headline-md": ["Poppins", "sans-serif"],
+                        "headline-sm": ["Poppins", "sans-serif"],
+
+                        // Body & Label Roles -> Inter
+                        "body-xl": ["Inter", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"],
+                        "body-sm": ["Inter", "sans-serif"],
+                        "label-lg": ["Inter", "sans-serif"],
+                        "label-md": ["Inter", "sans-serif"],
+                        "label-sm": ["Inter", "sans-serif"],
+                    },
+                    fontSize: {
+                        "display-hero": [
+                            "56px",
+                            {
+                                lineHeight: "64px",
+                                letterSpacing: "-0.03em",
+                                fontWeight: "700",
+                            },
+                        ],
+                        "display-hero-mobile": [
+                            "36px",
+                            {
+                                lineHeight: "44px",
+                                letterSpacing: "-0.02em",
+                                fontWeight: "700",
+                            },
+                        ],
+                        "headline-xl": [
+                            "40px",
+                            {
+                                lineHeight: "48px",
+                                letterSpacing: "-0.025em",
+                                fontWeight: "700",
+                            },
+                        ],
+                        "headline-xl-mobile": [
+                            "28px",
+                            {
+                                lineHeight: "36px",
+                                letterSpacing: "-0.02em",
+                                fontWeight: "700",
+                            },
+                        ],
+                        "headline-lg": [
+                            "32px",
+                            {
+                                lineHeight: "40px",
+                                letterSpacing: "-0.02em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "headline-md": [
+                            "24px",
+                            {
+                                lineHeight: "32px",
+                                letterSpacing: "-0.015em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "headline-sm": [
+                            "20px",
+                            {
+                                lineHeight: "28px",
+                                letterSpacing: "-0.01em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "body-xl": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "body-lg": ["16px", { lineHeight: "26px", fontWeight: "400" }],
+                        "body-md": ["14px", { lineHeight: "22px", fontWeight: "400" }],
+                        "body-sm": ["12px", { lineHeight: "18px", fontWeight: "400" }],
+                        "label-lg": [
+                            "15px",
+                            {
+                                lineHeight: "20px",
+                                letterSpacing: "0.01em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "label-md": [
+                            "13px",
+                            {
+                                lineHeight: "18px",
+                                letterSpacing: "0.02em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "label-sm": [
+                            "11px",
+                            {
+                                lineHeight: "16px",
+                                letterSpacing: "0.04em",
+                                fontWeight: "700",
+                            },
+                        ],
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body class="bg-surface font-body-md text-on-surface antialiased">
+    <header class="fixed top-0 left-0 right-0 z-50 w-full">
+        <div class="w-full text-white py-2 overflow-hidden shadow-sm bg-[#243445]">
+            <div class="ticker-wrapper font-label-md text-label-md tracking-wide uppercase">
+                <!-- Track 1 -->
+                <div class="ticker-track">
+                    <span class="flex items-center gap-2 px-6">
+                        <span class="material-symbols-outlined text-[16px]">celebration</span>
+                        🎉 Great Deal! GET First 2 Pages Assignment or Essay Absolutely Free!
+                    </span>
+                    <span class="text-white/40">•</span>
+                    <span class="flex items-center gap-2 px-6">
+                        <span class="material-symbols-outlined text-[16px]">verified</span>
+                        ⚡ USA's No.1 Academic Platform
+                    </span>
+                    <span class="text-white/40">•</span>
+                    <span class="flex items-center gap-2 px-6">
+                        <span class="material-symbols-outlined text-[16px]">support_agent</span>
+                        24/7 Dedicated Support &amp; Ph.D. Experts
+                    </span>
+                    <span class="text-white/40">•</span>
+                    <span class="flex items-center gap-2 px-6">
+                        <span class="material-symbols-outlined text-[16px]">security</span>
+                        100% Unique &amp; Plagiarism-Free Content Guaranteed
+                    </span>
+                    <span class="text-white/40">•</span>
+                </div>
+
+                <!-- Track 2 (Exact duplicate for seamless looping) -->
+                <div class="ticker-track" aria-hidden="true">
+                    <span class="flex items-center gap-2 px-6">
+                        <span class="material-symbols-outlined text-[16px]">celebration</span>
+                        🎉 Great Deal! GET First 2 Pages Assignment or Essay Absolutely Free!
+                    </span>
+                    <span class="text-white/40">•</span>
+                    <span class="flex items-center gap-2 px-6">
+                        <span class="material-symbols-outlined text-[16px]">verified</span>
+                        ⚡ USA's No.1 Academic Platform
+                    </span>
+                    <span class="text-white/40">•</span>
+                    <span class="flex items-center gap-2 px-6">
+                        <span class="material-symbols-outlined text-[16px]">support_agent</span>
+                        24/7 Dedicated Support &amp; Ph.D. Experts
+                    </span>
+                    <span class="text-white/40">•</span>
+                    <span class="flex items-center gap-2 px-6">
+                        <span class="material-symbols-outlined text-[16px]">security</span>
+                        100% Unique &amp; Plagiarism-Free Content Guaranteed
+                    </span>
+                    <span class="text-white/40">•</span>
+                </div>
+            </div>
+        </div>
+        <nav class="w-full bg-[#FF641A] shadow-md" data-active-classes="text-brand-orange font-label-lg font-bold">
+            <div class="h-20 mx-auto px-6 lg:px-12 flex items-center justify-between gap-6">
+                <div class="flex items-center gap-4 shrink-0">
+                    <a aria-current="page" class="flex items-center gap-3" data-path="home" href="#"><img
+                            alt="ReadEssay Logo" class="h-20 w-auto object-contain"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgfYhQti4HozFTbr_BeMVC6BGONTPlApB6zmAlRMhovIfGZn5gacqOON7rtXUAYbdjYyrI8M8oZJCIgNZnBntUPaN7e55_ZirHjarjj6NVfFfGzrlpO4dpZb9L6oFG0QO3F_tZL-tgW2dZgAoJgvPxsmCqrfIXcP74KnrEP2jGjmSmbEBWbucPu5uKQVgAX-FzgP_o4-EGnm_q0UkbMfMx09BM4pN5kTr_CwPb8QJwbjhKgfqMkszD" /></a>
+                </div>
+                <div class="hidden xl:flex items-center gap-7 whitespace-nowrap text-white">
+                    <div class="relative group py-6">
+                        <a class="flex items-center gap-1 font-label-lg text-label-lg text-white hover:text-white/80 transition-colors"
+                            data-path="online-class-help" href="#">Online Class Help<span
+                                class="material-symbols-outlined text-[18px] text-white/80 group-hover:rotate-180 transition-transform duration-200">expand_more</span></a>
+                        <div
+                            class="absolute top-full left-0 w-64 bg-white rounded-2xl shadow-xl p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
+                            <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                data-path="take-my-class" href="#"><span
+                                    class="material-symbols-outlined text-brand-orange text-[20px]">school</span><span
+                                    class="font-body-md text-body-md font-medium">Take My Class</span></a><a
+                                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                data-path="course-assistance" href="#"><span
+                                    class="material-symbols-outlined text-brand-orange text-[20px]">laptop_chromebook</span><span
+                                    class="font-body-md text-body-md font-medium">Course Assistance</span></a><a
+                                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                data-path="protected-exams" href="#"><span
+                                    class="material-symbols-outlined text-brand-orange text-[20px]">verified_user</span><span
+                                    class="font-body-md text-body-md font-medium">Protected Exams</span></a>
+                        </div>
+                    </div>
+                    <div class="relative group py-6">
+                        <a class="flex items-center gap-1 font-label-lg text-label-lg text-white hover:text-white/80 transition-colors"
+                            data-path="exam-help" href="#">Exam Help<span
+                                class="material-symbols-outlined text-[18px] text-white/80 group-hover:rotate-180 transition-transform duration-200">expand_more</span></a>
+                        <div
+                            class="absolute top-full left-0 w-64 bg-white rounded-2xl shadow-xl p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
+                            <a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                data-path="protected-exam-help" href="#"><span
+                                    class="material-symbols-outlined text-brand-orange text-[20px]">lock_open</span><span
+                                    class="font-body-md text-body-md font-medium">Protected Exam Help</span></a><a
+                                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                data-path="quiz-test-assistance" href="#"><span
+                                    class="material-symbols-outlined text-brand-orange text-[20px]">quiz</span><span
+                                    class="font-body-md text-body-md font-medium">Quiz &amp; Test
+                                    Assistance</span></a><a
+                                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                data-path="proctored-tests" href="#"><span
+                                    class="material-symbols-outlined text-brand-orange text-[20px]">timer</span><span
+                                    class="font-body-md text-body-md font-medium">Proctored Tests</span></a>
+                        </div>
+                    </div>
+                    <div class="relative group py-6">
+                        <a class="flex items-center gap-1 font-label-lg text-label-lg text-white hover:text-white/80 transition-colors"
+                            data-path="assignment-help" href="#">Assignment Help<span
+                                class="material-symbols-outlined text-[18px] text-white/80 group-hover:rotate-180 transition-transform duration-200">expand_more</span></a>
+                        <div
+                            class="absolute top-full -left-20 w-[480px] bg-white rounded-2xl shadow-xl p-5 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
+                            <div class="grid grid-cols-2 gap-2">
+                                <a class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="assignment-statistics" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">bar_chart</span><span
+                                        class="font-body-md text-body-md font-medium">Statistics</span></a><a
+                                    class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="assignment-cs" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">code</span><span
+                                        class="font-body-md text-body-md font-medium">Computer Science</span></a><a
+                                    class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="assignment-business" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">business_center</span><span
+                                        class="font-body-md text-body-md font-medium">Business Mgmt</span></a><a
+                                    class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="assignment-accounting" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">calculate</span><span
+                                        class="font-body-md text-body-md font-medium">Accounting</span></a><a
+                                    class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="assignment-math" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">functions</span><span
+                                        class="font-body-md text-body-md font-medium">Mathematics</span></a><a
+                                    class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="assignment-humanities" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">menu_book</span><span
+                                        class="font-body-md text-body-md font-medium">Humanities</span></a><a
+                                    class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="assignment-science" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">biotech</span><span
+                                        class="font-body-md text-body-md font-medium">Natural Science</span></a><a
+                                    class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="assignment-essay" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">edit_document</span><span
+                                        class="font-body-md text-body-md font-medium">Essay Writing</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative group py-6">
+                        <a class="flex items-center gap-1 font-label-lg text-label-lg text-white hover:text-white/80 transition-colors"
+                            data-path="homework-help" href="#">Homework Help<span
+                                class="material-symbols-outlined text-[18px] text-white/80 group-hover:rotate-180 transition-transform duration-200">expand_more</span></a>
+                        <div
+                            class="absolute top-full -left-10 w-[420px] bg-white rounded-2xl shadow-xl p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50">
+                            <div class="grid grid-cols-2 gap-2">
+                                <a class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="hw-statistics" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">analytics</span><span
+                                        class="font-body-md text-body-md font-medium">Statistics</span></a><a
+                                    class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="hw-economics" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">trending_up</span><span
+                                        class="font-body-md text-body-md font-medium">Economics</span></a><a
+                                    class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="hw-college" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">auto_stories</span><span
+                                        class="font-body-md text-body-md font-medium">College Homework</span></a><a
+                                    class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="hw-cs" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">terminal</span><span
+                                        class="font-body-md text-body-md font-medium">CS &amp; Coding</span></a><a
+                                    class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="hw-engineering" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">precision_manufacturing</span><span
+                                        class="font-body-md text-body-md font-medium">Engineering</span></a><a
+                                    class="flex items-center gap-2 px-3 py-2 rounded-xl text-brand-navy hover:bg-surface-subtle hover:text-brand-orange transition-colors"
+                                    data-path="hw-finance" href="#"><span
+                                        class="material-symbols-outlined text-brand-orange text-[18px]">payments</span><span
+                                        class="font-body-md text-body-md font-medium">Finance</span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="font-label-lg text-label-lg text-white hover:text-white/80 transition-colors whitespace-nowrap"
+                        data-path="reviews" href="#">Reviews</a>
+
+                    <a class="font-label-lg text-label-lg text-white hover:text-white/80 transition-colors whitespace-nowrap"
+                        data-path="samples" href="#">Samples</a>
+                    <a class="font-label-lg text-label-lg text-white hover:text-white/80 transition-colors whitespace-nowrap"
+                        data-path="top-experts" href="#">Top Experts</a>
+                </div>
+                <div class="flex flex-col items-end justify-center shrink-0 text-white">
+                    <a class="flex items-center gap-1.5 text-white hover:text-white/80 text-body-sm font-semibold transition-colors"
+                        href="tel:+923138400066"><span
+                            class="material-symbols-outlined text-[16px] text-white">call</span><span>+92
+                            3138400066</span></a><a
+                        class="flex items-center gap-1.5 text-white/90 hover:text-white text-xs font-medium transition-colors mt-0.5"
+                        href="mailto:support@readessay.com"><span
+                            class="material-symbols-outlined text-[14px] text-white/90">mail</span><span>support@readessay.com</span></a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="w-full pt-28 bg-surface">
+        <div class="flex flex-col w-full">
+            <!-- BEGIN: BreadcrumbNavigation -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-8">
+                <nav aria-label="Breadcrumb" class="w-full mt-10 py-4 text-xs text-slate-500">
+                    <ol class="flex justify-start items-center space-x-2">
+                        <li><a class="hover:text-brandOrange transition" href="/">Home</a></li>
+                        <li><span>/</span></li>
+                        <li><a class="hover:text-brandOrange transition" href="#">Blog</a></li>
+                        <li><span>/</span></li>
+                        <li>
+                            <a class="hover:text-brandOrange transition" href="#">Dissertation &amp; Thesis</a>
+                        </li>
+                        <li><span>/</span></li>
+                        <li class="text-slate-800 font-semibold truncate max-w-xs sm:max-w-md">
+                            How to Structure a Master's Dissertation: The Complete
+                            Chapter-by-Chapter Blueprint
+                        </li>
+                    </ol>
+                </nav>
+            </section>
+            <!-- END: BreadcrumbNavigation -->
+            <!-- BEGIN: ArticleHeaderSection -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2 pb-8">
+                <div class="max-w-7xl mx-auto space-y-5">
+                    <!-- Meta Badges Bar -->
+                    <div class="flex flex-wrap items-center gap-3 text-xs">
+                        <span
+                            class="bg-orange-tint text-brand-orange font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                            Dissertation &amp; Thesis
+                        </span>
+                        <span class="text-slate-500 flex items-center gap-1 font-medium">
+                            <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor"
+                                viewbox="0 0 24 24">
+                                <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="2"></path>
+                            </svg>
+                            8 min read
+                        </span>
+                        <span class="text-slate-400">•</span>
+                        <span class="text-slate-500">Published: Oct 24, 2024</span>
+                        <span class="text-slate-400">•</span>
+                    </div>
+                    <!-- Main SEO H1 -->
+                    <h1
+                        class="text-3xl sm:text-4xl lg:text-5xl font-display font-black text-slate-900 leading-[1.18] tracking-tight">
+                        How to Structure a Master's Dissertation: The Complete
+                        Chapter-by-Chapter Blueprint
+                    </h1>
+                    <!-- Author Byline & Social Bar -->
+                    <div
+                        class="flex flex-col sm:flex-row sm:items-center justify-between pt-4 pb-2 border-y border-borderColor gap-4">
+                        <!-- Author Profile Mini Card -->
+                        <div class="flex items-center space-x-3.5">
+                            <div>
+                                <div class="flex items-center gap-1.5">
+                                    <span class="font-display font-bold text-slate-900 text-sm">Dr. David Moraine</span>
+                                    <span
+                                        class="text-xs bg-slate-100 text-slate-600 font-semibold px-1.5 py-0.5 rounded">PhD,
+                                        Oxford Alum</span>
+                                </div>
+                                <p class="text-xs text-slate-500">
+                                    Senior Academic Research Faculty • Verified ReadEssay Advisor
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- Featured Image with SEO Caption -->
+                    <figure class="mt-6">
+                        <div
+                            class="overflow-hidden rounded-3xl shadow-lg border border-slate-200/80 aspect-[16/9] bg-slate-100">
+                            <img alt="Academic dissertation research writing setup, college student working on a literature review thesis chapter with open laptop, reference books, neat desk, warm focused library lighting, professional educational editorial photography"
+                                class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                                loading="eager"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBJ69LFSgBNZ2h1755hnc9BJm9FHy6LNw_PaKHfP_wc5tkz1yP34K1Lk1YBwJOfrvZ-2ECQV5PJi0tY4HxbXcVU20z2GhN6pCg-_LaEn8IZNxfUz-2IpGyTOH5P8TlEOlfqA6skHbT-kRl-dfou5sg8jMKI2dh0wCUA11CH2_kLtrq900VNrtteElaSf0dLpZyd7r7hoeqe8W_wjR1isaJ_1ZgQSyBiE3lhUC_pnE7n" />
+                        </div>
+                        <figcaption class="text-xs text-center text-slate-500 mt-3 font-normal">
+                            Figure 1.0: Empirical research formulation and reference management
+                            in progress at an Oxford graduate study cubicle. Photo: ReadEssay
+                            Editorial Archive.
+                        </figcaption>
+                    </figure>
+                </div>
+            </section>
+            <!-- END: ArticleHeaderSection -->
+            <!-- BEGIN: MainArticleTwoColumnBody -->
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                    <!-- Left Column: Sticky Table of Contents & Quick Action CTA -->
+                    <aside class="lg:col-span-4 space-y-6">
+                        <div class="sticky top-28 space-y-6">
+                            <!-- Table of Contents Container -->
+                            <nav aria-label="Table of Contents"
+                                class="bg-surfaceBg border border-borderColor rounded-2xl p-5 shadow-sm">
+                                <div class="flex items-center space-x-2 pb-3 mb-3 border-b border-borderColor">
+                                    <svg class="w-5 h-5 text-brandOrange" fill="none" stroke="currentColor"
+                                        viewbox="0 0 24 24">
+                                        <path d="M4 6h16M4 12h16M4 18h7" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"></path>
+                                    </svg>
+                                    <h3 class="font-display font-bold text-slate-800 text-sm tracking-tight uppercase">
+                                        Table of Contents
+                                    </h3>
+                                </div>
+                                <ul class="space-y-2.5 text-xs text-slate-600 font-medium">
+                                    <li>
+                                        <a class="hover:text-brand-orange transition flex items-start gap-2 py-0.5"
+                                            href="#toc-section-1">
+                                            <span class="text-brandOrange font-bold">1.</span>
+                                            <span>Understanding Graduate Dissertation Architecture</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="hover:text-brand-orange transition flex items-start gap-2 py-0.5"
+                                            href="#toc-section-2">
+                                            <span class="text-brandOrange font-bold">2.</span>
+                                            <span>The Standard 5-Chapter Dissertation Framework</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="hover:text-brand-orange transition flex items-start gap-2 py-0.5"
+                                            href="#toc-section-table">
+                                            <span class="text-brandOrange font-bold">3.</span>
+                                            <span>Chapter Breakdown &amp; Word Count Allocation
+                                                (Table)</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="hover:text-brand-orange transition flex items-start gap-2 py-0.5"
+                                            href="#toc-section-pitfalls">
+                                            <span class="text-brandOrange font-bold">4.</span>
+                                            <span>Common Faculty Objections &amp; Preemption Tactics</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="hover:text-brand-orange transition flex items-start gap-2 py-0.5"
+                                            href="#toc-section-author">
+                                            <span class="text-brandOrange font-bold">5.</span>
+                                            <span>About the Lead Faculty Author</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="hover:text-brand-orange transition flex items-start gap-2 py-0.5"
+                                            href="#toc-section-faq">
+                                            <span class="text-brandOrange font-bold">6.</span>
+                                            <span>Frequently Asked Questions (FAQ)</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+
+                        </div>
+                    </aside>
+                    <!-- Right Column: Main Article Editorial Content -->
+                    <main class="lg:col-span-8 custom-prose text-slate-700">
+                        <!-- SECTION 1 -->
+                        <article id="toc-section-1">
+                            <h2>
+                                1. Understanding the Core Architecture of Graduate Dissertations
+                            </h2>
+                            <p>
+                                A master's dissertation is not merely an extended course paper; it
+                                represents a comprehensive, methodologically sound contribution to
+                                scholarly discourse. At its foundation, academic graduate writing
+                                requires a symmetrical alignment between your epistemological
+                                stance, empirical questions, and analytical conclusions. When
+                                committee members evaluate a submission, they seek
+                                <strong>internal methodological coherence</strong> above all else.
+                            </p>
+                            <p>
+                                Many candidates encounter developmental roadblocks by treating
+                                each section in isolation. For instance, if your statement of the
+                                problem in Chapter 1 highlights a deficit in qualitative
+                                organizational experiences, your analytical toolkit in Chapter 3
+                                cannot arbitrarily pivot into non-contextual statistical metrics
+                                without rigorous theoretical bridging. Utilizing specialized
+                                <a class="text-brandOrange underline font-medium hover:text-orange-700"
+                                    href="#">Dissertation Editing Services</a>
+                                early in the outline stage ensures this coherence remains intact
+                                throughout your drafts.
+                            </p>
+                            <p>
+                                Before drafting initial sentences, candidates should construct a
+                                detailed chapter prospectus. A standard North American and UK
+                                postgraduate thesis generally conforms to between 12,000 and
+                                25,000 words, structured strategically across five classical
+                                pillars.
+                            </p>
+                        </article>
+                        <!-- SECTION 2 -->
+                        <article id="toc-section-2">
+                            <h2>2. The Standard 5-Chapter Dissertation Framework</h2>
+                            <p>
+                                While certain interdisciplinary faculties allow slight variations
+                                (such as portfolio-based or article-compilation theses), the
+                                five-chapter model remains the gold standard recognized by
+                                graduate examination boards across Harvard, Oxford, Stanford, and
+                                Australian Group of Eight institutions.
+                            </p>
+                            <!-- Chapter 1 -->
+                            <h3>Chapter 1: Introduction &amp; Problem Statement</h3>
+                            <p>
+                                The introductory chapter contextualizes the entire inquiry. It
+                                must establish why your research matters, identify an unresolved
+                                gap in existing literature, and present razor-sharp Research
+                                Questions (RQs) or hypotheses.
+                            </p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4 text-sm">
+                                <li>
+                                    <strong>Background &amp; Context:</strong> Macro-level
+                                    orientation of the topic within societal or academic parameters.
+                                </li>
+                                <li>
+                                    <strong>Statement of the Problem:</strong> The specific tension,
+                                    contradiction, or empirical void being investigated.
+                                </li>
+                                <li>
+                                    <strong>Purpose of the Study:</strong> Clear statement outlining
+                                    the study's scope, demographic focus, and analytical intent.
+                                </li>
+                                <li>
+                                    <strong>Significance:</strong> Practical implications for
+                                    practitioners and academic implications for researchers.
+                                </li>
+                                <li>
+                                    <strong>Definitions &amp; Delimitations:</strong> Boundaries set
+                                    intentionally by the researcher to keep the scope manageable.
+                                </li>
+                            </ul>
+                            <!-- Chapter 2 -->
+                            <h3>
+                                Chapter 2: Systematic Literature Review &amp; Theoretical
+                                Framework
+                            </h3>
+                            <p>
+                                Often comprising 25% to 30% of the entire work, the literature
+                                review is not a summary of sources; it is a critical synthesis.
+                                You must categorize prevailing scholarly debates, contrast
+                                theoretical assumptions, and ground your empirical work in an
+                                established framework. If you need structural assistance
+                                synthesizing disparate sources, refer to our specialized guide on
+                                <a class="text-brandOrange underline font-medium hover:text-orange-700"
+                                    href="#">Literature Review Writing Help</a>
+                                to avoid disjointed annotated bibliographies.
+                            </p>
+                            <!-- Callout Pro Tip Box -->
+                            <div class="my-6 border-l-4 border-brandOrange bg-orange-50/70 p-4 rounded-r-xl">
+                                <div
+                                    class="flex items-center gap-2 text-brandOrange font-bold font-display text-sm mb-1">
+                                    <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewbox="0 0 20 20">
+                                        <path clip-rule="evenodd"
+                                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                                            fill-rule="evenodd"></path>
+                                    </svg>
+                                    <span>Faculty Insider Note: Methodological Alignment</span>
+                                </div>
+                                <p class="text-sm text-slate-700 mb-0">
+                                    Committees frequently scrutinize the direct alignment between
+                                    Chapter 1 and Chapter 3. Every secondary research question
+                                    formulated in your introduction must directly map to an
+                                    identifiable data collection instrument and statistical or
+                                    thematic protocol in your methodology chapter.
+                                </p>
+                            </div>
+                            <!-- Chapter 3 -->
+                            <h3>Chapter 3: Research Methodology &amp; Sampling Strategy</h3>
+                            <p>
+                                Chapter 3 serves as the blueprint that makes your research
+                                replicable. Whether you are conducting empirical regressions or
+                                phenomenology, this chapter requires uncompromising transparency
+                                regarding:
+                            </p>
+                            <ul class="list-disc pl-6 space-y-2 mb-4 text-sm">
+                                <li>
+                                    <strong>Research Paradigm:</strong> Positivist, interpretivist,
+                                    critical, or pragmatic philosophical positioning.
+                                </li>
+                                <li>
+                                    <strong>Design:</strong> Quantitative experimental,
+                                    quasi-experimental, qualitative case study, or mixed-methods.
+                                    Consult our comparative guide on
+                                    <a class="text-brandOrange underline font-medium hover:text-orange-700"
+                                        href="#">Quantitative vs. Qualitative Research Methodology</a>
+                                    for paradigm selection.
+                                </li>
+                                <li>
+                                    <strong>Population &amp; Sampling:</strong> Sample size
+                                    calculation (e.g., G*Power) or purposive sampling criteria.
+                                </li>
+                                <li>
+                                    <strong>Instruments &amp; Validity:</strong> Cronbach's alpha
+                                    reliability, internal validity threats, or qualitative
+                                    trustworthiness (triangulation, reflexivity).
+                                </li>
+                                <li>
+                                    <strong>Ethical Safeguards:</strong> Institutional Review Board
+                                    (IRB) compliance, informed consent, and data anonymization.
+                                </li>
+                            </ul>
+                            <!-- Chapter 4 -->
+                            <h3>Chapter 4: Data Analysis, Findings &amp; Empirical Evidence</h3>
+                            <p>
+                                Chapter 4 presents empirical facts without speculative
+                                editorializing. In quantitative manuscripts, present descriptive
+                                statistics followed by inferential hypothesis tests, formatted in
+                                clean APA/Chicago statistical tables. In qualitative work,
+                                organize data thematically, providing rich verbatim participant
+                                excerpts to substantiate emergent coding nodes.
+                            </p>
+                            <!-- Chapter 5 -->
+                            <h3>
+                                Chapter 5: Discussion, Practical Implications &amp; Future
+                                Research
+                            </h3>
+                            <p>
+                                Here you interpret what your findings mean in conversation with
+                                the scholars cited in Chapter 2. Address whether your outcomes
+                                confirmed or challenged existing hypotheses, outline unavoidable
+                                study limitations, and deliver actionable recommendations for
+                                industry leaders and future researchers.
+                            </p>
+                        </article>
+                        <!-- SECTION 3: Comparative Table -->
+                        <article class="mt-10" id="toc-section-table">
+                            <h2>3. Chapter Breakdown &amp; Word Count Allocation</h2>
+                            <p>
+                                To ensure your dissertation does not become top-heavy in
+                                conceptualization while remaining anemic in empirical
+                                verification, follow this accredited percentage benchmark:
+                            </p>
+                            <div
+                                class="overflow-x-auto table-scrollbar my-6 rounded-xl border border-borderColor shadow-sm">
+                                <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                                    <thead>
+                                        <tr class="bg-brand-orange text-white font-display">
+                                            <th class="p-3 sm:p-4 font-semibold border-b border-slate-700">
+                                                Chapter &amp; Title
+                                            </th>
+                                            <th class="p-3 sm:p-4 font-semibold border-b border-slate-700">
+                                                Word Count %
+                                            </th>
+                                            <th class="p-3 sm:p-4 font-semibold border-b border-slate-700">
+                                                Primary Core Objective
+                                            </th>
+                                            <th class="p-3 sm:p-4 font-semibold border-b border-slate-700">
+                                                Typical Pitfall to Avoid
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-200 bg-white">
+                                        <tr class="hover:bg-slate-50 transition">
+                                            <td class="p-3 sm:p-4 font-bold text-slate-800">
+                                                <span
+                                                    class="inline-block px-2 py-0.5 rounded bg-orange-100 text-brandOrange font-mono text-xs mr-1">CH
+                                                    1</span>
+                                                Introduction
+                                            </td>
+                                            <td class="p-3 sm:p-4 font-semibold text-slate-700">
+                                                10% – 12%
+                                            </td>
+                                            <td class="p-3 sm:p-4 text-slate-600">
+                                                Establish empirical void, clear RQs, and theoretical
+                                                rationale.
+                                            </td>
+                                            <td class="p-3 sm:p-4 text-rose-600 font-medium">
+                                                Overly broad scope; failing to define measurable
+                                                variables.
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-slate-50 transition">
+                                            <td class="p-3 sm:p-4 font-bold text-slate-800">
+                                                <span
+                                                    class="inline-block px-2 py-0.5 rounded bg-orange-100 text-brandOrange font-mono text-xs mr-1">CH
+                                                    2</span>
+                                                Literature Review
+                                            </td>
+                                            <td class="p-3 sm:p-4 font-semibold text-slate-700">
+                                                25% – 30%
+                                            </td>
+                                            <td class="p-3 sm:p-4 text-slate-600">
+                                                Synthesize existing scholarship into cohesive theoretical
+                                                models.
+                                            </td>
+                                            <td class="p-3 sm:p-4 text-rose-600 font-medium">
+                                                Descriptive listing; presenting source summaries rather
+                                                than synthesis.
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-slate-50 transition">
+                                            <td class="p-3 sm:p-4 font-bold text-slate-800">
+                                                <span
+                                                    class="inline-block px-2 py-0.5 rounded bg-orange-100 text-brandOrange font-mono text-xs mr-1">CH
+                                                    3</span>
+                                                Methodology
+                                            </td>
+                                            <td class="p-3 sm:p-4 font-semibold text-slate-700">
+                                                15% – 20%
+                                            </td>
+                                            <td class="p-3 sm:p-4 text-slate-600">
+                                                Demonstrate replicable sampling, data collection, and
+                                                ethical compliance.
+                                            </td>
+                                            <td class="p-3 sm:p-4 text-rose-600 font-medium">
+                                                Vague sampling justification; omitting instrument
+                                                reliability stats.
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-slate-50 transition">
+                                            <td class="p-3 sm:p-4 font-bold text-slate-800">
+                                                <span
+                                                    class="inline-block px-2 py-0.5 rounded bg-orange-100 text-brandOrange font-mono text-xs mr-1">CH
+                                                    4</span>
+                                                Results &amp; Findings
+                                            </td>
+                                            <td class="p-3 sm:p-4 font-semibold text-slate-700">
+                                                20% – 25%
+                                            </td>
+                                            <td class="p-3 sm:p-4 text-slate-600">
+                                                Report unvarnished empirical findings, tables,
+                                                coefficients, and themes.
+                                            </td>
+                                            <td class="p-3 sm:p-4 text-rose-600 font-medium">
+                                                Premature interpretation; discussing implications before
+                                                Chapter 5.
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-slate-50 transition">
+                                            <td class="p-3 sm:p-4 font-bold text-slate-800">
+                                                <span
+                                                    class="inline-block px-2 py-0.5 rounded bg-orange-100 text-brandOrange font-mono text-xs mr-1">CH
+                                                    5</span>
+                                                Discussion &amp; Conclusion
+                                            </td>
+                                            <td class="p-3 sm:p-4 font-semibold text-slate-700">
+                                                15% – 20%
+                                            </td>
+                                            <td class="p-3 sm:p-4 text-slate-600">
+                                                Synthesize findings with prior lit, outline boundaries,
+                                                suggest next steps.
+                                            </td>
+                                            <td class="p-3 sm:p-4 text-rose-600 font-medium">
+                                                Claiming causality without statistical proof; ignoring
+                                                obvious limitations.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </article>
+                        <!-- Secondary Editorial Visual Graphic -->
+                        <figure class="my-8">
+                            <div
+                                class="overflow-hidden rounded-2xl shadow-md border border-borderColor aspect-[16/9] bg-slate-100">
+                                <img alt="Diverse group of college students collaborating on a research presentation around a modern seminar table, high-quality educational photo"
+                                    class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                                    loading="lazy"
+                                    src="https://lh3.googleusercontent.com/aida/ALJJyrCllg_NFOqpHERIsqQ6fMlctesYHQf6u96vIPNpJLZfB0Q7o8guKjadbgM2o9hZQHx-ZjFsN9zkbhL6MJufMClBKhslblIsD74B2H3h6qVGNFo3fHimtcczTDeLtHPGYK1SGgvvJH78KjnmGeEznzqKygVh-Cest8AK8IVtdzS5LLA9MYt08L0YCF7K_TqdfT1GZ_MbNaz66qVdJYQUymgukzqkJZOgalEkE_NnRobLvg" />
+                            </div>
+                            <figcaption class="text-xs text-center text-slate-500 mt-2.5">
+                                Figure 1.1: Collaborative thesis defense rehearsal and peer
+                                cross-examination in an academic research laboratory.
+                            </figcaption>
+                        </figure>
+                        <!-- SECTION 4: Objections & Pitfalls -->
+                        <article id="toc-section-pitfalls">
+                            <h2>4. Common Faculty Objections &amp; How to Preempt Them</h2>
+                            <p>
+                                During defense hearings, committee examiners focus on specific
+                                structural vulnerabilities. Anticipating these points in your text
+                                prevents extensive revisions:
+                            </p>
+                            <div class="space-y-4 my-4">
+                                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                                    <h4 class="font-display font-bold text-slate-800 text-sm mb-1 text-brandOrange">
+                                        Objection 1: "The theoretical framework is disconnected from
+                                        your findings."
+                                    </h4>
+                                    <p class="text-xs sm:text-sm text-slate-600 mb-0">
+                                        <strong>Preemption:</strong> In Chapter 5, explicitly revisit
+                                        the theoretical models established in Chapter 2. Use dedicated
+                                        subheadings explaining how your empirical outcomes either
+                                        reinforce, modify, or contest the theoretical framework.
+                                    </p>
+                                </div>
+                                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                                    <h4 class="font-display font-bold text-slate-800 text-sm mb-1 text-brandOrange">
+                                        Objection 2: "Inadequate citation of recent scholarly
+                                        literature."
+                                    </h4>
+                                    <p class="text-xs sm:text-sm text-slate-600 mb-0">
+                                        <strong>Preemption:</strong> At least 65% of your cited
+                                        literature must be peer-reviewed articles published within the
+                                        last 3 to 5 years, reserving older seminal citations only for
+                                        original foundational frameworks.
+                                    </p>
+                                </div>
+                                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200">
+                                    <h4 class="font-display font-bold text-slate-800 text-sm mb-1 text-brandOrange">
+                                        Objection 3: "Underpowered sample size or unaddressed
+                                        non-response bias."
+                                    </h4>
+                                    <p class="text-xs sm:text-sm text-slate-600 mb-0">
+                                        <strong>Preemption:</strong> Include an unambiguous
+                                        <em>Power Analysis</em> calculation directly in Chapter 3, and
+                                        state limitations transparently rather than leaving them for
+                                        committee scrutiny.
+                                    </p>
+                                </div>
+                            </div>
+                        </article>
+                        <!-- Author Biography Card (Schema.org Person Visual) -->
+                        <section
+                            class="mt-12 p-6 sm:p-7 bg-surfaceBg rounded-2xl border border-borderColor flex flex-col sm:flex-row items-center sm:items-start gap-5"
+                            id="toc-section-author">
+
+                            <div class="space-y-2 text-center sm:text-left">
+                                <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                                    <h3 class="text-lg font-display font-bold text-slate-900 m-0">
+                                        About the Author: Dr. David Moraine, PhD
+                                    </h3>
+                                    <span
+                                        class="bg-orange-tint text-brand-orange text-[11px] font-bold px-2 py-0.5 rounded">Verified
+                                        PhD Supervisor</span>
+                                </div>
+                                <p class="text-xs text-slate-500 font-medium">
+                                    Senior Research Fellow • 14+ Years Postgraduate Advising • 45+
+                                    Peer-Reviewed Publications
+                                </p>
+                                <p class="text-sm text-slate-600 leading-relaxed">
+                                    Dr. Moraine holds a Doctorate in Educational Research from the
+                                    University of Oxford. Over the past decade, he has served on
+                                    graduate defense committees and led the Academic Research
+                                    Integrity board at ReadEssay.com, mentoring over 1,200 master’s
+                                    and doctoral candidates to successful honors completion.
+                                </p>
+                                <div class="pt-1">
+                                    <a class="text-xs font-bold text-brandOrange hover:text-orange-700 inline-flex items-center gap-1"
+                                        href="#">
+                                        <span>View Author Archive &amp; Verified Research Guides</span>
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                                            <path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- FAQ Section (Schema.org FAQPage Visual) -->
+                        <section class="mt-12 space-y-4" id="toc-section-faq">
+                            <div class="border-b border-borderColor pb-3">
+                                <span class="text-xs font-bold uppercase tracking-wider text-brand-orange">Dissertation
+                                    Structuring Inquiries</span>
+                                <h2 class="text-2xl font-display font-bold text-slate-900 mt-1 mb-0">
+                                    Frequently Asked Questions
+                                </h2>
+                            </div>
+                            <div class="space-y-4" id="faq-container">
+                                <!-- FAQ 1 -->
+                                <div class="bg-surface-card rounded-2xl shadow-sm overflow-hidden faq-item">
+                                    <button
+                                        class="w-full px-6 py-5 flex items-center justify-between text-left font-headline-sm text-headline-sm text-brand-navy focus:outline-none"
+                                        onclick="toggleFaq(this)" type="button">
+                                        <span>1. What is the typical word count distribution across dissertation
+                                            chapters?</span>
+                                        <span
+                                            class="material-symbols-outlined text-brand-orange transform transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+                                    </button>
+                                    <div
+                                        class="px-6 pb-6 text-text-secondary font-body-md text-body-md leading-relaxed hidden">
+                                        Typically, Introduction takes 10%, Literature Review takes 25-30%, Methodology
+                                        occupies 15-20%, Results takes 20-25%, and the Discussion/Conclusion comprises
+                                        15-20%. This ensures equal weight between your contextual scholarship and your
+                                        original empirical data analysis.
+                                    </div>
+                                </div>
+
+                                <!-- FAQ 2 -->
+                                <div class="bg-surface-card rounded-2xl shadow-sm overflow-hidden faq-item">
+                                    <button
+                                        class="w-full px-6 py-5 flex items-center justify-between text-left font-headline-sm text-headline-sm text-brand-navy focus:outline-none"
+                                        onclick="toggleFaq(this)" type="button">
+                                        <span>2. Can I combine the Results and Discussion chapters in my thesis?</span>
+                                        <span
+                                            class="material-symbols-outlined text-brand-orange transform transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+                                    </button>
+                                    <div
+                                        class="px-6 pb-6 text-text-secondary font-body-md text-body-md leading-relaxed hidden">
+                                        In specific disciplines (such as certain qualitative humanities or fast-paced
+                                        laboratory science papers), faculties permit an integrated "Results and
+                                        Discussion" chapter. However, for most North American and UK social science and
+                                        business master's programs, examiners strictly prefer keeping pure findings
+                                        isolated from speculative interpretation. Always confirm with your institutional
+                                        thesis handbook.
+                                    </div>
+                                </div>
+
+                                <!-- FAQ 3 -->
+                                <div class="bg-surface-card rounded-2xl shadow-sm overflow-hidden faq-item">
+                                    <button
+                                        class="w-full px-6 py-5 flex items-center justify-between text-left font-headline-sm text-headline-sm text-brand-navy focus:outline-none"
+                                        onclick="toggleFaq(this)" type="button">
+                                        <span>3. How does ReadEssay ensure 100% academic integrity and original research
+                                            guidance?</span>
+                                        <span
+                                            class="material-symbols-outlined text-brand-orange transform transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+                                    </button>
+                                    <div
+                                        class="px-6 pb-6 text-text-secondary font-body-md text-body-md leading-relaxed hidden">
+                                        All ReadEssay specialists are certified postgraduates with verified terminal
+                                        degrees. We perform comprehensive Turnitin similarity indexing, ensure zero AI
+                                        contamination, adhere to strict confidentiality non-disclosure pacts, and assist
+                                        candidates through personalized editorial feedback without ghostwriting.
+                                    </div>
+                                </div>
+
+                                <!-- FAQ 4 -->
+                                <div class="bg-surface-card rounded-2xl shadow-sm overflow-hidden faq-item">
+                                    <button
+                                        class="w-full px-6 py-5 flex items-center justify-between text-left font-headline-sm text-headline-sm text-brand-navy focus:outline-none"
+                                        onclick="toggleFaq(this)" type="button">
+                                        <span>4. How early before defense deadlines should I seek professional
+                                            dissertation proofreading?</span>
+                                        <span
+                                            class="material-symbols-outlined text-brand-orange transform transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+                                    </button>
+                                    <div
+                                        class="px-6 pb-6 text-text-secondary font-body-md text-body-md leading-relaxed hidden">
+                                        We strongly advise submitting your draft for full proofreading and formatting at
+                                        least 3 to 4 weeks prior to your official committee submission date. This
+                                        provides comfortable lead time to incorporate faculty observations, review
+                                        citation discrepancies, and run professional format checks.
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- Social Share Bar Bottom -->
+                        <div
+                            class="mt-10 p-4 rounded-xl bg-orange-tint border border-orange-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <span class="text-xs font-bold text-brand-orange uppercase tracking-wide">Share this guide
+                                with
+                                fellow researchers:</span>
+                            <div class="flex items-center gap-2.5">
+                                <!-- Facebook -->
+                                <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook"
+                                    class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                        <path
+                                            d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z">
+                                        </path>
+                                    </svg>
+                                </a>
+                                <!-- X (Twitter) -->
+                                <a href="https://x.com/readessay" target="_blank" rel="noopener noreferrer"
+                                    aria-label="X (formerly Twitter)"
+                                    class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                                    <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                                        <path
+                                            d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z">
+                                        </path>
+                                    </svg>
+                                </a>
+
+                                <!-- LinkedIn -->
+                                <a href="#" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
+                                    class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                        <path
+                                            d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z">
+                                        </path>
+                                    </svg>
+                                </a>
+                            </div>
+
+                        </div>
+                    </main>
+                </div>
+            </section>
+            <!-- END: MainArticleTwoColumnBody -->
+            <!-- BEGIN: RelatedBlogArticlesSection -->
+            <section class="bg-surfaceBg border-y border-borderColor py-14">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+                        <div>
+                            <span
+                                class="text-xs font-bold text-brand-orange uppercase tracking-wider block mb-1">Recommended
+                                Readings</span>
+                            <h2 class="text-2xl sm:text-3xl font-display font-extrabold text-slate-900 tracking-tight">
+                                Related Academic Masterclasses &amp; Writing Blueprints
+                            </h2>
+                        </div>
+                        <a class="inline-flex items-center gap-1.5 text-sm font-bold text-brandOrange hover:text-orange-700 transition"
+                            href="#">
+                            <span>View All Academic Guides</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+                                <path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2"></path>
+                            </svg>
+                        </a>
+                    </div>
+                    <!-- 3-Column Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Card 1 -->
+                        <article
+                            class="bg-white rounded-2xl border border-borderColor overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                            <div class="aspect-[16/10] overflow-hidden bg-slate-100 relative">
+                                <img alt="University student studying with textbooks and digital tablet in a bright modern academic common room, professional editorial educational photography"
+                                    class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                                    loading="lazy"
+                                    src="https://lh3.googleusercontent.com/aida/ALJJyrDjpe5jdSd_Rx1Ue7pIXjbTvxYlKC02c58OQPEmWo-oBJpS1HXTyZMUQPpO-6dHk-UgJK6OLR8rJIdUVPvB0Lmg4XBRuFDIDmskRWWthbUqXxUgqV72Um0TtsGSDjUPkc7nOstrp4fYzotnsS84FhPnrSsF-vSd3_rPpNgE8VWYaXusLZ_2RpKROSxG6_e1sDchkX2hYv52_f8RUZzAmp9_icQwrgl0qB4jSccqEi9oGQ" />
+                                <span
+                                    class="absolute top-3 left-3 bg-brandOrange text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-sm">
+                                    Academic Writing &amp; Essays
+                                </span>
+                            </div>
+                            <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+                                <div>
+                                    <div class="text-[11px] text-slate-400 mb-2 flex items-center gap-1 font-medium">
+                                        <span>Oct 19, 2024</span> • <span>5 min read</span>
+                                    </div>
+                                    <h3
+                                        class="font-display font-bold text-base text-slate-900 leading-snug hover:text-brand-orange transition">
+                                        <a href="#">Mastering Literature Reviews: Synthesizing Scholarly
+                                            Sources Without Plagiarism</a>
+                                    </h3>
+                                    <p class="text-xs text-slate-600 line-clamp-3 mt-2 leading-relaxed">
+                                        Learn the synthesis matrix method to weave contrasting
+                                        scholarly viewpoints into a cohesive, high-scoring critical
+                                        critique.
+                                    </p>
+                                </div>
+                                <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                                    <span class="text-slate-500 font-medium">Prof. David Sterling</span>
+                                    <a class="text-brand-orange font-bold hover:underline flex items-center gap-1"
+                                        href="#">
+                                        <span>Read Article</span> →
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                        <!-- Card 2 -->
+                        <article
+                            class="bg-white rounded-2xl border border-borderColor overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                            <div class="aspect-[16/10] overflow-hidden bg-slate-100 relative">
+                                <img alt="Academic citation guides, vintage and modern books stacked neatly on a sleek modern study desk with high-end pen, minimalist educational photography"
+                                    class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                                    loading="lazy"
+                                    src="https://lh3.googleusercontent.com/aida/ALJJyrCPiMOGe6r131nCwosPTLuL0DfKvVdcnbnVl_rM3WwD0p4DOL0Rcw3fr7O8yh7i59P1pkVmFfs4l5Xzct43euPRYLqWPXx5-EShNPSWjeN5b8v133SD19AeSMFxOodsTSbmXU2zc2sS09k0zzoRr49clT4K5CTq8JXBc82CZ4FGws2Gs6-Sm5raVEBTuR9Ox2OmOBN-Aofd3XJ4MyrsfRTi8-mcvhIzh3Tcx5qBB595" />
+                                <span
+                                    class="absolute top-3 left-3 bg-brandNavy text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-sm">
+                                    Dissertation &amp; Thesis
+                                </span>
+                            </div>
+                            <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+                                <div>
+                                    <div class="text-[11px] text-slate-400 mb-2 flex items-center gap-1 font-medium">
+                                        <span>Sep 22, 2024</span> • <span>9 min read</span>
+                                    </div>
+                                    <h3
+                                        class="font-display font-bold text-base text-slate-900 leading-snug hover:text-brand-orange transition">
+                                        <a href="#">Quantitative vs. Qualitative Research: Selecting Your
+                                            Dissertation Methodology</a>
+                                    </h3>
+                                    <p class="text-xs text-slate-600 line-clamp-3 mt-2 leading-relaxed">
+                                        How to justify your sampling methodology, statistical
+                                        instrumentation, and ethical compliance to your thesis
+                                        committee.
+                                    </p>
+                                </div>
+                                <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                                    <span class="text-slate-500 font-medium">Dr. Sarah Jenkins</span>
+                                    <a class="text-brand-orange font-bold hover:underline flex items-center gap-1"
+                                        href="#">
+                                        <span>Read Article</span> →
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                        <!-- Card 3 -->
+                        <article
+                            class="bg-white rounded-2xl border border-borderColor overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                            <div class="aspect-[16/10] overflow-hidden bg-slate-100 relative">
+                                <img alt="Modern university library study scene with an open academic laptop, research notebook, warm ambient lighting, coffee cup, clean minimalist desk, high-end editorial photography"
+                                    class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                                    loading="lazy"
+                                    src="https://lh3.googleusercontent.com/aida/ALJJyrBALmn-AhHIoESkMeHM7j3FEh1inSqpMfPT5bWl4js7Aq9UFlkEQ7yKVneApQDD2Hma9twnEgpPaQJ32ACzQnUG_Bh7eUoXf1aotbHOXGHxQadivviw7kFUn_0XrCpFiMg9_hiaWSFgvCq8s-OZ2R24w-CfHidBxarTBlwl7z9DwAk8Q6VQ7FzMngosvJ5fWG-pWAdZcuj0l7N8PXNJQSHcODxhYHIvZSvJNDHNNhw0Fw" />
+                                <span
+                                    class="absolute top-3 left-3 bg-slate-700 text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-sm">
+                                    University Guides &amp; LMS
+                                </span>
+                            </div>
+                            <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+                                <div>
+                                    <div class="text-[11px] text-slate-400 mb-2 flex items-center gap-1 font-medium">
+                                        <span>Oct 15, 2024</span> • <span>6 min read</span>
+                                    </div>
+                                    <h3
+                                        class="font-display font-bold text-base text-slate-900 leading-snug hover:text-brand-orange transition">
+                                        <a href="#">APA 7th vs. Chicago 17th: Deciding Which Citation Standard
+                                            Your Faculty Requires</a>
+                                    </h3>
+                                    <p class="text-xs text-slate-600 line-clamp-3 mt-2 leading-relaxed">
+                                        A clear comparative breakdown of in-text citations, footnote
+                                        rules, and bibliographic entries with instant formatting
+                                        examples.
+                                    </p>
+                                </div>
+                                <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                                    <span class="text-slate-500 font-medium">Dr. Alan Crawford</span>
+                                    <a class="text-brand-orange font-bold hover:underline flex items-center gap-1"
+                                        href="#">
+                                        <span>Read Article</span> →
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+            <!-- END: RelatedBlogArticlesSection -->
+
+
+            <!-- CONVERSION FINAL SECTION & DIRECT HOTLINES -->
+            <section class="w-full bg-surface-subtle py-16 lg:py-24">
+                <div class="max-w-7xl mx-auto px-6 lg:px-12">
+                    <div
+                        class="bg-brand-navy text-on-primary rounded-3xl p-8 lg:p-14 relative overflow-hidden shadow-2xl">
+                        <div
+                            class="absolute -right-20 -bottom-20 w-80 h-80 bg-brand-orange/20 rounded-full blur-3xl pointer-events-none">
+                        </div>
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                            <div class="lg:col-span-8">
+                                <span
+                                    class="font-label-md text-label-md uppercase tracking-wider text-brand-orange font-bold">Get
+                                    In
+                                    Touch With Us</span>
+                                <h2 class="font-headline-xl text-headline-xl text-on-primary mt-2 leading-tight">
+                                    Excel your academic journey today with ReadEssay's online
+                                    class service and protected exam service.
+                                </h2>
+                                <p
+                                    class="font-body-lg text-body-lg text-surface-container-high mt-4 leading-relaxed max-w-2xl">
+                                    Don't let coursework weigh you down. We are your partners in
+                                    your academic journey. Ordering from ReadEssay.com is
+                                    absolutely safe and secure. We do not disclose any customer
+                                    information.
+                                </p>
+                                <div class="flex flex-wrap items-center gap-6 mt-8 pt-4">
+                                    <a class="flex items-center gap-3 px-5 py-3 rounded-full bg-brand-slate text-on-primary hover:bg-slate-700 transition-colors"
+                                        href="tel:+923138400066">
+                                        <span
+                                            class="material-symbols-outlined text-brand-orange text-[22px]">phone_iphone</span>
+                                        <div>
+                                            <span class="text-[10px] block uppercase tracking-wider text-text-muted">PK
+                                                WhatsApp
+                                                Hotline</span>
+                                            <span class="font-label-md text-label-md font-bold">+92 3138400066</span>
+                                        </div>
+                                    </a>
+                                    <a class="flex items-center gap-3 px-5 py-3 rounded-full bg-brand-slate text-on-primary hover:bg-slate-700 transition-colors"
+                                        href="tel:+447460674811">
+                                        <span
+                                            class="material-symbols-outlined text-brand-orange text-[22px]">call</span>
+                                        <div>
+                                            <span class="text-[10px] block uppercase tracking-wider text-text-muted">UK
+                                                Support Desk</span>
+                                            <span class="font-label-md text-label-md font-bold">+44 7460 674811</span>
+                                        </div>
+                                    </a>
+                                    <a class="flex items-center gap-3 px-5 py-3 rounded-full bg-brand-slate text-on-primary hover:bg-slate-700 transition-colors"
+                                        href="mailto:support@readessay.com">
+                                        <span
+                                            class="material-symbols-outlined text-brand-orange text-[22px]">mail</span>
+                                        <div>
+                                            <span
+                                                class="text-[10px] block uppercase tracking-wider text-text-muted">Official
+                                                Email</span>
+                                            <span
+                                                class="font-label-md text-label-md font-bold">support@readessay.com</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="lg:col-span-4 flex flex-col justify-center items-start lg:items-end">
+                                <a class="px-8 py-5 rounded-full bg-brand-orange hover:bg-brand-orange-hover text-on-primary font-headline-sm text-headline-sm shadow-xl transition-all transform hover:-translate-y-1 text-center w-full lg:w-auto"
+                                    href="#">
+                                    Place Your Order Now
+                                </a>
+                                <span
+                                    class="text-surface-container-high font-body-sm text-body-sm mt-3 text-center lg:text-right block w-full">
+                                    Grade A or B Guaranteed • 100% Refundable
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Interactive Accordion Script -->
+            <script>
+                function toggleFaq(button) {
+                    const content = button.nextElementSibling;
+                    const icon = button.querySelector(".material-symbols-outlined");
+                    const isHidden = content.classList.contains("hidden");
+
+                    // Close all FAQs first
+                    document
+                        .querySelectorAll(
+                            "#faq-container .faq-item div.text-text-secondary",
+                        )
+                        .forEach((item) => {
+                            item.classList.add("hidden");
+                        });
+                    document
+                        .querySelectorAll(
+                            "#faq-container .faq-item .material-symbols-outlined",
+                        )
+                        .forEach((i) => {
+                            i.classList.remove("rotate-180");
+                        });
+
+                    // If clicked item was hidden, show it
+                    if (isHidden) {
+                        content.classList.remove("hidden");
+                        icon.classList.add("rotate-180");
+                    }
+                }
+            </script>
+        </div>
+    </main>
+    <footer class="w-full bg-brand-navy text-on-primary">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 pt-16 pb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12">
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <img alt="ReadEssay Logo" class="h-20 w-auto rounded-lg p-1" src="images/readessay-logo.png" />
+                    </div>
+                    <div class="pt-2 space-y-2 text-surface-container-high font-body-sm text-body-sm">
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="material-symbols-outlined text-brand-orange text-[18px]">corporate_fare</span><span
+                                class="">Operated by 786outsource Ltd</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-brand-orange text-[18px]">mail</span><a
+                                class="hover:text-brand-orange transition-colors"
+                                href="mailto:support@readessay.com">support@readessay.com</a>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-brand-orange text-[18px]">call</span><span
+                                class="">UK
+                                WhatsApp: +44 7460 674811</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="material-symbols-outlined text-brand-orange text-[18px]">phone_iphone</span><span
+                                class="">PK
+                                WhatsApp: +92 3138400066</span>
+                        </div>
+                    </div>
+                    <!-- Social Media Links -->
+                    <div class="pt-3">
+                        <span
+                            class="block text-xs uppercase tracking-wider text-text-muted mb-2.5 font-semibold">Connect
+                            with
+                            us</span>
+                        <div class="flex items-center gap-2.5">
+                            <!-- Facebook -->
+                            <a href="https://www.facebook.com/readessayofficial/" target="_blank"
+                                rel="noopener noreferrer" aria-label="Facebook"
+                                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path
+                                        d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                </svg>
+                            </a>
+
+                            <!-- Instagram -->
+                            <a href="https://www.instagram.com/readessay_official/" target="_blank"
+                                rel="noopener noreferrer" aria-label="Instagram"
+                                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                                </svg>
+                            </a>
+
+                            <!-- LinkedIn -->
+                            <a href="https://www.linkedin.com/company/readessay/" target="_blank"
+                                rel="noopener noreferrer" aria-label="LinkedIn"
+                                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path
+                                        d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                                </svg>
+                            </a>
+
+                            <!-- Pinterest -->
+                            <a href="https://www.pinterest.com/readessayofficial/" target="_blank"
+                                rel="noopener noreferrer" aria-label="Pinterest"
+                                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 0 1 .083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z" />
+                                </svg>
+                            </a>
+
+                            <!-- X (Twitter) -->
+                            <a href="https://x.com/readessay" target="_blank" rel="noopener noreferrer"
+                                aria-label="X (formerly Twitter)"
+                                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                                    <path
+                                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                                </svg>
+                            </a>
+
+                            <!-- YouTube -->
+                            <a href="https://www.youtube.com/@ReadEssayusa" target="_blank" rel="noopener noreferrer"
+                                aria-label="YouTube"
+                                class="w-9 h-9 rounded-full bg-brand-slate flex items-center justify-center text-surface-container-high hover:bg-brand-orange hover:text-white transition-all transform hover:-translate-y-0.5">
+                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                    <path
+                                        d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+                <div>
+                    <div class="font-headline-sm text-headline-sm text-on-primary mb-4">
+                        Core Services
+                    </div>
+                    <ul class="space-y-2.5 font-body-md text-body-md text-surface-container-high">
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="online-class-help"
+                                href="#">Online Class
+                                Help</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="take-my-class" href="#">Exam
+                                Help</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="exam-help"
+                                href="#">Assignment Help</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="protected-exams"
+                                href="#">Homework
+                                Help</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="font-headline-sm text-headline-sm text-on-primary mb-4">
+                        Company
+                    </div>
+                    <ul class="space-y-2.5 font-body-md text-body-md text-surface-container-high">
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="assignment-statistics"
+                                href="#">About</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="assignment-cs"
+                                href="#">Reviews</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="assignment-business"
+                                href="#">Samples</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="assignment-business"
+                                href="#">Exam
+                                Grades</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="assignment-accounting"
+                                href="#">Blog</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="assignment-math"
+                                href="#">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="font-headline-sm text-headline-sm text-on-primary mb-4">
+                        Policy
+                    </div>
+                    <ul class="space-y-2.5 font-body-md text-body-md text-surface-container-high">
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="reviews-samples"
+                                href="#">Privacy
+                                Policy</a>
+                        </li>
+                        <li class="">
+                            <a class="hover:text-brand-orange transition-colors" data-path="pricing-guarantee"
+                                href="#">Terms of
+                                Use</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 mt-4 flex flex-col md:flex-row items-center justify-between gap-6">
+
+                <div class="font-body-sm text-body-sm text-text-muted">
+                    Copyright © 2026 Readessay.com. All rights reserved | Readessay.com is owned and operated by
+                    786outsource Ltd.
+                </div>
+            </div>
+        </div>
+    </footer>
+    <div class="fixed bottom-6 right-6 z-50 flex items-center">
+        <a class="flex items-center gap-2.5 px-4 py-3 rounded-full bg-accent-green text-on-primary font-label-lg text-label-lg shadow-[0_12px_28px_rgba(16,185,129,0.4)] hover:bg-emerald-600 transition-all transform hover:scale-105"
+            href="https://wa.me/447460674811" target="_blank"><span
+                class="material-symbols-outlined text-[24px]">chat</span><span class="">WhatsApp Expert</span></a>
+    </div>
+    <!-- Price Calculator Script -->
+    <script id="price-calc-script">
+        (function () {
+            function recalculatePrice() {
+                const level = parseFloat(
+                    document.getElementById("calc-academic-level")?.value || 1.15,
+                );
+                const baseRate = parseFloat(
+                    document.getElementById("calc-service-type")?.value || 9.5,
+                );
+                const deadline = parseFloat(
+                    document.getElementById("calc-deadline")?.value || 1.0,
+                );
+                const pages = parseFloat(
+                    document.getElementById("calc-pages")?.value || 2,
+                );
+                const totalPrice = (baseRate * level * deadline * pages).toFixed(2);
+                const priceDisplay = document.getElementById("calc-total-price");
+                if (priceDisplay) {
+                    priceDisplay.textContent = "$" + totalPrice;
+                }
+            }
+            [
+                "calc-academic-level",
+                "calc-service-type",
+                "calc-deadline",
+                "calc-pages",
+            ].forEach((id) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener("change", recalculatePrice);
+                    el.addEventListener("input", recalculatePrice);
+                }
+            });
+            recalculatePrice();
+        })();
+    </script>
+    <!-- Unified Independent Infinite Drag & Auto-Scroll Slider -->
+    <script id="infinite-sliders-script">
+        (function () {
+            function setupInfiniteSlider(config) {
+                const container = document.getElementById(config.containerId);
+                const track = document.getElementById(config.trackId);
+                if (!container || !track) return;
+
+                let isDown = false;
+                let startX = 0;
+                let currentTranslate = 0;
+                let prevTranslate = 0;
+                let isHovered = false;
+                let halfWidth = 0;
+
+                // Measure group width dynamically
+                function updateHalfWidth() {
+                    const firstGroup = track.querySelector(config.groupSelector);
+                    if (firstGroup) {
+                        halfWidth = firstGroup.offsetWidth + config.gap;
+                    }
+                }
+
+                window.addEventListener("load", updateHalfWidth);
+                window.addEventListener("resize", updateHalfWidth);
+                updateHalfWidth();
+
+                // Seamless loop boundary control
+                function wrapPosition() {
+                    if (halfWidth <= 0) return;
+                    while (currentTranslate <= -halfWidth) {
+                        currentTranslate += halfWidth;
+                        prevTranslate += halfWidth;
+                    }
+                    while (currentTranslate > 0) {
+                        currentTranslate -= halfWidth;
+                        prevTranslate -= halfWidth;
+                    }
+                }
+
+                // Independent animation loop
+                function animate() {
+                    if (!isDown && !isHovered && halfWidth > 0) {
+                        currentTranslate -= config.speed;
+                        prevTranslate = currentTranslate;
+                        wrapPosition();
+                        track.style.transform = `translateX(${currentTranslate}px)`;
+                    }
+                    requestAnimationFrame(animate);
+                }
+                requestAnimationFrame(animate);
+
+                // Left-click mouse drag
+                container.addEventListener("mousedown", (e) => {
+                    if (e.button !== 0) return;
+                    isDown = true;
+                    startX = e.pageX;
+                    prevTranslate = currentTranslate;
+                });
+
+                window.addEventListener("mousemove", (e) => {
+                    if (!isDown) return;
+                    const deltaX = e.pageX - startX;
+                    currentTranslate = prevTranslate + deltaX;
+                    wrapPosition();
+                    track.style.transform = `translateX(${currentTranslate}px)`;
+                });
+
+                window.addEventListener("mouseup", () => {
+                    if (!isDown) return;
+                    isDown = false;
+                    prevTranslate = currentTranslate;
+                });
+
+                // Hover pause
+                container.addEventListener("mouseenter", () => {
+                    isHovered = true;
+                });
+                container.addEventListener("mouseleave", () => {
+                    isHovered = false;
+                });
+
+                // Mobile touch drag
+                container.addEventListener(
+                    "touchstart",
+                    (e) => {
+                        isDown = true;
+                        startX = e.touches[0].pageX;
+                        prevTranslate = currentTranslate;
+                    },
+                    { passive: true }
+                );
+
+                container.addEventListener(
+                    "touchmove",
+                    (e) => {
+                        if (!isDown) return;
+                        const deltaX = e.touches[0].pageX - startX;
+                        currentTranslate = prevTranslate + deltaX;
+                        wrapPosition();
+                        track.style.transform = `translateX(${currentTranslate}px)`;
+                    },
+                    { passive: true }
+                );
+
+                container.addEventListener("touchend", () => {
+                    isDown = false;
+                    prevTranslate = currentTranslate;
+                });
+            }
+
+            // Initialize Slider 1: Connect With Seniors
+            setupInfiniteSlider({
+                containerId: "senior-slider-container",
+                trackId: "senior-slider-track",
+                groupSelector: ".senior-group",
+                gap: 40, // 40px gap (gap-10)
+                speed: 1.0,
+            });
+
+            // Initialize Slider 2: Verified Grade Submissions
+            setupInfiniteSlider({
+                containerId: "grade-slider-container",
+                trackId: "grade-slider-track",
+                groupSelector: ".grade-group",
+                gap: 24, // 24px gap (gap-6)
+                speed: 0.85,
+            });
+        })();
+    </script>
+</body>
+
+</html>
