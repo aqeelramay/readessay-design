@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
+import { ServicesView } from "@/components/services/ServicesView";
 
 export const metadata: Metadata = {
   title: "Services — ReadEssay Admin",
   description:
-    "Manage essay writing packages, turnaround times, pricing tiers & academic tiers.",
+    "Manage top-level academic service categories and their sub-service hierarchies.",
 };
 
 export default function ServicesPage() {
-  return <ModulePlaceholder moduleId="services" />;
+  return <ServicesView />;
 }
-

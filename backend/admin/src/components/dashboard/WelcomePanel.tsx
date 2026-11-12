@@ -1,6 +1,3 @@
-import Link from "next/link";
-import { ClipboardList, Download } from "lucide-react";
-
 export function WelcomePanel() {
   return (
     <section
