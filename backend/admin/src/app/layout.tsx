@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ReadEssay Studio — Admin Panel",
-  description: "Administrative control center for ReadEssay Operations Studio",
+  title: "ReadEssay — Admin Panel",
+  description: "Administrative control center for ReadEssay Operations",
 };
 
 export default function RootLayout({

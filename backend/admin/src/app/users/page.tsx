@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
 
 export const metadata: Metadata = {
-  title: "Users — ReadEssay Studio",
+  title: "Users — ReadEssay Admin",
   description:
     "Client accounts, staff permissions, writer roles & RBAC access control.",
 };

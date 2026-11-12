@@ -2,9 +2,8 @@
 
 import Link from "next/link";
 import { PanelLeft, Menu } from "lucide-react";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import { Breadcrumbs } from "./Breadcrumbs";
-import { CommandSearch } from "./CommandSearch";
-import { NotificationMenu } from "./NotificationMenu";
 import { UserMenu } from "./UserMenu";
 
 interface AdminHeaderProps {
@@ -35,19 +34,9 @@ export function AdminHeader({
         {/* Brand lockup */}
         <Link
           href="/"
-          className="flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-orange rounded-lg py-1 px-1 -ml-1 transition-opacity hover:opacity-95"
+          className="flex items-center focus:outline-none focus:ring-2 focus:ring-orange rounded-lg py-1 px-1 -ml-1 transition-opacity hover:opacity-95"
         >
-          <div className="w-7 h-7 rounded-lg bg-orange flex items-center justify-center font-bold text-white text-base shadow-xs shrink-0">
-            R
-          </div>
-          <div className="flex items-center gap-1.5">
-            <span className="font-bold text-white text-sm sm:text-base tracking-tight font-sans">
-              ReadEssay
-            </span>
-            <span className="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest uppercase bg-white/10 text-slate-300 border border-white/10">
-              STUDIO
-            </span>
-          </div>
+          <BrandLogo compact surface="dark" size="sm" />
         </Link>
 
         {/* Desktop Sidebar Collapse Button */}
@@ -73,31 +62,10 @@ export function AdminHeader({
         </div>
       </div>
 
-      {/* Right side: Search, Live indicator, Notifications, User menu */}
-      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-        <div className="hidden lg:block">
-          <CommandSearch />
-        </div>
-
-        {/* LIVE status pill */}
-        <div
-          aria-label="System operational status: Live"
-          className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-navy-dark/90 border border-white/10 text-[10px] font-bold tracking-wider text-slate-200 select-none shadow-xs"
-        >
-          <span className="relative flex h-2 w-2" aria-hidden="true">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-          </span>
-          <span className="text-emerald-400">LIVE</span>
-        </div>
-
-        <NotificationMenu />
-
-        <div className="h-5 w-px bg-white/10 hidden sm:block" aria-hidden="true" />
-
+      {/* Right side: Only User menu */}
+      <div className="flex items-center shrink-0">
         <UserMenu />
       </div>
     </header>
   );
 }
-

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useSyncExternalStore, type ReactNode } from "react";
+import { usePathname } from "next/navigation";
 import { AdminHeader } from "./AdminHeader";
 import { AdminSidebar } from "./AdminSidebar";
 
@@ -28,6 +29,10 @@ function getSidebarServerSnapshot(): boolean {
 }
 
 export function AdminLayout({ children }: AdminLayoutProps) {
+  const pathname = usePathname();
+  const isAuthRoute =
+    pathname?.startsWith("/login") || pathname?.startsWith("/forgot-password");
+
   // Synchronize with localStorage safely without triggering setState in effects or hydration mismatch
   const isSidebarCollapsed = useSyncExternalStore(
     subscribeToSidebarState,
@@ -47,6 +52,11 @@ export function AdminLayout({ children }: AdminLayoutProps) {
     } catch {
       // Ignore if localStorage is disabled
     }
+  }
+
+  // Auth routes (e.g. /login, /forgot-password) render directly without dashboard chrome
+  if (isAuthRoute) {
+    return <>{children}</>;
   }
 
   return (

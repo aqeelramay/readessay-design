@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ACCENT_STYLES, type NavigationItem } from "@/config/navigation";
-import { StatusBadge } from "./StatusBadge";
+
 
 interface ModuleCardProps {
   item: NavigationItem;
@@ -25,7 +25,7 @@ export function ModuleCard({ item }: ModuleCardProps) {
           >
             <Icon className="w-5 h-5" aria-hidden="true" />
           </div>
-          <StatusBadge accent={item.accent} label={item.badge} />
+
         </div>
 
         {/* Content row: Title & description */}
@@ -51,11 +51,10 @@ export function ModuleCard({ item }: ModuleCardProps) {
           {item.action}
         </span>
         <ArrowRight
-          className={`w-4 h-4 transition-transform group-hover:translate-x-0.5 shrink-0 ${
-            isDashboard
-              ? "text-orange"
-              : "text-text-muted group-hover:text-orange transition-colors"
-          }`}
+          className={`w-4 h-4 transition-transform group-hover:translate-x-0.5 shrink-0 ${isDashboard
+            ? "text-orange"
+            : "text-text-muted group-hover:text-orange transition-colors"
+            }`}
           aria-hidden="true"
         />
       </div>

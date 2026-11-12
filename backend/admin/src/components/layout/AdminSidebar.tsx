@@ -8,6 +8,7 @@ import {
   PanelLeftOpen,
   X,
 } from "lucide-react";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 import { NAVIGATION_ITEMS } from "@/config/navigation";
 
 interface AdminSidebarProps {
@@ -61,9 +62,8 @@ export function AdminSidebar({
       {/* ======================================================== */}
       <aside
         aria-label="Sidebar Navigation"
-        className={`hidden md:flex flex-col bg-navy border-r border-white/10 shrink-0 transition-[width] duration-300 ease-in-out select-none ${
-          isCollapsed ? "w-[72px]" : "w-[228px]"
-        }`}
+        className={`hidden md:flex flex-col bg-navy border-r border-white/10 shrink-0 transition-[width] duration-300 ease-in-out select-none ${isCollapsed ? "w-[72px]" : "w-[228px]"
+          }`}
       >
         {/* Navigation Section Header */}
         <div className="px-4 pt-4 pb-2">
@@ -87,17 +87,15 @@ export function AdminSidebar({
                 key={item.id}
                 href={item.href}
                 title={isCollapsed ? item.label : undefined}
-                className={`group flex items-center gap-3 px-3 py-2.5 text-xs transition-colors ${
-                  active
+                className={`group flex items-center gap-3 px-3 py-2.5 text-xs transition-colors ${active
                     ? "bg-orange text-white font-medium rounded-lg shadow-xs"
                     : "text-slate-300 hover:bg-navy-hover hover:text-white rounded-lg"
-                } ${isCollapsed ? "justify-center px-0" : ""}`}
+                  } ${isCollapsed ? "justify-center px-0" : ""}`}
               >
                 <Icon
                   aria-hidden="true"
-                  className={`w-4 h-4 shrink-0 transition-transform ${
-                    active ? "text-white" : "text-slate-400 group-hover:text-white"
-                  }`}
+                  className={`w-4 h-4 shrink-0 transition-transform ${active ? "text-white" : "text-slate-400 group-hover:text-white"
+                    }`}
                 />
                 {!isCollapsed && (
                   <span className="truncate flex-1 tracking-tight">
@@ -115,9 +113,8 @@ export function AdminSidebar({
             type="button"
             onClick={onToggleCollapse}
             aria-label={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
-            className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-300 hover:text-white hover:bg-navy-hover rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-orange ${
-              isCollapsed ? "justify-center px-0" : ""
-            }`}
+            className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-300 hover:text-white hover:bg-navy-hover rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-orange ${isCollapsed ? "justify-center px-0" : ""
+              }`}
           >
             {isCollapsed ? (
               <PanelLeftOpen className="w-4 h-4 shrink-0" />
@@ -152,19 +149,7 @@ export function AdminSidebar({
           >
             {/* Drawer Header */}
             <div className="h-14 flex items-center justify-between px-4 border-b border-white/10">
-              <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-lg bg-orange flex items-center justify-center font-bold text-white text-base shadow-xs">
-                  R
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-white text-base tracking-tight font-sans">
-                    ReadEssay
-                  </span>
-                  <span className="px-1.5 py-0.5 rounded text-[9px] font-bold tracking-widest uppercase bg-white/10 text-slate-300 border border-white/10">
-                    STUDIO
-                  </span>
-                </div>
-              </div>
+              <BrandLogo compact size="sm" surface="dark" />
               <button
                 type="button"
                 aria-label="Close mobile navigation"
@@ -193,22 +178,20 @@ export function AdminSidebar({
                     key={item.id}
                     href={item.href}
                     onClick={onCloseMobile}
-                    className={`flex items-center justify-between px-3.5 py-2.5 text-xs rounded-lg transition-colors ${
-                      active
+                    className={`flex items-center justify-between px-3.5 py-2.5 text-xs rounded-lg transition-colors ${active
                         ? "bg-orange text-white font-medium shadow-xs"
                         : "text-slate-200 hover:bg-navy-hover hover:text-white"
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <Icon className="w-4 h-4 shrink-0" />
                       <span className="truncate font-medium">{item.label}</span>
                     </div>
                     <span
-                      className={`text-[10px] px-1.5 py-0.5 rounded ${
-                        active
+                      className={`text-[10px] px-1.5 py-0.5 rounded ${active
                           ? "bg-white/20 text-white"
                           : "bg-white/5 text-slate-400 border border-white/10"
-                      }`}
+                        }`}
                     >
                       {item.badge}
                     </span>

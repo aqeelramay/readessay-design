@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
 
 export const metadata: Metadata = {
-  title: "Blog — ReadEssay Studio",
+  title: "Blog — ReadEssay Admin",
   description:
     "Educational articles, admissions guides, research tips & SEO publications.",
 };

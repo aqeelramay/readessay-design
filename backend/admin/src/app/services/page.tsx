@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
 
 export const metadata: Metadata = {
-  title: "Services — ReadEssay Studio",
+  title: "Services — ReadEssay Admin",
   description:
     "Manage essay writing packages, turnaround times, pricing tiers & academic tiers.",
 };
