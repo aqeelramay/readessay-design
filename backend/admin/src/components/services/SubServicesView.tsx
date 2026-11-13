@@ -19,7 +19,6 @@ import {
   type SubService,
 } from "@/data/mockServices";
 import { ServiceStatusBadge } from "./ServiceStatusBadge";
-import { SubServiceFormDrawer } from "./SubServiceFormDrawer";
 import { DeleteConfirmModal } from "./DeleteConfirmModal";
 
 export function SubServicesView() {
@@ -36,9 +35,7 @@ export function SubServicesView() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
-  // Drawer & Modal state
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [editingSubService, setEditingSubService] = useState<SubService | null>(null);
+  // Modal state
   const [deletingSubService, setDeletingSubService] = useState<SubService | null>(null);
 
   // Toast feedback
@@ -96,42 +93,6 @@ export function SubServicesView() {
     return mainServices.find((s) => s.id === parentId)?.name ?? "Parent Category";
   }
 
-  // Handle Save (Create or Update)
-  function handleSaveSubService(
-    data: Omit<SubService, "id" | "updatedAt"> & { id?: string }
-  ) {
-    const today = new Date().toISOString().split("T")[0];
-
-    if (data.id) {
-      setSubServices((prev) =>
-        prev.map((sub) =>
-          sub.id === data.id
-            ? {
-                ...sub,
-                ...data,
-                updatedAt: today,
-              }
-            : sub
-        )
-      );
-      showToast(`Updated sub-service "${data.name}".`);
-    } else {
-      const newSub: SubService = {
-        id: `sub-${Date.now()}`,
-        parentId: data.parentId,
-        name: data.name,
-        slug: data.slug,
-        shortDescription: data.shortDescription,
-        status: data.status,
-        displayOrder: data.displayOrder,
-        updatedAt: today,
-      };
-      setSubServices((prev) => [...prev, newSub]);
-      showToast(`Created sub-service "${data.name}".`);
-    }
-    setEditingSubService(null);
-  }
-
   // Handle Delete
   function handleConfirmDelete() {
     if (!deletingSubService) return;
@@ -157,17 +118,17 @@ export function SubServicesView() {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={() => {
-            setEditingSubService(null);
-            setIsDrawerOpen(true);
-          }}
+        <Link
+          href={
+            activeParentService
+              ? `/services/sub-services/new?parent=${activeParentService.slug}`
+              : "/services/sub-services/new"
+          }
           className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-orange hover:bg-orange-hover text-white text-sm font-semibold shadow-xs transition-colors focus:outline-none focus:ring-2 focus:ring-orange/40 shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>+ Add Sub-Service</span>
-        </button>
+        </Link>
       </div>
 
       {/* Contextual Filter Banner when Parent is Active */}
@@ -381,18 +342,14 @@ export function SubServicesView() {
                           </Link>
 
                           {/* Edit button */}
-                          <button
-                            type="button"
+                          <Link
+                            href={`/services/sub-services/${sub.slug}/edit`}
                             aria-label={`Edit ${sub.name}`}
                             title="Edit Sub-Service"
-                            onClick={() => {
-                              setEditingSubService(sub);
-                              setIsDrawerOpen(true);
-                            }}
                             className="p-1.5 rounded-lg text-text-secondary hover:text-text-primary hover:bg-canvas transition-colors"
                           >
                             <Pencil className="w-4 h-4" />
-                          </button>
+                          </Link>
 
                           {/* Delete button */}
                           <button
@@ -414,20 +371,6 @@ export function SubServicesView() {
           </table>
         </div>
       </div>
-
-      {/* Slide-over Right Drawer for Adding/Editing Sub-Service */}
-      <SubServiceFormDrawer
-        key={editingSubService?.id ?? `new-${selectedParentId}`}
-        isOpen={isDrawerOpen}
-        subService={editingSubService}
-        mainServices={mainServices}
-        defaultParentId={selectedParentId !== "all" ? selectedParentId : undefined}
-        onClose={() => {
-          setIsDrawerOpen(false);
-          setEditingSubService(null);
-        }}
-        onSave={handleSaveSubService}
-      />
 
       {/* Delete Confirmation Modal */}
       <DeleteConfirmModal

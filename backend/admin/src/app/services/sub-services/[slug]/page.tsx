@@ -102,11 +102,11 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
           </div>
 
           <Link
-            href={`/services/sub-services?parent=${parentService?.slug ?? ""}`}
+            href={`/services/sub-services/${subService.slug}/edit`}
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-border text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-canvas transition-colors shrink-0"
           >
             <Pencil className="w-3.5 h-3.5" />
-            <span>Edit in Table View</span>
+            <span>Edit Sub-Service</span>
           </Link>
         </div>
 

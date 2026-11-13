@@ -19,8 +19,8 @@ import {
   type MainService,
 } from "@/data/mockServices";
 import { ServiceStatusBadge } from "./ServiceStatusBadge";
-import { ServiceFormDrawer } from "./ServiceFormDrawer";
 import { DeleteConfirmModal } from "./DeleteConfirmModal";
+import { ServiceIcon } from "./serviceIcons";
 
 export function ServicesView() {
   const router = useRouter();
@@ -33,9 +33,7 @@ export function ServicesView() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
-  // Drawer & Modal state
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [editingService, setEditingService] = useState<MainService | null>(null);
+  // Modal state
   const [deletingService, setDeletingService] = useState<MainService | null>(null);
 
   // Toast feedback state
@@ -60,7 +58,7 @@ export function ServicesView() {
         const matchesSearch =
           service.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           service.slug.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          service.shortDescription.toLowerCase().includes(searchQuery.toLowerCase());
+          service.shortIntro.toLowerCase().includes(searchQuery.toLowerCase());
 
         const matchesStatus =
           statusFilter === "all" || service.status === statusFilter;
@@ -69,41 +67,6 @@ export function ServicesView() {
       })
       .sort((a, b) => a.displayOrder - b.displayOrder);
   }, [services, searchQuery, statusFilter]);
-
-  // Handle Save (Create or Update)
-  function handleSaveService(data: Omit<MainService, "id" | "updatedAt"> & { id?: string }) {
-    const today = new Date().toISOString().split("T")[0];
-
-    if (data.id) {
-      // Edit existing
-      setServices((prev) =>
-        prev.map((s) =>
-          s.id === data.id
-            ? {
-                ...s,
-                ...data,
-                updatedAt: today,
-              }
-            : s
-        )
-      );
-      showToast(`Updated "${data.name}" successfully.`);
-    } else {
-      // Create new
-      const newService: MainService = {
-        id: `serv-${Date.now()}`,
-        name: data.name,
-        slug: data.slug,
-        shortDescription: data.shortDescription,
-        status: data.status,
-        displayOrder: data.displayOrder,
-        updatedAt: today,
-      };
-      setServices((prev) => [...prev, newService]);
-      showToast(`Created service category "${data.name}".`);
-    }
-    setEditingService(null);
-  }
 
   // Handle Delete
   function handleConfirmDelete() {
@@ -122,7 +85,6 @@ export function ServicesView() {
 
   return (
     <div className="space-y-6">
-      {/* Top Header Row */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-text-primary tracking-tight">
@@ -133,17 +95,13 @@ export function ServicesView() {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={() => {
-            setEditingService(null);
-            setIsDrawerOpen(true);
-          }}
+        <Link
+          href="/services/new"
           className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-orange hover:bg-orange-hover text-white text-sm font-semibold shadow-xs transition-colors focus:outline-none focus:ring-2 focus:ring-orange/40 shrink-0"
         >
           <Plus className="w-4 h-4" />
           <span>+ Add Service</span>
-        </button>
+        </Link>
       </div>
 
       {/* Filter & Search Bar */}
@@ -252,18 +210,25 @@ export function ServicesView() {
 
                       {/* Name & Slug */}
                       <td className="px-5 py-4">
-                        <div className="font-semibold text-text-primary group-hover:text-orange transition-colors">
-                          {service.name}
-                        </div>
-                        <div className="text-xs font-mono text-text-muted mt-0.5">
-                          /services/{service.slug}
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-orange/10 border border-orange/20 text-orange flex items-center justify-center shrink-0">
+                            <ServiceIcon iconKey={service.icon} className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <div className="font-semibold text-text-primary group-hover:text-orange transition-colors">
+                              {service.name}
+                            </div>
+                            <div className="text-xs font-mono text-text-muted mt-0.5">
+                              /services/{service.slug}
+                            </div>
+                          </div>
                         </div>
                       </td>
 
                       {/* Summary */}
                       <td className="px-5 py-4 max-w-xs">
-                        <p className="text-xs text-text-secondary truncate" title={service.shortDescription}>
-                          {service.shortDescription}
+                        <p className="text-xs text-text-secondary truncate" title={service.shortIntro}>
+                          {service.shortIntro}
                         </p>
                       </td>
 
@@ -311,18 +276,14 @@ export function ServicesView() {
                           </Link>
 
                           {/* Edit Service */}
-                          <button
-                            type="button"
+                          <Link
+                            href={`/services/${service.slug}/edit`}
                             aria-label={`Edit ${service.name}`}
                             title="Edit Service"
-                            onClick={() => {
-                              setEditingService(service);
-                              setIsDrawerOpen(true);
-                            }}
                             className="p-1.5 rounded-lg text-text-secondary hover:text-text-primary hover:bg-canvas transition-colors"
                           >
                             <Pencil className="w-4 h-4" />
-                          </button>
+                          </Link>
 
                           {/* Delete Service */}
                           <button
@@ -344,18 +305,6 @@ export function ServicesView() {
           </table>
         </div>
       </div>
-
-      {/* Slide-over Right Drawer for Adding/Editing Main Service */}
-      <ServiceFormDrawer
-        key={editingService?.id ?? "new"}
-        isOpen={isDrawerOpen}
-        service={editingService}
-        onClose={() => {
-          setIsDrawerOpen(false);
-          setEditingService(null);
-        }}
-        onSave={handleSaveService}
-      />
 
       {/* Delete Confirmation Modal */}
       <DeleteConfirmModal
