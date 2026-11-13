@@ -114,6 +114,18 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     action: "Manage Repository",
     accent: "emerald",
     icon: BookOpen,
+    children: [
+      {
+        id: "sample-sections",
+        label: "Sections",
+        href: "/samples",
+      },
+      {
+        id: "all-samples",
+        label: "All Samples",
+        href: "/samples/items",
+      },
+    ],
   },
   {
     id: "top-experts",

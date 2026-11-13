@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
+import { SampleSectionsView } from "@/components/samples/SampleSectionsView";
 
 export const metadata: Metadata = {
-  title: "Samples — ReadEssay Admin",
+  title: "Sample Sections — ReadEssay Admin",
   description:
-    "Academic sample repository, plagiarism-checked exemplars & citations archive.",
+    "Manage academic discipline sections, document exemplars, and research archives.",
 };
 
-export default function SamplesPage() {
-  return <ModulePlaceholder moduleId="samples" />;
+export default function SamplesSectionsPage() {
+  return <SampleSectionsView />;
 }
-

@@ -1,0 +1,1751 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="web_standard" name="shell-type" />
+    <title>ReadEssay - #1 Academic Support Platform</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        body,
+        .font-body-md,
+        .font-body-sm,
+        .font-body-lg,
+        .font-body-xl {
+            font-family: "Inter", sans-serif !important;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-headline-xl,
+        .font-headline-lg,
+        .font-headline-md,
+        .font-headline-sm,
+        .font-display-hero,
+        .font-display-hero-mobile {
+            font-family: "Poppins", sans-serif !important;
+        }
+    </style>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        @layer base {
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                overscroll-behavior: none;
+            }
+
+            main> :first-child {
+                margin-top: 0 !important;
+            }
+
+            main> :last-child {
+                margin-bottom: 0 !important;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        @keyframes marquee-seamless {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .ticker-wrapper {
+            display: flex;
+            width: 100%;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .ticker-track {
+            display: flex;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: space-around;
+            min-width: 100%;
+            animation: marquee-seamless 25s linear infinite;
+        }
+
+        .ticker-wrapper:hover .ticker-track {
+            animation-play-state: paused;
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        // Shared & Brand Primaries
+                        primary: "#a73a00",
+                        "primary-container": "#ff641a",
+                        "primary-fixed": "#ffdbce",
+                        "primary-fixed-dim": "#ffb599",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#571a00",
+                        "on-primary-fixed": "#370e00",
+                        "on-primary-fixed-variant": "#802a00",
+                        "inverse-primary": "#ffb599",
+
+                        // Secondaries
+                        secondary: "#565e74",
+                        "secondary-container": "#dae2fd",
+                        "secondary-fixed": "#dae2fd",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-container": "#5c647a",
+                        "on-secondary-fixed": "#131b2e",
+                        "on-secondary-fixed-variant": "#3f465c",
+
+                        // Tertiaries
+                        tertiary: "#5b5b7d",
+                        "tertiary-container": "#9393b8",
+                        "tertiary-fixed": "#e1e0ff",
+                        "tertiary-fixed-dim": "#c3c3ea",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-container": "#2b2c4b",
+                        "on-tertiary-fixed": "#171836",
+                        "on-tertiary-fixed-variant": "#434464",
+
+                        // Surfaces & Backgrounds
+                        background: "#f8f9ff",
+                        "on-background": "#0b1c30",
+                        surface: "#f8f9ff",
+                        "on-surface": "#0b1c30",
+                        "on-surface-variant": "#5a4138",
+                        "surface-tint": "#a73a00",
+                        "surface-dim": "#cbdbf5",
+                        "surface-bright": "#f8f9ff",
+                        "surface-variant": "#d3e4fe",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#eff4ff",
+                        "surface-container": "#e5eeff",
+                        "surface-container-high": "#dce9ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "surface-muted": "#F1F5F9",
+                        "surface-canvas": "#FFFFFF",
+                        "surface-card": "#FFFFFF",
+                        "surface-white": "#FFFFFF",
+                        "surface-subtle": "#F8FAFC",
+                        "canvas-bg": "#F8FAFC",
+                        "inverse-surface": "#213145",
+                        "inverse-on-surface": "#eaf1ff",
+
+                        // Borders & Outlines
+                        outline: "#8e7066",
+                        "outline-variant": "#e3bfb2",
+                        "border-subtle": "#E2E8F0",
+                        "border-strong": "#CBD5E1",
+
+                        // Text Utilities
+                        "text-primary": "#0F172A",
+                        "text-secondary": "#475569",
+                        "text-muted": "#94A3B8",
+
+                        // Error States
+                        error: "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+
+                        // Brand & Accents
+                        "brand-orange": "#FF641A",
+                        "brand-orange-hover": "#E8540E",
+                        "orange-hover": "#E8540E",
+                        "brand-orange-subtle": "#FFF2EC",
+                        "orange-tint": "#FFF2EC",
+                        "brand-navy": "#0F172A",
+                        "brand-slate": "#1E293B",
+                        "slate-supporting": "#1E293B",
+                        "accent-green": "#10B981",
+                        "verification-green": "#10B981",
+                        "accent-green-subtle": "#ECFDF5",
+                        "verification-tint": "#ECFDF5",
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                        lg: "2rem",
+                        xl: "3rem",
+                        full: "9999px",
+                    },
+                    spacing: {
+                        "space-xs": "0.25rem",
+                        "space-sm": "0.5rem",
+                        "space-md": "1rem",
+                        "space-lg": "1.5rem",
+                        "space-xl": "2.5rem",
+                        "space-2xl": "4rem",
+                        "space-3xl": "6rem",
+                        gutter: "1.5rem",
+                        "gutter-mobile": "1rem",
+                        margin: "2rem",
+                        "margin-mobile": "1.25rem",
+                    },
+                    fontFamily: {
+                        "display-hero": ["Space Grotesk", "Sora", "sans-serif"],
+                        "display-hero-mobile": ["Space Grotesk", "Sora", "sans-serif"],
+                        "headline-xl": ["Space Grotesk", "Sora", "sans-serif"],
+                        "headline-xl-mobile": ["Space Grotesk", "Sora", "sans-serif"],
+                        "headline-lg": ["Space Grotesk", "Sora", "sans-serif"],
+                        "headline-md": ["Space Grotesk", "Sora", "sans-serif"],
+                        "headline-sm": ["Space Grotesk", "Sora", "sans-serif"],
+                        "body-xl": ["Plus Jakarta Sans", "sans-serif"],
+                        "body-lg": ["Plus Jakarta Sans", "sans-serif"],
+                        "body-md": ["Plus Jakarta Sans", "sans-serif"],
+                        "body-sm": ["Plus Jakarta Sans", "sans-serif"],
+                        "label-lg": ["Plus Jakarta Sans", "sans-serif"],
+                        "label-md": ["Plus Jakarta Sans", "sans-serif"],
+                        "label-sm": ["Plus Jakarta Sans", "sans-serif"],
+                    },
+                    fontSize: {
+                        "display-hero": [
+                            "56px",
+                            {
+                                lineHeight: "64px",
+                                letterSpacing: "-0.03em",
+                                fontWeight: "700",
+                            },
+                        ],
+                        "display-hero-mobile": [
+                            "36px",
+                            {
+                                lineHeight: "44px",
+                                letterSpacing: "-0.02em",
+                                fontWeight: "700",
+                            },
+                        ],
+                        "headline-xl": [
+                            "40px",
+                            {
+                                lineHeight: "48px",
+                                letterSpacing: "-0.025em",
+                                fontWeight: "700",
+                            },
+                        ],
+                        "headline-xl-mobile": [
+                            "28px",
+                            {
+                                lineHeight: "36px",
+                                letterSpacing: "-0.02em",
+                                fontWeight: "700",
+                            },
+                        ],
+                        "headline-lg": [
+                            "32px",
+                            {
+                                lineHeight: "40px",
+                                letterSpacing: "-0.02em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "headline-md": [
+                            "24px",
+                            {
+                                lineHeight: "32px",
+                                letterSpacing: "-0.015em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "headline-sm": [
+                            "20px",
+                            {
+                                lineHeight: "28px",
+                                letterSpacing: "-0.01em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "body-xl": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "body-lg": ["16px", { lineHeight: "26px", fontWeight: "400" }],
+                        "body-md": ["14px", { lineHeight: "22px", fontWeight: "400" }],
+                        "body-sm": ["12px", { lineHeight: "18px", fontWeight: "400" }],
+                        "label-lg": [
+                            "15px",
+                            {
+                                lineHeight: "20px",
+                                letterSpacing: "0.01em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "label-md": [
+                            "13px",
+                            {
+                                lineHeight: "18px",
+                                letterSpacing: "0.02em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "label-sm": [
+                            "11px",
+                            {
+                                lineHeight: "16px",
+                                letterSpacing: "0.04em",
+                                fontWeight: "700",
+                            },
+                        ],
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body class="bg-surface font-body-md text-on-surface antialiased">
+
+    <main class="w-full pt-28 bg-surface">
+        <div class="flex flex-col w-full">
+
+            <!-- SECTION 3: INTERACTIVE FILTER AND SEARCH BAR (STICKY NAV) -->
+            <section class="sticky top-28 z-40 w-full bg-surface-white/95 backdrop-blur-md shadow-sm py-4"
+                id="samples-catalog">
+                <div class="max-w-7xl mx-auto px-gutter flex flex-col gap-3">
+
+
+                    <!-- Multi-row Discipline Filter Pills -->
+                    <div class="flex flex-wrap items-center gap-2.5 text-nowrap" id="filterPillsContainer">
+                        <button
+                            class="discipline-pill active bg-primary-container text-surface-white font-label-md text-label-md px-4 py-2 rounded-full transition-all shadow-sm"
+                            onclick="filterDiscipline('all', this)">
+                            All Disciplines (48)
+                        </button>
+                        <button
+                            class="discipline-pill bg-canvas-bg text-slate-supporting font-label-md text-label-md px-4 py-2 rounded-full transition-all"
+                            onclick="filterDiscipline('accounting', this)">
+                            Accounting &amp; Finance (6)
+                        </button>
+                        <button
+                            class="discipline-pill bg-canvas-bg text-slate-supporting font-label-md text-label-md px-4 py-2 rounded-full transition-all"
+                            onclick="filterDiscipline('business', this)">
+                            Business &amp; Management (8)
+                        </button>
+                        <button
+                            class="discipline-pill bg-canvas-bg text-slate-supporting font-label-md text-label-md px-4 py-2 rounded-full transition-all"
+                            onclick="filterDiscipline('economics', this)">
+                            Economics &amp; Econometrics (5)
+                        </button>
+                        <button
+                            class="discipline-pill bg-canvas-bg text-slate-supporting font-label-md text-label-md px-4 py-2 rounded-full transition-all"
+                            onclick="filterDiscipline('english', this)">
+                            English &amp; Literature (4)
+                        </button>
+                        <button
+                            class="discipline-pill bg-canvas-bg text-slate-supporting font-label-md text-label-md px-4 py-2 rounded-full transition-all"
+                            onclick="filterDiscipline('law', this)">
+                            Law &amp; Jurisprudence (5)
+                        </button>
+                        <button
+                            class="discipline-pill bg-canvas-bg text-slate-supporting font-label-md text-label-md px-4 py-2 rounded-full transition-all"
+                            onclick="filterDiscipline('mathematics', this)">
+                            Mathematics &amp; Statistics (6)
+                        </button>
+                        <button
+                            class="discipline-pill bg-canvas-bg text-slate-supporting font-label-md text-label-md px-4 py-2 rounded-full transition-all"
+                            onclick="filterDiscipline('psychology', this)">
+                            Psychology &amp; Behavioral (6)
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <!-- SECTION 4: ORGANIZED SUBJECT SECTIONS -->
+            <div class="max-w-7xl mx-auto px-gutter py-12 flex flex-col gap-16" id="sampleCardsContainer">
+                <!-- DISCIPLINE 1: ACCOUNTING & CORPORATE FINANCE -->
+                <div class="discipline-section flex flex-col gap-6" data-category="accounting">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2">
+                        <div class="max-w-3xl">
+
+                            <h2 class="font-headline-lg text-headline-lg font-bold text-slate-supporting">
+                                Accounting &amp; Corporate Finance
+                            </h2>
+                            <p class="font-body-md text-body-md text-text-secondary mt-1">
+                                Our accounting and finance samples demonstrate rigorous
+                                quantitative ledger analysis, cash flow cycle modeling,
+                                IFRS/GAAP compliance, and working capital optimization.
+                            </p>
+                        </div>
+
+                    </div>
+                    <!-- 3-Column Card Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+                        <!-- Accounting Card 1 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        2 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    The Characteristics of a Firm with a Long Operating Cycle
+                                    &amp; Cash Flow
+                                </h3>
+                                <!-- Key metadata grid -->
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Masters
+                                            Degree</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Financial
+                                            Analysis Q&amp;A</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">APA
+                                            7th Edition</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Software
+                                            Used</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Excel
+                                            • Solver</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                        <!-- Accounting Card 2 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        6 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Cadbury Beverages &amp; CRUSH Brands Working Capital Audit
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Undergraduate</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Case
+                                            Study</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Harvard
+                                            Format</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Audit
+                                            Scope</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">GAAP
+                                            Ratio Benchmarks</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                        <!-- Accounting Card 3 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        4 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Arthur Andersen &amp; Enron Ethics &amp; Financial Reporting
+                                    Failure
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Masters</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Research
+                                            Report</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Chicago
+                                            17th</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Ethics
+                                            Standard</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">SOX
+                                            Act Compliance</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- DISCIPLINE 2: BUSINESS & MANAGEMENT ASSIGNMENTS -->
+                <div class="discipline-section flex flex-col gap-6" data-category="business">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2">
+                        <div class="max-w-3xl">
+
+                            <h2 class="font-headline-lg text-headline-lg font-bold text-slate-supporting">
+                                Business &amp; Management Assignments
+                            </h2>
+                            <p class="font-body-md text-body-md text-text-secondary mt-1">
+                                Comprehensive business assignment samples showcasing strategic
+                                framework application (SWOT, PESTLE, Porter’s Five Forces,
+                                VRIO), organizational change management, and executive
+                                decision-making.
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+                        <!-- Business Card 1 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        10 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Strategic Management &amp; Global Expansion Analysis of
+                                    Tesla Inc.
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">MBA
+                                            / Masters</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Case
+                                            Study</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">APA
+                                            7th Edition</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Framework</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Porter's
+                                            5 • VRIO</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                        <!-- Business Card 2 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        7 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Becton Dickinson Strategic Corporate Entrepreneurship
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Undergraduate</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Strategic
+                                            Plan</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Harvard
+                                            Format</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Key Scope</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Corporate
+                                            Venturing</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                        <!-- Business Card 3 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        5 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Organizational Behavior &amp; Cross-Cultural Team Dynamics
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Masters</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Executive
+                                            Report</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">APA
+                                            7th Edition</span>
+                                    </div>
+                                    <div>
+                                        <span
+                                            class="font-label-sm text-label-sm text-text-muted block">Methodology</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Hofstede
+                                            Dimensions</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- DISCIPLINE 3: ECONOMICS & ECONOMETRICS -->
+                <div class="discipline-section flex flex-col gap-6" data-category="economics">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2">
+                        <div class="max-w-3xl">
+
+                            <h2 class="font-headline-lg text-headline-lg font-bold text-slate-supporting">
+                                Economics &amp; Econometrics
+                            </h2>
+                            <p class="font-body-md text-body-md text-text-secondary mt-1">
+                                Empirical economic samples focusing on micro/macroeconomic
+                                models, econometric regression analysis in R and Stata, and
+                                international trade policy evaluations.
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+                        <!-- Econ Card 1 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        12 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Macroeconomic Impacts of Inflation Targeting in Emerging
+                                    Markets
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Masters
+                                            / PhD</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Empirical
+                                            Paper</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Chicago
+                                            17th</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Statistical
+                                            Pack</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Stata
+                                            18 Panel VAR</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                        <!-- Econ Card 2 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        6 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Protectionism Costing Global Growth &amp; International
+                                    Trade Barriers
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Undergraduate</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Research
+                                            Paper</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">APA
+                                            7th Edition</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Focus
+                                            Area</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Tariff
+                                            deadweight loss</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                        <!-- Econ Card 3 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        8 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Renewable Energy Subsidies &amp; Deadweight Loss Econometric
+                                    Modeling
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Masters</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Policy
+                                            Brief</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Harvard
+                                            Format</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Core
+                                            Model</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">General
+                                            Equilibrium</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- DISCIPLINE 4: ENGLISH & LITERATURE -->
+                <div class="discipline-section flex flex-col gap-6" data-category="english">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2">
+                        <div class="max-w-3xl">
+
+                            <h2 class="font-headline-lg text-headline-lg font-bold text-slate-supporting">
+                                English &amp; Literature
+                            </h2>
+                            <p class="font-body-md text-body-md text-text-secondary mt-1">
+                                Exemplary literary criticism, comparative rhetorical essays,
+                                and textual deconstruction formatted to modern MLA and Chicago
+                                guidelines.
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+                        <!-- English Card 1 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        5 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Post-Colonial Identity &amp; Narrative Voice in Achebe and
+                                    Chimamanda
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Undergraduate</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Critical
+                                            Essay</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">MLA
+                                            9th Edition</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Critical
+                                            Lens</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Subaltern
+                                            Theory</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                        <!-- English Card 2 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        8 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Rhetoric of Classical Tragedy vs Modern Absurdism in Drama
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Masters</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Comparative
+                                            Analysis</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">MLA
+                                            9th Edition</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Literary
+                                            Target</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Sophocles
+                                            &amp; Beckett</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                        <!-- English Card 3 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        6 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Linguistic Drift and Semantic Evolution in Digital
+                                    Communication
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Masters</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Research
+                                            Paper</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">APA
+                                            7th Edition</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Field
+                                            Focus</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Sociolinguistics</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- DISCIPLINE 5: LAW & JURISPRUDENCE -->
+                <div class="discipline-section flex flex-col gap-6" data-category="law">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2">
+                        <div class="max-w-3xl">
+
+                            <h2 class="font-headline-lg text-headline-lg font-bold text-slate-supporting">
+                                Law &amp; Jurisprudence
+                            </h2>
+                            <p class="font-body-md text-body-md text-text-secondary mt-1">
+                                Strict IRAC/CRAC legal reasoning, statutory interpretation,
+                                tort liability assessments, and precedent case briefs
+                                conforming to OSCOLA and Bluebook standards.
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+                        <!-- Law Card 1 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        14 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Comparative Tort Liability for Autonomous Vehicle
+                                    Machine-Learning Systems
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">LLM
+                                            / Masters</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Legal
+                                            Analysis</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">OSCOLA
+                                            (Oxford)</span>
+                                    </div>
+                                    <div>
+                                        <span
+                                            class="font-label-sm text-label-sm text-text-muted block">Jurisdiction</span>
+                                        <span class="font-label-md text-label-md text-slate-supporting font-semibold">UK
+                                            &amp; EU Common Market</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                        <!-- Law Card 2 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        9 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Juvenile Justice Reform &amp; Due Process in US Federal
+                                    Jurisprudence
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Undergraduate</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Case
+                                            Brief</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Bluebook
+                                            21st</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Core
+                                            Doctrine</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">14th
+                                            Amendment</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                        <!-- Law Card 3 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        11 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Cross-Border Data Sovereignty &amp; GDPR Enforcement
+                                    Discrepancies
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Masters</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Regulatory
+                                            Law Review</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">OSCOLA
+                                            Format</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Topic</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Article
+                                            44 Transfers</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- DISCIPLINE 6: MATHEMATICS & STATISTICS -->
+                <div class="discipline-section flex flex-col gap-6" data-category="mathematics">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2">
+                        <div class="max-w-3xl">
+
+                            <h2 class="font-headline-lg text-headline-lg font-bold text-slate-supporting">
+                                Mathematics &amp; Statistics
+                            </h2>
+                            <p class="font-body-md text-body-md text-text-secondary mt-1">
+                                Step-by-step mathematical proofs, statistical hypothesis
+                                testing (ANOVA, Chi-square, regression), and computational
+                                algorithms with formatted LaTeX equations.
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+                        <!-- Math Card 1 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        9 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Zero-Knowledge Proofs in Decentralized Healthcare Database
+                                    Auditing
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Masters</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Technical
+                                            Paper</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">IEEE
+                                            Standard</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Notation</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">LaTeX
+                                            • ZK-SNARKs</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                        <!-- Math Card 2 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        7 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Bayesian Multilevel Modeling for Longitudinal Clinical
+                                    Datasets
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Masters
+                                            / PhD</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Statistical
+                                            Lab</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">APA
+                                            7th Edition</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Packages</span>
+                                        <span class="font-label-md text-label-md text-slate-supporting font-semibold">R
+                                            (brms • Stan)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                        <!-- Math Card 3 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        6 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Stochastic Calculus &amp; Black-Scholes Derivative Hedging
+                                    Proofs
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Undergraduate</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Problem
+                                            Set</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">LaTeX
+                                            / None</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Core
+                                            Equation</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Itô's
+                                            Lemma Proof</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- DISCIPLINE 7: PSYCHOLOGY & BEHAVIORAL SCIENCES -->
+                <div class="discipline-section flex flex-col gap-6" data-category="psychology">
+                    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2">
+                        <div class="max-w-3xl">
+
+                            <h2 class="font-headline-lg text-headline-lg font-bold text-slate-supporting">
+                                Psychology &amp; Behavioral Sciences
+                            </h2>
+                            <p class="font-body-md text-body-md text-text-secondary mt-1">
+                                Rigorous empirical write-ups, DSM-5 case conceptualizations,
+                                cognitive bias investigations, and clinical trial reviews
+                                adhering to APA 7th standards.
+                            </p>
+                        </div>
+
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+                        <!-- Psych Card 1 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        8 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Cognitive Biases in Digital Decision-Making &amp;
+                                    Algorithmic UX Interface Design
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Masters</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Research
+                                            Paper</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">APA
+                                            7th Edition</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Core
+                                            Theory</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Kahneman
+                                            System 1 &amp; 2</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                        <!-- Psych Card 2 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        6 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    PTSD Neurological Pathways and Trauma-Informed Clinical
+                                    Intervention
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Masters
+                                            Degree</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Clinical
+                                            Case Study</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">APA
+                                            7th Edition</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Clinical
+                                            Base</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">DSM-5
+                                            • fMRI Correlates</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                        <!-- Psych Card 3 -->
+                        <div
+                            class="sample-card bg-surface-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between mb-4">
+                                    <span
+                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-muted text-slate-supporting font-label-sm text-label-sm font-semibold">
+                                        <span
+                                            class="material-symbols-outlined text-[14px] text-primary-container">description</span>
+                                        7 Pages
+                                    </span>
+
+                                </div>
+                                <h3
+                                    class="font-headline-sm text-headline-sm font-bold text-slate-supporting hover:text-primary-container transition-colors line-clamp-2 mb-4">
+                                    Bio-Cultural Framework in Adolescent Social Development
+                                    &amp; Mental Health
+                                </h3>
+                                <div class="grid grid-cols-2 gap-y-2 gap-x-4 bg-canvas-bg p-3.5 rounded-xl mb-6">
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Academic
+                                            Level</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Undergraduate</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Document
+                                            Type</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Empirical
+                                            Review</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Citation
+                                            Style</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">APA
+                                            7th Edition</span>
+                                    </div>
+                                    <div>
+                                        <span class="font-label-sm text-label-sm text-text-muted block">Study
+                                            Design</span>
+                                        <span
+                                            class="font-label-md text-label-md text-slate-supporting font-semibold">Cohort
+                                            Meta-Analysis</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between pt-2">
+                                <a class="inline-flex items-center gap-2 bg-primary-container hover:bg-orange-hover text-surface-white font-label-md text-label-md px-5 py-2.5 rounded-full transition-all shadow-sm"
+                                    data-path="samples" href="#">
+                                    <span>View Sample</span>
+                                    <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+
+    <script>
+        function filterDiscipline(category, buttonEl) {
+            // Toggle button styling
+            const pills = document.querySelectorAll(".discipline-pill");
+            pills.forEach((pill) => {
+                pill.classList.remove(
+                    "bg-primary-container",
+                    "text-surface-white",
+                    "shadow-sm",
+                );
+                pill.classList.add("bg-canvas-bg", "text-slate-supporting");
+            });
+            buttonEl.classList.remove("bg-canvas-bg", "text-slate-supporting");
+            buttonEl.classList.add(
+                "bg-primary-container",
+                "text-surface-white",
+                "shadow-sm",
+            );
+
+            // Filter sections
+            const sections = document.querySelectorAll(".discipline-section");
+            let visibleCount = 0;
+            sections.forEach((sec) => {
+                const secCat = sec.getAttribute("data-category");
+                if (category === "all" || secCat === category) {
+                    sec.style.display = "flex";
+                    visibleCount += sec.querySelectorAll(".sample-card").length;
+                } else {
+                    sec.style.display = "none";
+                }
+            });
+
+            const countEl = document.getElementById("activeCount");
+            if (countEl) countEl.innerText = visibleCount;
+        }
+    </script>
+</body>
+
+</html>

@@ -27,9 +27,22 @@ export function AdminSidebar({
 }: AdminSidebarProps) {
   const pathname = usePathname();
 
-  // Manage Services dropdown expansion (defaults to expanded when on /services routes)
-  const [servicesOpenOverride, setServicesOpenOverride] = useState<boolean | null>(null);
-  const isServicesOpen = servicesOpenOverride ?? pathname.startsWith("/services");
+  // Manage dropdown expansion overrides for items with children (defaults to expanded when pathname starts with item href)
+  const [dropdownOverrides, setDropdownOverrides] = useState<Record<string, boolean>>({});
+
+  function isDropdownOpen(itemId: string, itemHref: string): boolean {
+    if (dropdownOverrides[itemId] !== undefined) {
+      return dropdownOverrides[itemId];
+    }
+    return pathname === itemHref || pathname.startsWith(`${itemHref}/`);
+  }
+
+  function toggleDropdown(itemId: string, itemHref: string) {
+    setDropdownOverrides((prev) => ({
+      ...prev,
+      [itemId]: !isDropdownOpen(itemId, itemHref),
+    }));
+  }
 
   // Handle body scroll lock on mobile
   useEffect(() => {
@@ -63,6 +76,9 @@ export function AdminSidebar({
   function isChildActive(childHref: string): boolean {
     if (childHref === "/services") {
       return pathname === "/services";
+    }
+    if (childHref === "/samples") {
+      return pathname === "/samples";
     }
     return pathname === childHref || pathname.startsWith(`${childHref}/`);
   }
@@ -123,6 +139,7 @@ export function AdminSidebar({
 
             // In Expanded Mode: If item has children, render dropdown menu
             if (children && children.length > 0) {
+              const isOpen = isDropdownOpen(item.id, item.href);
               return (
                 <div key={item.id} className="space-y-1">
                   <div
@@ -152,26 +169,26 @@ export function AdminSidebar({
                     <button
                       type="button"
                       aria-label={
-                        isServicesOpen
+                        isOpen
                           ? `Collapse ${item.label} menu`
                           : `Expand ${item.label} menu`
                       }
                       onClick={(e) => {
                         e.preventDefault();
-                        setServicesOpenOverride(!isServicesOpen);
+                        toggleDropdown(item.id, item.href);
                       }}
                       className="p-1 rounded text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
                     >
                       <ChevronDown
                         className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                          isServicesOpen ? "rotate-180" : ""
+                          isOpen ? "rotate-180" : ""
                         }`}
                       />
                     </button>
                   </div>
 
                   {/* Dropdown Children */}
-                  {isServicesOpen && (
+                  {isOpen && (
                     <div className="pl-6 pr-1 space-y-1">
                       {children.map((child) => {
                         const childActive = isChildActive(child.href);
@@ -296,6 +313,7 @@ export function AdminSidebar({
                 const children = item.children;
 
                 if (children && children.length > 0) {
+                  const isOpen = isDropdownOpen(item.id, item.href);
                   return (
                     <div key={item.id} className="space-y-1">
                       <div
@@ -318,23 +336,23 @@ export function AdminSidebar({
                         <button
                           type="button"
                           aria-label={
-                            isServicesOpen
+                            isOpen
                               ? `Collapse ${item.label} menu`
                               : `Expand ${item.label} menu`
                           }
-                          onClick={() => setServicesOpenOverride(!isServicesOpen)}
+                          onClick={() => toggleDropdown(item.id, item.href)}
                           className="p-1 text-slate-300 hover:text-white"
                         >
                           <ChevronDown
                             className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                              isServicesOpen ? "rotate-180" : ""
+                              isOpen ? "rotate-180" : ""
                             }`}
                           />
                         </button>
                       </div>
 
                       {/* Sub-items in mobile */}
-                      {isServicesOpen && (
+                      {isOpen && (
                         <div className="pl-8 pr-2 space-y-1">
                           {children.map((child) => {
                             const childActive = isChildActive(child.href);
