@@ -81,7 +81,7 @@ export function SubServicesView() {
         const matchesSearch =
           sub.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           sub.slug.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          sub.shortDescription.toLowerCase().includes(searchQuery.toLowerCase());
+          sub.shortIntro.toLowerCase().includes(searchQuery.toLowerCase());
 
         return matchesParent && matchesStatus && matchesSearch;
       })
@@ -313,8 +313,8 @@ export function SubServicesView() {
 
                       {/* Summary */}
                       <td className="px-5 py-4 max-w-xs">
-                        <p className="text-xs text-text-secondary truncate" title={sub.shortDescription}>
-                          {sub.shortDescription}
+                        <p className="text-xs text-text-secondary truncate" title={sub.shortIntro}>
+                          {sub.shortIntro}
                         </p>
                       </td>
 

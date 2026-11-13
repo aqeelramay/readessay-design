@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const subService = findSubService(slug);
   return {
     title: `${subService ? `Edit ${subService.name}` : "Edit Sub-Service"} — ReadEssay Admin`,
-    description: subService?.shortDescription ?? "Edit academic writing sub-service",
+    description: subService?.shortIntro ?? "Edit academic writing sub-service",
   };
 }
 

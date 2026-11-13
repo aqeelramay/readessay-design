@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps) {
   const subService = INITIAL_SUB_SERVICES.find((s) => s.slug === slug);
   return {
     title: `${subService?.name ?? "Sub-Service Details"} — ReadEssay Admin`,
-    description: subService?.shortDescription ?? "Academic sub-service details",
+    description: subService?.shortIntro ?? "Academic sub-service details",
   };
 }
 
@@ -116,7 +116,7 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
             Academic Scope &amp; Summary
           </h2>
           <p className="text-sm text-text-secondary leading-relaxed bg-canvas p-4 rounded-lg border border-border">
-            {subService.shortDescription}
+            {subService.shortIntro}
           </p>
         </div>
 
