@@ -19,6 +19,12 @@ import {
   getSampleSectionById,
   getSampleById,
 } from "@/data/mockSamples";
+import {
+  INITIAL_BLOG_CATEGORIES,
+  INITIAL_BLOG_POSTS,
+  getBlogCategoryBySlug,
+  getBlogPostBySlug,
+} from "@/data/mockBlog";
 
 function resolveServiceName(slug: string): string {
   if (typeof getServiceBySlug === "function") {
@@ -63,6 +69,24 @@ function resolveSampleTitle(id: string): string {
   }
   const s = INITIAL_ACADEMIC_SAMPLES.find((item) => item.id === id);
   return s?.title ?? id;
+}
+
+function resolveBlogCategoryName(slug: string): string {
+  if (typeof getBlogCategoryBySlug === "function") {
+    const c = getBlogCategoryBySlug(slug);
+    if (c?.name) return c.name;
+  }
+  const c = INITIAL_BLOG_CATEGORIES.find((item) => item.slug === slug);
+  return c?.name ?? slug;
+}
+
+function resolveBlogPostTitle(slug: string): string {
+  if (typeof getBlogPostBySlug === "function") {
+    const p = getBlogPostBySlug(slug);
+    if (p?.title) return p.title;
+  }
+  const p = INITIAL_BLOG_POSTS.find((item) => item.slug === slug);
+  return p?.title ?? slug;
 }
 
 export function Breadcrumbs() {
@@ -657,6 +681,250 @@ export function Breadcrumbs() {
           </li>
           <li aria-current="page">
             <span className="text-white font-semibold">Samples</span>
+          </li>
+        </ol>
+      </nav>
+    );
+  }
+
+  // 5. Blog specific paths:
+  // /blog/categories/new -> Admin Panel > Blog > Categories > Add Category
+  if (pathname === "/blog/categories/new") {
+    return (
+      <nav aria-label="Breadcrumbs" className="flex items-center text-xs sm:text-sm">
+        <ol className="flex items-center space-x-1.5 sm:space-x-2">
+          <li>
+            <Link
+              href="/"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Admin Panel
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li>
+            <Link
+              href="/blog"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Blog
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li>
+            <Link
+              href="/blog/categories"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Categories
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li aria-current="page">
+            <span className="text-white font-semibold">Add Category</span>
+          </li>
+        </ol>
+      </nav>
+    );
+  }
+
+  // /blog/categories/[slug]/edit -> Admin Panel > Blog > Categories > [Category Name] > Edit
+  const blogCategoryEditMatch = pathname.match(/^\/blog\/categories\/([^/]+)\/edit$/);
+  if (blogCategoryEditMatch) {
+    const slug = blogCategoryEditMatch[1];
+    const categoryName = resolveBlogCategoryName(slug);
+    return (
+      <nav aria-label="Breadcrumbs" className="flex items-center text-xs sm:text-sm">
+        <ol className="flex items-center space-x-1.5 sm:space-x-2">
+          <li>
+            <Link
+              href="/"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Admin Panel
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li>
+            <Link
+              href="/blog"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Blog
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li>
+            <Link
+              href="/blog/categories"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Categories
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li>
+            <span className="text-slate-300 font-medium truncate max-w-[200px] inline-block align-bottom">
+              {categoryName}
+            </span>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li aria-current="page">
+            <span className="text-white font-semibold">Edit</span>
+          </li>
+        </ol>
+      </nav>
+    );
+  }
+
+  // /blog/categories -> Admin Panel > Blog > Categories
+  if (pathname === "/blog/categories") {
+    return (
+      <nav aria-label="Breadcrumbs" className="flex items-center text-xs sm:text-sm">
+        <ol className="flex items-center space-x-1.5 sm:space-x-2">
+          <li>
+            <Link
+              href="/"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Admin Panel
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li>
+            <Link
+              href="/blog"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Blog
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li aria-current="page">
+            <span className="text-white font-semibold">Categories</span>
+          </li>
+        </ol>
+      </nav>
+    );
+  }
+
+  // /blog/new -> Admin Panel > Blog > Add Post
+  if (pathname === "/blog/new") {
+    return (
+      <nav aria-label="Breadcrumbs" className="flex items-center text-xs sm:text-sm">
+        <ol className="flex items-center space-x-1.5 sm:space-x-2">
+          <li>
+            <Link
+              href="/"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Admin Panel
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li>
+            <Link
+              href="/blog"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Blog
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li aria-current="page">
+            <span className="text-white font-semibold">Add Post</span>
+          </li>
+        </ol>
+      </nav>
+    );
+  }
+
+  // /blog/[slug]/edit -> Admin Panel > Blog > [Article Title] > Edit
+  const blogPostEditMatch = pathname.match(/^\/blog\/([^/]+)\/edit$/);
+  if (blogPostEditMatch) {
+    const slug = blogPostEditMatch[1];
+    const postTitle = resolveBlogPostTitle(slug);
+    return (
+      <nav aria-label="Breadcrumbs" className="flex items-center text-xs sm:text-sm">
+        <ol className="flex items-center space-x-1.5 sm:space-x-2">
+          <li>
+            <Link
+              href="/"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Admin Panel
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li>
+            <Link
+              href="/blog"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Blog
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li>
+            <span className="text-slate-300 font-medium truncate max-w-[200px] inline-block align-bottom">
+              {postTitle}
+            </span>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li aria-current="page">
+            <span className="text-white font-semibold">Edit</span>
+          </li>
+        </ol>
+      </nav>
+    );
+  }
+
+  // /blog -> Admin Panel > Blog
+  if (pathname === "/blog") {
+    return (
+      <nav aria-label="Breadcrumbs" className="flex items-center text-xs sm:text-sm">
+        <ol className="flex items-center space-x-1.5 sm:space-x-2">
+          <li>
+            <Link
+              href="/"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Admin Panel
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li aria-current="page">
+            <span className="text-white font-semibold">Blog</span>
           </li>
         </ol>
       </nav>

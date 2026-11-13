@@ -80,6 +80,19 @@ export function AdminSidebar({
     if (childHref === "/samples") {
       return pathname === "/samples";
     }
+    if (childHref === "/blog") {
+      return (
+        pathname === "/blog" ||
+        (pathname.startsWith("/blog/") &&
+          !pathname.startsWith("/blog/categories"))
+      );
+    }
+    if (childHref === "/blog/categories") {
+      return (
+        pathname === "/blog/categories" ||
+        pathname.startsWith("/blog/categories/")
+      );
+    }
     return pathname === childHref || pathname.startsWith(`${childHref}/`);
   }
 

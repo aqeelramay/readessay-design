@@ -1,13 +1,23 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
-import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
+import { BlogPostsView } from "@/components/blog/BlogPostsView";
 
 export const metadata: Metadata = {
-  title: "Blog — ReadEssay Admin",
+  title: "Blog Posts — ReadEssay Admin",
   description:
-    "Educational articles, admissions guides, research tips & SEO publications.",
+    "Manage academic guides, editorial articles, table-of-contents sections, and SEO metadata.",
 };
 
 export default function BlogPage() {
-  return <ModulePlaceholder moduleId="blog" />;
+  return (
+    <Suspense
+      fallback={
+        <div className="p-8 text-center text-xs text-text-secondary">
+          Loading blog articles...
+        </div>
+      }
+    >
+      <BlogPostsView />
+    </Suspense>
+  );
 }
-

@@ -162,6 +162,18 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     action: "Publish Articles",
     accent: "teal",
     icon: FileText,
+    children: [
+      {
+        id: "all-posts",
+        label: "All Posts",
+        href: "/blog",
+      },
+      {
+        id: "blog-categories",
+        label: "Categories",
+        href: "/blog/categories",
+      },
+    ],
   },
   {
     id: "pages",
