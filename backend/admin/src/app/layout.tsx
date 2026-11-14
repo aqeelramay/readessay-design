@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -14,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ReadEssay Studio — Admin Panel",
-  description: "Administrative control center for ReadEssay Operations Studio",
+  title: "ReadEssay — Admin Panel",
+  description: "Administrative control center for ReadEssay Operations",
 };
 
 export default function RootLayout({
@@ -29,7 +30,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <AdminLayout>{children}</AdminLayout>
+        <Suspense fallback={null}>
+          <AdminLayout>{children}</AdminLayout>
+        </Suspense>
       </body>
     </html>
   );

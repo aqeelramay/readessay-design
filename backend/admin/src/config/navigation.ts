@@ -22,6 +22,12 @@ export type ModuleAccent =
   | "indigo"
   | "cyan";
 
+export interface NavigationChildItem {
+  id: string;
+  label: string;
+  href: string;
+}
+
 export interface NavigationItem {
   id: string;
   label: string;
@@ -32,6 +38,7 @@ export interface NavigationItem {
   action: string;
   accent: ModuleAccent;
   icon: LucideIcon;
+  children?: readonly NavigationChildItem[];
 }
 
 /**
@@ -65,12 +72,24 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     label: "Services",
     href: "/services",
     // Mock placeholder metadata for UI shell stage — replace with NestJS API data later
-    badge: "14 Tiers",
+    badge: "6 Categories",
     description:
-      "Manage essay writing packages, turnaround times, pricing tiers & academic tiers.",
+      "Manage academic writing service categories, sub-service hierarchies, and content.",
     action: "Configure Services",
     accent: "blue",
     icon: Wrench,
+    children: [
+      {
+        id: "main-services",
+        label: "Services",
+        href: "/services",
+      },
+      {
+        id: "sub-services",
+        label: "Sub-Services",
+        href: "/services/sub-services",
+      },
+    ],
   },
   {
     id: "reviews",
@@ -95,6 +114,18 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     action: "Manage Repository",
     accent: "emerald",
     icon: BookOpen,
+    children: [
+      {
+        id: "sample-sections",
+        label: "Sections",
+        href: "/samples",
+      },
+      {
+        id: "all-samples",
+        label: "All Samples",
+        href: "/samples/items",
+      },
+    ],
   },
   {
     id: "top-experts",
@@ -131,6 +162,18 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     action: "Publish Articles",
     accent: "teal",
     icon: FileText,
+    children: [
+      {
+        id: "all-posts",
+        label: "All Posts",
+        href: "/blog",
+      },
+      {
+        id: "blog-categories",
+        label: "Categories",
+        href: "/blog/categories",
+      },
+    ],
   },
   {
     id: "pages",

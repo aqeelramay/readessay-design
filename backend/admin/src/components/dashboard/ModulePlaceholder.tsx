@@ -5,7 +5,7 @@ import {
   ACCENT_STYLES,
   type NavigationItem,
 } from "@/config/navigation";
-import { StatusBadge } from "./StatusBadge";
+
 
 interface ModulePlaceholderProps {
   moduleId: string;
@@ -70,7 +70,7 @@ export function ModulePlaceholder({ moduleId }: ModulePlaceholderProps) {
                 <h1 className="text-2xl sm:text-[26px] font-bold text-text-primary tracking-tight">
                   {item.label}
                 </h1>
-                <StatusBadge accent={item.accent} label={item.badge} />
+
               </div>
               <p className="text-sm text-text-secondary mt-2 max-w-2xl leading-relaxed">
                 {item.description}

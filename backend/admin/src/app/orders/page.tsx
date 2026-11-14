@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ModulePlaceholder } from "@/components/dashboard/ModulePlaceholder";
 
 export const metadata: Metadata = {
-  title: "Orders — ReadEssay Studio",
+  title: "Orders — ReadEssay Admin",
   description:
     "Order fulfillment queue, customer briefs, deadlines & milestone tracking.",
 };

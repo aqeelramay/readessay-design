@@ -3,7 +3,7 @@ import { WelcomePanel } from "@/components/dashboard/WelcomePanel";
 import { ModuleGrid } from "@/components/dashboard/ModuleGrid";
 
 export const metadata: Metadata = {
-  title: "Dashboard — ReadEssay Studio",
+  title: "Dashboard — ReadEssay Admin",
   description:
     "Central administrative hub, operational overview, and workspace launchpad.",
 };

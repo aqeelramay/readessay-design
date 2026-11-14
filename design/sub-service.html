@@ -1,0 +1,907 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="web_standard" name="shell-type" />
+    <title>ReadEssay - #1 Academic Support Platform</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        body,
+        .font-body-md,
+        .font-body-sm,
+        .font-body-lg,
+        .font-body-xl {
+            font-family: "Inter", sans-serif !important;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-headline-xl,
+        .font-headline-lg,
+        .font-headline-md,
+        .font-headline-sm,
+        .font-display-hero,
+        .font-display-hero-mobile {
+            font-family: "Poppins", sans-serif !important;
+        }
+    </style>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        @layer base {
+
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                overscroll-behavior: none;
+            }
+
+            main> :first-child {
+                margin-top: 0 !important;
+            }
+
+            main> :last-child {
+                margin-bottom: 0 !important;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        @keyframes marquee-seamless {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .ticker-wrapper {
+            display: flex;
+            width: 100%;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        .ticker-track {
+            display: flex;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: space-around;
+            min-width: 100%;
+            animation: marquee-seamless 25s linear infinite;
+        }
+
+        .ticker-wrapper:hover .ticker-track {
+            animation-play-state: paused;
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-canvas": "#FFFFFF",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-tint": "#a73a00",
+                        "surface-dim": "#cbdbf5",
+                        "brand-orange-hover": "#E8540E",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#5c647a",
+                        "surface-variant": "#d3e4fe",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "brand-navy": "#0F172A",
+                        "surface-container": "#e5eeff",
+                        "brand-orange-subtle": "#FFF2EC",
+                        "on-primary": "#ffffff",
+                        background: "#f8f9ff",
+                        "on-primary-fixed": "#370e00",
+                        "text-primary": "#0F172A",
+                        "tertiary-container": "#9393b8",
+                        "on-background": "#0b1c30",
+                        "border-strong": "#CBD5E1",
+                        "accent-green": "#10B981",
+                        primary: "#a73a00",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#e3bfb2",
+                        "on-primary-container": "#571a00",
+                        "surface-muted": "#F1F5F9",
+                        "inverse-primary": "#ffb599",
+                        outline: "#8e7066",
+                        "text-secondary": "#475569",
+                        "primary-fixed-dim": "#ffb599",
+                        "tertiary-fixed-dim": "#c3c3ea",
+                        "primary-container": "#ff641a",
+                        "on-secondary-fixed": "#131b2e",
+                        surface: "#f8f9ff",
+                        "on-tertiary-container": "#2b2c4b",
+                        "on-tertiary-fixed": "#171836",
+                        "primary-fixed": "#ffdbce",
+                        "accent-green-subtle": "#ECFDF5",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "surface-subtle": "#F8FAFC",
+                        "surface-container-low": "#eff4ff",
+                        "text-muted": "#94A3B8",
+                        error: "#ba1a1a",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "tertiary-fixed": "#e1e0ff",
+                        "brand-orange": "#FF641A",
+                        "on-tertiary": "#ffffff",
+                        "secondary-container": "#dae2fd",
+                        "on-error-container": "#93000a",
+                        "surface-card": "#FFFFFF",
+                        "on-primary-fixed-variant": "#802a00",
+                        "surface-container-highest": "#d3e4fe",
+                        secondary: "#565e74",
+                        "brand-slate": "#1E293B",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#0b1c30",
+                        "on-surface-variant": "#5a4138",
+                        tertiary: "#5b5b7d",
+                        "on-tertiary-fixed-variant": "#434464",
+                        "inverse-surface": "#213145",
+                        "border-subtle": "#E2E8F0",
+                        "secondary-fixed": "#dae2fd",
+                        "surface-container-lowest": "#ffffff",
+                    },
+                    borderRadius: {
+                        DEFAULT: "1rem",
+                        lg: "2rem",
+                        xl: "3rem",
+                        full: "9999px",
+                    },
+                    spacing: {
+                        margin: "2rem",
+                        "gutter-mobile": "1rem",
+                        gutter: "1.5rem",
+                        "space-sm": "0.5rem",
+                        "space-xl": "2.5rem",
+                        "space-lg": "1.5rem",
+                        "margin-mobile": "1.25rem",
+                        "space-md": "1rem",
+                        "space-3xl": "6rem",
+                        "space-xs": "0.25rem",
+                        "space-2xl": "4rem",
+                    },
+                    fontFamily: {
+                        "body-xl": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Space Grotesk"],
+                        "display-hero-mobile": ["Space Grotesk"],
+                        "headline-xl": ["Space Grotesk"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Space Grotesk"],
+                        "display-hero": ["Space Grotesk"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "label-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Space Grotesk"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "headline-xl-mobile": ["Space Grotesk"],
+                    },
+                    fontSize: {
+                        "body-xl": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "headline-sm": [
+                            "20px",
+                            {
+                                lineHeight: "28px",
+                                letterSpacing: "-0.01em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "display-hero-mobile": [
+                            "36px",
+                            {
+                                lineHeight: "44px",
+                                letterSpacing: "-0.02em",
+                                fontWeight: "700",
+                            },
+                        ],
+                        "headline-xl": [
+                            "40px",
+                            {
+                                lineHeight: "48px",
+                                letterSpacing: "-0.025em",
+                                fontWeight: "700",
+                            },
+                        ],
+                        "body-lg": ["16px", { lineHeight: "26px", fontWeight: "400" }],
+                        "headline-lg": [
+                            "32px",
+                            {
+                                lineHeight: "40px",
+                                letterSpacing: "-0.02em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "display-hero": [
+                            "56px",
+                            {
+                                lineHeight: "64px",
+                                letterSpacing: "-0.03em",
+                                fontWeight: "700",
+                            },
+                        ],
+                        "body-md": ["14px", { lineHeight: "22px", fontWeight: "400" }],
+                        "label-md": [
+                            "13px",
+                            {
+                                lineHeight: "18px",
+                                letterSpacing: "0.02em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "label-sm": [
+                            "11px",
+                            {
+                                lineHeight: "16px",
+                                letterSpacing: "0.04em",
+                                fontWeight: "700",
+                            },
+                        ],
+                        "label-lg": [
+                            "15px",
+                            {
+                                lineHeight: "20px",
+                                letterSpacing: "0.01em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "headline-md": [
+                            "24px",
+                            {
+                                lineHeight: "32px",
+                                letterSpacing: "-0.015em",
+                                fontWeight: "600",
+                            },
+                        ],
+                        "body-sm": ["12px", { lineHeight: "18px", fontWeight: "400" }],
+                        "headline-xl-mobile": [
+                            "28px",
+                            {
+                                lineHeight: "36px",
+                                letterSpacing: "-0.02em",
+                                fontWeight: "700",
+                            },
+                        ],
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body class="bg-surface font-body-md text-on-surface antialiased">
+
+    <main class="w-full pt-28 bg-surface">
+        <div class="flex flex-col w-full">
+            <!-- HERO SECTION -->
+            <section class="relative w-full bg-surface-canvas overflow-hidden py-12 lg:py-20">
+                <div
+                    class="absolute -top-32 right-10 w-96 h-96 bg-brand-orange-subtle rounded-full blur-3xl pointer-events-none -z-0">
+                </div>
+                <div
+                    class="absolute -bottom-20 -left-20 w-80 h-80 bg-surface-container rounded-full blur-3xl pointer-events-none -z-0">
+                </div>
+                <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+                        <!-- Left: Copy & Value Props -->
+                        <div class="lg:col-span-7 flex flex-col space-y-6">
+                            <div
+                                class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-orange-subtle text-brand-orange text-label-md font-label-md self-start">
+                                <span class="material-symbols-outlined text-[18px]">verified_user</span>
+                                <span class="">Expert Accounting Assignment Support for Every Academic Level</span>
+                            </div>
+                            <h1
+                                class="font-headline-xl text-headline-xl lg:text-display-hero text-text-primary tracking-tight !leading-tight">
+                                Accounting Assignment Help to Achieve Better Grades with Confidence
+                            </h1>
+
+                            <p class="font-body-xl text-body-xl text-text-secondary max-w-2xl">
+                                Get reliable accounting assignment help from experienced subject specialists. From
+                                financial accounting and auditing to taxation and cost accounting, receive expert
+                                guidance to tackle complex topics and meet your deadlines.
+                            </p>
+
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- OVERVIEW & STATS BAR: "Assistance in Accounting Tasks" -->
+            <section class="py-20 w-full bg-surface">
+                <div class="max-w-7xl mx-auto px-6 lg:px-12">
+
+                    <!-- Editorial Overview Narrative + Embedded YouTube Video -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                        <div class="lg:col-span-6 space-y-6">
+                            <div class="inline-flex items-center gap-2  text-brand-orange text-xs font-bold font-sans">
+                                <span>Specialized Assistance</span>
+                            </div>
+                            <h3 class="font-heading text-2xl sm:text-3xl font-bold text-brand-navy leading-snug">
+                                Assistance in Accounting Tasks
+                            </h3>
+                            <p class="font-sans text-sm md:text-base text-text-secondary leading-[1.6]">
+                                Does the conception of reasoning the compound questions of
+                                accounting fears the blood of your nerves and gives a sense of
+                                relaxation after the appropriate acknowledgment? Is the
+                                extreme terror of complex equations permitting you to get in
+                                an authorized website expert seekers that can help you with a
+                                great response just a way ahead?
+                            </p>
+                            <p class="font-sans text-sm md:text-base text-text-secondary leading-[1.6]">
+                                This website is particularly made to calm students’ fear and
+                                give them the best solution. You can have easy access to the
+                                website just a click ahead. The complexity can be tinctured
+                                from financial-cost-tax accounting. Our experts are extremely
+                                devoted and committed to their assigned work.
+                            </p>
+                            <p class="font-sans text-sm md:text-base text-text-secondary leading-[1.6]">
+                                Just click the order button on the website mentioned below,
+                                provides us with your basic details, and holds responsible for
+                                grading you up on your mark sheet. Keep the continuity of
+                                evaluating the entire article worth and know-how we work by
+                                putting our experts best, grading you up by meeting the given
+                                deadlines.
+                            </p>
+                            <div class="pt-2 font-sans">
+                                <a class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-orange hover:bg-brand-orange-hover text-white text-sm font-semibold shadow-md transition-colors"
+                                    href="https://app.readessay.com/instant-quote">
+                                    <span>Get Help Now</span>
+                                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- Embedded Video Player -->
+                        <div class="lg:col-span-6">
+                            <div
+                                class="relative w-full aspect-video rounded-2xl overflow-hidden shadow-lg border border-slate-200">
+                                <iframe allow="
+                      accelerometer;
+                      autoplay;
+                      clipboard-write;
+                      encrypted-media;
+                      gyroscope;
+                      picture-in-picture;
+                      web-share;
+                    " allowfullscreen="" class="w-full h-full" frameborder="0"
+                                    src="https://www.youtube.com/embed/OaqUwnjm9Xo"
+                                    title="Assistance in Accounting Tasks"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- SPECIALIZED ACCOUNTING SUB-DISCIPLINES (5 STRUCTURED CARDS) -->
+            <section class="py-20 w-full bg-surface-subtle">
+                <div class="max-w-7xl mx-auto px-6 lg:px-12">
+                    <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                        <span class="text-xs uppercase tracking-wider text-brand-orange font-bold font-sans">Detailed
+                            Solutions</span>
+                        <h2
+                            class="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-brand-navy leading-tight">
+                            Acquire Assistance in Accounting Tasks for Detailed Solutions
+                        </h2>
+                        <p class="font-sans text-sm md:text-base text-text-secondary leading-[1.6]">
+                            We are holding up the squad of 5500+ accounting professionals
+                            who hold specialist degrees in respective branches of accounting
+                            discussed with details below. We guarantee to meet the time
+                            limit assigned by the seeker; this can be assured by good word
+                            of mouth in the comments section. Look upon to clear your
+                            queries and realize the expertise of our team.
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Card 1: Cost-System Accounting Task Help -->
+                        <div
+                            class="bg-surface-card rounded-2xl p-8 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-start">
+                            <div class="space-y-4">
+                                <div
+                                    class="w-14 h-14 rounded-2xl bg-brand-orange-subtle flex items-center justify-center text-brand-orange">
+                                    <span class="material-symbols-outlined text-[28px]">query_stats</span>
+                                </div>
+                                <h3 class="font-heading text-xl font-bold text-brand-navy leading-snug">
+                                    Cost-System Accounting Task Help
+                                </h3>
+                                <p class="font-sans text-sm text-text-secondary leading-[1.6]">
+                                    Do your limited knowledge plunge you in problematic
+                                    questions of volume-profit analysis, activity-based costing;
+                                    tools for planning and control, flexible budgeting and
+                                    variance probability, inventory costing and stock ins-outs,
+                                    capacity analysis? Do you want an accurate response to the
+                                    cunning questions eroding up your mind nerves? Click free to
+                                    get expert advice and thus slow-down the fear.
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Card 2: Tax Accounting Problem-Solutions -->
+                        <div
+                            class="bg-surface-card rounded-2xl p-8 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-start">
+                            <div class="space-y-4">
+                                <div
+                                    class="w-14 h-14 rounded-2xl bg-accent-green-subtle flex items-center justify-center text-accent-green">
+                                    <span class="material-symbols-outlined text-[28px]">receipt_long</span>
+                                </div>
+                                <h3 class="font-heading text-xl font-bold text-brand-navy leading-snug">
+                                    Tax Accounting Problem-Solutions
+                                </h3>
+                                <p class="font-sans text-sm text-text-secondary leading-[1.6]">
+                                    The tax accounting will cover all the respective fields of
+                                    property, income, and material tax. The website in its
+                                    current features assisting students but looking a step
+                                    further to collaborate hands with the government to
+                                    calculate corporate taxes real time-based. Click to get
+                                    on-time assistance with specified ticklish questions. For
+                                    example, you are asked to calculate Tesco’s real-time
+                                    corporate tax and its official income tax this website will
+                                    particularly assist you to do so.
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Card 3: Finance Accounting Task Help -->
+                        <div
+                            class="bg-surface-card rounded-2xl p-8 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-start">
+                            <div class="space-y-4">
+                                <div
+                                    class="w-14 h-14 rounded-2xl bg-surface-muted flex items-center justify-center text-brand-navy">
+                                    <span class="material-symbols-outlined text-[28px]">account_balance</span>
+                                </div>
+                                <h3 class="font-heading text-xl font-bold text-brand-navy leading-snug">
+                                    Finance Accounting Task Help
+                                </h3>
+                                <p class="font-sans text-sm text-text-secondary leading-[1.6]">
+                                    The finance aspect of accounting is related to budgeting. It
+                                    involves the preparation of financial statements, their
+                                    rearrangements, and totals, balance sheet totals, stock
+                                    inventory management, machines cost financing, and different
+                                    graphs showing finance effects on balance sheets the
+                                    unblemished results are transferred to students with no
+                                    similarities of copied material on different other websites.
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Card 4: Forensic Complex situations Task -->
+                        <div
+                            class="bg-surface-card rounded-2xl p-8 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-start">
+                            <div class="space-y-4">
+                                <div
+                                    class="w-14 h-14 rounded-2xl bg-brand-orange-subtle flex items-center justify-center text-brand-orange">
+                                    <span class="material-symbols-outlined text-[28px]">security</span>
+                                </div>
+                                <h3 class="font-heading text-xl font-bold text-brand-navy leading-snug">
+                                    Forensic Complex situations Task
+                                </h3>
+                                <p class="font-sans text-sm text-text-secondary leading-[1.6]">
+                                    Supposed you are given the situation to solve the scandal
+                                    between two publicly listed corporations and declare their
+                                    solvency to resolve the bankruptcy issue of the other.
+                                    Forensic accounting tasks are solved to give high-yielding
+                                    and concentrated results on problematic queries.
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Card 5: Audit Aspect of Accounting Assistance -->
+                        <div
+                            class="bg-surface-card rounded-2xl p-8 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-start md:col-span-2 lg:col-span-2">
+                            <div class="space-y-4">
+                                <div
+                                    class="w-14 h-14 rounded-2xl bg-accent-green-subtle flex items-center justify-center text-accent-green">
+                                    <span class="material-symbols-outlined text-[28px]">fact_check</span>
+                                </div>
+                                <h3 class="font-heading text-xl font-bold text-brand-navy leading-snug">
+                                    Audit Aspect of Accounting Assistance
+                                </h3>
+                                <p class="font-sans text-sm text-text-secondary leading-[1.6]">
+                                    Do the complex questions related to absorption vs. variable
+                                    costing, operational budgeting techniques, and standard
+                                    costing vs. variance analysis, pricing of individual
+                                    products and services tangles your mind nerves and
+                                    assistance in these tasks can help you flourish and grow?
+                                    Then why you don’t click and get expert answers on these
+                                    complicated equations? In respect to these sub-topics
+                                    covered under the major head of accounting branches, the
+                                    website is also essential in guiding you with the major
+                                    principles of internal, external audit reports, and
+                                    sustainability in accounting records of corporate
+                                    structures.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- ACADEMIC LEVEL GUIDANCE (3-COLUMN CARDS) -->
+            <section class="py-20 w-full bg-surface">
+                <div class="max-w-7xl mx-auto px-6 lg:px-12">
+                    <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                        <span class="text-xs uppercase tracking-wider text-brand-orange font-bold font-sans">Respective
+                            Academic Fields</span>
+                        <h2
+                            class="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-brand-navy leading-tight">
+                            One Click away Accounting Task Online Guide for all Respective
+                            Academic Fields
+                        </h2>
+                        <p class="font-sans text-sm md:text-base text-text-secondary leading-[1.6]">
+                            This website is particularly for the USA students but solves
+                            queries for all around the globe and has native experts for
+                            students of different states and countries. The expert team is
+                            highly dedicated to fulfill the assigned task within the time
+                            limit provided for different academic standards.
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- Level 1: High and public held Schools -->
+                        <div class="bg-surface-card rounded-2xl p-8 shadow-md flex flex-col justify-start">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span
+                                        class="w-10 h-10 rounded-full bg-brand-orange text-white flex items-center justify-center font-heading font-bold text-lg">1</span>
+                                    <span
+                                        class="px-3 py-1 rounded-full bg-surface-muted text-xs font-semibold text-text-secondary font-sans">School</span>
+                                </div>
+                                <h3 class="font-heading text-xl font-bold text-brand-navy">
+                                    High and public held Schools
+                                </h3>
+                                <p class="font-sans text-sm text-text-secondary leading-[1.6]">
+                                    The initial Cambridge business field practices in accounting
+                                    and A-Levels accounting complex scenarios; situations, and
+                                    complex questions of any high ranked and publicly graded
+                                    school are solved with great expertise by our experts in the
+                                    field.
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Level 2: Graded colleges -->
+                        <div
+                            class="bg-surface-card rounded-2xl p-8 shadow-md flex flex-col justify-start border-2 border-brand-orange/20 relative">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span
+                                        class="w-10 h-10 rounded-full bg-brand-navy text-white flex items-center justify-center font-heading font-bold text-lg">2</span>
+                                    <span
+                                        class="px-3 py-1 rounded-full bg-brand-orange-subtle text-xs font-semibold text-brand-orange font-sans">Colleges</span>
+                                </div>
+                                <h3 class="font-heading text-xl font-bold text-brand-navy">
+                                    Graded colleges
+                                </h3>
+                                <p class="font-sans text-sm text-text-secondary leading-[1.6]">
+                                    Are your eyes looking for an expert to do in-depth analysis
+                                    on variables of the respective field in accounting and get
+                                    the paper published in journals set as authorized by the
+                                    college. The experts will provide the essential guidance,
+                                    help, and hold the responsibility to perform the assigned
+                                    task? Let us assign your work and get the task completed in
+                                    time to lift your grades.
+                                </p>
+                            </div>
+                        </div>
+                        <!-- Level 3: Post-graduates and P.H.D Program -->
+                        <div class="bg-surface-card rounded-2xl p-8 shadow-md flex flex-col justify-start">
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <span
+                                        class="w-10 h-10 rounded-full bg-brand-navy text-white flex items-center justify-center font-heading font-bold text-lg">3</span>
+                                    <span
+                                        class="px-3 py-1 rounded-full bg-surface-muted text-xs font-semibold text-text-secondary font-sans">Post-Grad
+                                        &amp; PhD</span>
+                                </div>
+                                <h3 class="font-heading text-xl font-bold text-brand-navy">
+                                    Post-graduates and P.H.D Program
+                                </h3>
+                                <p class="font-sans text-sm text-text-secondary leading-[1.6]">
+                                    The complex study on variables and get the article published
+                                    is the foremost task of the P.H.D program. The techniques
+                                    for assisting in various variables study of costing,
+                                    variance, and economic indicators and projection of
+                                    real-time financial reports of corporations is the premise
+                                    work of our experts. They also assist in data collection and
+                                    its econometric approach of analysis for getting the
+                                    articles published.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- ELITE ACCOUNTING SPECIALIST TEAM ("Task Helpers Accountability at Work") -->
+            <section class="py-20 w-full bg-surface-subtle">
+                <div class="max-w-7xl mx-auto px-6 lg:px-12">
+                    <div class="text-center max-w-3xl mx-auto mb-16 space-y-4">
+                        <span
+                            class="text-xs uppercase tracking-wider text-brand-orange font-bold font-sans">Accountability
+                            at Work</span>
+                        <h2
+                            class="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-brand-navy leading-tight">
+                            Task Helpers Accountability at work
+                        </h2>
+                        <p class="font-sans text-sm md:text-base text-text-secondary leading-[1.6]">
+                            Is your consciousness pondering that either the expert will be
+                            able to perform my task diligently or just work according to the
+                            basic level of knowledge? The reader must have a look at the
+                            below content of the website.
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <!-- P.H.D Intellectuals -->
+                        <div class="bg-surface-card rounded-2xl p-8 shadow-md space-y-4">
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-brand-orange-subtle flex items-center justify-center text-brand-orange">
+                                <span class="material-symbols-outlined text-[28px]">psychology</span>
+                            </div>
+                            <h3 class="font-heading text-xl font-bold text-brand-navy">
+                                P.H.D Intellectuals
+                            </h3>
+                            <p class="font-sans text-sm text-text-secondary leading-[1.6]">
+                                The best P.H.D scholar’s form all around the world is hired in
+                                this 5500+ team of experts. They have acquired P.H.D degrees
+                                from the University of Scotland, Melbourne, Oxford University,
+                                and the University of Edinburg. Their expertise in fields
+                                requires them to conduct their task jobs with extreme devotion
+                                and motivation.
+                            </p>
+                        </div>
+                        <!-- Indigenous Accounting Task Writers -->
+                        <div class="bg-surface-card rounded-2xl p-8 shadow-md space-y-4">
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-accent-green-subtle flex items-center justify-center text-accent-green">
+                                <span class="material-symbols-outlined text-[28px]">public</span>
+                            </div>
+                            <h3 class="font-heading text-xl font-bold text-brand-navy">
+                                Indigenous Accounting Task Writers
+                            </h3>
+                            <p class="font-sans text-sm text-text-secondary leading-[1.6]">
+                                The students from other states or countries of the world do
+                                not need to worry because we have your designated areas
+                                experts that are well trained according to specified country
+                                academic norms and cultures. Thus if a student of Canada wants
+                                accounting task accomplishment according to the economic
+                                indicators of Canada stock market then expert natives of
+                                Canada are well informed to perform such a task.
+                            </p>
+                        </div>
+                        <!-- Subject Branch Hub of Experts -->
+                        <div class="bg-surface-card rounded-2xl p-8 shadow-md space-y-4">
+                            <div
+                                class="w-14 h-14 rounded-2xl bg-surface-muted flex items-center justify-center text-brand-navy">
+                                <span class="material-symbols-outlined text-[28px]">hub</span>
+                            </div>
+                            <h3 class="font-heading text-xl font-bold text-brand-navy">
+                                Subject Branch Hub of Experts
+                            </h3>
+                            <p class="font-sans text-sm text-text-secondary leading-[1.6]">
+                                The seeker searching for the specialized job as for preparing
+                                tax reports then he just want to get his task done by the tax
+                                professionals in the field. We have the team of specified
+                                accounting branch experts as of Activity-based cost, project
+                                costing and others to not only guide but also make academic
+                                writings to publish papers, articles and mark students with
+                                upgrades.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Expert Profile Cards Preview -->
+                    <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 font-sans">
+                        <div class="bg-surface-card rounded-2xl p-6 shadow-sm flex items-center gap-6">
+                            <div
+                                class="w-20 h-20 rounded-full bg-surface-muted flex items-center justify-center text-brand-navy font-bold text-2xl flex-shrink-0 font-heading">
+                                <img class="w-20 h-20 rounded-full" src="images/female-expert1.jpg"
+                                    alt="Female Expert 1" />
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <h4 class="font-heading text-base font-bold text-brand-navy">
+                                        Dr. Alan Crawford, Ph.D., CPA
+                                    </h4>
+                                    <span
+                                        class="px-2 py-0.5 rounded bg-accent-green-subtle text-accent-green text-[10px] font-bold">Verified</span>
+                                </div>
+                                <p class="text-xs text-text-secondary">
+                                    12+ Years Experience • UK HMRC &amp; Forensic Auditing
+                                </p>
+                                <div class="flex flex-col  gap-2 text-xs text-brand-orange font-medium">
+                                    <span>★ 4.98 Rating</span>
+                                    <span class="text-text-secondary">840+ Accounting Papers Delivered</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-surface-card rounded-2xl p-6 shadow-sm flex items-center gap-6">
+                            <div
+                                class="w-20 h-20 rounded-full bg-surface-muted flex items-center justify-center text-brand-navy font-bold text-2xl flex-shrink-0 font-heading">
+                                <img class="w-20 h-20 rounded-full" src="images/male-expert1.jpg" alt="Male Expert 1" />
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <h4 class="font-heading text-base font-bold text-brand-navy">
+                                        Elena Morales, M.Sc., CMA
+                                    </h4>
+                                    <span
+                                        class="px-2 py-0.5 rounded bg-accent-green-subtle text-accent-green text-[10px] font-bold">Verified</span>
+                                </div>
+                                <p class="text-xs text-text-secondary">
+                                    9+ Years Experience • Activity-Based Costing &amp;
+                                    Managerial Finance
+                                </p>
+                                <div class="flex flex-col  gap-2 text-xs text-brand-orange font-medium">
+                                    <span>★ 4.96 Rating</span>
+                                    <span class="text-text-secondary">620+ Accounting Papers Delivered</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-surface-card rounded-2xl p-6 shadow-sm flex items-center gap-6">
+                            <div
+                                class="w-20 h-20 rounded-full bg-surface-muted flex items-center justify-center text-brand-navy font-bold text-2xl flex-shrink-0 font-heading">
+                                <img class="w-20 h-20 rounded-full" src="images/female-expert2.jpg"
+                                    alt="Female Expert 2" />
+                            </div>
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <h4 class="font-heading text-base font-bold text-brand-navy">
+                                        Elena Morales, M.Sc., CMA
+                                    </h4>
+                                    <span
+                                        class="px-2 py-0.5 rounded bg-accent-green-subtle text-accent-green text-[10px] font-bold">Verified</span>
+                                </div>
+                                <p class="text-xs text-text-secondary">
+                                    9+ Years Experience • Activity-Based Costing &amp;
+                                    Managerial Finance
+                                </p>
+                                <div class="flex flex-col  gap-2 text-xs text-brand-orange font-medium">
+                                    <span>★ 4.96 Rating</span>
+                                    <span class="text-text-secondary">620+ Accounting Papers Delivered</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+            <!-- FREQUENTLY ASKED QUESTIONS (10 ACCORDIONS) -->
+            <section class="w-full bg-surface-canvas py-16 lg:py-24">
+                <div class="max-w-4xl mx-auto px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <span
+                            class="font-label-md text-label-md uppercase tracking-wider text-brand-orange font-bold">Clarifications
+                            &amp; Help</span>
+                        <h2 class="font-headline-xl text-headline-xl text-brand-navy mt-2">
+                            Frequently Asked Questions FAQ
+                        </h2>
+                        <p class="font-body-lg text-body-lg text-text-secondary mt-3">
+                            Find rapid answers about our order placement, security, and
+                            class handling policies.
+                        </p>
+                    </div>
+                    <div class="space-y-4" id="faq-container">
+                        <!-- FAQ 1 -->
+                        <div class="bg-surface-card rounded-2xl shadow-sm overflow-hidden faq-item">
+                            <button
+                                class="w-full px-6 py-5 flex items-center justify-between text-left font-headline-sm text-headline-sm text-brand-navy focus:outline-none"
+                                onclick="toggleFaq(this)" type="button">
+                                <span>1. Can your accounting experts solve assignments in Microsoft Excel with working
+                                    formulas?</span>
+                                <span
+                                    class="material-symbols-outlined text-brand-orange transform transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+                            </button>
+                            <div class="px-6 pb-6 text-text-secondary font-body-md text-body-md leading-relaxed hidden">
+                                Yes, absolutely. Most university accounting modules require dynamic Excel spreadsheets
+                                showing formulas for depreciation, NPV, CVP analysis, or ledger summations. We provide
+                                clean, fully documented Excel files along with narrative Word reports.
+                            </div>
+                        </div>
+
+                        <!-- FAQ 2 -->
+                        <div class="bg-surface-card rounded-2xl shadow-sm overflow-hidden faq-item">
+                            <button
+                                class="w-full px-6 py-5 flex items-center justify-between text-left font-headline-sm text-headline-sm text-brand-navy focus:outline-none"
+                                onclick="toggleFaq(this)" type="button">
+                                <span>2. Do you follow US GAAP or International IFRS standards?</span>
+                                <span
+                                    class="material-symbols-outlined text-brand-orange transform transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+                            </button>
+                            <div class="px-6 pb-6 text-text-secondary font-body-md text-body-md leading-relaxed hidden">
+                                We follow whichever standard is mandated by your institution. When ordering, simply
+                                specify whether your course is grounded in US GAAP, IFRS, UK FRS 102, or Australian AASB
+                                standards, and our regional specialists will formulate the balance sheets accordingly.
+                            </div>
+                        </div>
+
+                        <!-- FAQ 3 -->
+                        <div class="bg-surface-card rounded-2xl shadow-sm overflow-hidden faq-item">
+                            <button
+                                class="w-full px-6 py-5 flex items-center justify-between text-left font-headline-sm text-headline-sm text-brand-navy focus:outline-none"
+                                onclick="toggleFaq(this)" type="button">
+                                <span>3. What if my balance sheet or trial balance does not balance?</span>
+                                <span
+                                    class="material-symbols-outlined text-brand-orange transform transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+                            </button>
+                            <div class="px-6 pb-6 text-text-secondary font-body-md text-body-md leading-relaxed hidden">
+                                Every accounting paper undergoes a dual-audit verification process by a senior reviewer
+                                before delivery. In the rare event of any discrepancy, we provide unlimited free
+                                revisions until your working papers are 100% accurate and aligned.
+                            </div>
+                        </div>
+
+                        <!-- FAQ 4 -->
+                        <div class="bg-surface-card rounded-2xl shadow-sm overflow-hidden faq-item">
+                            <button
+                                class="w-full px-6 py-5 flex items-center justify-between text-left font-headline-sm text-headline-sm text-brand-navy focus:outline-none"
+                                onclick="toggleFaq(this)" type="button">
+                                <span>4. How fast can I receive an urgent accounting assignment?</span>
+                                <span
+                                    class="material-symbols-outlined text-brand-orange transform transition-transform duration-200 shrink-0 ml-4">expand_more</span>
+                            </button>
+                            <div class="px-6 pb-6 text-text-secondary font-body-md text-body-md leading-relaxed hidden">
+                                Our express turnaround team handles emergency requests in as little as 6 to 12 hours. We
+                                have accounting specialists active 24/7 across multiple global time zones ready to begin
+                                immediately upon order placement.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interactive Accordion Script -->
+            <script>
+                function toggleFaq(button) {
+                    const content = button.nextElementSibling;
+                    const icon = button.querySelector(".material-symbols-outlined");
+                    const isHidden = content.classList.contains("hidden");
+
+                    // Close all FAQs first
+                    document
+                        .querySelectorAll(
+                            "#faq-container .faq-item div.text-text-secondary",
+                        )
+                        .forEach((item) => {
+                            item.classList.add("hidden");
+                        });
+                    document
+                        .querySelectorAll(
+                            "#faq-container .faq-item .material-symbols-outlined",
+                        )
+                        .forEach((i) => {
+                            i.classList.remove("rotate-180");
+                        });
+
+                    // If clicked item was hidden, show it
+                    if (isHidden) {
+                        content.classList.remove("hidden");
+                        icon.classList.add("rotate-180");
+                    }
+                }
+            </script>
+        </div>
+    </main>
+
+</body>
+
+</html>
