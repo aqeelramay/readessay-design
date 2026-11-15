@@ -4,7 +4,7 @@ import { ForgotPasswordForm } from "@/components/auth/ForgotPasswordForm";
 
 export const metadata: Metadata = {
   title: "Reset Password — ReadEssay Admin",
-  description: "Request single-use recovery instructions for staff accounts",
+  description: "Request single-use password recovery instructions for Super Admin",
 };
 
 export default function ForgotPasswordPage() {

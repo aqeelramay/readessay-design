@@ -4,7 +4,7 @@ import { LoginForm } from "@/components/auth/LoginForm";
 
 export const metadata: Metadata = {
   title: "Sign In — ReadEssay Admin",
-  description: "Staff credentials and two-factor gateway for ReadEssay Operations",
+  description: "Super Admin credentials authentication for ReadEssay Operations",
 };
 
 export default function LoginPage() {

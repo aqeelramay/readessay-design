@@ -31,7 +31,9 @@ function getSidebarServerSnapshot(): boolean {
 export function AdminLayout({ children }: AdminLayoutProps) {
   const pathname = usePathname();
   const isAuthRoute =
-    pathname?.startsWith("/login") || pathname?.startsWith("/forgot-password");
+    pathname?.startsWith("/login") ||
+    pathname?.startsWith("/forgot-password") ||
+    pathname?.startsWith("/reset-password");
 
   // Synchronize with localStorage safely without triggering setState in effects or hydration mismatch
   const isSidebarCollapsed = useSyncExternalStore(
