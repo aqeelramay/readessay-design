@@ -20,12 +20,10 @@ export function LoginForm() {
   const [step, setStep] = useState<"credentials" | "two-factor">("credentials");
 
   // Step 1: Credentials fields
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [capsLockOn, setCapsLockOn] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
-  const [require2fa, setRequire2fa] = useState(true);
   const [credentialsError, setCredentialsError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -55,17 +53,12 @@ export function LoginForm() {
     e.preventDefault();
     setCredentialsError(null);
 
-    const trimmedEmail = email.trim();
+    const trimmedUsername = username.trim();
     const trimmedPassword = password.trim();
 
     // Generic credential validation: never reveal if user exists or doesn't
-    if (
-      !trimmedEmail ||
-      !trimmedPassword ||
-      !trimmedEmail.includes("@") ||
-      !trimmedEmail.includes(".")
-    ) {
-      setCredentialsError("Please enter a valid work email and password.");
+    if (!trimmedUsername || !trimmedPassword) {
+      setCredentialsError("Please enter your username and password.");
       return;
     }
 
@@ -73,11 +66,7 @@ export function LoginForm() {
 
     timerRef.current = setTimeout(() => {
       setIsLoading(false);
-      if (require2fa) {
-        setStep("two-factor");
-      } else {
-        router.push("/");
-      }
+      router.push("/");
     }, 450);
   }
 
@@ -164,7 +153,7 @@ export function LoginForm() {
           </h1>
           <p className="text-sm text-text-secondary mt-1.5 leading-relaxed">
             Enter the 6-digit authentication code from your authenticator app
-            for <span className="font-semibold text-text-primary">{email || "admin@readessay.com"}</span>.
+            for <span className="font-semibold text-text-primary">{username || "admin"}</span>.
           </p>
         </div>
 
@@ -253,14 +242,11 @@ export function LoginForm() {
   // ==========================================
   return (
     <div className="w-full max-w-md mx-auto">
-      {/* Title & Subtitle */}
+      {/* Title */}
       <div className="mb-6">
         <h1 className="text-4xl font-bold text-text-primary text-center tracking-tight">
           Sign in
         </h1>
-        <p className="text-sm text-text-secondary mt-1.5 leading-relaxed">
-          Enter your staff credentials to access the administrative workspace.
-        </p>
       </div>
 
       {/* Generic Error Alert Banner */}
@@ -276,23 +262,23 @@ export function LoginForm() {
 
       {/* Main Form */}
       <form onSubmit={handleCredentialsSubmit} className="space-y-4">
-        {/* Work Email Field */}
+        {/* Username Field */}
         <div>
           <label
-            htmlFor="email"
+            htmlFor="username"
             className="block text-xs font-semibold text-text-primary mb-1.5"
           >
-            Work Email
+            Username
           </label>
           <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
+            id="username"
+            name="username"
+            type="text"
+            autoComplete="username"
             required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="admin@readessay.com"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Enter your username"
             className="w-full bg-surface border border-border rounded-lg px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange transition-all"
           />
         </div>
@@ -351,42 +337,12 @@ export function LoginForm() {
           )}
         </div>
 
-        {/* Options Row: Remember Me & 2FA Preview Toggle */}
-        <div className="space-y-2 pt-1">
-          <label className="flex items-center gap-2 cursor-pointer select-none">
-            <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-              className="w-4 h-4 rounded border-border text-orange focus:ring-orange/30 accent-orange"
-            />
-            <span className="text-xs text-text-secondary">
-              Keep me signed in for 7 days
-            </span>
-          </label>
-
-          <label className="flex items-center gap-2 cursor-pointer select-none">
-            <input
-              type="checkbox"
-              checked={require2fa}
-              onChange={(e) => setRequire2fa(e.target.checked)}
-              className="w-4 h-4 rounded border-border text-orange focus:ring-orange/30 accent-orange"
-            />
-            <span className="text-xs text-text-secondary flex items-center gap-1">
-              <span>Require 2FA step</span>
-              <span className="text-[10px] font-semibold text-orange bg-orange/10 px-1.5 py-0.2 rounded border border-orange/20">
-                Preview
-              </span>
-            </span>
-          </label>
-        </div>
-
         {/* Primary Submit Button */}
         <div className="pt-2">
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-orange hover:bg-orange-hover text-white text-sm font-medium shadow-xs transition-colors focus:outline-none focus:ring-2 focus:ring-orange/40 disabled:opacity-75 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-orange hover:bg-orange-hover text-white text-sm font-medium shadow-xs transition-colors focus:outline-none focus:ring-2 focus:ring-orange/40 disabled:opacity-75 disabled:cursor-not-allowed cursor-pointer"
           >
             {isLoading ? (
               <>
@@ -394,7 +350,7 @@ export function LoginForm() {
                 <span>Signing in...</span>
               </>
             ) : (
-              <span>Signin</span>
+              <span>Sign in</span>
             )}
           </button>
         </div>
