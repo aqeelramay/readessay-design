@@ -1,41 +1,57 @@
+"use client";
+
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, BookOpen, Info, Pencil } from "lucide-react";
-import {
-  INITIAL_SUB_SERVICES,
-  INITIAL_MAIN_SERVICES,
-} from "@/data/mockServices";
+import { ArrowLeft, BookOpen, Info, Pencil, RefreshCw, ExternalLink } from "lucide-react";
+import { getSubServiceById, type SubServiceItem } from "@/lib/api";
 import { ServiceStatusBadge } from "@/components/services/ServiceStatusBadge";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-  return INITIAL_SUB_SERVICES.map((s) => ({ slug: s.slug }));
-}
+export default function SubServiceDetailPage({ params }: PageProps) {
+  const { slug } = use(params);
+  const [subService, setSubService] = useState<SubServiceItem | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-export async function generateMetadata({ params }: PageProps) {
-  const { slug } = await params;
-  const subService = INITIAL_SUB_SERVICES.find((s) => s.slug === slug);
-  return {
-    title: `${subService?.name ?? "Sub-Service Details"} — ReadEssay Admin`,
-    description: subService?.shortIntro ?? "Academic sub-service details",
-  };
-}
+  useEffect(() => {
+    let isMounted = true;
+    getSubServiceById(slug)
+      .then((data) => {
+        if (!isMounted) return;
+        setSubService(data);
+        setIsLoading(false);
+      })
+      .catch((err: unknown) => {
+        if (!isMounted) return;
+        const msg = err instanceof Error ? err.message : "Failed to load sub-service";
+        setError(msg);
+        setIsLoading(false);
+      });
 
-export default async function SubServiceDetailPage({ params }: PageProps) {
-  const { slug } = await params;
-  const subService = INITIAL_SUB_SERVICES.find((s) => s.slug === slug);
-  const parentService = subService
-    ? INITIAL_MAIN_SERVICES.find((p) => p.id === subService.parentId)
-    : null;
+    return () => {
+      isMounted = false;
+    };
+  }, [slug]);
 
-  if (!subService) {
+  if (isLoading) {
+    return (
+      <div className="bg-surface border border-border rounded-xl p-12 text-center max-w-lg mx-auto">
+        <RefreshCw className="w-6 h-6 text-orange animate-spin mx-auto mb-3" />
+        <h2 className="text-base font-bold text-text-primary">Loading Sub-Service...</h2>
+        <p className="text-xs text-text-secondary mt-1">Connecting to NestJS API...</p>
+      </div>
+    );
+  }
+
+  if (error || !subService) {
     return (
       <div className="bg-surface border border-border rounded-xl p-8 text-center max-w-lg mx-auto">
         <h1 className="text-xl font-bold text-text-primary">Sub-Service Not Found</h1>
         <p className="text-sm text-text-secondary mt-2">
-          The requested sub-service &ldquo;{slug}&rdquo; does not exist in the catalog.
+          {error || `The requested sub-service "${slug}" does not exist in the catalog.`}
         </p>
         <Link
           href="/services/sub-services"
@@ -48,26 +64,29 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
     );
   }
 
+  const parentName = subService.service?.title || subService.parent?.title || "Parent Service";
+  const parentSlug = subService.service?.slug || subService.parent?.slug || "";
+  const displayPath = subService.fullPath || `/${parentSlug}/${subService.slug}`;
+  const displayUrl = subService.fullUrl || `https://readessay.com${displayPath}`;
+
   return (
     <div className="space-y-6 max-w-4xl">
-      {/* Back to Sub-Services Navigation */}
       <div>
         <Link
           href={
-            parentService
-              ? `/services/sub-services?parent=${parentService.slug}`
+            parentSlug
+              ? `/services/sub-services?parent=${parentSlug}`
               : "/services/sub-services"
           }
           className="inline-flex items-center gap-1.5 text-xs font-medium text-text-secondary hover:text-orange transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>
-            Back to {parentService ? parentService.name : "Sub-Services"}
+            Back to {parentName || "Sub-Services"}
           </span>
         </Link>
       </div>
 
-      {/* Main Sub-Service Card */}
       <section className="bg-surface border border-border rounded-xl p-6 sm:p-8 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div className="flex items-start gap-4">
@@ -78,25 +97,35 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
             <div>
               <div className="flex flex-wrap items-center gap-2.5">
                 <h1 className="text-2xl font-bold text-text-primary tracking-tight">
-                  {subService.name}
+                  {subService.title || subService.name}
                 </h1>
                 <ServiceStatusBadge status={subService.status} />
               </div>
 
-              {parentService && (
+              {parentName && (
                 <div className="flex items-center gap-2 mt-2">
                   <span className="text-xs text-text-muted">Parent Category:</span>
                   <Link
-                    href={`/services/sub-services?parent=${parentService.slug}`}
+                    href={`/services/sub-services?parent=${parentSlug}`}
                     className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors"
                   >
-                    {parentService.name}
+                    {parentName}
                   </Link>
                 </div>
               )}
 
-              <p className="text-xs font-mono text-text-muted mt-2">
-                URL Identifier: /services/{subService.slug}
+              <p className="text-xs font-mono text-text-muted mt-2 flex items-center gap-1.5">
+                <span>Public URL:</span>
+                <span className="text-orange">{displayPath}</span>
+                <a
+                  href={displayUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-text-primary"
+                  title="Open live storefront page"
+                >
+                  <ExternalLink className="w-3 h-3 inline" />
+                </a>
               </p>
             </div>
           </div>
@@ -110,26 +139,23 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
           </Link>
         </div>
 
-        {/* Content Section */}
         <div className="mt-8 pt-6 border-t border-border space-y-4">
           <h2 className="text-sm font-bold text-text-primary uppercase tracking-wider text-xs">
             Academic Scope &amp; Summary
           </h2>
           <p className="text-sm text-text-secondary leading-relaxed bg-canvas p-4 rounded-lg border border-border">
-            {subService.shortIntro}
+            {subService.shortDescription || subService.shortIntro || "No summary provided."}
           </p>
         </div>
 
-        {/* Notice Box */}
         <div className="mt-6 p-4 rounded-lg bg-blue-50/60 border border-blue-200 flex items-start gap-3">
           <Info className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
           <div className="text-xs text-slate-700 space-y-1">
             <p className="font-semibold text-navy">
-              Sub-Service Content Schema Ready
+              Sub-Service Synced with PostgreSQL API
             </p>
             <p className="leading-relaxed">
-              Sub-service content editor, syllabus taxonomy, and writer assignment
-              metadata will be wired directly to the NestJS API in subsequent phases.
+              This sub-service is dynamically connected to the live NestJS backend API.
             </p>
           </div>
         </div>
@@ -137,4 +163,3 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
     </div>
   );
 }
-

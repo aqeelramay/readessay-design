@@ -1,7 +1,14 @@
-import type { ServiceStatus } from "@/data/mockServices";
+export type ServiceStatusType =
+  | "active"
+  | "draft"
+  | "archived"
+  | "PUBLISHED"
+  | "DRAFT"
+  | "ARCHIVED"
+  | string;
 
 interface ServiceStatusBadgeProps {
-  status: ServiceStatus;
+  status: ServiceStatusType;
   className?: string;
 }
 
@@ -9,27 +16,26 @@ export function ServiceStatusBadge({
   status,
   className = "",
 }: ServiceStatusBadgeProps) {
-  const config = {
-    active: {
-      label: "Active",
-      styles: "bg-emerald-50 text-emerald-700 border-emerald-200",
-      dot: "bg-emerald-500",
-    },
-    draft: {
-      label: "Draft",
-      styles: "bg-amber-50 text-amber-700 border-amber-200",
-      dot: "bg-amber-500",
-    },
-    archived: {
-      label: "Archived",
-      styles: "bg-slate-100 text-slate-600 border-slate-200",
-      dot: "bg-slate-400",
-    },
-  }[status] ?? {
-    label: status,
-    styles: "bg-slate-100 text-slate-600 border-slate-200",
-    dot: "bg-slate-400",
-  };
+  const normalized = String(status || "").toLowerCase();
+
+  const config =
+    normalized === "active" || normalized === "published"
+      ? {
+          label: "Published",
+          styles: "bg-emerald-50 text-emerald-700 border-emerald-200",
+          dot: "bg-emerald-500",
+        }
+      : normalized === "draft"
+      ? {
+          label: "Draft",
+          styles: "bg-amber-50 text-amber-700 border-amber-200",
+          dot: "bg-amber-500",
+        }
+      : {
+          label: "Archived",
+          styles: "bg-slate-100 text-slate-600 border-slate-200",
+          dot: "bg-slate-400",
+        };
 
   return (
     <span

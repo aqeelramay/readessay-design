@@ -4,12 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAVIGATION_ITEMS } from "@/config/navigation";
 import {
-  INITIAL_MAIN_SERVICES,
-  INITIAL_SUB_SERVICES,
-  getServiceBySlug,
-  getSubServiceBySlug,
-} from "@/data/mockServices";
-import {
   INITIAL_REVIEWS,
   getReviewById,
 } from "@/data/mockReviews";
@@ -26,22 +20,21 @@ import {
   getBlogPostBySlug,
 } from "@/data/mockBlog";
 
+function formatSlugToTitle(slug: string): string {
+  if (!slug) return "";
+  return slug
+    .replace(/^serv-/, "")
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
 function resolveServiceName(slug: string): string {
-  if (typeof getServiceBySlug === "function") {
-    const s = getServiceBySlug(slug);
-    if (s?.name) return s.name;
-  }
-  const s = INITIAL_MAIN_SERVICES.find((item) => item.slug === slug);
-  return s?.name ?? slug;
+  return formatSlugToTitle(slug);
 }
 
 function resolveSubServiceName(slug: string): string {
-  if (typeof getSubServiceBySlug === "function") {
-    const s = getSubServiceBySlug(slug);
-    if (s?.name) return s.name;
-  }
-  const s = INITIAL_SUB_SERVICES.find((item) => item.slug === slug);
-  return s?.name ?? slug;
+  return formatSlugToTitle(slug);
 }
 
 function resolveReviewClientName(id: string): string {

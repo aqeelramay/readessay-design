@@ -367,7 +367,7 @@ export const INITIAL_SUB_SERVICES: SubService[] = [
       bodyParagraphs:
         "Navigating advanced university accounting coursework requires balancing conceptual standards with granular numerical accuracy. Our specialized accounting educators assist undergraduate and postgraduate scholars through complex financial statements, corporate taxation calculations, managerial cost allocations, and statutory auditing case studies.\n\nEvery assignment solution includes complete double-entry ledger trails, formula-annotated calculation tables, and contextual business analysis memos that explain the strategic implications behind every number.",
       ctaLabel: "Explore Accounting Solutions",
-      ctaUrl: "/services/sub-services/accounting-assignment-help",
+      ctaUrl: "/assignment-help/accounting-assignment-help",
       youtubeUrl: "https://www.youtube.com/embed/OaqUwnjm9Xo",
     },
     detailedSolutions: {
@@ -579,7 +579,7 @@ export const INITIAL_SUB_SERVICES: SubService[] = [
       bodyParagraphs:
         "Corporate finance demands seamless integration of capital asset pricing theories with pragmatic financial calculations. Our finance consultants support students through weighted average cost of capital derivations, capital structure trade-off models, and corporate restructuring case papers.\n\nEvery submission is delivered with fully annotated DCF sensitivity tables, Monte Carlo risk models, and board-level executive briefing summaries.",
       ctaLabel: "View Corporate Finance Solutions",
-      ctaUrl: "/services/sub-services/corporate-finance-assignment-help",
+      ctaUrl: "/assignment-help/corporate-finance-assignment-help",
       youtubeUrl: "https://www.youtube.com/embed/OaqUwnjm9Xo",
     },
     detailedSolutions: {
@@ -651,7 +651,7 @@ export const INITIAL_SUB_SERVICES: SubService[] = [
       heading: "Evidence-Based Nursing Solutions Built Upon Regulatory Guidelines",
       bodyParagraphs: "Nursing assignments require balancing academic scholarship with patient safety protocols and clinical care taxonomies. Our healthcare consultants hold active clinical or postgraduate nursing qualifications.\n\nWe assist students with holistic nursing care plans, epidemiological assessments, healthcare policy evaluations, and reflection on professional practice.",
       ctaLabel: "View Nursing Services",
-      ctaUrl: "/services/sub-services/nursing-healthcare-assignment-help",
+      ctaUrl: "/assignment-help/nursing-healthcare-assignment-help",
       youtubeUrl: "https://www.youtube.com/embed/OaqUwnjm9Xo",
     },
     detailedSolutions: {
@@ -723,7 +723,7 @@ export const INITIAL_SUB_SERVICES: SubService[] = [
       heading: "Actionable Business Strategy & Management Coursework",
       bodyParagraphs: "Modern business education synthesizes competitive positioning frameworks with human capital leadership principles. Our business educators support undergraduate and MBA candidates in analyzing corporate case studies.\n\nWe apply Porter's Five Forces, VRIO matrices, Kotter's change models, and Lean supply chain theories to deliver rigorous executive papers.",
       ctaLabel: "View Business Solutions",
-      ctaUrl: "/services/sub-services/business-management-assignment-help",
+      ctaUrl: "/assignment-help/business-management-assignment-help",
       youtubeUrl: "https://www.youtube.com/embed/OaqUwnjm9Xo",
     },
     detailedSolutions: {
@@ -795,7 +795,7 @@ export const INITIAL_SUB_SERVICES: SubService[] = [
       heading: "Rigorous Technical Architecture & Computational Documentation",
       bodyParagraphs: "Computer science assignments require bridging algorithmic logic with clear, professional system documentation. Our computer science academics assist with software specification documents, relational database design (3NF), and computational complexity proofs.\n\nEvery submission includes annotated UML diagrams, data structure comparison matrices, and step-by-step mathematical proofs.",
       ctaLabel: "View CS Solutions",
-      ctaUrl: "/services/sub-services/computer-science-assignment-help",
+      ctaUrl: "/assignment-help/computer-science-assignment-help",
       youtubeUrl: "https://www.youtube.com/embed/OaqUwnjm9Xo",
     },
     detailedSolutions: {
@@ -867,7 +867,7 @@ export const INITIAL_SUB_SERVICES: SubService[] = [
       heading: "Defensible Research Design & Defensible Hypotheses",
       bodyParagraphs: "A successful dissertation proposal establishes the academic significance, theoretical viability, and empirical roadmap of postgraduate research. Our PhD consultants assist candidates in refining research questions and structuring defensible proposals.\n\nEvery proposal includes a clear conceptual framework, sampling strategy justification, and institutional ethics review compliance checklist.",
       ctaLabel: "View Proposal Support",
-      ctaUrl: "/services/sub-services/dissertation-proposal-help",
+      ctaUrl: "/dissertation-thesis-help/dissertation-proposal-help",
       youtubeUrl: "https://www.youtube.com/embed/OaqUwnjm9Xo",
     },
     detailedSolutions: {
@@ -939,7 +939,7 @@ export const INITIAL_SUB_SERVICES: SubService[] = [
       heading: "Sustained Doctoral Mentorship Across Dissertation Chapters",
       bodyParagraphs: "Navigating doctoral research requires continuous synthesis of high-level academic theory with novel empirical discoveries. Our PhD consultants provide structured critique and theoretical defense preparation.\n\nWe help candidates maintain narrative continuity across 80,000+ word dissertations, integrate sophisticated econometric or qualitative findings, and rehearse defense arguments.",
       ctaLabel: "View PhD Guidance",
-      ctaUrl: "/services/sub-services/phd-thesis-writing",
+      ctaUrl: "/dissertation-thesis-help/phd-thesis-writing",
       youtubeUrl: "https://www.youtube.com/embed/OaqUwnjm9Xo",
     },
     detailedSolutions: {
@@ -1011,7 +1011,7 @@ export const INITIAL_SUB_SERVICES: SubService[] = [
       heading: "Thematic Literature Synthesis Moving Beyond Mere Summary",
       bodyParagraphs: "A robust literature review does not merely summarize past work; it critically evaluates theoretical tensions and establishes the rationale for new empirical research. We guide students in executing systematic and narrative reviews.\n\nEvery review features conceptual clustering, PRISMA flowcharts where applicable, and explicit identification of unaddressed theoretical tensions.",
       ctaLabel: "View Review Synthesis",
-      ctaUrl: "/services/sub-services/literature-review-synthesis",
+      ctaUrl: "/dissertation-thesis-help/literature-review-synthesis",
       youtubeUrl: "https://www.youtube.com/embed/OaqUwnjm9Xo",
     },
     detailedSolutions: {
@@ -1083,7 +1083,7 @@ export const INITIAL_SUB_SERVICES: SubService[] = [
       heading: "Compelling Thesis Statements Supported by Authoritative Sources",
       bodyParagraphs: "Argumentative essays require defending an academic stance against opposing viewpoints using rigorous scholarly citations. Our essay specialists construct clear, logically sound arguments with robust evidentiary backing.\n\nFrom concise introductory thesis statements to structured counter-argument rebuttals, our essays follow seamless logical progression.",
       ctaLabel: "View Argumentative Essays",
-      ctaUrl: "/services/sub-services/argumentative-essay-writing",
+      ctaUrl: "/essay-writing-service/argumentative-essay-writing",
       youtubeUrl: "https://www.youtube.com/embed/OaqUwnjm9Xo",
     },
     detailedSolutions: {
@@ -1155,7 +1155,7 @@ export const INITIAL_SUB_SERVICES: SubService[] = [
       heading: "Distinctive Admissions Narratives That Capture Committee Attention",
       bodyParagraphs: "Admissions essays allow candidates to communicate their unique academic trajectory, leadership milestones, and intellectual motivations to university selection committees.\n\nWe help students eliminate clichés, refine their authentic voice, and connect past experiences with future departmental research strengths.",
       ctaLabel: "View Admissions Help",
-      ctaUrl: "/services/sub-services/college-admission-essay",
+      ctaUrl: "/essay-writing-service/college-admission-essay",
       youtubeUrl: "https://www.youtube.com/embed/OaqUwnjm9Xo",
     },
     detailedSolutions: {
@@ -1227,7 +1227,7 @@ export const INITIAL_SUB_SERVICES: SubService[] = [
       heading: "Rigorous Application of Established Reflective Learning Cycles",
       bodyParagraphs: "Reflective essays require students to analyze professional practice and personal learning experiences through established pedagogical frameworks. We assist students in nursing, education, and business with structured reflective writing.\n\nEvery paper balances first-person experiential analysis with objective empirical literature and forward-looking SMART action plans.",
       ctaLabel: "View Reflective Support",
-      ctaUrl: "/services/sub-services/reflective-critical-essay",
+      ctaUrl: "/essay-writing-service/reflective-critical-essay",
       youtubeUrl: "https://www.youtube.com/embed/OaqUwnjm9Xo",
     },
     detailedSolutions: {
@@ -1299,7 +1299,7 @@ export const INITIAL_SUB_SERVICES: SubService[] = [
       heading: "Methodical IRAC Problem Solving & Statutory Interpretation",
       bodyParagraphs: "Legal coursework requires rigorous application of common law judicial precedents, statutory interpretation, and doctrinal analysis. Our law academics hold LL.B, LL.M, and Barrister/Solicitor credentials.\n\nEvery problem question is structured systematically using IRAC (Issue, Rule, Application, Conclusion) with precise citations conforming to OSCOLA, Bluebook, or AGLC4 standards.",
       ctaLabel: "View Law Support",
-      ctaUrl: "/services/sub-services/law-legal-coursework",
+      ctaUrl: "/coursework-homework-help/law-legal-coursework",
       youtubeUrl: "https://www.youtube.com/embed/OaqUwnjm9Xo",
     },
     detailedSolutions: {
@@ -1371,7 +1371,7 @@ export const INITIAL_SUB_SERVICES: SubService[] = [
       heading: "Step-by-Step Engineering Problem Solving & Lab Documentation",
       bodyParagraphs: "Engineering coursework requires balancing mathematical calculation accuracy with structured technical documentation. We support mechanical, civil, electrical, and biomedical engineering students.\n\nEvery submission includes annotated engineering schematics, step-by-step mathematical derivations with SI unit consistency checks, and MATLAB/Simulink simulation interpretations.",
       ctaLabel: "View Engineering Support",
-      ctaUrl: "/services/sub-services/engineering-coursework",
+      ctaUrl: "/coursework-homework-help/engineering-coursework",
       youtubeUrl: "https://www.youtube.com/embed/OaqUwnjm9Xo",
     },
     detailedSolutions: {
@@ -1443,7 +1443,7 @@ export const INITIAL_SUB_SERVICES: SubService[] = [
       heading: "Rigorous Statistical Testing & Qualitative Thematic Analysis",
       bodyParagraphs: "Extracting valid empirical insights requires rigorous statistical modeling or systematic qualitative coding. We guide researchers in executing descriptive statistics, multivariate regression, ANOVA, SEM, and thematic Braun & Clarke analysis.\n\nEvery deliverable includes APA 7th formatted statistical tables, visual data figures, and detailed interpretation of p-values, effect sizes, and confidence intervals.",
       ctaLabel: "View Data Analysis Support",
-      ctaUrl: "/services/sub-services/data-analysis-research",
+      ctaUrl: "/research-paper-writing/data-analysis-research",
       youtubeUrl: "https://www.youtube.com/embed/OaqUwnjm9Xo",
     },
     detailedSolutions: {
@@ -1515,7 +1515,7 @@ export const INITIAL_SUB_SERVICES: SubService[] = [
       heading: "Exacting Compliance with Top Peer-Reviewed Publisher Guidelines",
       bodyParagraphs: "Leading peer-reviewed journals enforce strict submission guidelines before sending manuscripts for peer review. We format and review manuscripts to conform to publisher author instructions (Elsevier, Springer Nature, Wiley, Taylor & Francis, IEEE).\n\nEvery submission includes typography standardization, graphical abstract guidance, vector equation formatting, and structured author rebuttal response tables.",
       ctaLabel: "View Journal Formatting",
-      ctaUrl: "/services/sub-services/journal-article-formatting",
+      ctaUrl: "/research-paper-writing/journal-article-formatting",
       youtubeUrl: "https://www.youtube.com/embed/OaqUwnjm9Xo",
     },
     detailedSolutions: {
@@ -1587,7 +1587,7 @@ export const INITIAL_SUB_SERVICES: SubService[] = [
       heading: "Protecting Academic Integrity Through Line-by-Line Refinement",
       bodyParagraphs: "Unintentional similarity or incomplete attribution can compromise scholarly work. Our originality review examines text similarity reports and offers academic paraphrasing and citation corrections.\n\nWe help students understand matching text, reformulate phrases into distinctive scholarly prose, and verify all quotation marks and page numbers.",
       ctaLabel: "View Plagiarism Review",
-      ctaUrl: "/services/sub-services/plagiarism-originality-review",
+      ctaUrl: "/editing-proofreading/plagiarism-originality-review",
       youtubeUrl: "https://www.youtube.com/embed/OaqUwnjm9Xo",
     },
     detailedSolutions: {
@@ -1659,7 +1659,7 @@ export const INITIAL_SUB_SERVICES: SubService[] = [
       heading: "Exacting In-Text Citations & Standardized Bibliographies",
       bodyParagraphs: "Meticulous referencing is essential to rigorous scholarship. We standardize in-text citations, footnotes, endnotes, and comprehensive bibliographies according to the latest official style manuals.\n\nEvery source is cross-checked to ensure that every in-text citation appears in the bibliography and all DOI hyperlinks resolve correctly.",
       ctaLabel: "View Citation Formatting",
-      ctaUrl: "/services/sub-services/citation-style-formatting",
+      ctaUrl: "/editing-proofreading/citation-style-formatting",
       youtubeUrl: "https://www.youtube.com/embed/OaqUwnjm9Xo",
     },
     detailedSolutions: {

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { INITIAL_MAIN_SERVICES } from "@/data/mockServices";
 import { NewSubServiceContent } from "./NewSubServiceContent";
 
 export const metadata: Metadata = {
@@ -17,8 +16,7 @@ export default function NewSubServicePage() {
         </div>
       }
     >
-      <NewSubServiceContent mainServices={INITIAL_MAIN_SERVICES} />
+      <NewSubServiceContent />
     </Suspense>
   );
 }
-

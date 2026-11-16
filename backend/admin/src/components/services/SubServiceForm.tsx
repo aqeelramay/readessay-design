@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -24,32 +24,132 @@ import {
   UserCheck,
   Star,
   ExternalLink,
+  RefreshCw,
 } from "lucide-react";
-import type {
-  MainService,
-  SubService,
-  ServiceStatus,
-  AccentColor,
-  SolutionCard,
-  AcademicLevel,
-  AccountabilityPillar,
-  FeaturedExpert,
-  FAQItem,
-} from "@/data/mockServices";
 import { ServiceStatusBadge } from "./ServiceStatusBadge";
 import { CURATED_CARD_ICONS, ServiceIcon } from "./serviceIcons";
 import { parseYouTubeVideoId } from "./youtubeUtils";
+import {
+  createSubService,
+  updateSubService,
+  getSubServiceById,
+  getParentServices,
+  type ParentServiceOption,
+  type CreateSubServicePayload,
+  type SubServiceItem,
+} from "@/lib/api";
 
-interface SubServiceFormProps {
-  subService?: SubService;
-  mainServices: MainService[];
+export type AccentColor = "orange" | "green" | "navy";
+
+export interface SolutionCard {
+  id: string;
+  icon: string;
+  accent: AccentColor;
+  title: string;
+  description: string;
+}
+
+export interface AcademicLevel {
+  id: string;
+  badge: string;
+  title: string;
+  description: string;
+  highlighted?: boolean;
+}
+
+export interface AccountabilityPillar {
+  id: string;
+  icon: string;
+  accent: AccentColor;
+  title: string;
+  description: string;
+}
+
+export interface FeaturedExpert {
+  id: string;
+  name: string;
+  credentials: string;
+  experienceLine: string;
+  rating: string;
+  papersDelivered: string;
+  verified: boolean;
+}
+
+export interface FAQItem {
+  id?: string;
+  question: string;
+  answer: string;
+}
+
+export interface SubServiceSpecializedAssistance {
+  tagline: string;
+  heading: string;
+  bodyParagraphs: string;
+  ctaLabel: string;
+  ctaUrl: string;
+  youtubeUrl: string;
+}
+
+export interface SubServiceDetailedSolutions {
+  tagline: string;
+  heading: string;
+  intro: string;
+  cards: SolutionCard[];
+}
+
+export interface SubServiceAcademicFields {
+  tagline: string;
+  heading: string;
+  intro: string;
+  levels: AcademicLevel[];
+}
+
+export interface SubServiceAccountability {
+  tagline: string;
+  heading: string;
+  intro: string;
+  pillars: AccountabilityPillar[];
+  featuredExperts: FeaturedExpert[];
+}
+
+export interface SubServiceFAQSection {
+  tagline: string;
+  heading: string;
+  intro: string;
+  items: FAQItem[];
+}
+
+export interface SubServiceFormProps {
+  subService?: Partial<SubServiceItem> & {
+    name?: string;
+    shortIntro?: string;
+    heroTagline?: string;
+    heroH1?: string;
+    heroSummary?: string;
+    displayOrder?: number;
+    specializedAssistance?: SubServiceSpecializedAssistance;
+    detailedSolutions?: SubServiceDetailedSolutions;
+    academicFields?: SubServiceAcademicFields;
+    accountabilitySection?: SubServiceAccountability;
+    faqSection?: SubServiceFAQSection;
+    seo?: {
+      metaTitle?: string;
+      metaDescription?: string;
+    };
+  };
+  subServiceIdOrSlug?: string;
+  mainServices?: ParentServiceOption[];
   defaultParentSlug?: string;
 }
 
 function slugify(text: string): string {
-  return text
+  const cleaned = text
     .toLowerCase()
     .trim()
+    .replace(/^\/?(services[\/-])+/i, "")
+    .replace(/^\/+|\/+$/g, "");
+
+  return cleaned
     .replace(/[^\w\s-]/g, "")
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
@@ -84,31 +184,38 @@ const ACCENT_STYLES: Record<
 
 export function SubServiceForm({
   subService,
+  subServiceIdOrSlug,
   mainServices,
   defaultParentSlug,
 }: SubServiceFormProps) {
   const router = useRouter();
-  const isEditing = Boolean(subService);
+
+  // Parents list state (loaded from prop or fetched from API)
+  const [parents, setParents] = useState<ParentServiceOption[]>(mainServices ?? []);
+  const [subServiceId, setSubServiceId] = useState<string | null>(subService?.id ?? null);
+  const isEditing = Boolean(subServiceId || subService?.id || subServiceIdOrSlug);
+  const [isLoading, setIsLoading] = useState(Boolean(subServiceIdOrSlug && !subService));
 
   // Derive initial parent ID
   const initialParentId =
+    subService?.serviceId ||
     subService?.parentId ||
     (defaultParentSlug
-      ? mainServices.find((m) => m.slug === defaultParentSlug)?.id
-      : mainServices[0]?.id) ||
+      ? parents.find((m) => m.slug === defaultParentSlug)?.id
+      : parents[0]?.id) ||
     "";
 
   // Hierarchy & Core
   const [parentId, setParentId] = useState(initialParentId);
-  const [name, setName] = useState(subService?.name ?? "");
+  const [name, setName] = useState(subService?.title ?? subService?.name ?? "");
   const [slug, setSlug] = useState(subService?.slug ?? "");
   const [isSlugCustomized, setIsSlugCustomized] = useState(isEditing);
-  const [shortIntro, setShortIntro] = useState(subService?.shortIntro ?? "");
-  const [status, setStatus] = useState<ServiceStatus>(
-    subService?.status ?? "active"
+  const [shortIntro, setShortIntro] = useState(subService?.shortDescription ?? subService?.shortIntro ?? "");
+  const [status, setStatus] = useState<string>(
+    subService?.status ?? "PUBLISHED"
   );
   const [displayOrder, setDisplayOrder] = useState<number>(
-    subService?.displayOrder ?? 1
+    subService?.sortOrder ?? subService?.displayOrder ?? 1
   );
 
   // Hero Section
@@ -142,7 +249,7 @@ export function SubServiceForm({
   );
   const [saCtaUrl, setSaCtaUrl] = useState(
     subService?.specializedAssistance?.ctaUrl ??
-      "/services/sub-services/accounting-assignment-help"
+      "/assignment-help/accounting"
   );
   const [saYoutubeUrl, setSaYoutubeUrl] = useState(
     subService?.specializedAssistance?.youtubeUrl ??
@@ -340,8 +447,95 @@ export function SubServiceForm({
   const [confirmation, setConfirmation] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Load parents from API if not provided
+  useEffect(() => {
+    if (!mainServices || mainServices.length === 0) {
+      getParentServices()
+        .then((data) => {
+          setParents(data);
+          if (defaultParentSlug) {
+            const match = data.find((p) => p.slug === defaultParentSlug);
+            if (match) setParentId(match.id);
+          }
+        })
+        .catch((err) => console.error("Failed to load parent services:", err));
+    }
+  }, [mainServices, defaultParentSlug]);
+
+  // Load existing sub-service if subServiceIdOrSlug is provided
+  useEffect(() => {
+    if (!subServiceIdOrSlug || subService) return;
+
+    let isMounted = true;
+    getSubServiceById(subServiceIdOrSlug)
+      .then((data) => {
+        if (!isMounted) return;
+        setSubServiceId(data.id);
+        setName(data.title || data.name || "");
+        setSlug(data.slug || "");
+        setIsSlugCustomized(true);
+        setParentId(data.serviceId || data.parentId || "");
+        setShortIntro(data.shortDescription || data.shortIntro || "");
+        setStatus(data.status || "PUBLISHED");
+        setDisplayOrder(data.sortOrder ?? data.displayOrder ?? 1);
+        setHeroTagline(data.heroBadge || data.heroTagline || "");
+        setHeroH1(data.heroTitle || data.heroH1 || "");
+        setHeroSummary(data.heroSubtitle || data.heroSummary || "");
+        setMetaTitle(data.seoTitle || "");
+        setMetaDescription(data.seoDescription || "");
+        if (Array.isArray(data.faqs) && data.faqs.length > 0) {
+          setFaqItems(data.faqs as FAQItem[]);
+        }
+        if (Array.isArray(data.features)) {
+          const featureList = data.features as Array<{ type?: string; data?: Record<string, unknown> }>;
+          const sa = featureList.find((f) => f?.type === "specializedAssistance");
+          if (sa?.data) {
+            if (typeof sa.data.tagline === "string") setSaTagline(sa.data.tagline);
+            if (typeof sa.data.heading === "string") setSaHeading(sa.data.heading);
+            if (typeof sa.data.bodyParagraphs === "string") setSaBodyParagraphs(sa.data.bodyParagraphs);
+            if (typeof sa.data.ctaLabel === "string") setSaCtaLabel(sa.data.ctaLabel);
+            if (typeof sa.data.ctaUrl === "string") setSaCtaUrl(sa.data.ctaUrl);
+            if (typeof sa.data.youtubeUrl === "string") setSaYoutubeUrl(sa.data.youtubeUrl);
+          }
+          const ds = featureList.find((f) => f?.type === "detailedSolutions");
+          if (ds?.data) {
+            if (typeof ds.data.tagline === "string") setDsTagline(ds.data.tagline);
+            if (typeof ds.data.heading === "string") setDsHeading(ds.data.heading);
+            if (typeof ds.data.intro === "string") setDsIntro(ds.data.intro);
+            if (Array.isArray(ds.data.cards)) setDsCards(ds.data.cards as SolutionCard[]);
+          }
+          const af = featureList.find((f) => f?.type === "academicFields");
+          if (af?.data) {
+            if (typeof af.data.tagline === "string") setAfTagline(af.data.tagline);
+            if (typeof af.data.heading === "string") setAfHeading(af.data.heading);
+            if (typeof af.data.intro === "string") setAfIntro(af.data.intro);
+            if (Array.isArray(af.data.levels)) setAfLevels(af.data.levels as AcademicLevel[]);
+          }
+          const acc = featureList.find((f) => f?.type === "accountability");
+          if (acc?.data) {
+            if (typeof acc.data.tagline === "string") setAccTagline(acc.data.tagline);
+            if (typeof acc.data.heading === "string") setAccHeading(acc.data.heading);
+            if (typeof acc.data.intro === "string") setAccIntro(acc.data.intro);
+            if (Array.isArray(acc.data.pillars)) setAccPillars(acc.data.pillars as AccountabilityPillar[]);
+            if (Array.isArray(acc.data.featuredExperts)) setAccFeaturedExperts(acc.data.featuredExperts as FeaturedExpert[]);
+          }
+        }
+        setIsLoading(false);
+      })
+      .catch((err: unknown) => {
+        if (!isMounted) return;
+        const msg = err instanceof Error ? err.message : "Failed to load sub-service";
+        setError(msg);
+        setIsLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [subServiceIdOrSlug, subService]);
+
   // Derive parent service object
-  const selectedParent = mainServices.find((m) => m.id === parentId);
+  const selectedParent = parents.find((m) => m.id === parentId);
 
   function handleNameChange(value: string) {
     setName(value);
@@ -513,7 +707,7 @@ export function SubServiceForm({
   }
 
   // Form Submit
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setConfirmation(null);
@@ -538,19 +732,104 @@ export function SubServiceForm({
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setConfirmation(
-        isEditing
-          ? `Sub-service "${name}" updated successfully. Changes staged in local UI session.`
-          : `Sub-service "${name}" created successfully. Changes staged in local UI session.`
-      );
+
+    const payload: CreateSubServicePayload = {
+      serviceId: parentId,
+      title: name.trim(),
+      slug: cleanSlug,
+      shortDescription: shortIntro.trim() || null,
+      heroBadge: heroTagline.trim() || null,
+      heroTitle: heroH1.trim() || null,
+      heroSubtitle: heroSummary.trim() || null,
+      content: saBodyParagraphs.trim() || "",
+      status: status.toUpperCase(),
+      sortOrder: Number(displayOrder) || 0,
+      seoTitle: metaTitle.trim() || null,
+      seoDescription: metaDescription.trim() || null,
+      canonicalUrl: null,
+      features: [
+        {
+          type: "specializedAssistance",
+          data: {
+            tagline: saTagline,
+            heading: saHeading,
+            bodyParagraphs: saBodyParagraphs,
+            ctaLabel: saCtaLabel,
+            ctaUrl: saCtaUrl,
+            youtubeUrl: saYoutubeUrl,
+          },
+        },
+        {
+          type: "detailedSolutions",
+          data: {
+            tagline: dsTagline,
+            heading: dsHeading,
+            intro: dsIntro,
+            cards: dsCards,
+          },
+        },
+        {
+          type: "academicFields",
+          data: {
+            tagline: afTagline,
+            heading: afHeading,
+            intro: afIntro,
+            levels: afLevels,
+          },
+        },
+        {
+          type: "accountability",
+          data: {
+            tagline: accTagline,
+            heading: accHeading,
+            intro: accIntro,
+            pillars: accPillars,
+            featuredExperts: accFeaturedExperts,
+          },
+        },
+      ],
+      faqs: faqItems.filter((f) => f.question.trim() || f.answer.trim()),
+    };
+
+    try {
+      if (isEditing && (subServiceId || subService?.id || subServiceIdOrSlug)) {
+        const idToUpdate = subServiceId || subService?.id || subServiceIdOrSlug!;
+        await updateSubService(idToUpdate, payload);
+        setConfirmation(`Sub-service "${name}" updated successfully.`);
+      } else {
+        await createSubService(payload);
+        setConfirmation(`Sub-service "${name}" created successfully.`);
+      }
+
       window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 450);
+      setTimeout(() => {
+        router.push(
+          selectedParent
+            ? `/services/sub-services?parent=${selectedParent.slug}`
+            : "/services/sub-services"
+        );
+      }, 900);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to save sub-service";
+      setError(msg);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   // YouTube parser
   const youtubeVideoId = parseYouTubeVideoId(saYoutubeUrl);
+
+  if (isLoading) {
+    return (
+      <div className="bg-surface border border-border rounded-xl p-12 text-center max-w-lg mx-auto">
+        <RefreshCw className="w-6 h-6 text-orange animate-spin mx-auto mb-3" />
+        <h2 className="text-base font-bold text-text-primary">Loading Sub-Service Details...</h2>
+        <p className="text-xs text-text-secondary mt-1">Connecting to NestJS API...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 pb-12">
@@ -569,9 +848,7 @@ export function SubServiceForm({
             <span>← Back to Sub-Services</span>
           </Link>
           <h1 className="text-2xl sm:text-[26px] font-bold text-text-primary tracking-tight">
-            {subService
-              ? `Edit Sub-Service: ${subService.name}`
-              : "Add Sub-Service"}
+            {isEditing ? `Edit Sub-Service: ${name || "Untitled"}` : "Add Sub-Service"}
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-1">
             {isEditing
@@ -691,8 +968,7 @@ export function SubServiceForm({
                 </label>
                 <div className="flex items-center rounded-lg border border-border bg-canvas overflow-hidden focus-within:ring-2 focus-within:ring-orange/30 focus-within:border-orange transition-all">
                   <span className="px-3 text-xs text-text-muted select-none whitespace-nowrap">
-                    readessay.com/services/
-                    {selectedParent ? `${selectedParent.slug}/` : ""}
+                    readessay.com/{selectedParent ? `${selectedParent.slug}/` : ""}
                   </span>
                   <input
                     id="sub-slug"
@@ -701,11 +977,26 @@ export function SubServiceForm({
                     value={slug}
                     onChange={(e) => {
                       setIsSlugCustomized(true);
-                      setSlug(e.target.value);
+                      let cleanVal = e.target.value
+                        .replace(/^\/?(services[\/-])+/i, "")
+                        .replace(/^\/+/, "");
+                      if (
+                        selectedParent &&
+                        cleanVal.startsWith(`${selectedParent.slug}/`)
+                      ) {
+                        cleanVal = cleanVal.slice(selectedParent.slug.length + 1);
+                      }
+                      setSlug(cleanVal);
                     }}
-                    placeholder="accounting-assignment-help"
+                    placeholder="accounting"
                     className="w-full bg-surface px-3 py-2.5 text-sm text-text-primary focus:outline-none"
                   />
+                </div>
+                <div className="mt-1.5 flex items-center gap-1.5 text-xs text-text-muted">
+                  <span>Live URL Preview:</span>
+                  <span className="font-mono text-text-secondary">
+                    https://readessay.com/{selectedParent ? `${selectedParent.slug}/` : ""}{slug || "sub-service-slug"}
+                  </span>
                 </div>
               </div>
 
@@ -886,7 +1177,7 @@ export function SubServiceForm({
                     type="text"
                     value={saCtaUrl}
                     onChange={(e) => setSaCtaUrl(e.target.value)}
-                    placeholder="e.g. /services/sub-services/accounting-assignment-help"
+                    placeholder="e.g. /assignment-help/accounting"
                     className="w-full bg-surface border border-border rounded-lg px-3.5 py-2 text-sm text-text-primary font-mono text-xs focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange"
                   />
                 </div>
@@ -1774,16 +2065,16 @@ export function SubServiceForm({
                   <option value="" disabled>
                     Select Parent Service...
                   </option>
-                  {mainServices.map((parent) => (
+                  {parents.map((parent) => (
                     <option key={parent.id} value={parent.id}>
-                      {parent.name}
+                      {parent.title || parent.name}
                     </option>
                   ))}
                 </select>
                 {selectedParent && (
                   <p className="text-[11px] text-text-muted mt-1.5">
                     Assigned under:{" "}
-                    <strong className="text-navy">{selectedParent.name}</strong>
+                    <strong className="text-navy">{selectedParent.title || selectedParent.name}</strong>
                   </p>
                 )}
               </div>
@@ -1800,12 +2091,12 @@ export function SubServiceForm({
                   <select
                     id="sub-status"
                     value={status}
-                    onChange={(e) => setStatus(e.target.value as ServiceStatus)}
+                    onChange={(e) => setStatus(e.target.value)}
                     className="flex-1 bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange"
                   >
-                    <option value="active">Active (Published)</option>
-                    <option value="draft">Draft (Hidden)</option>
-                    <option value="archived">Archived</option>
+                    <option value="PUBLISHED">Published (Active)</option>
+                    <option value="DRAFT">Draft (Hidden)</option>
+                    <option value="ARCHIVED">Archived</option>
                   </select>
                   <ServiceStatusBadge status={status} />
                 </div>
@@ -1921,14 +2212,14 @@ export function SubServiceForm({
                   <div className="text-[11px] text-[#202124] flex items-center gap-1.5 truncate">
                     <span className="text-[#5f6368]">readessay.com</span>
                     <span className="text-[#5f6368]">&gt;</span>
-                    <span className="text-[#5f6368]">services</span>
-                    <span className="text-[#5f6368]">&gt;</span>
-                    <span className="text-[#5f6368]">
-                      {selectedParent?.slug || "category"}
-                    </span>
-                    <span className="text-[#5f6368]">&gt;</span>
+                    {selectedParent ? (
+                      <>
+                        <span className="text-[#5f6368]">{selectedParent.slug}</span>
+                        <span className="text-[#5f6368]">&gt;</span>
+                      </>
+                    ) : null}
                     <span className="text-[#202124]">
-                      {slug || "sub-service"}
+                      {slug || "sub-service-slug"}
                     </span>
                   </div>
 
