@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Save,
@@ -14,52 +15,93 @@ import {
   AlertCircle,
   Layers,
   ExternalLink,
+  RefreshCw,
 } from "lucide-react";
 import {
+  getSampleSectionById,
+  createSampleSection,
+  updateSampleSection,
+  deleteAcademicSample,
   type SampleSection,
   type SampleStatus,
   type AcademicSample,
-  getSamplesForSection,
-} from "@/data/mockSamples";
+} from "@/lib/api";
 import { SampleStatusBadge } from "./SampleStatusBadge";
 
 interface SampleSectionFormProps {
   section?: SampleSection;
+  sectionId?: string;
 }
 
-export function SampleSectionForm({ section }: SampleSectionFormProps) {
-  const isEditing = Boolean(section);
+export function SampleSectionForm({ section: initialSection, sectionId }: SampleSectionFormProps) {
+  const router = useRouter();
+  const [section, setSection] = useState<SampleSection | undefined>(initialSection);
+  const [currentId, setCurrentId] = useState<string | undefined>(
+    initialSection?.id ?? sectionId
+  );
+  const isEditing = Boolean(currentId);
 
   // Form Fields
-  const [heading, setHeading] = useState(section?.heading ?? "");
+  const [heading, setHeading] = useState(initialSection?.heading ?? "");
   const [shortSummary, setShortSummary] = useState(
-    section?.shortSummary ?? ""
+    initialSection?.shortSummary ?? ""
   );
-
   const [status, setStatus] = useState<SampleStatus>(
-    section?.status ?? "active"
+    initialSection?.status ?? "active"
   );
   const [displayOrder, setDisplayOrder] = useState<number>(
-    section?.displayOrder ?? 1
+    initialSection?.displayOrder ?? 1
   );
-
-  const [metaTitle, setMetaTitle] = useState(section?.seo?.metaTitle ?? "");
+  const [metaTitle, setMetaTitle] = useState(
+    initialSection?.seo?.metaTitle ?? initialSection?.metaTitle ?? ""
+  );
   const [metaDescription, setMetaDescription] = useState(
-    section?.seo?.metaDescription ?? ""
+    initialSection?.seo?.metaDescription ?? initialSection?.metaDescription ?? ""
   );
 
-  // Embedded section samples (staged in UI session if editing)
-  const [sectionSamples, setSectionSamples] = useState<AcademicSample[]>(() => {
-    if (section?.id) {
-      return getSamplesForSection(section.id);
-    }
-    return [];
-  });
+  // Embedded section samples
+  const [sectionSamples, setSectionSamples] = useState<AcademicSample[]>(
+    initialSection?.samples ?? []
+  );
 
   // UI state
+  const [isLoading, setIsLoading] = useState(Boolean(!initialSection && sectionId));
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmation, setConfirmation] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // Fetch section details if sectionId was provided
+  useEffect(() => {
+    if (!sectionId || initialSection) return;
+
+    let isMounted = true;
+    getSampleSectionById(sectionId)
+      .then((data) => {
+        if (!isMounted) return;
+        setSection(data);
+        setCurrentId(data.id);
+        setHeading(data.heading);
+        setShortSummary(data.shortSummary);
+        setStatus(data.status);
+        setDisplayOrder(data.displayOrder);
+        setMetaTitle(data.seo?.metaTitle || data.metaTitle || "");
+        setMetaDescription(data.seo?.metaDescription || data.metaDescription || "");
+        if (data.samples) {
+          setSectionSamples(data.samples);
+        }
+      })
+      .catch((err) => {
+        if (!isMounted) return;
+        setError(err instanceof Error ? err.message : "Failed to load discipline section");
+      })
+      .finally(() => {
+        if (isMounted) setIsLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [sectionId, initialSection]);
 
   function handleHeadingChange(val: string) {
     setHeading(val);
@@ -68,13 +110,21 @@ export function SampleSectionForm({ section }: SampleSectionFormProps) {
     }
   }
 
-  function handleDeleteSample(sampleId: string) {
-    setSectionSamples((prev) => prev.filter((s) => s.id !== sampleId));
+  async function handleDeleteSample(sampleId: string) {
+    if (!confirm("Are you sure you want to delete this sample?")) return;
+    try {
+      await deleteAcademicSample(sampleId);
+      setSectionSamples((prev) => prev.filter((s) => s.id !== sampleId));
+      setConfirmation("Sample deleted successfully.");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to delete sample");
+    }
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setConfirmation(null);
 
     if (!heading.trim()) {
       setError("Please provide a discipline section heading.");
@@ -86,15 +136,47 @@ export function SampleSectionForm({ section }: SampleSectionFormProps) {
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setConfirmation(
-        isEditing
-          ? `Discipline section "${heading}" updated successfully. Changes staged in local UI session.`
-          : `Discipline section "${heading}" created successfully. Changes staged in local UI session.`
-      );
+
+    try {
+      if (isEditing && currentId) {
+        const updated = await updateSampleSection(currentId, {
+          heading: heading.trim(),
+          shortSummary: shortSummary.trim(),
+          status,
+          displayOrder,
+          metaTitle: metaTitle.trim() || null,
+          metaDescription: metaDescription.trim() || null,
+        });
+        setSection(updated);
+        setConfirmation(`Discipline section "${heading}" updated successfully.`);
+      } else {
+        const created = await createSampleSection({
+          heading: heading.trim(),
+          shortSummary: shortSummary.trim(),
+          status,
+          displayOrder,
+          metaTitle: metaTitle.trim() || null,
+          metaDescription: metaDescription.trim() || null,
+        });
+        setConfirmation(`Discipline section "${heading}" created successfully.`);
+        router.push(`/samples/${created.id}/edit`);
+      }
       window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 400);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to save discipline section");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="bg-surface border border-border rounded-xl p-12 text-center max-w-lg mx-auto my-12">
+        <RefreshCw className="w-8 h-8 text-orange mx-auto mb-3 animate-spin" />
+        <h2 className="text-base font-bold text-text-primary">Loading Discipline Section...</h2>
+        <p className="text-xs text-text-secondary mt-1">Fetching live discipline data from database.</p>
+      </div>
+    );
   }
 
   return (
@@ -111,7 +193,7 @@ export function SampleSectionForm({ section }: SampleSectionFormProps) {
           </Link>
           <h1 className="text-2xl sm:text-[26px] font-bold text-text-primary tracking-tight">
             {isEditing
-              ? `Edit Discipline Section: ${section?.heading}`
+              ? `Edit Discipline Section: ${heading || section?.heading}`
               : "Add Discipline Section"}
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-1">
@@ -265,7 +347,7 @@ export function SampleSectionForm({ section }: SampleSectionFormProps) {
                 </div>
 
                 <Link
-                  href={`/samples/items/new?section=${section?.id ?? ""}`}
+                  href={`/samples/items/new?section=${currentId ?? ""}`}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange hover:bg-orange-hover text-white text-xs font-semibold transition-colors shrink-0"
                 >
                   <Plus className="w-3.5 h-3.5" />
@@ -279,7 +361,7 @@ export function SampleSectionForm({ section }: SampleSectionFormProps) {
                     No academic samples registered under this section yet.
                   </p>
                   <Link
-                    href={`/samples/items/new?section=${section?.id ?? ""}`}
+                    href={`/samples/items/new?section=${currentId ?? ""}`}
                     className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-navy hover:bg-navy-hover text-white text-xs font-semibold transition-colors"
                   >
                     <Plus className="w-3.5 h-3.5" />
@@ -450,7 +532,7 @@ export function SampleSectionForm({ section }: SampleSectionFormProps) {
                   <div className="flex justify-between">
                     <span>Last updated:</span>
                     <span className="font-mono text-text-primary">
-                      {section?.updatedAt ?? "2026-11-12"}
+                      {section?.updatedAt ?? ""}
                     </span>
                   </div>
                 </div>

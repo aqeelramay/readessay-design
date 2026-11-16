@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   Plus,
@@ -8,70 +8,85 @@ import {
   Pencil,
   Trash2,
   CheckCircle2,
+  AlertCircle,
   Filter,
   BookOpen,
   ArrowRight,
   FolderOpen,
+  RefreshCw,
 } from "lucide-react";
 import {
-  INITIAL_SAMPLE_SECTIONS,
-  INITIAL_ACADEMIC_SAMPLES,
+  getSampleSections,
+  deleteSampleSection,
   type SampleSection,
-} from "@/data/mockSamples";
+  type SectionsSummary,
+} from "@/lib/api";
 import { SampleStatusBadge } from "./SampleStatusBadge";
 import { DeleteConfirmModal } from "@/components/services/DeleteConfirmModal";
 
 export function SampleSectionsView() {
-  const [sections, setSections] = useState<SampleSection[]>(
-    INITIAL_SAMPLE_SECTIONS
-  );
-  const [samples, setSamples] = useState(INITIAL_ACADEMIC_SAMPLES);
+  const [sections, setSections] = useState<SampleSection[]>([]);
+  const [summary, setSummary] = useState<SectionsSummary | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
-  const [deletingSection, setDeletingSection] = useState<SampleSection | null>(
-    null
-  );
+  const [deletingSection, setDeletingSection] = useState<SampleSection | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   function showToast(msg: string) {
     setToastMessage(msg);
     setTimeout(() => {
       setToastMessage(null);
-    }, 3500);
+    }, 4000);
   }
 
-  function getSampleCount(sectionId: string): number {
-    return samples.filter((s) => s.sectionId === sectionId).length;
-  }
+  const loadSections = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await getSampleSections({
+        search: searchQuery.trim() || undefined,
+        status: statusFilter !== "all" ? statusFilter : undefined,
+        limit: 100,
+      });
+      setSections(res.data);
+      setSummary(res.summary);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to load discipline sections";
+      setError(msg);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [searchQuery, statusFilter]);
 
-  const filteredSections = useMemo(() => {
-    return sections
-      .filter((sec) => {
-        const query = searchQuery.toLowerCase();
-        const matchesSearch =
-          sec.heading.toLowerCase().includes(query) ||
-          sec.shortSummary.toLowerCase().includes(query);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      loadSections();
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [loadSections]);
 
-        const matchesStatus =
-          statusFilter === "all" || sec.status === statusFilter;
-
-        return matchesSearch && matchesStatus;
-      })
-      .sort((a, b) => a.displayOrder - b.displayOrder);
-  }, [sections, searchQuery, statusFilter]);
-
-  function handleConfirmDelete() {
+  async function handleConfirmDelete() {
     if (!deletingSection) return;
 
     const heading = deletingSection.heading;
     const secId = deletingSection.id;
+    setError(null);
 
-    setSections((prev) => prev.filter((s) => s.id !== secId));
-    setSamples((prev) => prev.filter((s) => s.sectionId !== secId));
-    setDeletingSection(null);
-    showToast(`Deleted section "${heading}".`);
+    try {
+      await deleteSampleSection(secId);
+      setSections((prev) => prev.filter((s) => s.id !== secId));
+      setDeletingSection(null);
+      showToast(`Deleted section "${heading}".`);
+      loadSections();
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : `Failed to delete section "${heading}".`;
+      setError(msg);
+      setDeletingSection(null);
+    }
   }
 
   return (
@@ -85,7 +100,9 @@ export function SampleSectionsView() {
             </h1>
             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
               <BookOpen className="w-3 h-3 text-emerald-600" />
-              <span>7 Disciplines</span>
+              <span>
+                {summary ? `${summary.totalCount} Disciplines` : "Disciplines"}
+              </span>
             </span>
           </div>
           <p className="text-sm text-text-secondary mt-1">
@@ -101,6 +118,26 @@ export function SampleSectionsView() {
           <span>+ Add Section</span>
         </Link>
       </div>
+
+      {/* Error Alert Banner */}
+      {error && (
+        <div
+          role="alert"
+          className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm flex items-start justify-between gap-3 animate-in fade-in"
+        >
+          <div className="flex items-center gap-2">
+            <AlertCircle className="w-5 h-5 text-red-600 shrink-0" />
+            <span>{error}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setError(null)}
+            className="text-xs text-red-700 hover:text-red-950 font-semibold px-1"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       {/* Toast Alert */}
       {toastMessage && (
@@ -166,8 +203,7 @@ export function SampleSectionsView() {
           </div>
 
           <span className="text-xs font-medium text-text-muted px-2.5 py-1 bg-canvas rounded-lg border border-border">
-            {filteredSections.length}{" "}
-            {filteredSections.length === 1 ? "Section" : "Sections"}
+            {sections.length} {sections.length === 1 ? "Section" : "Sections"}
           </span>
         </div>
       </div>
@@ -199,7 +235,14 @@ export function SampleSectionsView() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border text-xs sm:text-sm text-text-primary">
-              {filteredSections.length === 0 ? (
+              {isLoading ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-12 text-center text-text-secondary">
+                    <RefreshCw className="w-6 h-6 text-orange mx-auto mb-2 animate-spin" />
+                    <p className="font-medium text-text-primary">Loading discipline sections...</p>
+                  </td>
+                </tr>
+              ) : sections.length === 0 ? (
                 <tr>
                   <td
                     colSpan={6}
@@ -215,8 +258,8 @@ export function SampleSectionsView() {
                   </td>
                 </tr>
               ) : (
-                filteredSections.map((sec) => {
-                  const count = getSampleCount(sec.id);
+                sections.map((sec) => {
+                  const count = sec.sampleCount ?? (sec.samples ? sec.samples.length : 0);
                   return (
                     <tr
                       key={sec.id}
@@ -314,4 +357,3 @@ export function SampleSectionsView() {
     </div>
   );
 }
-

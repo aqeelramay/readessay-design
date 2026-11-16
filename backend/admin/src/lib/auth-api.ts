@@ -54,8 +54,9 @@ export async function apiRequest<T>(
   const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
   const url = `${API_BASE_URL}${cleanEndpoint}`;
 
+  const isFormData = typeof FormData !== 'undefined' && options.body instanceof FormData;
   const defaultHeaders: Record<string, string> = {
-    'Content-Type': 'application/json',
+    ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
     Accept: 'application/json',
   };
 

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowLeft,
   Save,
@@ -15,16 +15,23 @@ import {
   RefreshCw,
   Layers,
   ExternalLink,
+  Upload,
 } from "lucide-react";
 import {
+  getAcademicSampleById,
+  createAcademicSample,
+  updateAcademicSample,
+  getSampleSections,
+  uploadSampleDocument,
   type AcademicSample,
   type AcademicSampleFile,
+  type SampleSection,
   type SampleStatus,
-  INITIAL_SAMPLE_SECTIONS,
-} from "@/data/mockSamples";
+} from "@/lib/api";
 
 interface SampleItemFormProps {
   sample?: AcademicSample;
+  sampleId?: string;
 }
 
 const ACADEMIC_LEVELS = [
@@ -64,61 +71,156 @@ const CITATION_STYLES = [
   "Vancouver",
 ];
 
-export function SampleItemForm({ sample }: SampleItemFormProps) {
+export function SampleItemForm({ sample: initialSample, sampleId }: SampleItemFormProps) {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const isEditing = Boolean(sample);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Pre-select section if passed via query param e.g. /samples/items/new?section=sec-1
+  const [sample, setSample] = useState<AcademicSample | undefined>(initialSample);
+  const [currentId, setCurrentId] = useState<string | undefined>(
+    initialSample?.id ?? sampleId
+  );
+  const isEditing = Boolean(currentId);
+
+  // Discipline Sections list for dropdown
+  const [sections, setSections] = useState<SampleSection[]>([]);
+  const [isLoadingSections, setIsLoadingSections] = useState(true);
+
+  // Pre-select section if passed via query param e.g. /samples/items/new?section=<sectionId>
   const querySectionId = searchParams.get("section");
-  const initialSectionId = (() => {
-    if (sample?.sectionId) return sample.sectionId;
-    if (querySectionId) return querySectionId;
-    return INITIAL_SAMPLE_SECTIONS[0]?.id ?? "sec-1";
-  })();
 
   // Form Fields
-  const [title, setTitle] = useState(sample?.title ?? "");
-  const [sectionId, setSectionId] = useState(initialSectionId);
-  const [pageCount, setPageCount] = useState<number>(sample?.pageCount ?? 5);
+  const [title, setTitle] = useState(initialSample?.title ?? "");
+  const [sectionId, setSectionId] = useState(initialSample?.sectionId ?? querySectionId ?? "");
+  const [pageCount, setPageCount] = useState<number>(initialSample?.pageCount ?? 5);
 
   // 4-Slot Metadata Grid
   const [academicLevel, setAcademicLevel] = useState(
-    sample?.academicLevel ?? "Masters Degree"
+    initialSample?.academicLevel ?? "Masters Degree"
   );
   const [documentType, setDocumentType] = useState(
-    sample?.documentType ?? "Research Report"
+    initialSample?.documentType ?? "Research Report"
   );
   const [citationStyle, setCitationStyle] = useState(
-    sample?.citationStyle ?? "APA 7th Edition"
+    initialSample?.citationStyle ?? "APA 7th Edition"
   );
   const [customMetaLabel, setCustomMetaLabel] = useState(
-    sample?.customMetaLabel ?? "Framework"
+    initialSample?.customMetaLabel ?? "Framework"
   );
   const [customMetaValue, setCustomMetaValue] = useState(
-    sample?.customMetaValue ?? "Empirical Analysis"
+    initialSample?.customMetaValue ?? "Empirical Analysis"
   );
 
-  // Document File Attachment (strictly PDF or DOCX)
+  // Document File Attachment
   const [documentFile, setDocumentFile] = useState<AcademicSampleFile | null>(
-    sample?.documentFile ?? {
-      fileName: "Exemplar_Academic_Paper.pdf",
-      fileType: "PDF",
-      fileSize: "1.8 MB",
-      fileUrl: "/samples/exemplars/Exemplar_Academic_Paper.pdf",
-    }
+    initialSample?.documentFile ??
+      (initialSample?.fileUrl
+        ? {
+            fileName: initialSample.fileName ?? "Exemplar_Academic_Paper.pdf",
+            fileType: initialSample.fileType ?? "PDF",
+            fileSize: initialSample.fileSize ?? "1.8 MB",
+            fileUrl: initialSample.fileUrl,
+          }
+        : null)
   );
 
   const [status, setStatus] = useState<SampleStatus>(
-    sample?.status ?? "active"
+    initialSample?.status ?? "active"
   );
   const [displayOrder, setDisplayOrder] = useState<number>(
-    sample?.displayOrder ?? 1
+    initialSample?.displayOrder ?? 1
   );
 
   // UI state
+  const [isLoadingSample, setIsLoadingSample] = useState(Boolean(!initialSample && sampleId));
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [confirmation, setConfirmation] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // 1. Load sections for dropdown
+  useEffect(() => {
+    getSampleSections({ limit: 100 })
+      .then((res) => {
+        setSections(res.data);
+        if (!sectionId && res.data.length > 0) {
+          if (querySectionId && res.data.some((s) => s.id === querySectionId)) {
+            setSectionId(querySectionId);
+          } else {
+            setSectionId(res.data[0].id);
+          }
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load sections dropdown:", err);
+      })
+      .finally(() => {
+        setIsLoadingSections(false);
+      });
+  }, [querySectionId, sectionId]);
+
+  // 2. Fetch existing sample if sampleId is provided
+  useEffect(() => {
+    if (!sampleId || initialSample) return;
+
+    let isMounted = true;
+    getAcademicSampleById(sampleId)
+      .then((data) => {
+        if (!isMounted) return;
+        setSample(data);
+        setCurrentId(data.id);
+        setTitle(data.title);
+        setSectionId(data.sectionId);
+        setPageCount(data.pageCount);
+        setAcademicLevel(data.academicLevel);
+        setDocumentType(data.documentType);
+        setCitationStyle(data.citationStyle);
+        setCustomMetaLabel(data.customMetaLabel || "");
+        setCustomMetaValue(data.customMetaValue || "");
+        setDocumentFile(
+          data.documentFile || {
+            fileName: data.fileName || "sample.pdf",
+            fileType: data.fileType || "PDF",
+            fileSize: data.fileSize || "1.0 MB",
+            fileUrl: data.fileUrl || "",
+          }
+        );
+        setStatus(data.status);
+        setDisplayOrder(data.displayOrder);
+      })
+      .catch((err) => {
+        if (!isMounted) return;
+        setError(err instanceof Error ? err.message : "Failed to load academic sample");
+      })
+      .finally(() => {
+        if (isMounted) setIsLoadingSample(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [sampleId, initialSample]);
+
+  // Handle real file upload to API
+  async function handleFileUpload(file: File) {
+    setError(null);
+    setIsUploading(true);
+
+    try {
+      const uploaded = await uploadSampleDocument(file);
+      setDocumentFile({
+        fileName: uploaded.fileName,
+        fileType: uploaded.fileType,
+        fileSize: uploaded.fileSize,
+        fileUrl: uploaded.fileUrl,
+      });
+      setConfirmation(`Uploaded "${uploaded.fileName}" (${uploaded.fileSize}) successfully.`);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to upload file attachment");
+    } finally {
+      setIsUploading(false);
+    }
+  }
 
   function handleSimulatedFileUpload(type: "PDF" | "DOCX") {
     const ext = type === "PDF" ? "pdf" : "docx";
@@ -135,9 +237,10 @@ export function SampleItemForm({ sample }: SampleItemFormProps) {
     });
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setConfirmation(null);
 
     if (!title.trim()) {
       setError("Please provide a sample title.");
@@ -147,29 +250,57 @@ export function SampleItemForm({ sample }: SampleItemFormProps) {
       setError("Please select an academic discipline section.");
       return;
     }
-    if (!documentFile) {
-      setError(
-        "Please attach an academic sample document file (.pdf or .docx)."
-      );
-      return;
-    }
-    if (!customMetaLabel.trim() || !customMetaValue.trim()) {
-      setError(
-        "Please fill in both custom metadata slot label and value."
-      );
+    if (!documentFile || !documentFile.fileUrl) {
+      setError("Please attach an academic sample document file (.pdf or .docx).");
       return;
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setConfirmation(
-        isEditing
-          ? `Sample "${title}" updated successfully. Changes staged in local UI session.`
-          : `Sample "${title}" created successfully. Changes staged in local UI session.`
-      );
+
+    try {
+      const payload = {
+        sectionId,
+        title: title.trim(),
+        pageCount,
+        academicLevel,
+        documentType,
+        citationStyle,
+        customMetaLabel: customMetaLabel.trim(),
+        customMetaValue: customMetaValue.trim(),
+        fileName: documentFile.fileName,
+        fileType: documentFile.fileType,
+        fileSize: documentFile.fileSize,
+        fileUrl: documentFile.fileUrl,
+        documentFile,
+        status,
+        displayOrder,
+      };
+
+      if (isEditing && currentId) {
+        const updated = await updateAcademicSample(currentId, payload);
+        setSample(updated);
+        setConfirmation(`Sample "${title}" updated successfully.`);
+      } else {
+        const created = await createAcademicSample(payload);
+        setConfirmation(`Sample "${title}" created successfully.`);
+        router.push(`/samples/items/${created.id}/edit`);
+      }
       window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 400);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "Failed to save academic sample");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  if (isLoadingSample) {
+    return (
+      <div className="bg-surface border border-border rounded-xl p-12 text-center max-w-lg mx-auto my-12">
+        <RefreshCw className="w-8 h-8 text-orange mx-auto mb-3 animate-spin" />
+        <h2 className="text-base font-bold text-text-primary">Loading Academic Sample...</h2>
+        <p className="text-xs text-text-secondary mt-1">Fetching live sample data from database.</p>
+      </div>
+    );
   }
 
   return (
@@ -186,7 +317,7 @@ export function SampleItemForm({ sample }: SampleItemFormProps) {
           </Link>
           <h1 className="text-2xl sm:text-[26px] font-bold text-text-primary tracking-tight">
             {isEditing
-              ? `Edit Academic Sample: ${sample?.title}`
+              ? `Edit Academic Sample: ${title || sample?.title}`
               : "Add Academic Sample"}
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-1">
@@ -207,7 +338,7 @@ export function SampleItemForm({ sample }: SampleItemFormProps) {
           <button
             type="submit"
             form="sample-item-form"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isUploading}
             className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-orange hover:bg-orange-hover text-white text-xs font-semibold shadow-xs transition-colors focus:outline-none focus:ring-2 focus:ring-orange/40 disabled:opacity-75"
           >
             <Save className="w-4 h-4" />
@@ -261,6 +392,20 @@ export function SampleItemForm({ sample }: SampleItemFormProps) {
           </button>
         </div>
       )}
+
+      {/* Hidden Real File Input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        className="hidden"
+        onChange={(e) => {
+          const files = e.target.files;
+          if (files && files.length > 0) {
+            handleFileUpload(files[0]);
+          }
+        }}
+      />
 
       {/* Main 2-Column Grid */}
       <form
@@ -387,7 +532,7 @@ export function SampleItemForm({ sample }: SampleItemFormProps) {
                   {/* Slot 4: Discipline-Specific Label & Value Pair */}
                   <div>
                     <label className="block text-xs font-semibold text-text-primary mb-1.5">
-                      Slot 4: Custom Discipline Slot <span className="text-orange">*</span>
+                      Slot 4: Custom Discipline Slot
                     </label>
                     <div className="grid grid-cols-2 gap-2">
                       <input
@@ -396,7 +541,6 @@ export function SampleItemForm({ sample }: SampleItemFormProps) {
                         onChange={(e) => setCustomMetaLabel(e.target.value)}
                         placeholder="Label (e.g. Software)"
                         className="w-full px-2.5 py-2 text-xs rounded-lg border border-border bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary placeholder:text-text-muted"
-                        required
                       />
                       <input
                         type="text"
@@ -404,7 +548,6 @@ export function SampleItemForm({ sample }: SampleItemFormProps) {
                         onChange={(e) => setCustomMetaValue(e.target.value)}
                         placeholder="Value (e.g. Excel • Solver)"
                         className="w-full px-2.5 py-2 text-xs rounded-lg border border-border bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary placeholder:text-text-muted"
-                        required
                       />
                     </div>
                   </div>
@@ -471,8 +614,17 @@ export function SampleItemForm({ sample }: SampleItemFormProps) {
                     title="Open document in new tab"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
-                    <span>View Document</span>
+                    <span>View</span>
                   </a>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isUploading}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface text-text-secondary hover:text-navy text-xs font-semibold transition-colors disabled:opacity-50"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>{isUploading ? "Uploading..." : "Replace"}</span>
+                  </button>
                   <button
                     type="button"
                     onClick={() =>
@@ -507,22 +659,30 @@ export function SampleItemForm({ sample }: SampleItemFormProps) {
                     Upload Academic Document File
                   </p>
                   <p className="text-[11px] text-text-secondary mt-0.5">
-                    Drag and drop or select a document file (.pdf or .docx, up to
-                    25MB)
+                    Select a document file (.pdf or .docx, up to 25MB)
                   </p>
                 </div>
-                <div className="flex items-center justify-center gap-2 pt-1">
+                <div className="flex flex-wrap items-center justify-center gap-2 pt-1">
+                  <button
+                    type="button"
+                    disabled={isUploading}
+                    onClick={() => fileInputRef.current?.click()}
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-orange hover:bg-orange-hover text-white text-xs font-semibold transition-colors disabled:opacity-50 shadow-xs"
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>{isUploading ? "Uploading File..." : "Choose PDF / DOCX File"}</span>
+                  </button>
                   <button
                     type="button"
                     onClick={() => handleSimulatedFileUpload("PDF")}
-                    className="px-3.5 py-1.5 rounded-lg bg-navy hover:bg-navy-hover text-white text-xs font-semibold transition-colors"
+                    className="px-3.5 py-2 rounded-lg border border-border bg-surface text-text-primary hover:bg-canvas text-xs font-semibold transition-colors"
                   >
                     Attach Mock PDF (.pdf)
                   </button>
                   <button
                     type="button"
                     onClick={() => handleSimulatedFileUpload("DOCX")}
-                    className="px-3.5 py-1.5 rounded-lg border border-border bg-surface text-text-primary hover:bg-canvas text-xs font-semibold transition-colors"
+                    className="px-3.5 py-2 rounded-lg border border-border bg-surface text-text-primary hover:bg-canvas text-xs font-semibold transition-colors"
                   >
                     Attach Mock DOCX (.docx)
                   </button>
@@ -553,12 +713,19 @@ export function SampleItemForm({ sample }: SampleItemFormProps) {
                   onChange={(e) => setSectionId(e.target.value)}
                   className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary font-medium"
                   required
+                  disabled={isLoadingSections}
                 >
-                  {INITIAL_SAMPLE_SECTIONS.map((sec) => (
-                    <option key={sec.id} value={sec.id}>
-                      {sec.heading}
-                    </option>
-                  ))}
+                  {isLoadingSections ? (
+                    <option value="">Loading disciplines...</option>
+                  ) : sections.length === 0 ? (
+                    <option value="">No discipline sections found</option>
+                  ) : (
+                    sections.map((sec) => (
+                      <option key={sec.id} value={sec.id}>
+                        {sec.heading}
+                      </option>
+                    ))
+                  )}
                 </select>
                 <p className="text-[11px] text-text-secondary mt-1">
                   The parent category this sample belongs to.
@@ -627,14 +794,14 @@ export function SampleItemForm({ sample }: SampleItemFormProps) {
                 <div className="pt-3 border-t border-border/60 text-xs text-text-secondary space-y-1.5">
                   <div className="flex justify-between">
                     <span>Sample ID:</span>
-                    <span className="font-mono text-text-primary">
-                      {sample?.id}
+                    <span className="font-mono text-text-primary truncate max-w-[160px]">
+                      {currentId}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span>Last updated:</span>
                     <span className="font-mono text-text-primary">
-                      {sample?.updatedAt ?? "2026-11-12"}
+                      {sample?.updatedAt ?? ""}
                     </span>
                   </div>
                 </div>

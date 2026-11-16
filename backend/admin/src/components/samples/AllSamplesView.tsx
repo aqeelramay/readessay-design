@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   Plus,
@@ -8,82 +8,107 @@ import {
   Pencil,
   Trash2,
   CheckCircle2,
+  AlertCircle,
   FileText,
   Layers,
   ExternalLink,
+  RefreshCw,
 } from "lucide-react";
 import {
-  INITIAL_ACADEMIC_SAMPLES,
-  INITIAL_SAMPLE_SECTIONS,
+  getAcademicSamples,
+  getSampleSections,
+  deleteAcademicSample,
   type AcademicSample,
   type SampleSection,
-} from "@/data/mockSamples";
+  type SamplesSummary,
+} from "@/lib/api";
 import { SampleStatusBadge } from "./SampleStatusBadge";
 import { DeleteConfirmModal } from "@/components/services/DeleteConfirmModal";
 
 export function AllSamplesView() {
-  const [samples, setSamples] = useState<AcademicSample[]>(
-    INITIAL_ACADEMIC_SAMPLES
-  );
-  const [sections] = useState<SampleSection[]>(INITIAL_SAMPLE_SECTIONS);
+  const [samples, setSamples] = useState<AcademicSample[]>([]);
+  const [sections, setSections] = useState<SampleSection[]>([]);
+  const [summary, setSummary] = useState<SamplesSummary | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [disciplineFilter, setDisciplineFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
-  const [deletingSample, setDeletingSample] = useState<AcademicSample | null>(
-    null
-  );
+  const [deletingSample, setDeletingSample] = useState<AcademicSample | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   function showToast(msg: string) {
     setToastMessage(msg);
     setTimeout(() => {
       setToastMessage(null);
-    }, 3500);
+    }, 4000);
   }
+
+  // Load parent discipline sections for filter dropdown
+  useEffect(() => {
+    getSampleSections({ limit: 100 })
+      .then((res) => setSections(res.data))
+      .catch((err) => console.error("Failed to load sections dropdown:", err));
+  }, []);
+
+  const loadSamples = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await getAcademicSamples({
+        search: searchQuery.trim() || undefined,
+        sectionId: disciplineFilter !== "all" ? disciplineFilter : undefined,
+        status: statusFilter !== "all" ? statusFilter : undefined,
+        limit: 100,
+      });
+      setSamples(res.data);
+      setSummary(res.summary);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to load academic samples";
+      setError(msg);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [searchQuery, disciplineFilter, statusFilter]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      loadSamples();
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [loadSamples]);
 
   function getSectionHeading(sectionId: string): string {
     const sec = sections.find((s) => s.id === sectionId);
     return sec?.heading ?? "General";
   }
 
-  const filteredSamples = useMemo(() => {
-    return samples
-      .filter((sample) => {
-        const query = searchQuery.toLowerCase();
-        const matchesSearch =
-          sample.title.toLowerCase().includes(query) ||
-          sample.academicLevel.toLowerCase().includes(query) ||
-          sample.documentType.toLowerCase().includes(query) ||
-          sample.citationStyle.toLowerCase().includes(query) ||
-          sample.customMetaLabel.toLowerCase().includes(query) ||
-          sample.customMetaValue.toLowerCase().includes(query) ||
-          sample.documentFile.fileName.toLowerCase().includes(query);
-
-        const matchesDiscipline =
-          disciplineFilter === "all" || sample.sectionId === disciplineFilter;
-
-        const matchesStatus =
-          statusFilter === "all" || sample.status === statusFilter;
-
-        return matchesSearch && matchesDiscipline && matchesStatus;
-      })
-      .sort((a, b) => a.displayOrder - b.displayOrder);
-  }, [samples, searchQuery, disciplineFilter, statusFilter]);
-
-  function handleDeleteConfirm() {
+  async function handleDeleteConfirm() {
     if (!deletingSample) return;
     const title = deletingSample.title;
-    setSamples((prev) => prev.filter((s) => s.id !== deletingSample.id));
-    setDeletingSample(null);
-    showToast(`Sample "${title}" deleted successfully.`);
+    const sampleId = deletingSample.id;
+    setError(null);
+
+    try {
+      await deleteAcademicSample(sampleId);
+      setSamples((prev) => prev.filter((s) => s.id !== sampleId));
+      setDeletingSample(null);
+      showToast(`Sample "${title}" deleted successfully.`);
+      loadSamples();
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : `Failed to delete sample "${title}".`;
+      setError(msg);
+      setDeletingSample(null);
+    }
   }
 
   // Summary Metrics
-  const totalSamplesCount = samples.length;
-  const activeSamplesCount = samples.filter((s) => s.status === "active").length;
-  const totalPagesCount = samples.reduce((acc, s) => acc + s.pageCount, 0);
+  const totalSamplesCount = summary?.totalCount ?? samples.length;
+  const activeSamplesCount = summary?.activeCount ?? 0;
+  const totalPagesCount = summary?.totalPages ?? 0;
+  const totalSectionsCount = sections.length;
 
   return (
     <div className="space-y-6">
@@ -127,6 +152,26 @@ export function AllSamplesView() {
         </div>
       </div>
 
+      {/* Error Alert */}
+      {error && (
+        <div
+          role="alert"
+          className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm flex items-start justify-between gap-3 animate-in fade-in"
+        >
+          <div className="flex items-center gap-2">
+            <AlertCircle className="w-5 h-5 text-red-600 shrink-0" />
+            <span>{error}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setError(null)}
+            className="text-xs text-red-700 hover:text-red-950 font-semibold px-1"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* Metric Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-surface border border-border rounded-xl p-4 shadow-xs">
@@ -137,7 +182,7 @@ export function AllSamplesView() {
             {totalSamplesCount}
           </div>
           <div className="text-[11px] text-text-muted mt-1">
-            Across {sections.length} disciplines
+            Across {totalSectionsCount} disciplines
           </div>
         </div>
         <div className="bg-surface border border-border rounded-xl p-4 shadow-xs">
@@ -167,7 +212,7 @@ export function AllSamplesView() {
             Discipline Sections
           </div>
           <div className="text-2xl font-bold text-orange mt-1">
-            {sections.length}
+            {totalSectionsCount}
           </div>
           <div className="text-[11px] text-text-muted mt-1">
             Academic domains covered
@@ -183,8 +228,12 @@ export function AllSamplesView() {
             {(["all", "active", "draft", "archived"] as const).map((tab) => {
               const count =
                 tab === "all"
-                  ? samples.length
-                  : samples.filter((s) => s.status === tab).length;
+                  ? summary?.totalCount ?? samples.length
+                  : tab === "active"
+                  ? summary?.activeCount ?? 0
+                  : tab === "draft"
+                  ? summary?.draftCount ?? 0
+                  : summary?.archivedCount ?? 0;
               const isActive = statusFilter === tab;
 
               return (
@@ -223,17 +272,12 @@ export function AllSamplesView() {
               onChange={(e) => setDisciplineFilter(e.target.value)}
               className="text-xs py-1.5 px-3 rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary font-medium"
             >
-              <option value="all">All Disciplines ({samples.length})</option>
-              {sections.map((sec) => {
-                const count = samples.filter(
-                  (s) => s.sectionId === sec.id
-                ).length;
-                return (
-                  <option key={sec.id} value={sec.id}>
-                    {sec.heading} ({count})
-                  </option>
-                );
-              })}
+              <option value="all">All Disciplines ({sections.length})</option>
+              {sections.map((sec) => (
+                <option key={sec.id} value={sec.id}>
+                  {sec.heading}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -253,7 +297,12 @@ export function AllSamplesView() {
 
       {/* SaaS Data Table */}
       <div className="bg-surface border border-border rounded-xl shadow-xs overflow-hidden">
-        {filteredSamples.length === 0 ? (
+        {isLoading ? (
+          <div className="p-12 text-center text-text-secondary">
+            <RefreshCw className="w-6 h-6 text-orange mx-auto mb-2 animate-spin" />
+            <p className="font-medium text-text-primary">Loading academic samples...</p>
+          </div>
+        ) : samples.length === 0 ? (
           <div className="p-12 text-center">
             <div className="w-12 h-12 rounded-xl bg-orange/10 flex items-center justify-center text-orange mx-auto mb-3">
               <FileText className="w-6 h-6" />
@@ -296,8 +345,9 @@ export function AllSamplesView() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border bg-surface">
-                {filteredSamples.map((sample) => {
-                  const sectionHeading = getSectionHeading(sample.sectionId);
+                {samples.map((sample) => {
+                  const sectionHeading =
+                    sample.section?.heading ?? getSectionHeading(sample.sectionId);
 
                   return (
                     <tr
@@ -312,12 +362,14 @@ export function AllSamplesView() {
                         >
                           {sample.title}
                         </Link>
-                        <div className="text-[11px] text-text-secondary mt-0.5 flex items-center gap-1.5">
-                          <span className="font-medium text-navy">
-                            {sample.customMetaLabel}:
-                          </span>
-                          <span>{sample.customMetaValue}</span>
-                        </div>
+                        {sample.customMetaLabel && (
+                          <div className="text-[11px] text-text-secondary mt-0.5 flex items-center gap-1.5">
+                            <span className="font-medium text-navy">
+                              {sample.customMetaLabel}:
+                            </span>
+                            <span>{sample.customMetaValue}</span>
+                          </div>
+                        )}
                       </td>
 
                       {/* Discipline Section */}
@@ -350,7 +402,7 @@ export function AllSamplesView() {
                       {/* Document File */}
                       <td className="py-3 px-4">
                         <a
-                          href={sample.documentFile.fileUrl}
+                          href={sample.documentFile?.fileUrl || sample.fileUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 group/file"
@@ -358,19 +410,19 @@ export function AllSamplesView() {
                         >
                           <span
                             className={`px-1.5 py-0.5 rounded text-[10px] font-bold font-mono transition-transform group-hover/file:scale-105 ${
-                              sample.documentFile.fileType === "PDF"
+                              (sample.documentFile?.fileType || sample.fileType) === "PDF"
                                 ? "bg-red-100 text-red-700 border border-red-200"
                                 : "bg-blue-100 text-blue-700 border border-blue-200"
                             }`}
                           >
-                            {sample.documentFile.fileType}
+                            {sample.documentFile?.fileType || sample.fileType}
                           </span>
                           <div className="min-w-0">
                             <span className="font-mono text-[11px] text-text-primary group-hover/file:text-orange group-hover/file:underline block truncate max-w-[150px] transition-colors">
-                              {sample.documentFile.fileName}
+                              {sample.documentFile?.fileName || sample.fileName}
                             </span>
                             <span className="text-[10px] text-text-muted">
-                              {sample.documentFile.fileSize}
+                              {sample.documentFile?.fileSize || sample.fileSize}
                             </span>
                           </div>
                         </a>
@@ -385,7 +437,7 @@ export function AllSamplesView() {
                       <td className="py-3 px-4 text-right">
                         <div className="flex items-center justify-end gap-1">
                           <a
-                            href={sample.documentFile.fileUrl}
+                            href={sample.documentFile?.fileUrl || sample.fileUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-1.5 rounded-md text-text-secondary hover:text-navy hover:bg-canvas transition-colors"
@@ -420,15 +472,13 @@ export function AllSamplesView() {
       </div>
 
       {/* Delete Confirmation Modal */}
-      {deletingSample && (
-        <DeleteConfirmModal
-          isOpen={Boolean(deletingSample)}
-          title="Delete Academic Sample"
-          itemName={deletingSample.title}
-          onConfirm={handleDeleteConfirm}
-          onCancel={() => setDeletingSample(null)}
-        />
-      )}
+      <DeleteConfirmModal
+        isOpen={Boolean(deletingSample)}
+        title="Delete Academic Sample"
+        itemName={deletingSample?.title ?? ""}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeletingSample(null)}
+      />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import type { SampleStatus } from "@/data/mockSamples";
+import type { SampleStatus } from "@/lib/api";
 
 interface SampleStatusBadgeProps {
   status: SampleStatus;

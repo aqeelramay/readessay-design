@@ -4,12 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAVIGATION_ITEMS } from "@/config/navigation";
 import {
-  INITIAL_SAMPLE_SECTIONS,
-  INITIAL_ACADEMIC_SAMPLES,
-  getSampleSectionById,
-  getSampleById,
-} from "@/data/mockSamples";
-import {
   INITIAL_BLOG_CATEGORIES,
   INITIAL_BLOG_POSTS,
   getBlogCategoryBySlug,
@@ -40,21 +34,15 @@ function resolveReviewClientName(id: string): string {
 }
 
 function resolveSampleSectionHeading(id: string): string {
-  if (typeof getSampleSectionById === "function") {
-    const s = getSampleSectionById(id);
-    if (s?.heading) return s.heading;
-  }
-  const s = INITIAL_SAMPLE_SECTIONS.find((item) => item.id === id);
-  return s?.heading ?? id;
+  if (!id) return "Discipline Section";
+  if (id.length > 12) return `Section #${id.slice(0, 8)}`;
+  return `Section #${id}`;
 }
 
 function resolveSampleTitle(id: string): string {
-  if (typeof getSampleById === "function") {
-    const s = getSampleById(id);
-    if (s?.title) return s.title;
-  }
-  const s = INITIAL_ACADEMIC_SAMPLES.find((item) => item.id === id);
-  return s?.title ?? id;
+  if (!id) return "Academic Sample";
+  if (id.length > 12) return `Sample #${id.slice(0, 8)}`;
+  return `Sample #${id}`;
 }
 
 function resolveBlogCategoryName(slug: string): string {
