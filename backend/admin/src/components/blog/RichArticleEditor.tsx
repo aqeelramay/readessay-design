@@ -23,7 +23,9 @@ import {
   Upload,
   X,
   Check,
+  Loader2,
 } from "lucide-react";
+import { uploadBlogImage } from "@/lib/blog-api";
 
 interface RichArticleEditorProps {
   value: string;
@@ -52,6 +54,9 @@ export function RichArticleEditor({
   const [selectedFileDataUrl, setSelectedFileDataUrl] = useState<string | null>(
     null
   );
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [imageUploadError, setImageUploadError] = useState<string | null>(null);
 
   // Sync value to visual editor when switching modes or when content changes externally
   useEffect(() => {
@@ -158,9 +163,14 @@ export function RichArticleEditor({
   }
 
   // Handle Local File Selection for Image
-  function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleFileSelect(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    setImageUploadError(null);
+    setUploadedImageUrl(null);
+
+    // Read local data URL for immediate visual preview
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === "string") {
@@ -168,12 +178,26 @@ export function RichArticleEditor({
       }
     };
     reader.readAsDataURL(file);
+
+    // Upload to backend API to receive permanent hosted URL
+    try {
+      setIsUploadingImage(true);
+      const res = await uploadBlogImage(file);
+      setUploadedImageUrl(res.url);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to upload image.";
+      setImageUploadError(msg);
+    } finally {
+      setIsUploadingImage(false);
+    }
   }
 
   // Handle Image / Figure Insertion
   function handleInsertImage() {
     const finalUrl =
-      imageTab === "file" ? selectedFileDataUrl : imageUrlInput.trim();
+      imageTab === "file"
+        ? uploadedImageUrl || selectedFileDataUrl
+        : imageUrlInput.trim();
     if (!finalUrl) return;
 
     const alt = imageAltInput.trim() || "Academic guide figure";
@@ -192,6 +216,7 @@ export function RichArticleEditor({
     // Reset modal
     setIsImageModalOpen(false);
     setSelectedFileDataUrl(null);
+    setUploadedImageUrl(null);
     setImageUrlInput("");
     setImageAltInput("");
     setImageCaptionInput("");
@@ -580,10 +605,19 @@ export function RichArticleEditor({
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <span className="text-xs font-medium text-emerald-700 flex items-center gap-1">
-                      <Check className="w-3.5 h-3.5" /> Image loaded ready to
-                      insert
-                    </span>
+                    {isUploadingImage ? (
+                      <span className="text-xs font-medium text-orange flex items-center gap-1.5">
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" /> Uploading image to server...
+                      </span>
+                    ) : imageUploadError ? (
+                      <span className="text-xs font-medium text-rose-600">
+                        Upload failed: {imageUploadError} (fallback to local preview)
+                      </span>
+                    ) : (
+                      <span className="text-xs font-medium text-emerald-700 flex items-center gap-1">
+                        <Check className="w-3.5 h-3.5" /> Image uploaded & ready to insert
+                      </span>
+                    )}
                   </div>
                 )}
               </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   Plus,
@@ -11,20 +11,21 @@ import {
   FolderOpen,
   ArrowRight,
   BookOpen,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 import {
-  INITIAL_BLOG_CATEGORIES,
-  INITIAL_BLOG_POSTS,
   type BlogCategory,
-} from "@/data/mockBlog";
+  getBlogCategories,
+  deleteBlogCategory,
+} from "@/lib/blog-api";
 import { BlogStatusBadge } from "./BlogStatusBadge";
 import { DeleteConfirmModal } from "@/components/services/DeleteConfirmModal";
 
 export function BlogCategoriesView() {
-  const [categories, setCategories] = useState<BlogCategory[]>(
-    INITIAL_BLOG_CATEGORIES
-  );
-  const [posts, setPosts] = useState(INITIAL_BLOG_POSTS);
+  const [categories, setCategories] = useState<BlogCategory[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -33,6 +34,7 @@ export function BlogCategoriesView() {
     null
   );
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   function showToast(msg: string) {
     setToastMessage(msg);
@@ -41,9 +43,29 @@ export function BlogCategoriesView() {
     }, 3500);
   }
 
-  function getPostCount(categoryId: string): number {
-    return posts.filter((p) => p.categoryId === categoryId).length;
-  }
+  const loadCategories = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setFetchError(null);
+      const res = await getBlogCategories({
+        search: searchQuery || undefined,
+        status: statusFilter !== "all" ? statusFilter : undefined,
+      });
+      setCategories(res.categories || []);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to load blog categories.";
+      setFetchError(msg);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [searchQuery, statusFilter]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      loadCategories();
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [loadCategories]);
 
   const filteredCategories = useMemo(() => {
     return categories
@@ -62,15 +84,22 @@ export function BlogCategoriesView() {
       .sort((a, b) => a.displayOrder - b.displayOrder);
   }, [categories, searchQuery, statusFilter]);
 
-  function handleConfirmDelete() {
+  async function handleConfirmDelete() {
     if (!deletingCategory) return;
     const name = deletingCategory.name;
     const catId = deletingCategory.id;
 
-    setCategories((prev) => prev.filter((c) => c.id !== catId));
-    setPosts((prev) => prev.filter((p) => p.categoryId !== catId));
-    setDeletingCategory(null);
-    showToast(`Deleted category "${name}".`);
+    try {
+      setErrorMessage(null);
+      await deleteBlogCategory(catId);
+      setDeletingCategory(null);
+      showToast(`Deleted category "${name}".`);
+      await loadCategories();
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : `Failed to delete category "${name}".`;
+      setErrorMessage(msg);
+      setDeletingCategory(null);
+    }
   }
 
   // Summary Metrics
@@ -78,7 +107,7 @@ export function BlogCategoriesView() {
   const publishedCount = categories.filter(
     (c) => c.status === "published"
   ).length;
-  const totalPostsCount = posts.length;
+  const totalPostsCount = categories.reduce((acc, c) => acc + (c.postCount ?? 0), 0);
 
   return (
     <div className="space-y-6">
@@ -90,6 +119,23 @@ export function BlogCategoriesView() {
         >
           <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>{toastMessage}</span>
+        </div>
+      )}
+
+      {/* Error Notification */}
+      {errorMessage && (
+        <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl flex items-start justify-between gap-3 text-rose-800 text-xs">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+            <span>{errorMessage}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setErrorMessage(null)}
+            className="text-rose-600 hover:text-rose-800 font-bold ml-2"
+          >
+            ✕
+          </button>
         </div>
       )}
 
@@ -217,7 +263,7 @@ export function BlogCategoriesView() {
         </div>
       </div>
 
-      {/* Structured SaaS Data Table */}
+      {/* Data Table */}
       <div className="bg-surface border border-border rounded-xl shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
@@ -244,7 +290,29 @@ export function BlogCategoriesView() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border text-xs sm:text-sm text-text-primary bg-surface">
-              {filteredCategories.length === 0 ? (
+              {isLoading ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-12 text-center text-text-secondary">
+                    <Loader2 className="w-6 h-6 animate-spin text-orange mx-auto mb-2" />
+                    <p className="text-xs text-text-muted">Loading blog categories from database...</p>
+                  </td>
+                </tr>
+              ) : fetchError ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-12 text-center text-rose-600">
+                    <AlertCircle className="w-8 h-8 mx-auto mb-2 opacity-80" />
+                    <p className="font-semibold text-sm">Failed to load blog categories</p>
+                    <p className="text-xs text-text-muted mt-1">{fetchError}</p>
+                    <button
+                      type="button"
+                      onClick={() => loadCategories()}
+                      className="mt-3 px-3 py-1.5 rounded-lg bg-navy text-white text-xs font-semibold hover:bg-navy-hover"
+                    >
+                      Try Again
+                    </button>
+                  </td>
+                </tr>
+              ) : filteredCategories.length === 0 ? (
                 <tr>
                   <td
                     colSpan={6}
@@ -261,7 +329,7 @@ export function BlogCategoriesView() {
                 </tr>
               ) : (
                 filteredCategories.map((cat) => {
-                  const count = getPostCount(cat.id);
+                  const count = cat.postCount ?? 0;
                   return (
                     <tr
                       key={cat.id}

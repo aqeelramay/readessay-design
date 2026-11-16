@@ -155,8 +155,7 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     id: "blog",
     label: "Blog",
     href: "/blog",
-    // Mock placeholder metadata for UI shell stage — replace with NestJS API data later
-    badge: "84 Articles",
+    badge: "Articles",
     description:
       "Educational articles, admissions guides, research tips & SEO publications.",
     action: "Publish Articles",

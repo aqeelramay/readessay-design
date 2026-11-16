@@ -3,12 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAVIGATION_ITEMS } from "@/config/navigation";
-import {
-  INITIAL_BLOG_CATEGORIES,
-  INITIAL_BLOG_POSTS,
-  getBlogCategoryBySlug,
-  getBlogPostBySlug,
-} from "@/data/mockBlog";
 
 function formatSlugToTitle(slug: string): string {
   if (!slug) return "";
@@ -46,21 +40,11 @@ function resolveSampleTitle(id: string): string {
 }
 
 function resolveBlogCategoryName(slug: string): string {
-  if (typeof getBlogCategoryBySlug === "function") {
-    const c = getBlogCategoryBySlug(slug);
-    if (c?.name) return c.name;
-  }
-  const c = INITIAL_BLOG_CATEGORIES.find((item) => item.slug === slug);
-  return c?.name ?? slug;
+  return formatSlugToTitle(slug);
 }
 
 function resolveBlogPostTitle(slug: string): string {
-  if (typeof getBlogPostBySlug === "function") {
-    const p = getBlogPostBySlug(slug);
-    if (p?.title) return p.title;
-  }
-  const p = INITIAL_BLOG_POSTS.find((item) => item.slug === slug);
-  return p?.title ?? slug;
+  return formatSlugToTitle(slug);
 }
 
 export function Breadcrumbs() {

@@ -1,4 +1,4 @@
-import type { BlogStatus } from "@/data/mockBlog";
+import type { BlogStatus } from "@/lib/blog-api";
 
 interface BlogStatusBadgeProps {
   status: BlogStatus;

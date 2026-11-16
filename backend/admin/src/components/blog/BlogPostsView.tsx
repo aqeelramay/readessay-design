@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
@@ -15,14 +15,16 @@ import {
   X,
   Clock,
   Calendar,
+  Loader2,
+  AlertCircle,
 } from "lucide-react";
 import {
-  INITIAL_BLOG_POSTS,
-  INITIAL_BLOG_CATEGORIES,
   type BlogPost,
   type BlogCategory,
-  getBlogCategoryById,
-} from "@/data/mockBlog";
+  getBlogPosts,
+  getBlogCategories,
+  deleteBlogPost,
+} from "@/lib/blog-api";
 import { BlogStatusBadge } from "./BlogStatusBadge";
 import { DeleteConfirmModal } from "@/components/services/DeleteConfirmModal";
 
@@ -31,17 +33,18 @@ export function BlogPostsView() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
 
-  const [posts, setPosts] = useState<BlogPost[]>(INITIAL_BLOG_POSTS);
-  const [categories] = useState<BlogCategory[]>(INITIAL_BLOG_CATEGORIES);
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [categories, setCategories] = useState<BlogCategory[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategorySlug, setSelectedCategorySlug] = useState<string>(
-    categoryParam ?? "all"
-  );
+  const selectedCategorySlug = categoryParam ?? "all";
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
   const [deletingPost, setDeletingPost] = useState<BlogPost | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   function showToast(msg: string) {
     setToastMessage(msg);
@@ -49,6 +52,38 @@ export function BlogPostsView() {
       setToastMessage(null);
     }, 3500);
   }
+
+  const loadData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setFetchError(null);
+
+      const [postsRes, catsRes] = await Promise.all([
+        getBlogPosts({
+          search: searchQuery || undefined,
+          status: statusFilter !== "all" ? statusFilter : undefined,
+          categorySlug: selectedCategorySlug !== "all" ? selectedCategorySlug : undefined,
+          limit: 100,
+        }),
+        getBlogCategories(),
+      ]);
+
+      setPosts(postsRes.posts || []);
+      setCategories(catsRes.categories || []);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to load blog posts.";
+      setFetchError(msg);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [searchQuery, statusFilter, selectedCategorySlug]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      loadData();
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [loadData]);
 
   // Active category object if filtered by category
   const activeCategory = useMemo(() => {
@@ -68,7 +103,7 @@ export function BlogPostsView() {
         post.author.name.toLowerCase().includes(query) ||
         post.author.credentials.toLowerCase().includes(query);
 
-      const postCategory = categoryMap.get(post.categoryId);
+      const postCategory = categoryMap.get(post.categoryId) || post.category;
       const matchesCategory =
         selectedCategorySlug === "all" ||
         postCategory?.slug === selectedCategorySlug;
@@ -81,7 +116,6 @@ export function BlogPostsView() {
   }, [posts, searchQuery, selectedCategorySlug, statusFilter, categories]);
 
   function handleCategoryChange(slug: string) {
-    setSelectedCategorySlug(slug);
     if (slug === "all") {
       router.push("/blog");
     } else {
@@ -89,12 +123,22 @@ export function BlogPostsView() {
     }
   }
 
-  function handleConfirmDelete() {
+  async function handleConfirmDelete() {
     if (!deletingPost) return;
     const title = deletingPost.title;
-    setPosts((prev) => prev.filter((p) => p.id !== deletingPost.id));
-    setDeletingPost(null);
-    showToast(`Article "${title}" deleted successfully.`);
+    const postId = deletingPost.id;
+
+    try {
+      setErrorMessage(null);
+      await deleteBlogPost(postId);
+      setDeletingPost(null);
+      showToast(`Article "${title}" deleted successfully.`);
+      await loadData();
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : `Failed to delete article "${title}".`;
+      setErrorMessage(msg);
+      setDeletingPost(null);
+    }
   }
 
   // Summary Metrics
@@ -103,6 +147,7 @@ export function BlogPostsView() {
     (p) => p.status === "published"
   ).length;
   const draftArticles = posts.filter((p) => p.status === "draft").length;
+  const categoriesCount = categories.length;
 
   return (
     <div className="space-y-6">
@@ -114,6 +159,23 @@ export function BlogPostsView() {
         >
           <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>{toastMessage}</span>
+        </div>
+      )}
+
+      {/* Error Notification */}
+      {errorMessage && (
+        <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl flex items-start justify-between gap-3 text-rose-800 text-xs">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+            <span>{errorMessage}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setErrorMessage(null)}
+            className="text-rose-600 hover:text-rose-800 font-bold ml-2"
+          >
+            ✕
+          </button>
         </div>
       )}
 
@@ -138,8 +200,8 @@ export function BlogPostsView() {
           </Link>
           <Link
             href={
-              activeCategory
-                ? `/blog/new?category=${activeCategory.slug}`
+              selectedCategorySlug !== "all"
+                ? `/blog/new?category=${selectedCategorySlug}`
                 : "/blog/new"
             }
             className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-orange hover:bg-orange-hover text-white text-xs font-semibold shadow-xs transition-colors focus:outline-none focus:ring-2 focus:ring-orange/40"
@@ -149,6 +211,33 @@ export function BlogPostsView() {
           </Link>
         </div>
       </div>
+
+      {/* Active Category Filter Banner (if filtered via query param) */}
+      {activeCategory && (
+        <div className="bg-orange/10 border border-orange/20 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 animate-in fade-in">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-orange text-white flex items-center justify-center font-bold text-xs shrink-0">
+              <FolderOpen className="w-4 h-4" />
+            </div>
+            <div>
+              <span className="text-[11px] font-semibold text-orange uppercase tracking-wider">
+                Filtered by Category
+              </span>
+              <h2 className="text-sm font-bold text-text-primary">
+                {activeCategory.name}
+              </h2>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => handleCategoryChange("all")}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface border border-border hover:bg-canvas text-xs font-semibold text-text-secondary hover:text-text-primary transition-colors"
+          >
+            <X className="w-3.5 h-3.5" />
+            <span>Clear Filter</span>
+          </button>
+        </div>
+      )}
 
       {/* Metric Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -160,7 +249,7 @@ export function BlogPostsView() {
             {totalArticles}
           </div>
           <div className="text-[11px] text-text-muted mt-1">
-            Across {categories.length} categories
+            Across all categories
           </div>
         </div>
         <div className="bg-surface border border-border rounded-xl p-4 shadow-xs">
@@ -171,291 +260,269 @@ export function BlogPostsView() {
             {publishedArticles}
           </div>
           <div className="text-[11px] text-text-muted mt-1">
-            Live on ReadEssay Blog
+            Live on customer blog
           </div>
         </div>
         <div className="bg-surface border border-border rounded-xl p-4 shadow-xs">
           <div className="text-xs text-text-secondary font-medium">
-            Draft Articles
+            Drafts in Progress
           </div>
           <div className="text-2xl font-bold text-amber-600 mt-1">
             {draftArticles}
           </div>
           <div className="text-[11px] text-text-muted mt-1">
-            In review or editing
+            Unpublished revisions
           </div>
         </div>
         <div className="bg-surface border border-border rounded-xl p-4 shadow-xs">
           <div className="text-xs text-text-secondary font-medium">
-            Active Categories
+            Topic Categories
           </div>
-          <div className="text-2xl font-bold text-orange mt-1">
-            {categories.length}
+          <div className="text-2xl font-bold text-navy mt-1">
+            {categoriesCount}
           </div>
           <div className="text-[11px] text-text-muted mt-1">
-            Curated research topics
+            Curated collections
           </div>
         </div>
       </div>
 
-      {/* Active Category Filter Banner (if filtered) */}
-      {activeCategory && (
-        <div className="bg-orange/5 border border-orange/20 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-in fade-in">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-orange/10 flex items-center justify-center text-orange shrink-0">
-              <FolderOpen className="w-4 h-4" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-text-primary flex items-center gap-2">
-                <span>Filtered by Category:</span>
-                <span className="text-orange">{activeCategory.name}</span>
-              </div>
-              <p className="text-[11px] text-text-secondary mt-0.5 line-clamp-1">
-                {activeCategory.shortDescription}
-              </p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={() => handleCategoryChange("all")}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface text-text-secondary hover:text-text-primary text-xs font-semibold transition-colors shrink-0"
-          >
-            <X className="w-3.5 h-3.5" />
-            <span>Show All Posts</span>
-          </button>
-        </div>
-      )}
-
-      {/* Toolbar: Category dropdown, Status tabs, Search bar */}
-      <div className="bg-surface border border-border rounded-xl p-4 shadow-xs space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-          {/* Status Tabs */}
-          <div className="flex items-center gap-1.5 p-1 bg-canvas rounded-lg border border-border/80 self-start sm:self-auto overflow-x-auto">
-            {(["all", "published", "draft", "archived"] as const).map((tab) => {
-              const count =
-                tab === "all"
-                  ? posts.length
-                  : posts.filter((p) => p.status === tab).length;
-              const isActive = statusFilter === tab;
-
-              return (
-                <button
-                  key={tab}
-                  type="button"
-                  onClick={() => setStatusFilter(tab)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-all capitalize whitespace-nowrap ${
-                    isActive
-                      ? "bg-surface text-navy shadow-xs border border-border"
-                      : "text-text-secondary hover:text-text-primary"
-                  }`}
-                >
-                  <span>{tab}</span>
-                  <span
-                    className={`px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
-                      isActive
-                        ? "bg-navy/10 text-navy"
-                        : "bg-slate-200/60 text-text-secondary"
-                    }`}
-                  >
-                    {count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Category Dropdown Filter */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-medium text-text-secondary whitespace-nowrap">
-              Category:
-            </span>
-            <select
-              value={selectedCategorySlug}
-              onChange={(e) => handleCategoryChange(e.target.value)}
-              className="text-xs py-1.5 px-3 rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary font-medium"
-            >
-              <option value="all">All Categories ({posts.length})</option>
-              {categories.map((cat) => {
-                const count = posts.filter(
-                  (p) => p.categoryId === cat.id
-                ).length;
-                return (
-                  <option key={cat.id} value={cat.slug}>
-                    {cat.name} ({count})
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-        </div>
-
-        {/* Search Bar */}
-        <div className="relative">
-          <Search className="w-4 h-4 text-text-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
+      {/* Filter & Search Bar */}
+      <div className="bg-surface border border-border rounded-xl p-4 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+        {/* Search Input */}
+        <div className="relative flex-1 max-w-md">
+          <Search className="w-4 h-4 text-text-muted absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search posts by title, slug, excerpt, or faculty author..."
-            className="w-full pl-9 pr-4 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary placeholder:text-text-muted"
+            placeholder="Search articles by title, slug, excerpt, or author..."
+            className="w-full bg-canvas border border-border rounded-lg pl-9 pr-3.5 py-2 text-xs sm:text-sm text-text-primary placeholder:text-text-muted focus:bg-surface focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-navy transition-all"
           />
+        </div>
+
+        {/* Category & Status Selectors */}
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Category Dropdown */}
+          <select
+            value={selectedCategorySlug}
+            onChange={(e) => handleCategoryChange(e.target.value)}
+            className="px-3 py-1.5 rounded-lg border border-border bg-canvas text-xs font-medium text-text-primary focus:bg-surface focus:outline-none focus:ring-2 focus:ring-orange/30 transition-colors"
+          >
+            <option value="all">All Categories</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.slug}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+
+          {/* Status Filter Tabs */}
+          <div className="inline-flex rounded-lg border border-border bg-canvas p-0.5">
+            {[
+              { id: "all", label: "All" },
+              { id: "published", label: "Published" },
+              { id: "draft", label: "Draft" },
+              { id: "archived", label: "Archived" },
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setStatusFilter(tab.id)}
+                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                  statusFilter === tab.id
+                    ? "bg-surface text-text-primary font-semibold shadow-2xs border border-border/80"
+                    : "text-text-secondary hover:text-text-primary"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          <span className="text-xs font-medium text-text-muted px-2.5 py-1 bg-canvas rounded-lg border border-border">
+            {filteredPosts.length}{" "}
+            {filteredPosts.length === 1 ? "Article" : "Articles"}
+          </span>
         </div>
       </div>
 
-      {/* SaaS Data Table */}
+      {/* Structured SaaS Data Table */}
       <div className="bg-surface border border-border rounded-xl shadow-xs overflow-hidden">
-        {filteredPosts.length === 0 ? (
-          <div className="p-12 text-center">
-            <div className="w-12 h-12 rounded-xl bg-orange/10 flex items-center justify-center text-orange mx-auto mb-3">
-              <BookOpen className="w-6 h-6" />
-            </div>
-            <h2 className="text-base font-bold text-text-primary">
-              No blog posts found
-            </h2>
-            <p className="text-xs text-text-secondary mt-1 max-w-sm mx-auto">
-              No articles match your search or category filter. Try clearing
-              your query or selecting another category.
-            </p>
-            {(searchQuery ||
-              selectedCategorySlug !== "all" ||
-              statusFilter !== "all") && (
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchQuery("");
-                  setSelectedCategorySlug("all");
-                  setStatusFilter("all");
-                  router.push("/blog");
-                }}
-                className="mt-4 px-3.5 py-1.5 rounded-lg border border-border text-xs font-semibold text-text-secondary hover:text-text-primary hover:bg-canvas transition-colors"
-              >
-                Reset All Filters
-              </button>
-            )}
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-canvas border-b border-border text-text-secondary font-semibold uppercase tracking-wider text-[11px]">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr className="bg-canvas border-b border-border text-[11px] font-bold text-text-secondary uppercase tracking-wider select-none">
+                <th scope="col" className="px-5 py-3.5">
+                  Article Title &amp; Slug
+                </th>
+                <th scope="col" className="px-5 py-3.5">
+                  Category
+                </th>
+                <th scope="col" className="px-5 py-3.5">
+                  Author
+                </th>
+                <th scope="col" className="px-5 py-3.5">
+                  Read Time
+                </th>
+                <th scope="col" className="px-5 py-3.5">
+                  Status
+                </th>
+                <th scope="col" className="px-5 py-3.5">
+                  Published
+                </th>
+                <th scope="col" className="px-5 py-3.5 text-right">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border text-xs sm:text-sm text-text-primary bg-surface">
+              {isLoading ? (
                 <tr>
-                  <th className="py-3 px-4">Article Title &amp; Slug</th>
-                  <th className="py-3 px-4">Category</th>
-                  <th className="py-3 px-4">Author</th>
-                  <th className="py-3 px-4">Read Time &amp; Date</th>
-                  <th className="py-3 px-3">Status</th>
-                  <th className="py-3 px-4 text-right">Actions</th>
+                  <td colSpan={7} className="px-6 py-12 text-center text-text-secondary">
+                    <Loader2 className="w-6 h-6 animate-spin text-orange mx-auto mb-2" />
+                    <p className="text-xs text-text-muted">Loading blog posts from database...</p>
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-border bg-surface">
-                {filteredPosts.map((post) => {
-                  const cat = getBlogCategoryById(post.categoryId);
-
+              ) : fetchError ? (
+                <tr>
+                  <td colSpan={7} className="px-6 py-12 text-center text-rose-600">
+                    <AlertCircle className="w-8 h-8 mx-auto mb-2 opacity-80" />
+                    <p className="font-semibold text-sm">Failed to load blog posts</p>
+                    <p className="text-xs text-text-muted mt-1">{fetchError}</p>
+                    <button
+                      type="button"
+                      onClick={() => loadData()}
+                      className="mt-3 px-3 py-1.5 rounded-lg bg-navy text-white text-xs font-semibold hover:bg-navy-hover"
+                    >
+                      Try Again
+                    </button>
+                  </td>
+                </tr>
+              ) : filteredPosts.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={7}
+                    className="px-6 py-12 text-center text-text-secondary"
+                  >
+                    <BookOpen className="w-8 h-8 text-text-muted mx-auto mb-2 opacity-50" />
+                    <p className="font-medium text-text-primary">
+                      No blog articles found
+                    </p>
+                    <p className="text-xs text-text-muted mt-1">
+                      Try clearing search filters or create a new blog post.
+                    </p>
+                  </td>
+                </tr>
+              ) : (
+                filteredPosts.map((post) => {
+                  const category =
+                    categories.find((c) => c.id === post.categoryId) || post.category;
                   return (
                     <tr
                       key={post.id}
-                      className="hover:bg-canvas/60 transition-colors"
+                      className="hover:bg-canvas/50 transition-colors group"
                     >
-                      {/* Title & Slug (with thumbnail) */}
-                      <td className="py-3 px-4">
-                        <div className="flex items-start gap-3">
-                          <div className="w-12 h-10 rounded-lg overflow-hidden bg-slate-100 border border-border shrink-0 mt-0.5">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              src={post.featuredImage.url}
-                              alt={post.featuredImage.altText || post.title}
-                              className="w-full h-full object-cover"
-                              loading="lazy"
-                            />
-                          </div>
-                          <div>
-                            <Link
-                              href={`/blog/${post.slug}/edit`}
-                              className="font-bold text-text-primary hover:text-orange transition-colors line-clamp-1 max-w-sm sm:max-w-md block"
-                            >
-                              {post.title}
-                            </Link>
-                            <span className="block text-[11px] font-mono text-text-muted mt-0.5">
-                              /blog/{post.slug}
-                            </span>
-                          </div>
+                      {/* Title & Slug */}
+                      <td className="px-5 py-4 max-w-md">
+                        <div>
+                          <Link
+                            href={`/blog/${post.slug}/edit`}
+                            className="font-bold text-text-primary hover:text-orange transition-colors block text-xs sm:text-sm line-clamp-1"
+                          >
+                            {post.title}
+                          </Link>
+                          <span className="block text-[11px] font-mono text-text-muted mt-0.5">
+                            readessay.com/blog/{post.slug}
+                          </span>
                         </div>
                       </td>
 
-                      {/* Category */}
-                      <td className="py-3 px-4">
-                        {cat ? (
+                      {/* Category Pill */}
+                      <td className="px-5 py-4 whitespace-nowrap">
+                        {category ? (
                           <Link
-                            href={`/blog?category=${cat.slug}`}
-                            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-orange/10 text-orange border border-orange/20 hover:bg-orange/20 transition-colors whitespace-nowrap"
+                            href={`/blog?category=${category.slug}`}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-navy/5 text-navy hover:bg-navy/10 border border-navy/10 transition-colors"
                           >
-                            {cat.name}
+                            <span>{category.name}</span>
                           </Link>
                         ) : (
-                          <span className="text-text-muted">—</span>
+                          <span className="text-xs text-text-muted italic">
+                            Unassigned
+                          </span>
                         )}
                       </td>
 
                       {/* Author */}
-                      <td className="py-3 px-4">
-                        <div className="font-semibold text-text-primary">
-                          {post.author.name}
-                        </div>
-                        <div className="text-[11px] text-text-secondary truncate max-w-[160px]">
-                          {post.author.credentials}
+                      <td className="px-5 py-4 whitespace-nowrap">
+                        <div>
+                          <span className="font-semibold text-xs text-text-primary block">
+                            {post.author?.name || "Editorial Staff"}
+                          </span>
+                          <span className="text-[11px] text-text-secondary block">
+                            {post.author?.credentials || "ReadEssay Faculty"}
+                          </span>
                         </div>
                       </td>
 
-                      {/* Read Time & Date */}
-                      <td className="py-3 px-4">
-                        <div className="flex items-center gap-1.5 text-text-primary font-medium">
+                      {/* Read Time */}
+                      <td className="px-5 py-4 whitespace-nowrap">
+                        <span className="inline-flex items-center gap-1 text-xs text-text-secondary font-mono">
                           <Clock className="w-3 h-3 text-text-muted" />
                           <span>{post.readTime}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-[11px] text-text-secondary mt-0.5 font-mono">
-                          <Calendar className="w-3 h-3 text-text-muted" />
-                          <span>{post.publishedAt}</span>
-                        </div>
+                        </span>
                       </td>
 
                       {/* Status */}
-                      <td className="py-3 px-3">
+                      <td className="px-5 py-4 whitespace-nowrap">
                         <BlogStatusBadge status={post.status} />
                       </td>
 
+                      {/* Published Date */}
+                      <td className="px-5 py-4 whitespace-nowrap">
+                        <span className="inline-flex items-center gap-1.5 text-xs font-mono text-text-secondary">
+                          <Calendar className="w-3 h-3 text-text-muted" />
+                          <span>{post.publishedAt}</span>
+                        </span>
+                      </td>
+
                       {/* Actions */}
-                      <td className="py-3 px-4 text-right">
-                        <div className="flex items-center justify-end gap-1">
+                      <td className="px-5 py-4 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-1.5 opacity-90 group-hover:opacity-100">
                           <Link
                             href={`/blog/${post.slug}/edit`}
-                            className="p-1.5 rounded-md text-text-secondary hover:text-navy hover:bg-canvas transition-colors"
+                            aria-label={`Edit ${post.title}`}
+                            className="p-1.5 text-text-secondary hover:text-navy hover:bg-canvas rounded-md transition-colors"
                             title="Edit Article"
                           >
-                            <Pencil className="w-3.5 h-3.5" />
+                            <Pencil className="w-4 h-4" />
                           </Link>
                           <button
                             type="button"
                             onClick={() => setDeletingPost(post)}
-                            className="p-1.5 rounded-md text-text-secondary hover:text-red-600 hover:bg-red-50 transition-colors"
+                            aria-label={`Delete ${post.title}`}
+                            className="p-1.5 text-text-secondary hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors"
                             title="Delete Article"
                           >
-                            <Trash2 className="w-3.5 h-3.5" />
+                            <Trash2 className="w-4 h-4" />
                           </button>
                         </div>
                       </td>
                     </tr>
                   );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Delete Confirmation Modal */}
       {deletingPost && (
         <DeleteConfirmModal
           isOpen={Boolean(deletingPost)}
-          title="Delete Blog Post"
+          title="Delete Blog Article"
           itemName={deletingPost.title}
           onConfirm={handleConfirmDelete}
           onCancel={() => setDeletingPost(null)}

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Save,
@@ -19,20 +19,26 @@ import {
   HelpCircle,
   ListOrdered,
   Sparkles,
-  Layers,
+  Upload,
+  Loader2,
 } from "lucide-react";
 import {
   type BlogPost,
+  type BlogCategory,
   type BlogStatus,
   type BlogFaqItem,
-  INITIAL_BLOG_CATEGORIES,
-  INITIAL_BLOG_POSTS,
-  getBlogCategoryBySlug,
-} from "@/data/mockBlog";
+  getBlogPostByIdOrSlug,
+  getBlogCategories,
+  getBlogPosts,
+  createBlogPost,
+  updateBlogPost,
+  uploadBlogImage,
+} from "@/lib/blog-api";
 import { RichArticleEditor } from "./RichArticleEditor";
 
 interface BlogPostFormProps {
   post?: BlogPost;
+  postSlug?: string;
 }
 
 function slugify(text: string): string {
@@ -65,42 +71,51 @@ function extractH2Headings(html: string): string[] {
   }
 }
 
-export function BlogPostForm({ post }: BlogPostFormProps) {
+export function BlogPostForm({
+  post: initialPost,
+  postSlug,
+}: BlogPostFormProps) {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const isEditing = Boolean(post);
+
+  const [postData, setPostData] = useState<BlogPost | null>(
+    initialPost ?? null
+  );
+  const [isLoadingPost, setIsLoadingPost] = useState(
+    Boolean(postSlug && !initialPost)
+  );
+  const [postLoadError, setPostLoadError] = useState<string | null>(null);
+
+  const isEditing = Boolean(postData || postSlug);
+
+  // Categories & Available Posts lists
+  const [categories, setCategories] = useState<BlogCategory[]>([]);
+  const [availablePosts, setAvailablePosts] = useState<BlogPost[]>([]);
+  const [isLoadingLists, setIsLoadingLists] = useState(true);
 
   // Pre-selected category from query params on create mode
   const queryCategorySlug = searchParams.get("category");
-  const defaultCategoryId = (() => {
-    if (post?.categoryId) return post.categoryId;
-    if (queryCategorySlug) {
-      const match = getBlogCategoryBySlug(queryCategorySlug);
-      if (match) return match.id;
-    }
-    return INITIAL_BLOG_CATEGORIES[0]?.id ?? "cat-1";
-  })();
 
   // Card 1: Article Header & Featured Media
-  const [title, setTitle] = useState(post?.title ?? "");
-  const [slug, setSlug] = useState(post?.slug ?? "");
-  const [isSlugCustomized, setIsSlugCustomized] = useState(isEditing);
-  const [excerpt, setExcerpt] = useState(post?.excerpt ?? "");
-  const [readTime, setReadTime] = useState(post?.readTime ?? "8 min read");
+  const [title, setTitle] = useState(initialPost?.title ?? "");
+  const [slug, setSlug] = useState(initialPost?.slug ?? "");
+  const [isSlugCustomized, setIsSlugCustomized] = useState(Boolean(initialPost));
+  const [excerpt, setExcerpt] = useState(initialPost?.excerpt ?? "");
+  const [readTime, setReadTime] = useState(initialPost?.readTime ?? "8 min read");
 
-  const [imageUrl, setImageUrl] = useState(
-    post?.featuredImage?.url ??
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBJ69LFSgBNZ2h1755hnc9BJm9FHy6LNw_PaKHfP_wc5tkz1yP34K1Lk1YBwJOfrvZ-2ECQV5PJi0tY4HxbXcVU20z2GhN6pCg-_LaEn8IZNxfUz-2IpGyTOH5P8TlEOlfqA6skHbT-kRl-dfou5sg8jMKI2dh0wCUA11CH2_kLtrq900VNrtteElaSf0dLpZyd7r7hoeqe8W_wjR1isaJ_1ZgQSyBiE3lhUC_pnE7n"
-  );
+  const [imageUrl, setImageUrl] = useState(initialPost?.featuredImage?.url ?? "");
   const [imageAltText, setImageAltText] = useState(
-    post?.featuredImage?.altText ?? ""
+    initialPost?.featuredImage?.altText ?? ""
   );
   const [imageCaption, setImageCaption] = useState(
-    post?.featuredImage?.caption ?? ""
+    initialPost?.featuredImage?.caption ?? ""
   );
+  const [isUploadingFeaturedImage, setIsUploadingFeaturedImage] = useState(false);
+  const [featuredImageError, setFeaturedImageError] = useState<string | null>(null);
 
   // Card 2: Article Editorial Content (Rich Text)
   const [contentHtml, setContentHtml] = useState(
-    post?.contentHtml ??
+    initialPost?.contentHtml ??
       `<h2>1. Understanding Core Academic Frameworks</h2>
 <p>Provide a foundational overview of this topic, establishing scholarly relevance and theoretical grounding. Articulate the empirical void and state the central thesis clearly.</p>
 
@@ -121,33 +136,33 @@ export function BlogPostForm({ post }: BlogPostFormProps) {
 
   // Card 3: Lead Faculty Author Attribution
   const [authorName, setAuthorName] = useState(
-    post?.author?.name ?? "Dr. David Moraine"
+    initialPost?.author?.name ?? "Dr. David Moraine"
   );
   const [authorCredentials, setAuthorCredentials] = useState(
-    post?.author?.credentials ?? "PhD, Oxford Alum"
+    initialPost?.author?.credentials ?? "PhD, Oxford Alum"
   );
   const [authorRoleSubtitle, setAuthorRoleSubtitle] = useState(
-    post?.author?.roleSubtitle ??
+    initialPost?.author?.roleSubtitle ??
       "Senior Academic Research Faculty • Verified ReadEssay Advisor"
   );
   const [authorExperienceLine, setAuthorExperienceLine] = useState(
-    post?.author?.experienceLine ??
+    initialPost?.author?.experienceLine ??
       "Senior Research Fellow • 14+ Years Postgraduate Advising"
   );
   const [authorBio, setAuthorBio] = useState(
-    post?.author?.bio ??
+    initialPost?.author?.bio ??
       "Doctorate in Educational Research with over a decade of graduate defense committee advisory."
   );
 
   // Card 4: Article FAQs
   const [faqTagline, setFaqTagline] = useState(
-    post?.faqSection?.tagline ?? "Academic Inquiries"
+    initialPost?.faqSection?.tagline ?? "Academic Inquiries"
   );
   const [faqHeading, setFaqHeading] = useState(
-    post?.faqSection?.heading ?? "Frequently Asked Questions"
+    initialPost?.faqSection?.heading ?? "Frequently Asked Questions"
   );
   const [faqs, setFaqs] = useState<BlogFaqItem[]>(
-    post?.faqSection?.items ?? [
+    initialPost?.faqSection?.items ?? [
       {
         id: "faq-init-1",
         question:
@@ -159,27 +174,115 @@ export function BlogPostForm({ post }: BlogPostFormProps) {
   );
 
   // Right Column: Publishing & Categorization
-  const [categoryId, setCategoryId] = useState(defaultCategoryId);
+  const [categoryId, setCategoryId] = useState(initialPost?.categoryId ?? "");
   const [status, setStatus] = useState<BlogStatus>(
-    post?.status ?? "published"
+    initialPost?.status ?? "published"
   );
   const [publishedAt, setPublishedAt] = useState(
-    post?.publishedAt ?? new Date().toISOString().split("T")[0]
+    initialPost?.publishedAt ?? new Date().toISOString().split("T")[0]
   );
   const [relatedPostIds, setRelatedPostIds] = useState<string[]>(
-    post?.relatedPostIds ?? []
+    initialPost?.relatedPostIds ?? []
   );
 
   // Right Column: SEO & Search Metadata
-  const [metaTitle, setMetaTitle] = useState(post?.seo?.metaTitle ?? "");
+  const [metaTitle, setMetaTitle] = useState(initialPost?.seo?.metaTitle ?? "");
   const [metaDescription, setMetaDescription] = useState(
-    post?.seo?.metaDescription ?? ""
+    initialPost?.seo?.metaDescription ?? ""
   );
 
   // UI state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmation, setConfirmation] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // Load categories and other posts
+  const loadInitialLists = useCallback(async () => {
+    try {
+      setIsLoadingLists(true);
+      const [catsRes, postsRes] = await Promise.all([
+        getBlogCategories(),
+        getBlogPosts({ limit: 100 }),
+      ]);
+      setCategories(catsRes.categories || []);
+      setAvailablePosts(postsRes.posts || []);
+
+      // If categoryId not yet selected, set from queryCategorySlug or first category
+      if (!initialPost?.categoryId && !postData?.categoryId) {
+        if (queryCategorySlug) {
+          const matched = catsRes.categories.find(
+            (c) => c.slug === queryCategorySlug
+          );
+          if (matched) {
+            setCategoryId(matched.id);
+          } else if (catsRes.categories.length > 0) {
+            setCategoryId(catsRes.categories[0].id);
+          }
+        } else if (catsRes.categories.length > 0) {
+          setCategoryId(catsRes.categories[0].id);
+        }
+      }
+    } catch {
+      // Ignored non-critical list fetch error
+    } finally {
+      setIsLoadingLists(false);
+    }
+  }, [initialPost, postData, queryCategorySlug]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      loadInitialLists();
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [loadInitialLists]);
+
+  // If postSlug is provided, fetch dynamically
+  useEffect(() => {
+    if (!postSlug || initialPost) return;
+
+    let isMounted = true;
+    getBlogPostByIdOrSlug(postSlug)
+      .then((p) => {
+        if (!isMounted) return;
+        setPostData(p);
+        setTitle(p.title);
+        setSlug(p.slug);
+        setIsSlugCustomized(true);
+        setExcerpt(p.excerpt);
+        setReadTime(p.readTime);
+        setPublishedAt(p.publishedAt);
+        setImageUrl(p.featuredImage?.url ?? "");
+        setImageAltText(p.featuredImage?.altText ?? "");
+        setImageCaption(p.featuredImage?.caption ?? "");
+        setContentHtml(p.contentHtml);
+        setAuthorName(p.author?.name ?? "");
+        setAuthorCredentials(p.author?.credentials ?? "");
+        setAuthorRoleSubtitle(p.author?.roleSubtitle ?? "");
+        setAuthorExperienceLine(p.author?.experienceLine ?? "");
+        setAuthorBio(p.author?.bio ?? "");
+        setFaqTagline(p.faqSection?.tagline ?? "Academic Inquiries");
+        setFaqHeading(p.faqSection?.heading ?? "Frequently Asked Questions");
+        setFaqs(p.faqSection?.items ?? []);
+        setCategoryId(p.categoryId);
+        setStatus(p.status);
+        setRelatedPostIds(p.relatedPostIds ?? []);
+        setMetaTitle(p.seo?.metaTitle ?? "");
+        setMetaDescription(p.seo?.metaDescription ?? "");
+      })
+      .catch((err) => {
+        if (!isMounted) return;
+        const msg =
+          err instanceof Error ? err.message : "Failed to load blog post.";
+        setPostLoadError(msg);
+      })
+      .finally(() => {
+        if (isMounted) setIsLoadingPost(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [postSlug, initialPost]);
 
   function handleTitleChange(val: string) {
     setTitle(val);
@@ -188,6 +291,30 @@ export function BlogPostForm({ post }: BlogPostFormProps) {
     }
     if (!metaTitle || metaTitle.endsWith(" | ReadEssay")) {
       setMetaTitle(`${val} | ReadEssay`);
+    }
+  }
+
+  // Handle Featured Hero Image File Upload
+  async function handleFeaturedImageUpload(
+    e: React.ChangeEvent<HTMLInputElement>
+  ) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setIsUploadingFeaturedImage(true);
+      setFeaturedImageError(null);
+      const res = await uploadBlogImage(file);
+      setImageUrl(res.url);
+      if (!imageAltText) {
+        setImageAltText(title ? `${title} illustration` : file.name);
+      }
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error ? err.message : "Failed to upload featured image.";
+      setFeaturedImageError(msg);
+    } finally {
+      setIsUploadingFeaturedImage(false);
     }
   }
 
@@ -240,52 +367,133 @@ export function BlogPostForm({ post }: BlogPostFormProps) {
         return prev.filter((pId) => pId !== id);
       }
       if (prev.length >= 3) {
-        return [...prev.slice(1), id]; // keep max 3
+        return [...prev.slice(1), id];
       }
       return [...prev, id];
     });
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  // Submit Handler
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setConfirmation(null);
 
     if (!title.trim()) {
       setError("Please provide an article title.");
       return;
     }
     if (!slug.trim()) {
-      setError("Please specify a URL slug.");
-      return;
-    }
-    if (!excerpt.trim()) {
-      setError("Please write an article short excerpt.");
+      setError("Please specify a URL slug for this article.");
       return;
     }
     if (!categoryId) {
-      setError("Please select a blog category.");
-      return;
-    }
-    if (!contentHtml.trim()) {
-      setError("Please provide article editorial content.");
+      setError("Please select a topic category for this article.");
       return;
     }
 
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setConfirmation(
-        isEditing
-          ? `Article "${title}" updated successfully. Changes staged in local UI session.`
-          : `Article "${title}" created successfully. Changes staged in local UI session.`
-      );
+    try {
+      setIsSubmitting(true);
+
+      const payload = {
+        categoryId,
+        title: title.trim(),
+        slug: slug.trim(),
+        excerpt: excerpt.trim(),
+        readTime: readTime.trim() || "8 min read",
+        publishedAt: publishedAt || new Date().toISOString().split("T")[0],
+        featuredImageUrl: imageUrl.trim(),
+        featuredImageAlt: imageAltText.trim(),
+        featuredImageCaption: imageCaption.trim(),
+        featuredImage: {
+          url: imageUrl.trim(),
+          altText: imageAltText.trim(),
+          caption: imageCaption.trim(),
+        },
+        contentHtml,
+        authorName: authorName.trim(),
+        authorCredentials: authorCredentials.trim(),
+        authorRoleSubtitle: authorRoleSubtitle.trim(),
+        authorExperienceLine: authorExperienceLine.trim(),
+        authorBio: authorBio.trim(),
+        author: {
+          name: authorName.trim(),
+          credentials: authorCredentials.trim(),
+          roleSubtitle: authorRoleSubtitle.trim(),
+          experienceLine: authorExperienceLine.trim(),
+          bio: authorBio.trim(),
+        },
+        faqTagline: faqTagline.trim(),
+        faqHeading: faqHeading.trim(),
+        faqItems: faqs.filter((f) => f.question.trim()),
+        faqSection: {
+          tagline: faqTagline.trim(),
+          heading: faqHeading.trim(),
+          items: faqs.filter((f) => f.question.trim()),
+        },
+        relatedPostIds,
+        status,
+        metaTitle: metaTitle.trim() || null,
+        metaDescription: metaDescription.trim() || null,
+        canonicalSlug: slug.trim(),
+        seo: {
+          metaTitle: metaTitle.trim(),
+          metaDescription: metaDescription.trim(),
+          canonicalSlug: slug.trim(),
+        },
+      };
+
+      if (postData?.id) {
+        const updated = await updateBlogPost(postData.id, payload);
+        setPostData(updated);
+        setConfirmation(`Article "${updated.title}" updated successfully.`);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        const created = await createBlogPost(payload);
+        setConfirmation(`Article "${created.title}" created successfully.`);
+        router.push("/blog");
+      }
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "An error occurred while saving the blog post.";
+      setError(msg);
       window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 450);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  if (isLoadingPost) {
+    return (
+      <div className="p-12 text-center text-text-secondary">
+        <Loader2 className="w-8 h-8 animate-spin text-orange mx-auto mb-2" />
+        <p className="text-sm font-medium text-text-primary">Loading article editor...</p>
+      </div>
+    );
+  }
+
+  if (postLoadError) {
+    return (
+      <div className="bg-surface border border-border rounded-xl p-8 text-center max-w-lg mx-auto">
+        <AlertCircle className="w-10 h-10 text-rose-500 mx-auto mb-3" />
+        <h1 className="text-xl font-bold text-text-primary">Article Not Found</h1>
+        <p className="text-sm text-text-secondary mt-2">{postLoadError}</p>
+        <Link
+          href="/blog"
+          className="inline-flex items-center gap-2 mt-5 px-4 py-2 rounded-lg bg-orange text-white text-xs font-semibold hover:bg-orange-hover transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to Blog Posts</span>
+        </Link>
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6 pb-12">
-      {/* Top Action Header */}
+      {/* Top Header & Global Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-border">
         <div>
           <Link
@@ -293,19 +501,18 @@ export function BlogPostForm({ post }: BlogPostFormProps) {
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-text-secondary hover:text-orange transition-colors mb-2"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>← Back to Blog Posts</span>
+            <span>← Back to All Posts</span>
           </Link>
           <h1 className="text-2xl sm:text-[26px] font-bold text-text-primary tracking-tight">
-            {isEditing ? `Edit Post: ${post?.title}` : "Add Blog Post"}
+            {isEditing ? `Edit Post: ${postData?.title || title}` : "Add Blog Post"}
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-1">
-            {isEditing
-              ? "Update article copy, table of contents structure, faculty author profile, and search metadata."
-              : "Author and publish a new academic guide or editorial publication."}
+            Author and publish educational articles, research methods, and SEO
+            publications.
           </p>
         </div>
 
-        {/* Action Buttons */}
+        {/* Global Save / Discard Bar */}
         <div className="flex items-center gap-3 shrink-0">
           <Link
             href="/blog"
@@ -319,7 +526,11 @@ export function BlogPostForm({ post }: BlogPostFormProps) {
             disabled={isSubmitting}
             className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-orange hover:bg-orange-hover text-white text-xs font-semibold shadow-xs transition-colors focus:outline-none focus:ring-2 focus:ring-orange/40 disabled:opacity-75"
           >
-            <Save className="w-4 h-4" />
+            {isSubmitting ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Save className="w-4 h-4" />
+            )}
             <span>
               {isSubmitting
                 ? "Saving..."
@@ -331,68 +542,36 @@ export function BlogPostForm({ post }: BlogPostFormProps) {
         </div>
       </div>
 
-      {/* Confirmation Banner */}
+      {/* Confirmation & Error Banners */}
       {confirmation && (
-        <div
-          role="status"
-          className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-start justify-between gap-3 animate-in fade-in"
-        >
-          <div className="flex items-center gap-2.5">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-            <span className="font-medium">{confirmation}</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setConfirmation(null)}
-            className="text-emerald-700 hover:text-emerald-900 text-xs font-semibold"
-          >
-            Dismiss
-          </button>
+        <div className="p-4 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-900 text-xs sm:text-sm flex items-center gap-3 animate-in fade-in">
+          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+          <span className="font-medium">{confirmation}</span>
         </div>
       )}
 
-      {/* Error Banner */}
       {error && (
-        <div
-          role="alert"
-          className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm flex items-start justify-between gap-3 animate-in fade-in"
-        >
-          <div className="flex items-center gap-2.5">
-            <AlertCircle className="w-5 h-5 text-red-600 shrink-0" />
-            <span className="font-medium">{error}</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setError(null)}
-            className="text-red-700 hover:text-red-900 text-xs font-semibold"
-          >
-            Dismiss
-          </button>
+        <div className="p-4 rounded-xl border border-rose-300 bg-rose-50 text-rose-900 text-xs sm:text-sm flex items-center gap-3 animate-in fade-in">
+          <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
+          <span className="font-medium">{error}</span>
         </div>
       )}
 
-      {/* Main 2-Column Grid */}
+      {/* Main 2-Column Responsive Form Layout */}
       <form
         id="blog-post-form"
         onSubmit={handleSubmit}
-        className="grid grid-cols-1 lg:grid-cols-12 gap-6"
+        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
       >
-        {/* Left Column (8 cols): 4 Structured Cards */}
-        <div className="lg:col-span-8 space-y-6">
-          {/* CARD 1: Article Header & Featured Media */}
+        {/* Left Column (2 Cols): Content & Metadata Cards */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Card 1: Article Header & Featured Media */}
           <div className="bg-surface rounded-xl border border-border p-6 shadow-xs space-y-5">
-            <div className="flex items-center gap-2.5 pb-3 border-b border-border">
-              <div className="w-8 h-8 rounded-lg bg-orange/10 flex items-center justify-center text-orange">
-                <FileText className="w-4 h-4" />
-              </div>
-              <div>
-                <h2 className="text-base font-bold text-text-primary">
-                  Article Header &amp; Featured Media
-                </h2>
-                <p className="text-xs text-text-secondary">
-                  Primary H1 headline, URL slug, short excerpt, and hero imagery.
-                </p>
-              </div>
+            <div className="flex items-center gap-2 pb-3 border-b border-border">
+              <FileText className="w-4 h-4 text-orange" />
+              <h2 className="text-base font-bold text-text-primary">
+                Article Header &amp; Featured Media
+              </h2>
             </div>
 
             <div className="space-y-4">
@@ -441,7 +620,7 @@ export function BlogPostForm({ post }: BlogPostFormProps) {
                     type="text"
                     value={readTime}
                     onChange={(e) => setReadTime(e.target.value)}
-                    placeholder="e.g. 8 min read"
+                    placeholder="8 min read"
                     className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary"
                   />
                 </div>
@@ -449,44 +628,97 @@ export function BlogPostForm({ post }: BlogPostFormProps) {
 
               <div>
                 <label className="block text-xs font-semibold text-text-primary mb-1.5">
-                  Card Short Excerpt <span className="text-orange">*</span>
+                  Excerpt / Lead Summary <span className="text-orange">*</span>
                 </label>
                 <textarea
-                  rows={3}
+                  rows={2}
                   value={excerpt}
                   onChange={(e) => setExcerpt(e.target.value)}
-                  placeholder="A concise 2-3 sentence overview that appears on the public blog listing cards..."
-                  className="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary placeholder:text-text-muted resize-y"
+                  placeholder="A definitive 2-3 sentence overview of the article methodology and key takeaway..."
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary resize-y"
                   required
                 />
               </div>
 
-              {/* Featured Image Sub-group */}
+              {/* Featured Media Box */}
               <div className="pt-3 border-t border-border space-y-3">
-                <div className="flex items-center gap-2">
-                  <ImageIcon className="w-4 h-4 text-orange" />
-                  <span className="text-xs font-bold text-text-primary uppercase tracking-wider">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-text-primary flex items-center gap-1.5">
+                    <ImageIcon className="w-3.5 h-3.5 text-orange" />
                     Featured Hero Image
+                  </span>
+                  <span className="text-[11px] text-text-secondary">
+                    Recommended 1200×630px
                   </span>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-text-primary mb-1.5">
-                    Featured Image URL
+                  <label className="block text-[11px] font-semibold text-text-secondary mb-1">
+                    Image URL or Upload from Computer
                   </label>
-                  <input
-                    type="url"
-                    value={imageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
-                    placeholder="https://images.unsplash.com/... or Google CDN URL"
-                    className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary font-mono"
-                  />
+                  <div className="flex gap-2">
+                    <input
+                      type="url"
+                      value={imageUrl}
+                      onChange={(e) => setImageUrl(e.target.value)}
+                      placeholder="https://... or upload image"
+                      className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary font-mono placeholder:text-text-muted"
+                    />
+                    <label className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-border bg-canvas hover:bg-surface text-text-secondary hover:text-text-primary text-xs font-semibold cursor-pointer shrink-0 transition-colors">
+                      {isUploadingFeaturedImage ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin text-orange" />
+                      ) : (
+                        <Upload className="w-3.5 h-3.5 text-orange" />
+                      )}
+                      <span>
+                        {isUploadingFeaturedImage ? "Uploading..." : "Upload File"}
+                      </span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFeaturedImageUpload}
+                        className="hidden"
+                        disabled={isUploadingFeaturedImage}
+                      />
+                    </label>
+                  </div>
+                  {featuredImageError && (
+                    <p className="text-[11px] text-rose-600 mt-1">
+                      {featuredImageError}
+                    </p>
+                  )}
                 </div>
 
-                {/* Live Image Preview */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-text-secondary mb-1">
+                      Image Accessibility Alt Text
+                    </label>
+                    <input
+                      type="text"
+                      value={imageAltText}
+                      onChange={(e) => setImageAltText(e.target.value)}
+                      placeholder="Student reviewing dissertation chapter at desk"
+                      className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-semibold text-text-secondary mb-1">
+                      Figure Caption (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      value={imageCaption}
+                      onChange={(e) => setImageCaption(e.target.value)}
+                      placeholder="Figure 1.0: Canonical 5-Chapter Postgraduate Blueprint"
+                      className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary"
+                    />
+                  </div>
+                </div>
+
                 {imageUrl && (
-                  <div className="p-3 bg-canvas rounded-lg border border-border flex flex-col sm:flex-row items-center gap-4">
-                    <div className="w-32 h-20 rounded-md overflow-hidden bg-slate-200 border border-border shrink-0">
+                  <div className="mt-2 p-2 bg-canvas rounded-lg border border-border flex items-center gap-3">
+                    <div className="w-20 h-14 rounded overflow-hidden bg-slate-200 border border-border shrink-0">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={imageUrl}
@@ -494,239 +726,180 @@ export function BlogPostForm({ post }: BlogPostFormProps) {
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <div className="space-y-1.5 flex-1 min-w-0">
-                      <div className="text-xs font-semibold text-text-primary">
-                        Live Thumbnail Preview
-                      </div>
-                      <p className="text-[11px] text-text-secondary truncate">
+                    <div className="text-[11px] text-text-secondary truncate">
+                      <span className="font-semibold text-text-primary block truncate">
                         {imageUrl}
-                      </p>
+                      </span>
+                      <span>Hero media attached</span>
                     </div>
                   </div>
                 )}
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-text-primary mb-1.5">
-                      SEO Image Alt Text
-                    </label>
-                    <input
-                      type="text"
-                      value={imageAltText}
-                      onChange={(e) => setImageAltText(e.target.value)}
-                      placeholder="e.g. Master's dissertation writing setup in an academic library"
-                      className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary placeholder:text-text-muted"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-text-primary mb-1.5">
-                      Figure Caption
-                    </label>
-                    <input
-                      type="text"
-                      value={imageCaption}
-                      onChange={(e) => setImageCaption(e.target.value)}
-                      placeholder="e.g. Figure 1.0: Empirical research formulation at Oxford."
-                      className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary placeholder:text-text-muted"
-                    />
-                  </div>
-                </div>
               </div>
             </div>
           </div>
 
-          {/* CARD 2: Editorial Content & Live Table of Contents */}
-          <div className="bg-surface rounded-xl border border-border p-6 shadow-xs space-y-5">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-border">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-orange/10 flex items-center justify-center text-orange">
-                  <ListOrdered className="w-4 h-4" />
-                </div>
-                <div>
-                  <h2 className="text-base font-bold text-text-primary">
-                    Editorial Content &amp; Table of Contents
-                  </h2>
-                  <p className="text-xs text-text-secondary">
-                    Write or paste your article in full. All &lt;h2&gt; headings are automatically extracted into the live Table of Contents.
-                  </p>
-                </div>
+          {/* Card 2: Editorial Article Body & Live TOC */}
+          <div className="bg-surface rounded-xl border border-border p-6 shadow-xs space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
+              <div className="flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-orange" />
+                <h2 className="text-base font-bold text-text-primary">
+                  Article Editorial Body &amp; Rich Formatting
+                </h2>
               </div>
+              <span className="text-[11px] text-text-secondary">
+                WYSIWYG &amp; HTML Mode
+              </span>
             </div>
 
-            {/* Live Table of Contents Preview */}
-            <div className="p-4 bg-canvas rounded-xl border border-border space-y-2.5">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-3.5 h-3.5 text-orange" />
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-text-primary">
-                    Live Sticky Table of Contents ({extractedHeadings.length}{" "}
-                    {extractedHeadings.length === 1 ? "Section" : "Sections"} Detected)
-                  </span>
-                </div>
-                <span className="text-[11px] text-text-secondary font-mono">
-                  Auto-extracted from &lt;h2&gt;
+            <p className="text-xs text-text-secondary">
+              Use the toolbar below to apply headings, bolding, blockquotes,
+              tables, and inline figures. Headings formatted with{" "}
+              <code className="text-navy font-mono bg-canvas px-1 py-0.5 rounded">
+                H2
+              </code>{" "}
+              will automatically generate the Table of Contents outline.
+            </p>
+
+            {/* Custom Rich WYSIWYG Editor */}
+            <RichArticleEditor
+              value={contentHtml}
+              onChange={setContentHtml}
+              placeholder="Start drafting your academic article..."
+            />
+
+            {/* Live Table of Contents Summary */}
+            <div className="mt-4 p-4 rounded-xl bg-canvas border border-border space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-navy flex items-center gap-1.5">
+                  <ListOrdered className="w-3.5 h-3.5 text-orange" />
+                  Auto-Extracted Table of Contents ({extractedHeadings.length}{" "}
+                  H2 Sections)
+                </span>
+                <span className="text-[10px] text-text-muted font-mono">
+                  Live Preview
                 </span>
               </div>
-
-              {extractedHeadings.length > 0 ? (
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {extractedHeadings.map((heading, idx) => (
-                    <span
-                      key={idx}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-surface border border-border text-xs font-medium text-navy shadow-2xs"
-                    >
-                      <span className="text-orange font-bold font-mono">
-                        {idx + 1}.
-                      </span>
-                      <span className="truncate max-w-[280px]">{heading}</span>
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xs text-text-muted italic">
-                  No &lt;h2&gt; headings detected yet. Highlight a section heading and click &ldquo;H2 (TOC)&rdquo; in the editor toolbar to automatically build your Table of Contents.
+              {extractedHeadings.length === 0 ? (
+                <p className="text-[11px] text-text-secondary italic">
+                  No &lt;h2&gt; headings detected yet. Format sections using H2
+                  to construct the sticky navigation outline.
                 </p>
+              ) : (
+                <ol className="list-decimal list-inside space-y-1 text-xs text-text-primary pl-1 font-medium">
+                  {extractedHeadings.map((heading, idx) => (
+                    <li key={idx} className="truncate">
+                      <span className="hover:text-orange transition-colors">
+                        {heading}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
               )}
-            </div>
-
-            {/* Rich Text Editor */}
-            <div className="space-y-2">
-              <label className="block text-xs font-semibold text-text-primary">
-                Article Body Copy &amp; Rich Formatting <span className="text-orange">*</span>
-              </label>
-              <RichArticleEditor
-                value={contentHtml}
-                onChange={setContentHtml}
-                placeholder="Compose your article here. Use H2 for main chapters, insert figures, tables, or faculty callout notes..."
-              />
-              <p className="text-[11px] text-text-secondary">
-                💡 <strong className="text-text-primary font-medium">Author Tip:</strong> Use the <span className="text-orange font-semibold">H2 (TOC)</span> button in the toolbar to structure your article. The public article page automatically links each H2 into the sticky left-hand navigation sidebar.
-              </p>
             </div>
           </div>
 
-          {/* CARD 3: Lead Faculty Author Attribution */}
-          <div className="bg-surface rounded-xl border border-border p-6 shadow-xs space-y-5">
-            <div className="flex items-center gap-2.5 pb-3 border-b border-border">
-              <div className="w-8 h-8 rounded-lg bg-orange/10 flex items-center justify-center text-orange">
-                <UserCheck className="w-4 h-4" />
-              </div>
-              <div>
-                <h2 className="text-base font-bold text-text-primary">
-                  Lead Faculty Author Attribution
-                </h2>
-                <p className="text-xs text-text-secondary">
-                  Verified doctoral advisor credentials, role subtitle, and
-                  biography displayed in the article byline and footer bio.
-                </p>
-              </div>
+          {/* Card 3: Lead Faculty Author Attribution */}
+          <div className="bg-surface rounded-xl border border-border p-6 shadow-xs space-y-4">
+            <div className="flex items-center gap-2 pb-3 border-b border-border">
+              <UserCheck className="w-4 h-4 text-orange" />
+              <h2 className="text-base font-bold text-text-primary">
+                Lead Faculty Author Attribution
+              </h2>
             </div>
 
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-text-primary mb-1.5">
-                    Author Full Name <span className="text-orange">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={authorName}
-                    onChange={(e) => setAuthorName(e.target.value)}
-                    placeholder="e.g. Dr. David Moraine"
-                    className="w-full px-3.5 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-text-primary mb-1.5">
-                    Credential Badge <span className="text-orange">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={authorCredentials}
-                    onChange={(e) => setAuthorCredentials(e.target.value)}
-                    placeholder="e.g. PhD, Oxford Alum"
-                    className="w-full px-3.5 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-text-primary mb-1.5">
-                    Role Subtitle <span className="text-orange">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    value={authorRoleSubtitle}
-                    onChange={(e) => setAuthorRoleSubtitle(e.target.value)}
-                    placeholder="e.g. Senior Academic Research Faculty • Verified ReadEssay Advisor"
-                    className="w-full px-3.5 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-text-primary mb-1.5">
-                    Experience Highlight Line
-                  </label>
-                  <input
-                    type="text"
-                    value={authorExperienceLine}
-                    onChange={(e) => setAuthorExperienceLine(e.target.value)}
-                    placeholder="e.g. Senior Research Fellow • 14+ Years Postgraduate Advising"
-                    className="w-full px-3.5 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary"
-                  />
-                </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold text-text-primary mb-1">
+                  Author Full Name <span className="text-orange">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={authorName}
+                  onChange={(e) => setAuthorName(e.target.value)}
+                  placeholder="e.g. Dr. David Moraine"
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary"
+                  required
+                />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-text-primary mb-1.5">
-                  Author Biography <span className="text-orange">*</span>
+                <label className="block text-xs font-semibold text-text-primary mb-1">
+                  Credentials / Alma Mater
+                </label>
+                <input
+                  type="text"
+                  value={authorCredentials}
+                  onChange={(e) => setAuthorCredentials(e.target.value)}
+                  placeholder="e.g. PhD, Oxford Alum"
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold text-text-primary mb-1">
+                  Role Subtitle
+                </label>
+                <input
+                  type="text"
+                  value={authorRoleSubtitle}
+                  onChange={(e) => setAuthorRoleSubtitle(e.target.value)}
+                  placeholder="Senior Academic Research Faculty • Verified ReadEssay Advisor"
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold text-text-primary mb-1">
+                  Experience &amp; Milestone Line
+                </label>
+                <input
+                  type="text"
+                  value={authorExperienceLine}
+                  onChange={(e) => setAuthorExperienceLine(e.target.value)}
+                  placeholder="Senior Research Fellow • 14+ Years Postgraduate Advising • 45+ Peer-Reviewed Publications"
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-xs font-semibold text-text-primary mb-1">
+                  Faculty Bio
                 </label>
                 <textarea
-                  rows={3}
+                  rows={2}
                   value={authorBio}
                   onChange={(e) => setAuthorBio(e.target.value)}
-                  placeholder="Doctorate in Educational Research from the University of Oxford. Mentored over 1,200 master's candidates..."
-                  className="w-full px-3.5 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary resize-y"
-                  required
+                  placeholder="Dr. Moraine holds a Doctorate in Educational Research from the University of Oxford..."
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary resize-y"
                 />
               </div>
             </div>
           </div>
 
-          {/* CARD 4: Article FAQs */}
-          <div className="bg-surface rounded-xl border border-border p-6 shadow-xs space-y-5">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-border">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-orange/10 flex items-center justify-center text-orange">
-                  <HelpCircle className="w-4 h-4" />
-                </div>
-                <div>
-                  <h2 className="text-base font-bold text-text-primary">
-                    Article FAQs (FAQPage Schema)
-                  </h2>
-                  <p className="text-xs text-text-secondary">
-                    Structured Q&amp;As rendered at the bottom of the article.
-                  </p>
-                </div>
+          {/* Card 4: Article FAQs Section */}
+          <div className="bg-surface rounded-xl border border-border p-6 shadow-xs space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-border">
+              <div className="flex items-center gap-2">
+                <HelpCircle className="w-4 h-4 text-orange" />
+                <h2 className="text-base font-bold text-text-primary">
+                  Article FAQ Accordion Section
+                </h2>
               </div>
-
               <button
                 type="button"
                 onClick={handleAddFaq}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange hover:bg-orange-hover text-white text-xs font-semibold transition-colors shrink-0"
+                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-orange/10 hover:bg-orange/20 text-orange border border-orange/20 text-xs font-semibold transition-colors"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add FAQ</span>
               </button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-2">
               <div>
-                <label className="block text-xs font-semibold text-text-primary mb-1">
-                  FAQ Section Tagline
+                <label className="block text-[11px] font-semibold text-text-secondary mb-1">
+                  Section Tagline
                 </label>
                 <input
                   type="text"
@@ -737,110 +910,112 @@ export function BlogPostForm({ post }: BlogPostFormProps) {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-text-primary mb-1">
-                  FAQ Section Heading
+                <label className="block text-[11px] font-semibold text-text-secondary mb-1">
+                  Section Heading
                 </label>
                 <input
                   type="text"
                   value={faqHeading}
                   onChange={(e) => setFaqHeading(e.target.value)}
-                  placeholder="e.g. Frequently Asked Questions"
+                  placeholder="Frequently Asked Questions"
                   className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary"
                 />
               </div>
             </div>
 
-            {/* Repeatable FAQs */}
-            <div className="space-y-3 pt-2">
-              {faqs.map((faq, idx) => (
+            <div className="space-y-3">
+              {faqs.map((faq, index) => (
                 <div
-                  key={faq.id}
-                  className="p-3.5 rounded-xl border border-border bg-canvas/60 space-y-2.5"
+                  key={faq.id || index}
+                  className="p-4 rounded-xl border border-border bg-canvas/40 space-y-3 relative group"
                 >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-bold text-navy">
-                      Question #{idx + 1}
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-navy uppercase tracking-wider">
+                      Question #{index + 1}
                     </span>
                     <div className="flex items-center gap-1">
                       <button
                         type="button"
-                        onClick={() => handleMoveFaq(idx, "up")}
-                        disabled={idx === 0}
-                        className="p-1 rounded text-text-secondary hover:text-navy disabled:opacity-30 transition-colors"
-                        title="Move Up"
+                        onClick={() => handleMoveFaq(index, "up")}
+                        disabled={index === 0}
+                        aria-label="Move FAQ up"
+                        className="p-1 text-text-secondary hover:text-navy disabled:opacity-30"
                       >
                         <ChevronUp className="w-3.5 h-3.5" />
                       </button>
                       <button
                         type="button"
-                        onClick={() => handleMoveFaq(idx, "down")}
-                        disabled={idx === faqs.length - 1}
-                        className="p-1 rounded text-text-secondary hover:text-navy disabled:opacity-30 transition-colors"
-                        title="Move Down"
+                        onClick={() => handleMoveFaq(index, "down")}
+                        disabled={index === faqs.length - 1}
+                        aria-label="Move FAQ down"
+                        className="p-1 text-text-secondary hover:text-navy disabled:opacity-30"
                       >
                         <ChevronDown className="w-3.5 h-3.5" />
                       </button>
                       <button
                         type="button"
-                        onClick={() => handleDeleteFaq(idx)}
-                        className="p-1 rounded text-text-secondary hover:text-red-600 transition-colors"
-                        title="Delete FAQ"
+                        onClick={() => handleDeleteFaq(index)}
+                        aria-label="Delete FAQ"
+                        className="p-1 text-text-secondary hover:text-rose-600 ml-1"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </div>
 
-                  <input
-                    type="text"
-                    value={faq.question}
-                    onChange={(e) =>
-                      handleUpdateFaq(idx, "question", e.target.value)
-                    }
-                    placeholder="Enter question text..."
-                    className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary"
-                    required
-                  />
+                  <div>
+                    <input
+                      type="text"
+                      value={faq.question}
+                      onChange={(e) =>
+                        handleUpdateFaq(index, "question", e.target.value)
+                      }
+                      placeholder="e.g. Can I combine the Results and Discussion chapters?"
+                      className="w-full px-3 py-1.5 text-xs rounded-lg border border-border bg-surface focus:border-navy focus:outline-none text-text-primary font-medium"
+                    />
+                  </div>
 
-                  <textarea
-                    rows={2}
-                    value={faq.answer}
-                    onChange={(e) =>
-                      handleUpdateFaq(idx, "answer", e.target.value)
-                    }
-                    placeholder="Enter detailed answer..."
-                    className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary resize-y"
-                    required
-                  />
+                  <div>
+                    <textarea
+                      rows={2}
+                      value={faq.answer}
+                      onChange={(e) =>
+                        handleUpdateFaq(index, "answer", e.target.value)
+                      }
+                      placeholder="Provide a clear, authoritative editorial answer..."
+                      className="w-full px-3 py-1.5 text-xs rounded-lg border border-border bg-surface focus:border-navy focus:outline-none text-text-primary resize-y"
+                    />
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Right Column (4 cols — Sticky Sidebar) */}
-        <div className="lg:col-span-4 space-y-6">
-          {/* Card 1: Publishing & Categorization */}
-          <div className="bg-surface rounded-xl border border-border p-6 shadow-xs space-y-5">
-            <div className="flex items-center gap-2 pb-3 border-b border-border">
-              <Layers className="w-4 h-4 text-orange" />
-              <h2 className="text-base font-bold text-text-primary">
-                Publishing &amp; Category
-              </h2>
-            </div>
+        {/* Right Column (1 Col): Publishing, Related Posts & SEO */}
+        <div className="space-y-6">
+          {/* Card 1: Publishing Settings */}
+          <div className="bg-surface rounded-xl border border-border p-6 shadow-xs space-y-4">
+            <h2 className="text-base font-bold text-text-primary pb-3 border-b border-border">
+              Publishing Settings
+            </h2>
 
             <div className="space-y-4">
+              {/* Category Picker */}
               <div>
                 <label className="block text-xs font-semibold text-text-primary mb-1.5">
-                  Category <span className="text-orange">*</span>
+                  Editorial Category <span className="text-orange">*</span>
                 </label>
                 <select
                   value={categoryId}
                   onChange={(e) => setCategoryId(e.target.value)}
-                  className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary font-medium"
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary"
                   required
                 >
-                  {INITIAL_BLOG_CATEGORIES.map((cat) => (
+                  <option value="" disabled>
+                    {isLoadingLists ? "Loading categories..." : "Select category"}
+                  </option>
+                  {categories.map((cat) => (
                     <option key={cat.id} value={cat.id}>
                       {cat.name}
                     </option>
@@ -848,9 +1023,10 @@ export function BlogPostForm({ post }: BlogPostFormProps) {
                 </select>
               </div>
 
+              {/* Status Picker */}
               <div>
-                <label className="block text-xs font-semibold text-text-primary mb-2">
-                  Status
+                <label className="block text-xs font-semibold text-text-primary mb-1.5">
+                  Publishing Status
                 </label>
                 <div className="grid grid-cols-3 gap-2">
                   {(["published", "draft", "archived"] as BlogStatus[]).map(
@@ -898,51 +1074,49 @@ export function BlogPostForm({ post }: BlogPostFormProps) {
                   Related Articles (Pick up to 3)
                 </label>
                 <p className="text-[11px] text-text-secondary mb-2">
-                  Shown in the &ldquo;Recommended Further Reading&rdquo; grid.
+                  Selected: {relatedPostIds.length}/3
                 </p>
-                <div className="space-y-1.5 max-h-48 overflow-y-auto p-2 bg-canvas rounded-lg border border-border">
-                  {INITIAL_BLOG_POSTS.filter((p) => p.id !== post?.id).map(
-                    (otherPost) => {
-                      const isChecked = relatedPostIds.includes(otherPost.id);
+                <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+                  {availablePosts
+                    .filter((p) => p.id !== postData?.id)
+                    .map((item) => {
+                      const isChecked = relatedPostIds.includes(item.id);
                       return (
                         <label
-                          key={otherPost.id}
-                          className="flex items-start gap-2 p-1.5 rounded hover:bg-surface cursor-pointer text-xs"
+                          key={item.id}
+                          className={`flex items-start gap-2 p-2 rounded-lg border text-xs cursor-pointer transition-colors ${
+                            isChecked
+                              ? "bg-orange/5 border-orange/40 text-navy font-medium"
+                              : "bg-canvas border-border text-text-secondary hover:bg-surface"
+                          }`}
                         >
                           <input
                             type="checkbox"
                             checked={isChecked}
-                            onChange={() => toggleRelatedPost(otherPost.id)}
-                            className="mt-0.5 rounded text-orange focus:ring-orange/30"
+                            onChange={() => toggleRelatedPost(item.id)}
+                            className="mt-0.5 rounded border-border text-orange focus:ring-orange"
                           />
-                          <span
-                            className={`line-clamp-1 ${
-                              isChecked
-                                ? "font-semibold text-text-primary"
-                                : "text-text-secondary"
-                            }`}
-                          >
-                            {otherPost.title}
+                          <span className="line-clamp-2 leading-tight">
+                            {item.title}
                           </span>
                         </label>
                       );
-                    }
-                  )}
+                    })}
                 </div>
               </div>
 
-              {isEditing && (
+              {postData && (
                 <div className="pt-3 border-t border-border/60 text-xs text-text-secondary space-y-1.5">
                   <div className="flex justify-between">
                     <span>Article ID:</span>
                     <span className="font-mono text-text-primary">
-                      {post?.id}
+                      {postData.id}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span>Last updated:</span>
                     <span className="font-mono text-text-primary">
-                      {post?.updatedAt ?? "2024-10-24"}
+                      {postData.updatedAt}
                     </span>
                   </div>
                 </div>

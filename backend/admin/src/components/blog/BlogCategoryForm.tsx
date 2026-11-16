@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Save,
@@ -12,17 +13,21 @@ import {
   CheckCircle2,
   AlertCircle,
   FolderOpen,
+  Loader2,
 } from "lucide-react";
 import {
   type BlogCategory,
   type BlogStatus,
   type BlogPost,
-  getPostsForCategory,
-} from "@/data/mockBlog";
+  getBlogCategoryByIdOrSlug,
+  createBlogCategory,
+  updateBlogCategory,
+} from "@/lib/blog-api";
 import { BlogStatusBadge } from "./BlogStatusBadge";
 
 interface BlogCategoryFormProps {
   category?: BlogCategory;
+  categorySlug?: string;
 }
 
 function slugify(text: string): string {
@@ -34,42 +39,92 @@ function slugify(text: string): string {
     .replace(/^-+|-+$/g, "");
 }
 
-export function BlogCategoryForm({ category }: BlogCategoryFormProps) {
-  const isEditing = Boolean(category);
+export function BlogCategoryForm({
+  category: initialCategory,
+  categorySlug,
+}: BlogCategoryFormProps) {
+  const router = useRouter();
+
+  const [categoryData, setCategoryData] = useState<BlogCategory | null>(
+    initialCategory ?? null
+  );
+  const [isLoadingCategory, setIsLoadingCategory] = useState(
+    Boolean(categorySlug && !initialCategory)
+  );
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  const isEditing = Boolean(categoryData || categorySlug);
 
   // Form Fields
-  const [name, setName] = useState(category?.name ?? "");
-  const [slug, setSlug] = useState(category?.slug ?? "");
-  const [isSlugCustomized, setIsSlugCustomized] = useState(isEditing);
-  const [badgeLabel, setBadgeLabel] = useState(category?.badgeLabel ?? "Category");
+  const [name, setName] = useState(initialCategory?.name ?? "");
+  const [slug, setSlug] = useState(initialCategory?.slug ?? "");
+  const [isSlugCustomized, setIsSlugCustomized] = useState(
+    Boolean(initialCategory)
+  );
+  const [badgeLabel, setBadgeLabel] = useState(
+    initialCategory?.badgeLabel ?? "Category"
+  );
   const [shortDescription, setShortDescription] = useState(
-    category?.shortDescription ?? ""
+    initialCategory?.shortDescription ?? ""
   );
 
   const [status, setStatus] = useState<BlogStatus>(
-    category?.status ?? "published"
+    initialCategory?.status ?? "published"
   );
   const [displayOrder, setDisplayOrder] = useState<number>(
-    category?.displayOrder ?? 1
+    initialCategory?.displayOrder ?? 1
   );
 
-  const [metaTitle, setMetaTitle] = useState(category?.seo?.metaTitle ?? "");
+  const [metaTitle, setMetaTitle] = useState(
+    initialCategory?.seo?.metaTitle ?? ""
+  );
   const [metaDescription, setMetaDescription] = useState(
-    category?.seo?.metaDescription ?? ""
+    initialCategory?.seo?.metaDescription ?? ""
   );
 
   // Associated posts if in edit mode
-  const [categoryPosts] = useState<BlogPost[]>(() => {
-    if (category?.id) {
-      return getPostsForCategory(category.id);
-    }
-    return [];
-  });
+  const [categoryPosts, setCategoryPosts] = useState<BlogPost[]>(
+    initialCategory?.posts ?? []
+  );
 
   // UI state
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [confirmation, setConfirmation] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!categorySlug || initialCategory) return;
+
+    let isMounted = true;
+    getBlogCategoryByIdOrSlug(categorySlug)
+      .then((cat) => {
+        if (!isMounted) return;
+        setCategoryData(cat);
+        setName(cat.name);
+        setSlug(cat.slug);
+        setIsSlugCustomized(true);
+        setBadgeLabel(cat.badgeLabel);
+        setShortDescription(cat.shortDescription);
+        setStatus(cat.status);
+        setDisplayOrder(cat.displayOrder);
+        setMetaTitle(cat.seo?.metaTitle ?? "");
+        setMetaDescription(cat.seo?.metaDescription ?? "");
+        setCategoryPosts(cat.posts ?? []);
+      })
+      .catch((err) => {
+        if (!isMounted) return;
+        const msg =
+          err instanceof Error ? err.message : "Failed to load category.";
+        setLoadError(msg);
+      })
+      .finally(() => {
+        if (isMounted) setIsLoadingCategory(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [categorySlug, initialCategory]);
 
   function handleNameChange(val: string) {
     setName(val);
@@ -81,9 +136,10 @@ export function BlogCategoryForm({ category }: BlogCategoryFormProps) {
     }
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setConfirmation(null);
 
     if (!name.trim()) {
       setError("Please provide a category name.");
@@ -98,16 +154,70 @@ export function BlogCategoryForm({ category }: BlogCategoryFormProps) {
       return;
     }
 
-    setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setConfirmation(
-        isEditing
-          ? `Category "${name}" updated successfully. Changes staged in local UI session.`
-          : `Category "${name}" created successfully. Changes staged in local UI session.`
-      );
+    try {
+      setIsSubmitting(true);
+
+      const payload = {
+        name: name.trim(),
+        slug: slug.trim(),
+        badgeLabel: badgeLabel.trim() || "Category",
+        shortDescription: shortDescription.trim(),
+        status,
+        displayOrder: Number(displayOrder) || 1,
+        metaTitle: metaTitle.trim() || null,
+        metaDescription: metaDescription.trim() || null,
+        canonicalSlug: slug.trim(),
+        seo: {
+          metaTitle: metaTitle.trim(),
+          metaDescription: metaDescription.trim(),
+          canonicalSlug: slug.trim(),
+        },
+      };
+
+      if (categoryData?.id) {
+        const updated = await updateBlogCategory(categoryData.id, payload);
+        setCategoryData(updated);
+        setConfirmation(`Category "${updated.name}" updated successfully.`);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        const created = await createBlogCategory(payload);
+        setConfirmation(`Category "${created.name}" created successfully.`);
+        router.push("/blog/categories");
+      }
+    } catch (err: unknown) {
+      const msg =
+        err instanceof Error ? err.message : "An error occurred while saving the category.";
+      setError(msg);
       window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 400);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  if (isLoadingCategory) {
+    return (
+      <div className="p-12 text-center text-text-secondary">
+        <Loader2 className="w-8 h-8 animate-spin text-orange mx-auto mb-2" />
+        <p className="text-sm font-medium text-text-primary">Loading category...</p>
+      </div>
+    );
+  }
+
+  if (loadError) {
+    return (
+      <div className="bg-surface border border-border rounded-xl p-8 text-center max-w-lg mx-auto">
+        <AlertCircle className="w-10 h-10 text-rose-500 mx-auto mb-3" />
+        <h1 className="text-xl font-bold text-text-primary">Category Not Found</h1>
+        <p className="text-sm text-text-secondary mt-2">{loadError}</p>
+        <Link
+          href="/blog/categories"
+          className="inline-flex items-center gap-2 mt-5 px-4 py-2 rounded-lg bg-orange text-white text-xs font-semibold hover:bg-orange-hover transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to Categories</span>
+        </Link>
+      </div>
+    );
   }
 
   return (
@@ -123,7 +233,7 @@ export function BlogCategoryForm({ category }: BlogCategoryFormProps) {
             <span>← Back to Categories</span>
           </Link>
           <h1 className="text-2xl sm:text-[26px] font-bold text-text-primary tracking-tight">
-            {isEditing ? `Edit Category: ${category?.name}` : "Add Blog Category"}
+            {isEditing ? `Edit Category: ${categoryData?.name || name}` : "Add Blog Category"}
           </h1>
           <p className="text-xs sm:text-sm text-text-secondary mt-1">
             {isEditing
@@ -146,80 +256,46 @@ export function BlogCategoryForm({ category }: BlogCategoryFormProps) {
             disabled={isSubmitting}
             className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-orange hover:bg-orange-hover text-white text-xs font-semibold shadow-xs transition-colors focus:outline-none focus:ring-2 focus:ring-orange/40 disabled:opacity-75"
           >
-            <Save className="w-4 h-4" />
-            <span>
-              {isSubmitting
-                ? "Saving..."
-                : isEditing
-                ? "Save Changes"
-                : "Create Category"}
-            </span>
+            {isSubmitting ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Save className="w-4 h-4" />
+            )}
+            <span>{isSubmitting ? "Saving..." : isEditing ? "Save Changes" : "Create Category"}</span>
           </button>
         </div>
       </div>
 
-      {/* Confirmation Banner */}
+      {/* Confirmation & Error Banners */}
       {confirmation && (
-        <div
-          role="status"
-          className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-start justify-between gap-3 animate-in fade-in"
-        >
-          <div className="flex items-center gap-2.5">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-            <span className="font-medium">{confirmation}</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setConfirmation(null)}
-            className="text-emerald-700 hover:text-emerald-900 text-xs font-semibold"
-          >
-            Dismiss
-          </button>
+        <div className="p-4 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-900 text-xs sm:text-sm flex items-center gap-3 animate-in fade-in">
+          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+          <span className="font-medium">{confirmation}</span>
         </div>
       )}
 
-      {/* Error Banner */}
       {error && (
-        <div
-          role="alert"
-          className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm flex items-start justify-between gap-3 animate-in fade-in"
-        >
-          <div className="flex items-center gap-2.5">
-            <AlertCircle className="w-5 h-5 text-red-600 shrink-0" />
-            <span className="font-medium">{error}</span>
-          </div>
-          <button
-            type="button"
-            onClick={() => setError(null)}
-            className="text-red-700 hover:text-red-900 text-xs font-semibold"
-          >
-            Dismiss
-          </button>
+        <div className="p-4 rounded-xl border border-rose-300 bg-rose-50 text-rose-900 text-xs sm:text-sm flex items-center gap-3 animate-in fade-in">
+          <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
+          <span className="font-medium">{error}</span>
         </div>
       )}
 
-      {/* Main 2-Column Grid */}
+      {/* Main Form Layout */}
       <form
         id="blog-category-form"
         onSubmit={handleSubmit}
-        className="grid grid-cols-1 lg:grid-cols-12 gap-6"
+        className="grid grid-cols-1 lg:grid-cols-3 gap-6"
       >
-        {/* Left Column (8 cols): Core category info & assigned articles */}
-        <div className="lg:col-span-8 space-y-6">
-          {/* Card 1: Category Details */}
+        {/* Left Column (2 Cols): Core Metadata & Articles Table */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Card 1: Core Category Information */}
           <div className="bg-surface rounded-xl border border-border p-6 shadow-xs space-y-5">
-            <div className="flex items-center gap-2.5 pb-3 border-b border-border">
-              <div className="w-8 h-8 rounded-lg bg-orange/10 flex items-center justify-center text-orange">
-                <FolderOpen className="w-4 h-4" />
-              </div>
-              <div>
-                <h2 className="text-base font-bold text-text-primary">
-                  Category Information
-                </h2>
-                <p className="text-xs text-text-secondary">
-                  Heading, URL identifier, and editorial summary.
-                </p>
-              </div>
+            <div className="flex items-center gap-2 pb-3 border-b border-border">
+              <FolderOpen className="w-4 h-4 text-orange" />
+              <h2 className="text-base font-bold text-text-primary">
+                Category Details
+              </h2>
             </div>
 
             <div className="space-y-4">
@@ -231,7 +307,7 @@ export function BlogCategoryForm({ category }: BlogCategoryFormProps) {
                   type="text"
                   value={name}
                   onChange={(e) => handleNameChange(e.target.value)}
-                  placeholder="e.g. Dissertation & Thesis"
+                  placeholder="e.g. Dissertation & Thesis Mastery"
                   className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary placeholder:text-text-muted"
                   required
                 />
@@ -269,11 +345,8 @@ export function BlogCategoryForm({ category }: BlogCategoryFormProps) {
                     value={badgeLabel}
                     onChange={(e) => setBadgeLabel(e.target.value)}
                     placeholder="e.g. Category, Guide, Topic"
-                    className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary placeholder:text-text-muted"
+                    className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary"
                   />
-                  <p className="text-[11px] text-text-secondary mt-1">
-                    Pill tag shown above the category heading on public pages.
-                  </p>
                 </div>
               </div>
 
@@ -282,41 +355,30 @@ export function BlogCategoryForm({ category }: BlogCategoryFormProps) {
                   Short Description <span className="text-orange">*</span>
                 </label>
                 <textarea
-                  rows={4}
+                  rows={3}
                   value={shortDescription}
                   onChange={(e) => setShortDescription(e.target.value)}
-                  placeholder="Describe the themes, research areas, and topics categorized within this editorial section..."
-                  className="w-full px-3.5 py-2.5 text-sm rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary placeholder:text-text-muted resize-y"
+                  placeholder="Lead introductory paragraph for the category landing page..."
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary resize-y"
                   required
                 />
-                <p className="text-[11px] text-text-secondary mt-1">
-                  Featured as the lead introductory paragraph on category index pages.
-                </p>
               </div>
             </div>
           </div>
 
-          {/* Card 2: Associated Articles (Edit mode only) */}
+          {/* Card 2: Embedded Articles Table (in edit mode) */}
           {isEditing && (
-            <div className="bg-surface rounded-xl border border-border p-6 shadow-xs space-y-5">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-border">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-orange/10 flex items-center justify-center text-orange">
-                    <FileText className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <h2 className="text-base font-bold text-text-primary">
-                      Articles in this Category
-                    </h2>
-                    <p className="text-xs text-text-secondary">
-                      {categoryPosts.length} published or drafted articles assigned.
-                    </p>
-                  </div>
+            <div className="bg-surface rounded-xl border border-border p-6 shadow-xs space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-border">
+                <div className="flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-orange" />
+                  <h2 className="text-base font-bold text-text-primary">
+                    Articles in this Category ({categoryPosts.length})
+                  </h2>
                 </div>
-
                 <Link
                   href={`/blog/new?category=${slug}`}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange hover:bg-orange-hover text-white text-xs font-semibold transition-colors shrink-0"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange hover:bg-orange-hover text-white text-xs font-semibold shadow-2xs transition-colors"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Add Article</span>
@@ -324,64 +386,50 @@ export function BlogCategoryForm({ category }: BlogCategoryFormProps) {
               </div>
 
               {categoryPosts.length === 0 ? (
-                <div className="text-center py-8 px-4 rounded-lg border border-dashed border-border bg-canvas">
-                  <p className="text-xs font-medium text-text-secondary mb-3">
-                    No articles currently assigned to this category.
-                  </p>
+                <div className="p-8 text-center bg-canvas/50 rounded-lg border border-dashed border-border text-xs text-text-secondary">
+                  <p>No articles are currently assigned to this category.</p>
                   <Link
                     href={`/blog/new?category=${slug}`}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-navy hover:bg-navy-hover text-white text-xs font-semibold transition-colors"
+                    className="inline-block mt-2 font-semibold text-orange hover:underline"
                   >
-                    <Plus className="w-3.5 h-3.5" />
-                    <span>Create First Article</span>
+                    + Publish the first article in this collection
                   </Link>
                 </div>
               ) : (
                 <div className="overflow-x-auto rounded-lg border border-border">
-                  <table className="w-full text-left text-xs">
-                    <thead className="bg-canvas border-b border-border text-text-secondary font-semibold uppercase tracking-wider text-[11px]">
-                      <tr>
-                        <th className="py-2.5 px-3.5">Article Title</th>
-                        <th className="py-2.5 px-3">Author</th>
-                        <th className="py-2.5 px-3">Read Time</th>
-                        <th className="py-2.5 px-3">Status</th>
-                        <th className="py-2.5 px-3 text-right">Action</th>
+                  <table className="w-full text-left border-collapse text-xs">
+                    <thead>
+                      <tr className="bg-canvas border-b border-border text-[11px] font-bold text-text-secondary uppercase select-none">
+                        <th className="px-4 py-2.5">Title &amp; Slug</th>
+                        <th className="px-4 py-2.5">Status</th>
+                        <th className="px-4 py-2.5">Published</th>
+                        <th className="px-4 py-2.5 text-right">Action</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border bg-surface">
                       {categoryPosts.map((post) => (
-                        <tr
-                          key={post.id}
-                          className="hover:bg-canvas/60 transition-colors"
-                        >
-                          <td className="py-3 px-3.5">
-                            <div className="font-semibold text-text-primary line-clamp-1 max-w-[280px]">
+                        <tr key={post.id} className="hover:bg-canvas/50 transition-colors">
+                          <td className="px-4 py-3">
+                            <span className="font-semibold text-text-primary block line-clamp-1">
                               {post.title}
-                            </div>
-                            <div className="text-[11px] text-text-secondary font-mono mt-0.5">
+                            </span>
+                            <span className="text-[11px] font-mono text-text-muted">
                               /blog/{post.slug}
-                            </div>
-                          </td>
-                          <td className="py-3 px-3">
-                            <span className="font-medium text-text-primary">
-                              {post.author.name}
                             </span>
                           </td>
-                          <td className="py-3 px-3">
-                            <span className="text-text-secondary">
-                              {post.readTime}
-                            </span>
-                          </td>
-                          <td className="py-3 px-3">
+                          <td className="px-4 py-3">
                             <BlogStatusBadge status={post.status} />
                           </td>
-                          <td className="py-3 px-3 text-right">
+                          <td className="px-4 py-3 font-mono text-[11px] text-text-secondary">
+                            {post.publishedAt}
+                          </td>
+                          <td className="px-4 py-3 text-right">
                             <Link
                               href={`/blog/${post.slug}/edit`}
-                              className="p-1.5 rounded-md text-text-secondary hover:text-navy hover:bg-canvas transition-colors inline-block"
-                              title="Edit article"
+                              className="inline-flex items-center gap-1 text-xs font-semibold text-orange hover:underline"
                             >
-                              <Pencil className="w-3.5 h-3.5" />
+                              <Pencil className="w-3 h-3" />
+                              <span>Edit</span>
                             </Link>
                           </td>
                         </tr>
@@ -394,43 +442,41 @@ export function BlogCategoryForm({ category }: BlogCategoryFormProps) {
           )}
         </div>
 
-        {/* Right Column (4 cols): Publishing & SEO */}
-        <div className="lg:col-span-4 space-y-6">
-          {/* Card 1: Publishing & Visibility */}
-          <div className="bg-surface rounded-xl border border-border p-6 shadow-xs space-y-5">
+        {/* Right Column (1 Col): Publishing Status & SEO */}
+        <div className="space-y-6">
+          {/* Card 1: Publishing Settings */}
+          <div className="bg-surface rounded-xl border border-border p-6 shadow-xs space-y-4">
             <h2 className="text-base font-bold text-text-primary pb-3 border-b border-border">
-              Publishing & Visibility
+              Publishing Settings
             </h2>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
               <div>
-                <label className="block text-xs font-semibold text-text-primary mb-2">
-                  Status
+                <label className="block text-xs font-semibold text-text-primary mb-1.5">
+                  Category Status
                 </label>
                 <div className="grid grid-cols-3 gap-2">
-                  {(["published", "draft", "archived"] as BlogStatus[]).map(
-                    (s) => {
-                      const isSelected = status === s;
-                      return (
-                        <button
-                          key={s}
-                          type="button"
-                          onClick={() => setStatus(s)}
-                          className={`py-2 px-3 rounded-lg border text-xs font-semibold capitalize transition-all ${
-                            isSelected
-                              ? s === "published"
-                                ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-1 ring-emerald-600"
-                                : s === "draft"
-                                ? "border-amber-600 bg-amber-50 text-amber-800 ring-1 ring-amber-600"
-                                : "border-slate-500 bg-slate-100 text-slate-800 ring-1 ring-slate-500"
-                              : "border-border text-text-secondary hover:bg-canvas"
-                          }`}
-                        >
-                          {s}
-                        </button>
-                      );
-                    }
-                  )}
+                  {(["published", "draft", "archived"] as BlogStatus[]).map((s) => {
+                    const isSelected = status === s;
+                    return (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setStatus(s)}
+                        className={`py-2 px-3 rounded-lg border text-xs font-semibold capitalize transition-all ${
+                          isSelected
+                            ? s === "published"
+                              ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-1 ring-emerald-600"
+                              : s === "draft"
+                              ? "border-amber-600 bg-amber-50 text-amber-800 ring-1 ring-amber-600"
+                              : "border-slate-500 bg-slate-100 text-slate-800 ring-1 ring-slate-500"
+                            : "border-border text-text-secondary hover:bg-canvas"
+                        }`}
+                      >
+                        {s}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -442,29 +488,24 @@ export function BlogCategoryForm({ category }: BlogCategoryFormProps) {
                   type="number"
                   min={1}
                   value={displayOrder}
-                  onChange={(e) =>
-                    setDisplayOrder(parseInt(e.target.value) || 1)
-                  }
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary"
+                  onChange={(e) => setDisplayOrder(parseInt(e.target.value) || 1)}
+                  className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary font-mono"
+                  required
                 />
                 <p className="text-[11px] text-text-secondary mt-1">
-                  Determines order on public category navigation tabs.
+                  Determines position on public category tabs (1 = leftmost).
                 </p>
               </div>
 
-              {isEditing && (
+              {categoryData && (
                 <div className="pt-3 border-t border-border/60 text-xs text-text-secondary space-y-1.5">
                   <div className="flex justify-between">
-                    <span>Assigned Articles:</span>
-                    <span className="font-semibold text-text-primary">
-                      {categoryPosts.length}
-                    </span>
+                    <span>Category ID:</span>
+                    <span className="font-mono text-text-primary">{categoryData.id}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Last updated:</span>
-                    <span className="font-mono text-text-primary">
-                      {category?.updatedAt ?? "2024-10-24"}
-                    </span>
+                    <span className="font-mono text-text-primary">{categoryData.updatedAt}</span>
                   </div>
                 </div>
               )}
@@ -472,7 +513,7 @@ export function BlogCategoryForm({ category }: BlogCategoryFormProps) {
           </div>
 
           {/* Card 2: SEO & Search Metadata */}
-          <div className="bg-surface rounded-xl border border-border p-6 shadow-xs space-y-5">
+          <div className="bg-surface rounded-xl border border-border p-6 shadow-xs space-y-4">
             <div className="flex items-center gap-2 pb-3 border-b border-border">
               <Globe className="w-4 h-4 text-orange" />
               <h2 className="text-base font-bold text-text-primary">
@@ -500,7 +541,7 @@ export function BlogCategoryForm({ category }: BlogCategoryFormProps) {
                   type="text"
                   value={metaTitle}
                   onChange={(e) => setMetaTitle(e.target.value)}
-                  placeholder="e.g. Dissertation & Thesis Guides | ReadEssay"
+                  placeholder="e.g. Dissertation Guides | ReadEssay"
                   className="w-full px-3 py-2 text-xs rounded-lg border border-border bg-canvas focus:bg-surface focus:border-navy focus:outline-none transition-colors text-text-primary"
                 />
               </div>
@@ -566,4 +607,3 @@ export function BlogCategoryForm({ category }: BlogCategoryFormProps) {
     </div>
   );
 }
-
