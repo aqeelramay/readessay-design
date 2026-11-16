@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -8,53 +8,103 @@ import {
   CheckCircle2,
   AlertCircle,
   Save,
-  Globe,
   Sliders,
   Star,
   MessageSquareQuote,
   UserCheck,
   Check,
-  Image as ImageIcon,
+  BookOpen,
+  RefreshCw,
 } from "lucide-react";
-import type { StudentReview, ReviewStatus } from "@/data/mockReviews";
+import {
+  createReview,
+  updateReview,
+  getReviewById,
+  getServices,
+  getSubServices,
+  type ReviewItem,
+  type ServiceItem,
+  type SubServiceItem,
+  type CreateReviewPayload,
+} from "@/lib/api";
 import { ReviewStatusBadge } from "./ReviewStatusBadge";
 
-interface ReviewFormProps {
-  review?: StudentReview;
+export interface ReviewInitialData extends Partial<ReviewItem> {
+  studentName?: string;
+  quoteHeadline?: string;
+  reviewBody?: string;
+  courseLabel?: string;
+  avatarUrl?: string | null;
+  verified?: boolean;
+  displayOrder?: number;
 }
 
-export function ReviewForm({ review }: ReviewFormProps) {
+interface ReviewFormProps {
+  review?: ReviewInitialData;
+  reviewId?: string;
+}
+
+const ACADEMIC_LEVELS = [
+  "Undergraduate",
+  "Master's",
+  "PhD / Doctoral",
+  "High School",
+  "Professional / Executive",
+];
+
+const COMMON_PAPER_TYPES = [
+  "Essay",
+  "Research Paper",
+  "Case Study",
+  "Dissertation / Thesis",
+  "Coursework",
+  "Literature Review",
+  "Problem Set",
+];
+
+export function ReviewForm({ review, reviewId }: ReviewFormProps) {
   const router = useRouter();
-  const isEditing = Boolean(review);
 
-  // Review Card Fields
-  const [studentName, setStudentName] = useState(review?.studentName ?? "");
+  // Loading & ID tracking
+  const [currentId, setCurrentId] = useState<string | null>(review?.id || reviewId || null);
+  const isEditing = Boolean(currentId);
+  const [isLoading, setIsLoading] = useState(Boolean(reviewId && !review));
+
+  // Services & Sub-Services options from PostgreSQL API
+  const [services, setServices] = useState<ServiceItem[]>([]);
+  const [subServices, setSubServices] = useState<SubServiceItem[]>([]);
+
+  // Review Fields
+  const [reviewerName, setReviewerName] = useState(
+    review?.reviewerName || review?.studentName || ""
+  );
   const [rating, setRating] = useState<number>(review?.rating ?? 5);
-  const [verified, setVerified] = useState<boolean>(review?.verified ?? true);
-  const [quoteHeadline, setQuoteHeadline] = useState(
-    review?.quoteHeadline ?? ""
+  const [isVerified, setIsVerified] = useState<boolean>(
+    review?.isVerified ?? review?.verified ?? true
   );
-  const [reviewBody, setReviewBody] = useState(review?.reviewBody ?? "");
-  const [courseLabel, setCourseLabel] = useState(
-    review?.courseLabel ?? "Course: Business Assignment"
+  const [isFeatured, setIsFeatured] = useState<boolean>(review?.isFeatured ?? false);
+  const [title, setTitle] = useState(review?.title || review?.quoteHeadline || "");
+  const [comment, setComment] = useState(review?.comment || review?.reviewBody || "");
+  const [academicLevel, setAcademicLevel] = useState(review?.academicLevel || "Undergraduate");
+  const [subject, setSubject] = useState(
+    review?.subject || review?.courseLabel?.replace(/^Course:\s*/i, "") || ""
   );
-  const [timeAgoLabel, setTimeAgoLabel] = useState(
-    review?.timeAgoLabel ?? "2 days ago"
+  const [paperType, setPaperType] = useState(review?.paperType || "Essay");
+  const [orderRef, setOrderRef] = useState(review?.orderRef || "");
+  const [reviewerAvatar, setReviewerAvatar] = useState(
+    review?.reviewerAvatar || review?.avatarUrl || ""
   );
-  const [avatarUrl, setAvatarUrl] = useState(
-    review?.avatarUrl ?? "/images/female-expert1.jpg"
-  );
+  const [reviewerInitials, setReviewerInitials] = useState(review?.reviewerInitials || "");
+  const [serviceId, setServiceId] = useState<string>(review?.serviceId || "");
+  const [subServiceId, setSubServiceId] = useState<string>(review?.subServiceId || "");
 
-  // Publishing & SEO Fields
-  const [status, setStatus] = useState<ReviewStatus>(
-    review?.status ?? "active"
+  // Publishing & Ordering
+  const [status, setStatus] = useState<string>(review?.status || "PUBLISHED");
+  const [sortOrder, setSortOrder] = useState<number>(
+    review?.sortOrder ?? review?.displayOrder ?? 0
   );
-  const [displayOrder, setDisplayOrder] = useState<number>(
-    review?.displayOrder ?? 1
-  );
-  const [metaTitle, setMetaTitle] = useState(review?.seo?.metaTitle ?? "");
-  const [metaDescription, setMetaDescription] = useState(
-    review?.seo?.metaDescription ?? ""
+  const [reviewDate, setReviewDate] = useState<string>(
+    review?.reviewDate ? new Date(review.reviewDate).toISOString().split("T")[0] : ""
   );
 
   // UI state
@@ -62,40 +112,137 @@ export function ReviewForm({ review }: ReviewFormProps) {
   const [confirmation, setConfirmation] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Load services and sub-services for dropdowns
+  useEffect(() => {
+    Promise.all([
+      getServices({ limit: 100 }),
+      getSubServices({ limit: 100 }),
+    ])
+      .then(([servicesRes, subServicesRes]) => {
+        setServices(servicesRes.data);
+        setSubServices(subServicesRes.data);
+      })
+      .catch((err) => console.error("Failed to load service options:", err));
+  }, []);
+
+  // Fetch existing review if reviewId is provided
+  useEffect(() => {
+    if (!reviewId || review) return;
+
+    let isMounted = true;
+    getReviewById(reviewId)
+      .then((data) => {
+        if (!isMounted) return;
+        setCurrentId(data.id);
+        setReviewerName(data.reviewerName || data.studentName || "");
+        setRating(data.rating ?? 5);
+        setIsVerified(data.isVerified ?? data.verified ?? true);
+        setIsFeatured(Boolean(data.isFeatured));
+        setTitle(data.title || data.quoteHeadline || "");
+        setComment(data.comment || data.reviewBody || "");
+        setAcademicLevel(data.academicLevel || "Undergraduate");
+        setSubject(data.subject || data.courseLabel?.replace(/^Course:\s*/i, "") || "");
+        setPaperType(data.paperType || "Essay");
+        setOrderRef(data.orderRef || "");
+        setReviewerAvatar(data.reviewerAvatar || data.avatarUrl || "");
+        setReviewerInitials(data.reviewerInitials || "");
+        setServiceId(data.serviceId || "");
+        setSubServiceId(data.subServiceId || "");
+        setStatus(data.status || "PUBLISHED");
+        setSortOrder(data.sortOrder ?? data.displayOrder ?? 0);
+        if (data.reviewDate) {
+          setReviewDate(new Date(data.reviewDate).toISOString().split("T")[0]);
+        }
+        setIsLoading(false);
+      })
+      .catch((err: unknown) => {
+        if (!isMounted) return;
+        const msg = err instanceof Error ? err.message : "Failed to load review";
+        setError(msg);
+        setIsLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [reviewId, review]);
+
+  // Filter available sub-services based on selected parent service
+  const availableSubServices = subServices.filter((sub) => {
+    if (!serviceId) return true;
+    return sub.serviceId === serviceId || sub.parentId === serviceId;
+  });
+
   // Submit Handler
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setConfirmation(null);
 
-    if (!studentName.trim()) {
-      setError("Please provide a client name.");
+    if (!reviewerName.trim()) {
+      setError("Please provide a reviewer / client name.");
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
-    if (!quoteHeadline.trim()) {
-      setError("Please provide a quote headline for this review.");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
-
-    if (!reviewBody.trim()) {
-      setError("Please enter the client's full review testimonial.");
+    if (!comment.trim()) {
+      setError("Please enter the client's review testimonial.");
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setConfirmation(
-        isEditing
-          ? `Review for "${studentName}" updated successfully. Changes staged in local UI session.`
-          : `Review for "${studentName}" created successfully. Changes staged in local UI session.`
-      );
+    const payload: CreateReviewPayload = {
+      reviewerName: reviewerName.trim(),
+      reviewerInitials: reviewerInitials.trim() || null,
+      reviewerAvatar: reviewerAvatar.trim() || null,
+      academicLevel: academicLevel.trim() || null,
+      subject: subject.trim() || null,
+      paperType: paperType.trim() || null,
+      rating: Number(rating) || 5,
+      title: title.trim() || null,
+      comment: comment.trim(),
+      orderRef: orderRef.trim() || null,
+      serviceId: serviceId && serviceId.trim() ? serviceId.trim() : null,
+      subServiceId: subServiceId && subServiceId.trim() ? subServiceId.trim() : null,
+      isVerified,
+      isFeatured,
+      sortOrder: Number(sortOrder) || 0,
+      reviewDate: reviewDate ? new Date(reviewDate).toISOString() : null,
+      status: status.toUpperCase(),
+    };
+
+    try {
+      if (currentId) {
+        await updateReview(currentId, payload);
+        setConfirmation(`Review for "${reviewerName}" updated successfully.`);
+      } else {
+        await createReview(payload);
+        setConfirmation(`Review for "${reviewerName}" created successfully.`);
+      }
+
       window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 400);
+      setTimeout(() => {
+        router.push("/reviews");
+      }, 900);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Failed to save review";
+      setError(msg);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="bg-surface border border-border rounded-xl p-12 text-center max-w-lg mx-auto">
+        <RefreshCw className="w-6 h-6 text-orange animate-spin mx-auto mb-3" />
+        <h2 className="text-base font-bold text-text-primary">Loading Review Details...</h2>
+        <p className="text-xs text-text-secondary mt-1">Connecting to NestJS API...</p>
+      </div>
+    );
   }
 
   return (
@@ -112,7 +259,7 @@ export function ReviewForm({ review }: ReviewFormProps) {
           </Link>
           <div className="flex items-center gap-3">
             <h1 className="text-2xl sm:text-[26px] font-bold text-text-primary tracking-tight">
-              {review ? `Edit Review: ${review.studentName}` : "Add Review"}
+              {isEditing ? `Edit Review: ${reviewerName || "Untitled"}` : "Add Review"}
             </h1>
             <div className="flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-200">
               <Star className="w-3 h-3 fill-amber-400 text-amber-500" />
@@ -121,8 +268,8 @@ export function ReviewForm({ review }: ReviewFormProps) {
           </div>
           <p className="text-xs sm:text-sm text-text-secondary mt-1">
             {isEditing
-              ? "Update client testimonial details, star rating, and verified credentials."
-              : "Create a new client review testimonial and rating."}
+              ? "Update client testimonial details, star rating, and service attribution."
+              : "Create a new student review testimonial and rating synced with PostgreSQL."}
           </p>
         </div>
 
@@ -140,7 +287,11 @@ export function ReviewForm({ review }: ReviewFormProps) {
             disabled={isSubmitting}
             className="inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-orange hover:bg-orange-hover text-white text-xs font-semibold shadow-xs transition-colors focus:outline-none focus:ring-2 focus:ring-orange/40 disabled:opacity-75"
           >
-            <Save className="w-4 h-4" />
+            {isSubmitting ? (
+              <RefreshCw className="w-4 h-4 animate-spin" />
+            ) : (
+              <Save className="w-4 h-4" />
+            )}
             <span>
               {isSubmitting
                 ? "Saving..."
@@ -160,24 +311,15 @@ export function ReviewForm({ review }: ReviewFormProps) {
         >
           <div className="flex items-center gap-2.5">
             <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-            <span>{confirmation}</span>
+            <span>{confirmation} Redirecting to reviews list...</span>
           </div>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => router.push("/reviews")}
-              className="text-xs font-semibold underline hover:text-emerald-950"
-            >
-              Return to Reviews
-            </button>
-            <button
-              type="button"
-              onClick={() => setConfirmation(null)}
-              className="text-xs text-emerald-700 hover:text-emerald-950 px-1"
-            >
-              ✕
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => router.push("/reviews")}
+            className="text-xs font-semibold underline hover:text-emerald-950"
+          >
+            Return to Reviews
+          </button>
         </div>
       )}
 
@@ -195,9 +337,7 @@ export function ReviewForm({ review }: ReviewFormProps) {
       {/* Form Workspace */}
       <form id="review-form" onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* ======================================================== */}
-          {/* Left Column: Review Card Details (8 Cols)               */}
-          {/* ======================================================== */}
+          {/* Left Column: Review Card Details (8 Cols) */}
           <div className="lg:col-span-8 space-y-6">
             <div className="bg-surface border border-border rounded-xl p-6 shadow-2xs space-y-5">
               <div className="flex items-center gap-2 pb-3 border-b border-border">
@@ -207,12 +347,12 @@ export function ReviewForm({ review }: ReviewFormProps) {
                     Review Card Details
                   </h2>
                   <p className="text-xs text-text-secondary mt-0.5">
-                    Configure client testimonial, star rating, and verified enrollment credentials.
+                    Configure client testimonial, star rating, verified badge, and academic scope.
                   </p>
                 </div>
               </div>
 
-              {/* Top Control Bar: Rating Stars & Verified Toggle */}
+              {/* Top Control Bar: Rating Stars & Verified Badge */}
               <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl border border-border bg-canvas/40">
                 {/* Interactive Star Rating Selector */}
                 <div>
@@ -243,7 +383,7 @@ export function ReviewForm({ review }: ReviewFormProps) {
                   </div>
                 </div>
 
-                {/* Verified Student Toggle Switch / Checkbox */}
+                {/* Verified Student Checkbox */}
                 <div>
                   <span className="block text-xs font-semibold text-text-primary mb-1.5">
                     Verification Badge
@@ -251,15 +391,15 @@ export function ReviewForm({ review }: ReviewFormProps) {
                   <label className="inline-flex items-center gap-2 cursor-pointer select-none">
                     <input
                       type="checkbox"
-                      checked={verified}
-                      onChange={(e) => setVerified(e.target.checked)}
+                      checked={isVerified}
+                      onChange={(e) => setIsVerified(e.target.checked)}
                       className="w-4 h-4 text-orange rounded border-border focus:ring-orange/30 accent-orange"
                     />
                     <span className="text-xs font-medium text-text-primary flex items-center gap-1">
                       <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
                       Verified Student Status
                     </span>
-                    {verified && (
+                    {isVerified && (
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                         <Check className="w-2.5 h-2.5 text-emerald-600" />
                         <span>Active</span>
@@ -269,20 +409,19 @@ export function ReviewForm({ review }: ReviewFormProps) {
                 </div>
               </div>
 
-              {/* Quote Headline */}
+              {/* Quote Headline / Short Title */}
               <div>
                 <label
                   htmlFor="quote-headline"
                   className="block text-xs font-semibold text-text-primary mb-1.5"
                 >
-                  Quote Headline <span className="text-rose-500">*</span>
+                  Quote Headline / Title
                 </label>
                 <input
                   id="quote-headline"
                   type="text"
-                  required
-                  value={quoteHeadline}
-                  onChange={(e) => setQuoteHeadline(e.target.value)}
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                   placeholder='e.g., "I literally have no words to show my gratitude."'
                   className="w-full bg-surface border border-border rounded-lg px-3.5 py-2.5 text-xs sm:text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange font-medium"
                 />
@@ -300,8 +439,8 @@ export function ReviewForm({ review }: ReviewFormProps) {
                   id="review-body"
                   required
                   rows={4}
-                  value={reviewBody}
-                  onChange={(e) => setReviewBody(e.target.value)}
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
                   placeholder="Enter the client's full review testimonial, experience with specialists, turnaround satisfaction, and grade results..."
                   className="w-full bg-surface border border-border rounded-lg px-3.5 py-2.5 text-xs sm:text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange leading-relaxed"
                 />
@@ -321,94 +460,159 @@ export function ReviewForm({ review }: ReviewFormProps) {
                     id="student-name"
                     type="text"
                     required
-                    value={studentName}
-                    onChange={(e) => setStudentName(e.target.value)}
+                    value={reviewerName}
+                    onChange={(e) => setReviewerName(e.target.value)}
                     placeholder="e.g., Isabel Pearson"
                     className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange font-medium"
                   />
                 </div>
 
-                {/* Course / Subject */}
+                {/* Subject / Course */}
                 <div>
                   <label
                     htmlFor="course-label"
                     className="block text-xs font-semibold text-text-primary mb-1.5"
                   >
-                    Course / Subject
+                    Subject / Course
                   </label>
                   <input
                     id="course-label"
                     type="text"
-                    value={courseLabel}
-                    onChange={(e) => setCourseLabel(e.target.value)}
-                    placeholder="e.g., Business Assignment"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    placeholder="e.g., Corporate Finance"
                     className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange"
                   />
                 </div>
 
-                {/* Time Ago */}
+                {/* Order Reference */}
                 <div>
                   <label
-                    htmlFor="time-ago"
+                    htmlFor="order-ref"
                     className="block text-xs font-semibold text-text-primary mb-1.5"
                   >
-                    Time Ago
+                    Order Ref Badge
                   </label>
                   <input
-                    id="time-ago"
+                    id="order-ref"
                     type="text"
-                    value={timeAgoLabel}
-                    onChange={(e) => setTimeAgoLabel(e.target.value)}
-                    placeholder="e.g., 2 days ago"
-                    className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange"
+                    value={orderRef}
+                    onChange={(e) => setOrderRef(e.target.value)}
+                    placeholder="e.g., #RE-4821"
+                    className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange font-mono"
                   />
                 </div>
               </div>
 
-              {/* Avatar URL with Live Circular Preview */}
-              <div>
-                <label
-                  htmlFor="avatar-url"
-                  className="block text-xs font-semibold text-text-primary mb-1.5"
-                >
-                  Avatar URL
-                </label>
-                <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-full bg-slate-100 border border-border flex items-center justify-center shrink-0 overflow-hidden font-bold text-xs text-text-secondary shadow-2xs">
-                    {avatarUrl ? (
-                      /* eslint-disable-next-line @next/next/no-img-element */
-                      <img
-                        src={avatarUrl}
-                        alt={studentName || "Avatar"}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).style.display =
-                            "none";
-                        }}
-                      />
-                    ) : (
-                      <ImageIcon className="w-5 h-5 text-text-muted" />
-                    )}
-                  </div>
-                  <input
-                    id="avatar-url"
-                    type="text"
-                    value={avatarUrl}
-                    onChange={(e) => setAvatarUrl(e.target.value)}
-                    placeholder="e.g., /images/female-expert1.jpg"
-                    className="flex-1 bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm font-mono text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange"
-                  />
+              {/* Academic Details Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                {/* Academic Level */}
+                <div>
+                  <label
+                    htmlFor="academic-level"
+                    className="block text-xs font-semibold text-text-primary mb-1.5"
+                  >
+                    Academic Level
+                  </label>
+                  <select
+                    id="academic-level"
+                    value={academicLevel}
+                    onChange={(e) => setAcademicLevel(e.target.value)}
+                    className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange"
+                  >
+                    {ACADEMIC_LEVELS.map((lvl) => (
+                      <option key={lvl} value={lvl}>
+                        {lvl}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-                <p className="text-[11px] text-text-muted mt-1.5">
-                  Path or URL to the client&apos;s verified display photo.
-                </p>
+
+                {/* Paper Type */}
+                <div>
+                  <label
+                    htmlFor="paper-type"
+                    className="block text-xs font-semibold text-text-primary mb-1.5"
+                  >
+                    Paper / Assignment Type
+                  </label>
+                  <select
+                    id="paper-type"
+                    value={paperType}
+                    onChange={(e) => setPaperType(e.target.value)}
+                    className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange"
+                  >
+                    {COMMON_PAPER_TYPES.map((pt) => (
+                      <option key={pt} value={pt}>
+                        {pt}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Avatar URL & Initials */}
+              <div className="pt-2 border-t border-border space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+                  <div className="sm:col-span-2">
+                    <label
+                      htmlFor="avatar-url"
+                      className="block text-xs font-semibold text-text-primary mb-1.5"
+                    >
+                      Avatar Image URL
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <div className="w-11 h-11 rounded-full bg-slate-100 border border-border flex items-center justify-center shrink-0 overflow-hidden font-bold text-xs text-text-secondary shadow-2xs">
+                        {reviewerAvatar ? (
+                          /* eslint-disable-next-line @next/next/no-img-element */
+                          <img
+                            src={reviewerAvatar}
+                            alt={reviewerName || "Avatar"}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).style.display = "none";
+                            }}
+                          />
+                        ) : (
+                          <span>
+                            {reviewerInitials || (reviewerName ? reviewerName.slice(0, 2).toUpperCase() : "ST")}
+                          </span>
+                        )}
+                      </div>
+                      <input
+                        id="avatar-url"
+                        type="text"
+                        value={reviewerAvatar}
+                        onChange={(e) => setReviewerAvatar(e.target.value)}
+                        placeholder="e.g., /images/female-expert1.jpg or https://..."
+                        className="flex-1 bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm font-mono text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="reviewer-initials"
+                      className="block text-xs font-semibold text-text-primary mb-1.5"
+                    >
+                      Initials Fallback
+                    </label>
+                    <input
+                      id="reviewer-initials"
+                      type="text"
+                      maxLength={3}
+                      value={reviewerInitials}
+                      onChange={(e) => setReviewerInitials(e.target.value.toUpperCase())}
+                      placeholder="e.g., IP"
+                      className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm font-mono text-text-primary uppercase focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* ======================================================== */}
-          {/* Right Column: Sticky Sidebar (4 Cols)                   */}
-          {/* ======================================================== */}
+          {/* Right Column: Sticky Sidebar (4 Cols) */}
           <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-20">
             {/* 1. Publishing & Visibility Card */}
             <div className="bg-surface border border-border rounded-xl p-6 shadow-2xs space-y-4">
@@ -431,17 +635,50 @@ export function ReviewForm({ review }: ReviewFormProps) {
                   <select
                     id="review-status"
                     value={status}
-                    onChange={(e) =>
-                      setStatus(e.target.value as ReviewStatus)
-                    }
-                    className="flex-1 bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange"
+                    onChange={(e) => setStatus(e.target.value)}
+                    className="flex-1 bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange font-medium"
                   >
-                    <option value="active">Active (Published)</option>
-                    <option value="draft">Draft (Unlisted)</option>
-                    <option value="archived">Archived</option>
+                    <option value="PUBLISHED">Published (Active)</option>
+                    <option value="PENDING">Pending (Moderation)</option>
+                    <option value="HIDDEN">Hidden (Archived)</option>
                   </select>
                   <ReviewStatusBadge status={status} />
                 </div>
+              </div>
+
+              {/* Featured Toggle */}
+              <div className="flex items-center justify-between pt-2">
+                <div>
+                  <span className="text-xs font-semibold text-text-primary block">
+                    Featured Review
+                  </span>
+                  <span className="text-[11px] text-text-muted block">
+                    Show prominently on landing page testimonials and hero widgets.
+                  </span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={isFeatured}
+                  onChange={(e) => setIsFeatured(e.target.checked)}
+                  className="w-4 h-4 accent-orange rounded cursor-pointer"
+                />
+              </div>
+
+              {/* Review Date */}
+              <div className="pt-2">
+                <label
+                  htmlFor="review-date"
+                  className="block text-xs font-semibold text-text-primary mb-1.5"
+                >
+                  Testimonial Date
+                </label>
+                <input
+                  id="review-date"
+                  type="date"
+                  value={reviewDate}
+                  onChange={(e) => setReviewDate(e.target.value)}
+                  className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange"
+                />
               </div>
 
               {/* Display Order */}
@@ -455,152 +692,70 @@ export function ReviewForm({ review }: ReviewFormProps) {
                 <input
                   id="review-order"
                   type="number"
-                  min={1}
-                  max={99}
-                  value={displayOrder}
-                  onChange={(e) =>
-                    setDisplayOrder(parseInt(e.target.value, 10) || 1)
-                  }
+                  min={0}
+                  value={sortOrder}
+                  onChange={(e) => setSortOrder(parseInt(e.target.value, 10) || 0)}
                   className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange"
                 />
               </div>
-
-              {/* Content Metrics */}
-              <div className="p-3 rounded-lg border border-border bg-canvas/40 space-y-2 text-xs">
-                <div className="flex items-center justify-between text-text-secondary">
-                  <span>Rating Assigned:</span>
-                  <span className="font-semibold text-amber-700">
-                    {rating} / 5 Stars
-                  </span>
-                </div>
-                <div className="flex items-center justify-between text-text-secondary">
-                  <span>Verified Client:</span>
-                  <span
-                    className={`font-semibold ${
-                      verified ? "text-emerald-700" : "text-text-muted"
-                    }`}
-                  >
-                    {verified ? "Yes" : "No"}
-                  </span>
-                </div>
-              </div>
-
-              {/* Metadata */}
-              <div className="pt-3 border-t border-border text-xs text-text-muted space-y-1">
-                <p>
-                  Last Updated:{" "}
-                  <span className="font-mono text-text-secondary">
-                    {review?.updatedAt || "Not yet saved"}
-                  </span>
-                </p>
-                <p>Type: Individual Client Review</p>
-              </div>
             </div>
 
-            {/* 2. SEO & Search Metadata Card */}
+            {/* 2. Service Attribution Card */}
             <div className="bg-surface border border-border rounded-xl p-6 shadow-2xs space-y-4">
               <div className="flex items-center gap-2 pb-3 border-b border-border">
-                <Globe className="w-4 h-4 text-orange" />
+                <BookOpen className="w-4 h-4 text-orange" />
                 <h2 className="text-sm font-bold text-text-primary uppercase tracking-wider">
-                  SEO &amp; Search Snippet
+                  Service Attribution
                 </h2>
               </div>
 
-              {/* Meta Title */}
+              {/* Parent Service Dropdown */}
               <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label
-                    htmlFor="meta-title"
-                    className="block text-xs font-semibold text-text-primary"
-                  >
-                    Meta Title
-                  </label>
-                  <span
-                    className={`text-[10px] font-mono ${
-                      metaTitle.length > 60
-                        ? "text-amber-600 font-bold"
-                        : "text-text-muted"
-                    }`}
-                  >
-                    {metaTitle.length}/60
-                  </span>
-                </div>
-                <input
-                  id="meta-title"
-                  type="text"
-                  value={metaTitle}
-                  onChange={(e) => setMetaTitle(e.target.value)}
-                  placeholder={`${
-                    studentName || "Student"
-                  } Review — Verified Testimonial | ReadEssay`}
-                  className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange"
-                />
+                <label
+                  htmlFor="review-service"
+                  className="block text-xs font-semibold text-text-primary mb-1.5"
+                >
+                  Main Service Category
+                </label>
+                <select
+                  id="review-service"
+                  value={serviceId}
+                  onChange={(e) => {
+                    setServiceId(e.target.value);
+                    setSubServiceId("");
+                  }}
+                  className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange"
+                >
+                  <option value="">General / None</option>
+                  {services.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.title || s.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
-              {/* Meta Description */}
+              {/* Sub-Service Dropdown */}
               <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label
-                    htmlFor="meta-desc"
-                    className="block text-xs font-semibold text-text-primary"
-                  >
-                    Meta Description
-                  </label>
-                  <span
-                    className={`text-[10px] font-mono ${
-                      metaDescription.length > 160
-                        ? "text-amber-600 font-bold"
-                        : "text-text-muted"
-                    }`}
-                  >
-                    {metaDescription.length}/160
-                  </span>
-                </div>
-                <textarea
-                  id="meta-desc"
-                  rows={3}
-                  value={metaDescription}
-                  onChange={(e) => setMetaDescription(e.target.value)}
-                  placeholder="Read verified student testimonial and feedback on ReadEssay's academic research and writing services..."
-                  className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange"
-                />
-              </div>
-
-              {/* Live Google Search Snippet Preview */}
-              <div className="pt-3 border-t border-border">
-                <span className="block text-[11px] font-bold text-text-muted uppercase tracking-wider mb-2">
-                  Live Search Engine Preview
-                </span>
-                <div className="p-3.5 rounded-lg border border-border bg-[#F8F9FA] space-y-1 font-sans">
-                  {/* Google Breadcrumb */}
-                  <div className="text-[11px] text-[#202124] flex items-center gap-1.5 truncate">
-                    <span className="text-[#5f6368]">readessay.com</span>
-                    <span className="text-[#5f6368]">&gt;</span>
-                    <span className="text-[#5f6368]">reviews</span>
-                    <span className="text-[#5f6368]">&gt;</span>
-                    <span className="text-[#202124]">
-                      {studentName
-                        ? studentName.toLowerCase().replace(/\s+/g, "-")
-                        : "client-review"}
-                    </span>
-                  </div>
-
-                  {/* Google Title */}
-                  <div className="text-sm text-[#1a0dab] font-medium leading-snug truncate hover:underline cursor-pointer">
-                    {metaTitle ||
-                      `${
-                        studentName || "Verified Student"
-                      } Review — ReadEssay Testimonial`}
-                  </div>
-
-                  {/* Google Snippet */}
-                  <div className="text-xs text-[#4d5156] line-clamp-2 leading-relaxed">
-                    {metaDescription ||
-                      reviewBody ||
-                      quoteHeadline ||
-                      "Explore genuine student feedback and discover why university students trust ReadEssay for reliable academic support."}
-                  </div>
-                </div>
+                <label
+                  htmlFor="review-sub-service"
+                  className="block text-xs font-semibold text-text-primary mb-1.5"
+                >
+                  Sub-Service (Optional)
+                </label>
+                <select
+                  id="review-sub-service"
+                  value={subServiceId}
+                  onChange={(e) => setSubServiceId(e.target.value)}
+                  className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange"
+                >
+                  <option value="">None</option>
+                  {availableSubServices.map((sub) => (
+                    <option key={sub.id} value={sub.id}>
+                      {sub.title || sub.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
           </div>

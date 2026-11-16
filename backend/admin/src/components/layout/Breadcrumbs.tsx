@@ -4,10 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAVIGATION_ITEMS } from "@/config/navigation";
 import {
-  INITIAL_REVIEWS,
-  getReviewById,
-} from "@/data/mockReviews";
-import {
   INITIAL_SAMPLE_SECTIONS,
   INITIAL_ACADEMIC_SAMPLES,
   getSampleSectionById,
@@ -38,12 +34,9 @@ function resolveSubServiceName(slug: string): string {
 }
 
 function resolveReviewClientName(id: string): string {
-  if (typeof getReviewById === "function") {
-    const r = getReviewById(id);
-    if (r?.studentName) return r.studentName;
-  }
-  const r = INITIAL_REVIEWS.find((item) => item.id === id);
-  return r?.studentName ?? id;
+  if (!id) return "Review";
+  if (id.length > 12) return `Review #${id.slice(0, 8)}`;
+  return `Review #${id}`;
 }
 
 function resolveSampleSectionHeading(id: string): string {
