@@ -4,6 +4,17 @@ import { apiClient, RequestOptions } from './apiClient';
 // Service Interfaces
 // ============================================================================
 
+export interface PublicFaqItem {
+  question: string;
+  answer: string;
+}
+
+export interface PublicProcessStep {
+  stepNumber?: number;
+  title: string;
+  description: string;
+}
+
 export interface PublicSubService {
   id: string;
   title: string;
@@ -12,14 +23,30 @@ export interface PublicSubService {
   badgeLabel?: string | null;
   shortDescription?: string | null;
   fullDescription?: string | null;
+  heroBadge?: string | null;
+  heroTitle?: string | null;
+  heroSubtitle?: string | null;
+  content?: string | null;
   features?: string[] | null;
-  faqs?: { question: string; answer: string }[] | null;
+  faqs?: PublicFaqItem[] | null;
+  processSteps?: PublicProcessStep[] | null;
+  icon?: string | null;
+  featuredImage?: string | null;
   displayOrder?: number;
   status: string;
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+  seoKeywords?: string | null;
   metaTitle?: string | null;
   metaDescription?: string | null;
-  createdAt: string;
-  updatedAt: string;
+  canonicalUrl?: string | null;
+  service?: {
+    id: string;
+    title: string;
+    slug: string;
+  };
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface PublicService {
@@ -29,14 +56,27 @@ export interface PublicService {
   badgeLabel?: string | null;
   shortDescription?: string | null;
   fullDescription?: string | null;
+  heroBadge?: string | null;
+  heroTitle?: string | null;
+  heroSubtitle?: string | null;
+  content?: string | null;
+  features?: string[] | null;
+  faqs?: PublicFaqItem[] | null;
+  processSteps?: PublicProcessStep[] | null;
+  icon?: string | null;
   iconName?: string | null;
+  featuredImage?: string | null;
   displayOrder?: number;
   status: string;
+  seoTitle?: string | null;
+  seoDescription?: string | null;
+  seoKeywords?: string | null;
   metaTitle?: string | null;
   metaDescription?: string | null;
+  canonicalUrl?: string | null;
   subServices?: PublicSubService[];
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // ============================================================================
@@ -225,27 +265,35 @@ export async function getPublicServiceTree(
 }
 
 /**
- * Fetch a single top-level service by slug
+ * Fetch a single top-level service by slug. Returns null on 404.
  */
 export async function getPublicServiceBySlug(
   slug: string,
   options?: RequestOptions,
-): Promise<PublicService> {
-  return apiClient<PublicService>(`/services/public/${slug}`, options);
+): Promise<PublicService | null> {
+  try {
+    return await apiClient<PublicService>(`/services/public/${slug}`, options);
+  } catch {
+    return null;
+  }
 }
 
 /**
- * Fetch a sub-service by parent service slug and sub-service slug
+ * Fetch a sub-service by parent service slug and sub-service slug. Returns null on 404.
  */
 export async function getPublicSubService(
   serviceSlug: string,
   subServiceSlug: string,
   options?: RequestOptions,
-): Promise<PublicSubService> {
-  return apiClient<PublicSubService>(
-    `/sub-services/public/${serviceSlug}/${subServiceSlug}`,
-    options,
-  );
+): Promise<PublicSubService | null> {
+  try {
+    return await apiClient<PublicSubService>(
+      `/sub-services/public/${serviceSlug}/${subServiceSlug}`,
+      options,
+    );
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -254,6 +302,7 @@ export async function getPublicSubService(
 export async function getPublicReviews(
   params?: {
     serviceSlug?: string;
+    subServiceSlug?: string;
     rating?: number;
     academicLevel?: string;
     isFeatured?: boolean;

@@ -73,8 +73,20 @@ const FAQ_ITEMS: FaqItem[] = [
   },
 ];
 
-export default function FaqAccordion() {
+interface FaqAccordionProps {
+  items?: { id?: string; question: string; answer: string }[];
+}
+
+export default function FaqAccordion({ items }: FaqAccordionProps = {}) {
   const [openId, setOpenId] = useState<string | null>(null);
+
+  const displayItems: FaqItem[] = items && items.length > 0
+    ? items.map((item, idx) => ({
+        id: item.id || `faq-dynamic-${idx}`,
+        question: item.question,
+        answer: item.answer,
+      }))
+    : FAQ_ITEMS;
 
   const toggleItem = (id: string) => {
     setOpenId((prev) => (prev === id ? null : id));
@@ -83,7 +95,7 @@ export default function FaqAccordion() {
   return (
     <div className="w-full">
       <div className="space-y-3.5" role="region" aria-label="Frequently Asked Questions">
-        {FAQ_ITEMS.map((item) => {
+        {displayItems.map((item) => {
           const isOpen = openId === item.id;
           return (
             <div
