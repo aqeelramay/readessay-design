@@ -1,0 +1,83 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap");
+@import "tailwindcss";
+
+:root {
+  /* Fonts matching design templates */
+  --font-inter: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-poppins: 'Poppins', system-ui, -apple-system, sans-serif;
+  --font-plus-jakarta: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-space-grotesk: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+
+  /* Brand Palette from design */
+  --color-brand-orange: #FF641A;
+  --color-brand-orange-hover: #E8540E;
+  --color-brand-orange-subtle: #FFF2EC;
+  --color-brand-navy: #0F172A;
+  --color-brand-slate: #1E293B;
+
+  /* Neutral & Text */
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94A3B8;
+
+  /* Surfaces & Backgrounds */
+  --color-surface-canvas: #FFFFFF;
+  --color-surface-card: #FFFFFF;
+  --color-surface-subtle: #F8FAFC;
+  --color-surface-muted: #F1F5F9;
+  --color-background-canvas: #F8F9FF;
+
+  /* Borders */
+  --color-border-subtle: #E2E8F0;
+  --color-border-strong: #CBD5E1;
+
+  /* Accents */
+  --color-accent-green: #10B981;
+  --color-accent-green-subtle: #ECFDF5;
+}
+
+@theme {
+  --color-brand-orange: var(--color-brand-orange);
+  --color-brand-orange-hover: var(--color-brand-orange-hover);
+  --color-brand-orange-subtle: var(--color-brand-orange-subtle);
+  --color-brand-navy: var(--color-brand-navy);
+  --color-brand-slate: var(--color-brand-slate);
+
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-muted: var(--color-text-muted);
+
+  --color-surface-canvas: var(--color-surface-canvas);
+  --color-surface-card: var(--color-surface-card);
+  --color-surface-subtle: var(--color-surface-subtle);
+  --color-surface-muted: var(--color-surface-muted);
+  --color-background-canvas: var(--color-background-canvas);
+
+  --color-border-subtle: var(--color-border-subtle);
+  --color-border-strong: var(--color-border-strong);
+
+  --color-accent-green: var(--color-accent-green);
+  --color-accent-green-subtle: var(--color-accent-green-subtle);
+
+  --font-inter: var(--font-inter);
+  --font-poppins: var(--font-poppins);
+  --font-plus-jakarta: var(--font-plus-jakarta);
+  --font-space-grotesk: var(--font-space-grotesk);
+}
+
+body {
+  background-color: var(--color-surface-canvas);
+  color: var(--color-text-primary);
+  font-family: var(--font-inter);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-poppins);
+}

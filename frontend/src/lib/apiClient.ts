@@ -1,7 +1,8 @@
-import { API_BASE_URL } from '../config/api.js';
+import { API_BASE_URL } from '../config/api';
 
 export interface RequestOptions extends RequestInit {
   params?: Record<string, string | number | boolean | undefined>;
+  next?: { revalidate?: number | false; tags?: string[] };
 }
 
 export class ApiError extends Error {

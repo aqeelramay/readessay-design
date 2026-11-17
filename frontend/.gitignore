@@ -16,6 +16,7 @@ out/
 
 # Environment & Secret Configuration
 .env*
+.env*.local
 !.env.example
 
 # Logs
