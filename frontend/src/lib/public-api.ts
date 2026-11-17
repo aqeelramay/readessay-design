@@ -86,23 +86,60 @@ export interface PublicService {
 export interface PublicReview {
   id: string;
   clientName: string;
+  reviewerName?: string;
+  studentName?: string;
+  reviewerInitials?: string | null;
+  reviewerAvatar?: string | null;
+  avatarUrl?: string | null;
+  academicLevel?: string | null;
+  subject?: string | null;
+  courseLabel?: string | null;
+  paperType?: string | null;
+  rating: number;
+  title?: string | null;
+  quoteHeadline?: string | null;
+  comment: string;
+  reviewBody?: string | null;
+  orderRef?: string | null;
+  serviceId?: string | null;
+  subServiceId?: string | null;
+  isVerified: boolean;
+  verified?: boolean;
+  isFeatured: boolean;
+  sortOrder?: number;
+  displayOrder?: number;
+  reviewDate: string;
+  status: string;
+  createdAt: string;
+  updatedAt?: string;
+  service?: {
+    id: string;
+    title: string;
+    slug: string;
+  } | null;
+  subService?: {
+    id: string;
+    title: string;
+    slug: string;
+  } | null;
+  // Legacy / compatibility properties
   serviceTitle?: string | null;
   serviceSlug?: string | null;
   subServiceTitle?: string | null;
   subServiceSlug?: string | null;
-  academicLevel?: string | null;
-  rating: number;
-  reviewDate: string;
-  comment: string;
-  isVerified: boolean;
-  isFeatured: boolean;
-  status: string;
-  createdAt: string;
+}
+
+export interface PublicReviewsStats {
+  averageRating: number;
+  totalReviews: number;
+  ratingBreakdown?: Record<number, number>;
 }
 
 export interface PublicReviewsResponse {
-  reviews: PublicReview[];
-  total: number;
+  data?: PublicReview[];
+  reviews?: PublicReview[];
+  stats?: PublicReviewsStats;
+  total?: number;
   page?: number;
   limit?: number;
   metrics?: {
@@ -116,43 +153,55 @@ export interface PublicReviewsResponse {
 // Sample Interfaces
 // ============================================================================
 
-export interface PublicSample {
-  id: string;
-  title: string;
-  slug: string;
-  sectionId?: string;
-  discipline?: string;
-  academicLevel?: string | null;
-  paperType?: string | null;
-  citationStyle?: string | null;
-  pagesCount?: number | null;
-  wordsCount?: number | null;
-  gradeAchieved?: string | null;
-  fileUrl?: string | null;
-  fileName?: string | null;
-  fileSize?: string | null;
-  fileType?: string | null;
-  previewSnippet?: string | null;
-  isFeatured?: boolean;
-  status: string;
-  createdAt: string;
+export interface PublicSampleFile {
+  fileName: string;
+  fileType: 'PDF' | 'DOCX' | string;
+  fileSize: string;
+  fileUrl: string;
 }
 
-export interface PublicDisciplineSection {
+export interface PublicAcademicSample {
   id: string;
-  name: string;
-  slug: string;
-  badgeLabel?: string | null;
-  shortDescription?: string | null;
-  iconName?: string | null;
-  displayOrder?: number;
+  sectionId: string;
+  title: string;
+  pageCount: number;
+  academicLevel: string;
+  documentType: string;
+  citationStyle: string;
+  customMetaLabel?: string | null;
+  customMetaValue?: string | null;
+  fileName?: string;
+  fileType?: 'PDF' | 'DOCX' | string;
+  fileSize?: string;
+  fileUrl?: string;
+  documentFile: PublicSampleFile;
+  status: string;
+  displayOrder: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface PublicSampleSection {
+  id: string;
+  heading: string;
+  shortSummary: string;
+  status: string;
+  displayOrder: number;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
   sampleCount?: number;
-  samples?: PublicSample[];
+  samples: PublicAcademicSample[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface PublicSamplesResponse {
-  sections?: PublicDisciplineSection[];
-  samples?: PublicSample[];
+  data?: PublicSampleSection[];
+  sections?: PublicSampleSection[];
+  stats?: {
+    totalSections: number;
+    totalSamples: number;
+  };
   total?: number;
 }
 
@@ -230,8 +279,9 @@ export interface PublicBlogPost {
     id: string;
     name: string;
     slug: string;
+    badgeLabel?: string | null;
   };
-  tocHeadings?: BlogTocHeading[];
+  tocHeadings?: (string | BlogTocHeading)[];
   relatedPosts?: {
     id: string;
     title: string;
@@ -329,8 +379,8 @@ export async function getPublicSamples(
     limit?: number;
   },
   options?: RequestOptions,
-): Promise<PublicSamplesResponse | PublicDisciplineSection[]> {
-  return apiClient<PublicSamplesResponse | PublicDisciplineSection[]>(
+): Promise<PublicSamplesResponse> {
+  return apiClient<PublicSamplesResponse>(
     '/samples/public',
     {
       ...options,
@@ -349,16 +399,20 @@ export async function getPublicBlogCategories(
 }
 
 /**
- * Fetch a single blog category with its posts by slug
+ * Fetch a single blog category with its posts by slug. Returns null on 404.
  */
 export async function getPublicBlogCategoryBySlug(
   slug: string,
   options?: RequestOptions,
-): Promise<PublicBlogCategory> {
-  return apiClient<PublicBlogCategory>(
-    `/blog/public/categories/${slug}`,
-    options,
-  );
+): Promise<PublicBlogCategory | null> {
+  try {
+    return await apiClient<PublicBlogCategory>(
+      `/blog/public/categories/${slug}`,
+      options,
+    );
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -380,11 +434,15 @@ export async function getPublicBlogPosts(
 }
 
 /**
- * Fetch a single blog post by slug with Table of Contents and Related Posts
+ * Fetch a single blog post by slug with Table of Contents and Related Posts. Returns null on 404.
  */
 export async function getPublicBlogPostBySlug(
   slug: string,
   options?: RequestOptions,
-): Promise<PublicBlogPost> {
-  return apiClient<PublicBlogPost>(`/blog/public/posts/${slug}`, options);
+): Promise<PublicBlogPost | null> {
+  try {
+    return await apiClient<PublicBlogPost>(`/blog/public/posts/${slug}`, options);
+  } catch {
+    return null;
+  }
 }
