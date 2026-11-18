@@ -5,6 +5,8 @@ import { fetchPublicSamplesDirectory, SAMPLES_FAQS } from '@/lib/data-fetchers';
 import SamplesDirectoryClient from '@/components/samples/SamplesDirectoryClient';
 import VerifiedGradesMarquee from '@/components/shared/VerifiedGradesMarquee';
 import FaqAccordion from '@/components/shared/FaqAccordion';
+import JsonLd from '@/components/seo/JsonLd';
+import { buildBreadcrumbSchema, buildFaqPageSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'Download Free Academic Samples & Coursework Models | ReadEssay',
@@ -28,6 +30,15 @@ export default async function SamplesPage() {
 
   return (
     <div className="w-full bg-[#f8f9ff]">
+      <JsonLd
+        data={[
+          buildBreadcrumbSchema([
+            { name: 'Home', url: '/' },
+            { name: 'Samples', url: '/samples' },
+          ]),
+          buildFaqPageSchema(SAMPLES_FAQS),
+        ]}
+      />
       {/* BREADCRUMB */}
       <nav aria-label="Breadcrumb" className="w-full bg-white border-b border-slate-200/80 py-3">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center gap-2 text-xs text-slate-500 font-medium">

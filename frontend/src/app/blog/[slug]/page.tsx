@@ -9,6 +9,12 @@ import {
 } from '@/lib/data-fetchers';
 import StickyArticleToc from '@/components/blog/StickyArticleToc';
 import FaqAccordion from '@/components/shared/FaqAccordion';
+import JsonLd from '@/components/seo/JsonLd';
+import {
+  buildBreadcrumbSchema,
+  buildArticleSchema,
+  buildFaqPageSchema,
+} from '@/lib/schema';
 
 interface BlogPostDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -94,6 +100,18 @@ export default async function BlogPostDetailPage({
 
   return (
     <main className="w-full pt-28 bg-[#F8FAFC]">
+      <JsonLd
+        data={[
+          buildBreadcrumbSchema([
+            { name: 'Home', url: '/' },
+            { name: 'Blog', url: '/blog' },
+            { name: categoryName, url: `/blog/category/${categorySlug}` },
+            { name: post.title, url: `/blog/${post.slug}` },
+          ]),
+          buildArticleSchema(post),
+          buildFaqPageSchema(post.faqSection?.items),
+        ]}
+      />
       <div className="flex flex-col w-full">
         {/* BREADCRUMB NAVIGATION */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-2 w-full">

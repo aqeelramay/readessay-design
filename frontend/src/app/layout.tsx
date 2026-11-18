@@ -4,6 +4,8 @@ import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { fetchServiceTree } from '@/lib/data-fetchers';
+import JsonLd from '@/components/seo/JsonLd';
+import { buildOrganizationSchema, buildWebSiteSchema } from '@/lib/schema';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -54,6 +56,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
       <body className="min-h-screen bg-white text-[#243445] font-sans antialiased flex flex-col">
+        <JsonLd data={[buildOrganizationSchema(), buildWebSiteSchema()]} />
         <Header serviceTree={serviceTree} />
         <main className="flex-1 w-full pt-28 bg-[#FFFFFF]">{children}</main>
         <Footer serviceTree={serviceTree} />

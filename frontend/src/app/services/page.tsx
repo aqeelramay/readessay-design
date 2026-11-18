@@ -11,6 +11,12 @@ import RatingCards from '@/components/shared/RatingCards';
 import UniversityMarquee from '@/components/shared/UniversityMarquee';
 import VerifiedGradesMarquee from '@/components/shared/VerifiedGradesMarquee';
 import FaqAccordion from '@/components/shared/FaqAccordion';
+import JsonLd from '@/components/seo/JsonLd';
+import {
+  buildBreadcrumbSchema,
+  buildServiceSchema,
+  buildFaqPageSchema,
+} from '@/lib/schema';
 
 export const revalidate = 60;
 
@@ -198,6 +204,21 @@ export default async function ServicesPage() {
 
   return (
     <div className="w-full bg-[#FAFAFA] text-[#243445]">
+      <JsonLd
+        data={[
+          buildBreadcrumbSchema([
+            { name: 'Home', url: '/' },
+            { name: 'Services', url: '/services' },
+          ]),
+          buildServiceSchema({
+            name: 'ReadEssay Academic Services Catalog',
+            description:
+              'Explore comprehensive academic support across 26 core disciplines, online class management, protected exams, and dissertation assistance.',
+            url: '/services',
+          }),
+          buildFaqPageSchema(DEFAULT_FAQS),
+        ]}
+      />
       {/* 1. HERO SECTION */}
       <section className="relative w-full bg-white overflow-hidden py-12 lg:py-20 border-b border-slate-100">
         <div className="absolute -top-32 right-10 w-96 h-96 bg-[#FFF2EC] rounded-full blur-3xl pointer-events-none -z-0" />

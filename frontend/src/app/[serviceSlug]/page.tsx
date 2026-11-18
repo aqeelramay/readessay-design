@@ -13,6 +13,12 @@ import RatingCards from '@/components/shared/RatingCards';
 import UniversityMarquee from '@/components/shared/UniversityMarquee';
 import VerifiedGradesMarquee from '@/components/shared/VerifiedGradesMarquee';
 import FaqAccordion from '@/components/shared/FaqAccordion';
+import JsonLd from '@/components/seo/JsonLd';
+import {
+  buildBreadcrumbSchema,
+  buildServiceSchema,
+  buildFaqPageSchema,
+} from '@/lib/schema';
 
 export const revalidate = 60;
 
@@ -91,6 +97,25 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
   return (
     <div className="w-full bg-[#FAFAFA] text-[#243445]">
+      <JsonLd
+        data={[
+          buildBreadcrumbSchema([
+            { name: 'Home', url: '/' },
+            { name: 'Services', url: '/services' },
+            { name: service.title, url: `/${service.slug}` },
+          ]),
+          buildServiceSchema({
+            name: service.title,
+            description:
+              service.shortDescription ||
+              service.heroSubtitle ||
+              `${service.title} academic support and coursework assistance by ReadEssay.`,
+            url: `/${service.slug}`,
+            category: service.badgeLabel || undefined,
+          }),
+          buildFaqPageSchema(combinedFaqs),
+        ]}
+      />
       {/* 1. HERO SECTION */}
       <section className="relative w-full bg-white overflow-hidden py-12 lg:py-20 border-b border-slate-100">
         <div className="absolute -top-32 right-10 w-96 h-96 bg-[#FFF2EC] rounded-full blur-3xl pointer-events-none -z-0" />

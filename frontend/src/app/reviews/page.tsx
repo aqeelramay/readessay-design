@@ -7,6 +7,8 @@ import UniversityMarquee from '@/components/shared/UniversityMarquee';
 import VerifiedGradesMarquee from '@/components/shared/VerifiedGradesMarquee';
 import FaqAccordion from '@/components/shared/FaqAccordion';
 import ReviewsFilterGrid from '@/components/reviews/ReviewsFilterGrid';
+import JsonLd from '@/components/seo/JsonLd';
+import { buildBreadcrumbSchema, buildFaqPageSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'Student Reviews & Ratings - Genuine Experiences | ReadEssay',
@@ -38,6 +40,15 @@ export default async function ReviewsPage() {
 
   return (
     <div className="w-full bg-[#f8f9ff]">
+      <JsonLd
+        data={[
+          buildBreadcrumbSchema([
+            { name: 'Home', url: '/' },
+            { name: 'Reviews', url: '/reviews' },
+          ]),
+          buildFaqPageSchema(REVIEWS_FAQS),
+        ]}
+      />
       {/* BREADCRUMB */}
       <nav aria-label="Breadcrumb" className="w-full bg-white border-b border-slate-200/80 py-3">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center gap-2 text-xs text-slate-500 font-medium">

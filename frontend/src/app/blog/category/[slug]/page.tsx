@@ -8,6 +8,8 @@ import {
   fetchPublicBlogCategories,
   fetchPublicBlogPosts,
 } from '@/lib/data-fetchers';
+import JsonLd from '@/components/seo/JsonLd';
+import { buildBreadcrumbSchema } from '@/lib/schema';
 
 interface BlogCategoryPageProps {
   params: Promise<{ slug: string }>;
@@ -70,6 +72,13 @@ export default async function BlogCategoryPage({
 
   return (
     <main className="w-full pt-28 bg-[#F8FAFC]">
+      <JsonLd
+        data={buildBreadcrumbSchema([
+          { name: 'Home', url: '/' },
+          { name: 'Blog', url: '/blog' },
+          { name: category.name, url: `/blog/category/${category.slug}` },
+        ])}
+      />
       <div className="flex flex-col w-full">
         {/* HERO SECTION */}
         <section

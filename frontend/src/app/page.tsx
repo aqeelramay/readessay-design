@@ -28,12 +28,15 @@ import {
   fetchServiceTree,
   fetchFeaturedReviews,
   resolveReviewAvatar,
+  DEFAULT_FAQS,
 } from '@/lib/data-fetchers';
 import RatingCards from '@/components/shared/RatingCards';
 import UniversityMarquee from '@/components/shared/UniversityMarquee';
 import TopExpertsCarousel from '@/components/shared/TopExpertsCarousel';
 import VerifiedGradesMarquee from '@/components/shared/VerifiedGradesMarquee';
 import FaqAccordion from '@/components/shared/FaqAccordion';
+import JsonLd from '@/components/seo/JsonLd';
+import { buildFaqPageSchema } from '@/lib/schema';
 
 export default async function HomePage() {
   // Fetch live services tree and reviews on the server with ISR caching
@@ -44,6 +47,7 @@ export default async function HomePage() {
 
   return (
     <div className="w-full flex flex-col">
+      <JsonLd data={buildFaqPageSchema(DEFAULT_FAQS)} />
       {/* =====================================================================
           1. HERO SECTION
           Two-column layout with clean reserved slot for Price Calculator

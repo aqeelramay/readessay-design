@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { fetchServiceTree } from '@/lib/data-fetchers';
 import ContactFormClient from '@/components/contact/ContactFormClient';
 import FaqAccordion from '@/components/shared/FaqAccordion';
+import JsonLd from '@/components/seo/JsonLd';
+import { buildBreadcrumbSchema, buildFaqPageSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'Contact Us | ReadEssay - 24/7 Academic Support & WhatsApp Desk',
@@ -59,6 +61,15 @@ export default async function ContactPage() {
 
   return (
     <main className="w-full pt-28 bg-[#F8FAFC] min-h-screen">
+      <JsonLd
+        data={[
+          buildBreadcrumbSchema([
+            { name: 'Home', url: '/' },
+            { name: 'Contact', url: '/contact' },
+          ]),
+          buildFaqPageSchema(FAQ_MICRO_ITEMS),
+        ]}
+      />
       <div className="flex flex-col w-full">
         {/* HERO SECTION */}
         <section

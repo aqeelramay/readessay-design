@@ -4,6 +4,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import RatingCards from '@/components/shared/RatingCards';
 import UniversityMarquee from '@/components/shared/UniversityMarquee';
+import JsonLd from '@/components/seo/JsonLd';
+import { buildBreadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'About Us | ReadEssay - Premier Scholastic Support & PhD Mentorship',
@@ -98,6 +100,12 @@ const QA_STEPS = [
 export default function AboutUsPage() {
   return (
     <main className="w-full pt-28 bg-[#F8FAFC] min-h-screen">
+      <JsonLd
+        data={buildBreadcrumbSchema([
+          { name: 'Home', url: '/' },
+          { name: 'About Us', url: '/about-us' },
+        ])}
+      />
       <div className="flex flex-col w-full">
         {/* HERO SECTION */}
         <section

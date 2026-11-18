@@ -7,6 +7,8 @@ import {
   fetchPublicBlogPosts,
 } from '@/lib/data-fetchers';
 import BlogDirectoryClient from '@/components/blog/BlogDirectoryClient';
+import JsonLd from '@/components/seo/JsonLd';
+import { buildBreadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'ReadEssay Blog | Academic Insights & Student Resources',
@@ -32,6 +34,12 @@ export default async function BlogIndexPage() {
 
   return (
     <main className="w-full pt-28 bg-[#F8FAFC]">
+      <JsonLd
+        data={buildBreadcrumbSchema([
+          { name: 'Home', url: '/' },
+          { name: 'Blog', url: '/blog' },
+        ])}
+      />
       <div className="flex flex-col w-full">
         {/* HERO SECTION */}
         <section
