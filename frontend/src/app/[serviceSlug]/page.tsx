@@ -6,6 +6,7 @@ import {
   fetchServiceBySlug,
   fetchServiceTree,
   fetchFeaturedReviews,
+  fetchPublicCalculator,
   DEFAULT_FAQS,
   resolveReviewAvatar,
 } from '@/lib/data-fetchers';
@@ -13,6 +14,7 @@ import RatingCards from '@/components/shared/RatingCards';
 import UniversityMarquee from '@/components/shared/UniversityMarquee';
 import VerifiedGradesMarquee from '@/components/shared/VerifiedGradesMarquee';
 import FaqAccordion from '@/components/shared/FaqAccordion';
+import { PriceCalculatorWidget } from '@/components/shared/PriceCalculatorWidget';
 import JsonLd from '@/components/seo/JsonLd';
 import {
   buildBreadcrumbSchema,
@@ -84,12 +86,15 @@ export default async function ServiceDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const service = await fetchServiceBySlug(serviceSlug);
+  const [service, reviews, calculatorData] = await Promise.all([
+    fetchServiceBySlug(serviceSlug),
+    fetchFeaturedReviews({ serviceSlug, limit: 3 }),
+    fetchPublicCalculator(),
+  ]);
+
   if (!service) {
     notFound();
   }
-
-  const reviews = await fetchFeaturedReviews({ serviceSlug, limit: 3 });
 
   // Merge FAQs
   const combinedFaqs =
@@ -225,40 +230,13 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               </div>
             </div>
 
-            {/* Right: Reserved Calculator Slot */}
+            {/* Right: Hero Price Calculator Widget */}
             <div className="lg:col-span-5">
-              <div
-                id="hero-calculator-slot"
-                className="w-full min-h-[420px] rounded-3xl bg-slate-50/80 border-2 border-dashed border-slate-200 p-8 flex flex-col items-center justify-center text-center relative overflow-hidden"
-              >
-                <div className="w-16 h-16 rounded-2xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-4 shadow-sm">
-                  <span className="material-symbols-outlined text-[32px]">calculate</span>
-                </div>
-                <h3 className="font-heading text-xl font-bold text-[#243445] mb-2">
-                  Calculate Order Price
-                </h3>
-                <p className="text-sm text-slate-500 max-w-sm mb-6">
-                  Instant estimate tailored to your exact {service.title} requirements.
-                </p>
-                <a
-                  href="https://wa.me/923138400066"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#243445] text-white text-sm font-semibold hover:bg-slate-800 transition-colors"
-                >
-                  <span>Request Instant Quote</span>
-                  <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-                </a>
-                <div className="mt-4 flex items-center gap-4 text-xs text-slate-500 font-medium">
-                  <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-xs text-[#059669]">check</span>
-                    Zero Obligation
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-xs text-[#059669]">check</span>
-                    Instant Match
-                  </span>
-                </div>
+              <div id="hero-calculator-slot" className="w-full">
+                <PriceCalculatorWidget
+                  initialData={calculatorData}
+                  initialServiceSlug={service.slug}
+                />
               </div>
             </div>
           </div>

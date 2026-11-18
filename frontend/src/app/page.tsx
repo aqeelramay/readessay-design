@@ -27,6 +27,7 @@ import {
 import {
   fetchServiceTree,
   fetchFeaturedReviews,
+  fetchPublicCalculator,
   resolveReviewAvatar,
   DEFAULT_FAQS,
 } from '@/lib/data-fetchers';
@@ -35,14 +36,16 @@ import UniversityMarquee from '@/components/shared/UniversityMarquee';
 import TopExpertsCarousel from '@/components/shared/TopExpertsCarousel';
 import VerifiedGradesMarquee from '@/components/shared/VerifiedGradesMarquee';
 import FaqAccordion from '@/components/shared/FaqAccordion';
+import { PriceCalculatorWidget } from '@/components/shared/PriceCalculatorWidget';
 import JsonLd from '@/components/seo/JsonLd';
 import { buildFaqPageSchema } from '@/lib/schema';
 
 export default async function HomePage() {
-  // Fetch live services tree and reviews on the server with ISR caching
-  const [serviceTree, reviews] = await Promise.all([
+  // Fetch live services tree, reviews and calculator data on the server with ISR caching
+  const [serviceTree, reviews, calculatorData] = await Promise.all([
     fetchServiceTree(),
     fetchFeaturedReviews(),
+    fetchPublicCalculator(),
   ]);
 
   return (
@@ -121,24 +124,10 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Right Column: Reserved Clean Empty Space for Price Calculator */}
+            {/* Right Column: Hero Price Calculator Widget */}
             <div className="lg:col-span-5">
-              <div
-                id="hero-calculator-slot"
-                className="w-full min-h-[420px] bg-slate-50/50 rounded-2xl border-2 border-dashed border-slate-200/90 flex flex-col items-center justify-center p-8 text-center relative"
-              >
-                <div className="w-16 h-16 rounded-2xl bg-white shadow-sm border border-slate-200/60 flex items-center justify-center text-[#FF641A] mb-4">
-                  <Sparkles className="w-8 h-8" />
-                </div>
-                <span className="font-heading font-bold text-lg text-[#243445] mb-2">
-                  Calculate Order Price
-                </span>
-                <p className="text-slate-400 text-xs sm:text-sm max-w-xs leading-relaxed">
-                  Interactive estimate calculator reserved slot. Live pricing engine will mount here.
-                </p>
-                <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white text-xs font-semibold text-[#FF641A] shadow-sm border border-slate-200/70">
-                  <span>Starting at $5.50 / page</span>
-                </div>
+              <div id="hero-calculator-slot" className="w-full">
+                <PriceCalculatorWidget initialData={calculatorData} />
               </div>
             </div>
           </div>

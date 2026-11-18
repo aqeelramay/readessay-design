@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { fetchServiceTree } from '@/lib/data-fetchers';
@@ -251,7 +251,9 @@ export default async function ContactPage() {
 
               {/* Column 2: Interactive Contact Form (7 Cols) */}
               <div className="lg:col-span-7">
-                <ContactFormClient services={services} />
+                <Suspense fallback={<div className="h-96 rounded-3xl bg-slate-50 animate-pulse" />}>
+                  <ContactFormClient services={services} />
+                </Suspense>
               </div>
             </div>
           </div>

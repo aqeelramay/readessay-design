@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { PublicService } from '@/lib/public-api';
 
 interface ContactFormClientProps {
@@ -8,6 +9,8 @@ interface ContactFormClientProps {
 }
 
 export default function ContactFormClient({ services = [] }: ContactFormClientProps) {
+  const searchParams = useSearchParams();
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -19,6 +22,48 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
     wordCount: '',
     message: '',
   });
+
+  const [orderEstimate, setOrderEstimate] = useState<{
+    service: string;
+    level: string;
+    deadline: string;
+    pages: string;
+    words: string;
+    estimate: string;
+  } | null>(null);
+
+  // Sync with searchParams from Calculator
+  useEffect(() => {
+    if (!searchParams) return;
+    const serviceParam = searchParams.get('service') || '';
+    const levelParam = searchParams.get('level') || '';
+    const deadlineParam = searchParams.get('deadline') || '';
+    const pagesParam = searchParams.get('pages') || '';
+    const wordsParam = searchParams.get('words') || '';
+    const estimateParam = searchParams.get('estimate') || '';
+
+    if (estimateParam) {
+      setOrderEstimate({
+        service: serviceParam,
+        level: levelParam,
+        deadline: deadlineParam,
+        pages: pagesParam,
+        words: wordsParam,
+        estimate: estimateParam,
+      });
+
+      setFormData((prev) => ({
+        ...prev,
+        serviceSlug: serviceParam || prev.serviceSlug,
+        academicLevel: levelParam || prev.academicLevel,
+        deadline: deadlineParam ? `${deadlineParam.replace(/-/g, ' ')}` : prev.deadline,
+        wordCount: wordsParam ? `${wordsParam} words (${pagesParam} pages)` : prev.wordCount,
+        message: prev.message
+          ? prev.message
+          : `Order inquiry from price calculator: ${pagesParam} pages (${wordsParam} words), estimated at $${estimateParam} USD with ${deadlineParam.replace(/-/g, ' ')} turnaround.`,
+      }));
+    }
+  }, [searchParams]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -63,6 +108,7 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
       `• Academic Level: ${formData.academicLevel}\n` +
       `• Target Deadline: ${formData.deadline || 'Not specified'}\n` +
       `• Target Word Count: ${formData.wordCount || 'Not specified'}\n` +
+      (orderEstimate ? `• Calculator Estimate: $${orderEstimate.estimate} USD (${orderEstimate.pages} pages / ${orderEstimate.words} words)\n` : '') +
       `• Phone/WhatsApp: ${formData.phone || 'Not specified'}\n` +
       `• Email: ${formData.email || 'Not specified'}\n\n` +
       `*Brief / Notes:*\n${formData.message || 'I would like to inquire about assignment help.'}`,
@@ -151,6 +197,26 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
           coordinator will reach out promptly.
         </p>
       </div>
+
+      {orderEstimate && (
+        <div className="p-4 sm:p-5 rounded-2xl bg-orange-50/80 border border-orange-200/90 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+          <div className="space-y-0.5">
+            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#FF641A]">
+              <span className="material-symbols-outlined text-[16px]">calculate</span>
+              <span>Calculator Order Estimate Applied</span>
+            </div>
+            <p className="text-xs text-slate-600">
+              Configured for <strong className="text-[#243445]">{orderEstimate.pages} pages</strong> ({orderEstimate.words} words) &bull; Turnaround: <strong className="text-[#243445]">{orderEstimate.deadline.replace(/-/g, ' ')}</strong>
+            </p>
+          </div>
+          <div className="text-left sm:text-right shrink-0">
+            <span className="text-xs text-slate-500 font-semibold block">Total Estimate</span>
+            <span className="text-xl sm:text-2xl font-black text-[#FF641A] font-poppins">
+              ${orderEstimate.estimate} USD
+            </span>
+          </div>
+        </div>
+      )}
 
       {errorMsg && (
         <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-center gap-2">
@@ -292,9 +358,12 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
                 className="w-full h-11 px-4 bg-slate-50 border border-slate-200 text-slate-800 rounded-2xl outline-none focus:bg-white focus:border-[#FF641A] focus:ring-2 focus:ring-orange-100 appearance-none text-sm shadow-inner cursor-pointer"
               >
                 <option value="undergraduate">Undergraduate (Years 1-3)</option>
-                <option value="postgraduate">Postgraduate / Master&apos;s</option>
-                <option value="doctoral">Doctoral / PhD Candidate</option>
+                <option value="master">Master&apos;s Degree</option>
+                <option value="postgraduate">Postgraduate</option>
+                <option value="phd">PhD / Doctoral Candidate</option>
+                <option value="doctoral">Doctoral</option>
                 <option value="college">College / A-Level / IB</option>
+                <option value="high-school">High School</option>
               </select>
               <span className="material-symbols-outlined pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">
                 expand_more

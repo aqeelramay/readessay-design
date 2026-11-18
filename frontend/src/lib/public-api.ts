@@ -446,3 +446,83 @@ export async function getPublicBlogPostBySlug(
     return null;
   }
 }
+
+// ============================================================================
+// Order Pricing & Calculator Interfaces
+// ============================================================================
+
+export interface PublicCalculatorConfig {
+  id: string;
+  widgetTitle: string;
+  widgetSubtitle: string;
+  badgeText: string;
+  ctaButtonText: string;
+  currencySymbol: string;
+  wordsPerPage: number;
+  minPages: number;
+  maxPages: number;
+  defaultPages: number;
+  defaultLevelSlug: string;
+  defaultDeadlineSlug: string;
+  useServicesFromCatalog: boolean;
+}
+
+export interface PublicCalculatorLevel {
+  id: string;
+  name: string;
+  slug: string;
+  displayOrder: number;
+  isActive: boolean;
+}
+
+export interface PublicCalculatorDeadline {
+  id: string;
+  label: string;
+  slug: string;
+  hours: number;
+  displayOrder: number;
+  isActive: boolean;
+}
+
+export interface PublicCalculatorPaperType {
+  id: string;
+  name: string;
+  slug: string;
+  multiplier: number;
+  displayOrder: number;
+  isActive: boolean;
+}
+
+export interface PublicCalculatorRate {
+  id: string;
+  levelId: string;
+  deadlineId: string;
+  pricePerPage: number;
+}
+
+export interface PublicCalculatorServiceItem {
+  id: string;
+  title: string;
+  slug: string;
+  shortDescription?: string | null;
+  icon?: string | null;
+}
+
+export interface PublicCalculatorResponse {
+  config: PublicCalculatorConfig;
+  levels: PublicCalculatorLevel[];
+  deadlines: PublicCalculatorDeadline[];
+  paperTypes: PublicCalculatorPaperType[];
+  services: PublicCalculatorServiceItem[];
+  rates: PublicCalculatorRate[];
+}
+
+/**
+ * Fetch public order pricing calculator data
+ */
+export async function getPublicCalculator(
+  options?: RequestOptions,
+): Promise<PublicCalculatorResponse> {
+  return apiClient<PublicCalculatorResponse>('/calculator/public', options);
+}
+

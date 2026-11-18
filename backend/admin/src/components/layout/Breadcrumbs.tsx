@@ -889,6 +889,30 @@ export function Breadcrumbs() {
     );
   }
 
+  // /calculator -> Admin Panel > Order Pricing & Calculator
+  if (pathname === "/calculator") {
+    return (
+      <nav aria-label="Breadcrumbs" className="flex items-center text-xs sm:text-sm">
+        <ol className="flex items-center space-x-1.5 sm:space-x-2">
+          <li>
+            <Link
+              href="/"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Admin Panel
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li aria-current="page">
+            <span className="text-white font-semibold">Order Pricing &amp; Calculator</span>
+          </li>
+        </ol>
+      </nav>
+    );
+  }
+
   // Fallback to default
   const currentItem =
     NAVIGATION_ITEMS.find((item) =>

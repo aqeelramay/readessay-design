@@ -9,6 +9,7 @@ import {
   FileText,
   File,
   Users,
+  Calculator,
 } from "lucide-react";
 
 export type ModuleAccent =
@@ -150,6 +151,17 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     action: "Manage Order Queue",
     accent: "rose",
     icon: ClipboardList,
+  },
+  {
+    id: "calculator",
+    label: "Order Pricing",
+    href: "/calculator",
+    badge: "Matrix & Flow",
+    description:
+      "Manage per-page rates, academic levels, deadlines & hero calculator flow.",
+    action: "Manage Pricing",
+    accent: "orange",
+    icon: Calculator,
   },
   {
     id: "blog",

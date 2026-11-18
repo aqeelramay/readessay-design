@@ -9,6 +9,7 @@ import {
   PublicBlogCategory,
   PublicBlogPost,
   PublicBlogPostsResponse,
+  PublicCalculatorResponse,
   getPublicServiceTree,
   getPublicServiceBySlug,
   getPublicSubService,
@@ -18,6 +19,7 @@ import {
   getPublicBlogCategoryBySlug,
   getPublicBlogPosts,
   getPublicBlogPostBySlug,
+  getPublicCalculator,
 } from './public-api';
 
 export const DEFAULT_FAQS: PublicFaqItem[] = [
@@ -2292,3 +2294,131 @@ export async function fetchPublicBlogPostBySlug(
   const found = DEFAULT_BLOG_POSTS.find((p) => p.slug === slug);
   return found || null;
 }
+
+// ============================================================================
+// Order Pricing & Calculator Fallback Dataset
+// ============================================================================
+
+export const DEFAULT_CALCULATOR_DATA: PublicCalculatorResponse = {
+  config: {
+    id: 'default',
+    widgetTitle: 'Calculate Order Price',
+    widgetSubtitle: 'Instant estimate tailored to your exact academic needs',
+    badgeText: 'PRICE CALCULATOR',
+    ctaButtonText: 'Continue with Order',
+    currencySymbol: '$',
+    wordsPerPage: 275,
+    minPages: 1,
+    maxPages: 200,
+    defaultPages: 2,
+    defaultLevelSlug: 'undergraduate',
+    defaultDeadlineSlug: '6-days',
+    useServicesFromCatalog: true,
+  },
+  levels: [
+    { id: 'lvl-hs', name: 'High School', slug: 'high-school', displayOrder: 1, isActive: true },
+    { id: 'lvl-col', name: 'College', slug: 'college', displayOrder: 2, isActive: true },
+    { id: 'lvl-ug', name: 'Undergraduate', slug: 'undergraduate', displayOrder: 3, isActive: true },
+    { id: 'lvl-ms', name: 'Master', slug: 'master', displayOrder: 4, isActive: true },
+    { id: 'lvl-phd', name: 'PhD', slug: 'phd', displayOrder: 5, isActive: true },
+  ],
+  deadlines: [
+    { id: 'dl-3h', label: '3 hrs', slug: '3-hrs', hours: 3, displayOrder: 1, isActive: true },
+    { id: 'dl-12h', label: '12 hrs', slug: '12-hrs', hours: 12, displayOrder: 2, isActive: true },
+    { id: 'dl-24h', label: '24 hrs', slug: '24-hrs', hours: 24, displayOrder: 3, isActive: true },
+    { id: 'dl-48h', label: '48 hrs', slug: '48-hrs', hours: 48, displayOrder: 4, isActive: true },
+    { id: 'dl-3d', label: '3 days', slug: '3-days', hours: 72, displayOrder: 5, isActive: true },
+    { id: 'dl-4d', label: '4 days', slug: '4-days', hours: 96, displayOrder: 6, isActive: true },
+    { id: 'dl-6d', label: '6 days', slug: '6-days', hours: 144, displayOrder: 7, isActive: true },
+    { id: 'dl-10d', label: '10 days', slug: '10-days', hours: 240, displayOrder: 8, isActive: true },
+    { id: 'dl-20d', label: '20 days', slug: '20-days', hours: 480, displayOrder: 9, isActive: true },
+  ],
+  paperTypes: [
+    { id: 'pt-1', name: 'Essay', slug: 'essay', multiplier: 1.0, displayOrder: 1, isActive: true },
+    { id: 'pt-2', name: 'Term Paper', slug: 'term-paper', multiplier: 1.0, displayOrder: 2, isActive: true },
+    { id: 'pt-3', name: 'Research Paper', slug: 'research-paper', multiplier: 1.05, displayOrder: 3, isActive: true },
+    { id: 'pt-4', name: 'Coursework', slug: 'coursework', multiplier: 1.0, displayOrder: 4, isActive: true },
+    { id: 'pt-5', name: 'Case Study', slug: 'case-study', multiplier: 1.1, displayOrder: 5, isActive: true },
+    { id: 'pt-6', name: 'Dissertation', slug: 'dissertation', multiplier: 1.3, displayOrder: 6, isActive: true },
+    { id: 'pt-7', name: 'Thesis', slug: 'thesis', multiplier: 1.25, displayOrder: 7, isActive: true },
+  ],
+  services: [
+    { id: 'svc-1', title: 'Essay Writing', slug: 'essay-writing' },
+    { id: 'svc-2', title: 'Assignment Help', slug: 'assignment-help' },
+    { id: 'svc-3', title: 'Dissertation Help', slug: 'dissertation-help' },
+    { id: 'svc-4', title: 'Coursework Help', slug: 'coursework-help' },
+    { id: 'svc-5', title: 'Research Paper Help', slug: 'research-paper-help' },
+    { id: 'svc-6', title: 'Thesis Writing Help', slug: 'thesis-writing-help' },
+  ],
+  rates: [
+    // High School
+    { id: 'r-1', levelId: 'lvl-hs', deadlineId: 'dl-3h', pricePerPage: 15.99 },
+    { id: 'r-2', levelId: 'lvl-hs', deadlineId: 'dl-12h', pricePerPage: 14.99 },
+    { id: 'r-3', levelId: 'lvl-hs', deadlineId: 'dl-24h', pricePerPage: 13.99 },
+    { id: 'r-4', levelId: 'lvl-hs', deadlineId: 'dl-48h', pricePerPage: 12.99 },
+    { id: 'r-5', levelId: 'lvl-hs', deadlineId: 'dl-3d', pricePerPage: 11.99 },
+    { id: 'r-6', levelId: 'lvl-hs', deadlineId: 'dl-4d', pricePerPage: 10.99 },
+    { id: 'r-7', levelId: 'lvl-hs', deadlineId: 'dl-6d', pricePerPage: 9.99 },
+    { id: 'r-8', levelId: 'lvl-hs', deadlineId: 'dl-10d', pricePerPage: 7.99 },
+    { id: 'r-9', levelId: 'lvl-hs', deadlineId: 'dl-20d', pricePerPage: 5.99 },
+    // College (High School x 1.25)
+    { id: 'r-10', levelId: 'lvl-col', deadlineId: 'dl-3h', pricePerPage: 19.99 },
+    { id: 'r-11', levelId: 'lvl-col', deadlineId: 'dl-12h', pricePerPage: 18.74 },
+    { id: 'r-12', levelId: 'lvl-col', deadlineId: 'dl-24h', pricePerPage: 17.49 },
+    { id: 'r-13', levelId: 'lvl-col', deadlineId: 'dl-48h', pricePerPage: 16.24 },
+    { id: 'r-14', levelId: 'lvl-col', deadlineId: 'dl-3d', pricePerPage: 14.99 },
+    { id: 'r-15', levelId: 'lvl-col', deadlineId: 'dl-4d', pricePerPage: 13.74 },
+    { id: 'r-16', levelId: 'lvl-col', deadlineId: 'dl-6d', pricePerPage: 12.49 },
+    { id: 'r-17', levelId: 'lvl-col', deadlineId: 'dl-10d', pricePerPage: 9.99 },
+    { id: 'r-18', levelId: 'lvl-col', deadlineId: 'dl-20d', pricePerPage: 7.49 },
+    // Undergraduate (College x 1.25)
+    { id: 'r-19', levelId: 'lvl-ug', deadlineId: 'dl-3h', pricePerPage: 24.98 },
+    { id: 'r-20', levelId: 'lvl-ug', deadlineId: 'dl-12h', pricePerPage: 23.42 },
+    { id: 'r-21', levelId: 'lvl-ug', deadlineId: 'dl-24h', pricePerPage: 21.86 },
+    { id: 'r-22', levelId: 'lvl-ug', deadlineId: 'dl-48h', pricePerPage: 20.30 },
+    { id: 'r-23', levelId: 'lvl-ug', deadlineId: 'dl-3d', pricePerPage: 18.73 },
+    { id: 'r-24', levelId: 'lvl-ug', deadlineId: 'dl-4d', pricePerPage: 17.17 },
+    { id: 'r-25', levelId: 'lvl-ug', deadlineId: 'dl-6d', pricePerPage: 15.61 },
+    { id: 'r-26', levelId: 'lvl-ug', deadlineId: 'dl-10d', pricePerPage: 12.48 },
+    { id: 'r-27', levelId: 'lvl-ug', deadlineId: 'dl-20d', pricePerPage: 9.36 },
+    // Master (Undergraduate x 1.25)
+    { id: 'r-28', levelId: 'lvl-ms', deadlineId: 'dl-3h', pricePerPage: 31.23 },
+    { id: 'r-29', levelId: 'lvl-ms', deadlineId: 'dl-12h', pricePerPage: 29.28 },
+    { id: 'r-30', levelId: 'lvl-ms', deadlineId: 'dl-24h', pricePerPage: 27.32 },
+    { id: 'r-31', levelId: 'lvl-ms', deadlineId: 'dl-48h', pricePerPage: 25.37 },
+    { id: 'r-32', levelId: 'lvl-ms', deadlineId: 'dl-3d', pricePerPage: 23.42 },
+    { id: 'r-33', levelId: 'lvl-ms', deadlineId: 'dl-4d', pricePerPage: 21.46 },
+    { id: 'r-34', levelId: 'lvl-ms', deadlineId: 'dl-6d', pricePerPage: 19.51 },
+    { id: 'r-35', levelId: 'lvl-ms', deadlineId: 'dl-10d', pricePerPage: 15.61 },
+    { id: 'r-36', levelId: 'lvl-ms', deadlineId: 'dl-20d', pricePerPage: 11.70 },
+    // PhD (Master x 1.25)
+    { id: 'r-37', levelId: 'lvl-phd', deadlineId: 'dl-3h', pricePerPage: 39.04 },
+    { id: 'r-38', levelId: 'lvl-phd', deadlineId: 'dl-12h', pricePerPage: 36.60 },
+    { id: 'r-39', levelId: 'lvl-phd', deadlineId: 'dl-24h', pricePerPage: 34.16 },
+    { id: 'r-40', levelId: 'lvl-phd', deadlineId: 'dl-48h', pricePerPage: 31.71 },
+    { id: 'r-41', levelId: 'lvl-phd', deadlineId: 'dl-3d', pricePerPage: 29.27 },
+    { id: 'r-42', levelId: 'lvl-phd', deadlineId: 'dl-4d', pricePerPage: 26.83 },
+    { id: 'r-43', levelId: 'lvl-phd', deadlineId: 'dl-6d', pricePerPage: 24.39 },
+    { id: 'r-44', levelId: 'lvl-phd', deadlineId: 'dl-10d', pricePerPage: 19.51 },
+    { id: 'r-45', levelId: 'lvl-phd', deadlineId: 'dl-20d', pricePerPage: 14.62 },
+  ],
+};
+
+/**
+ * Server Component fetcher for Order Pricing & Calculator with ISR caching & offline fallback.
+ */
+export async function fetchPublicCalculator(): Promise<PublicCalculatorResponse> {
+  try {
+    const res = await getPublicCalculator({
+      next: { revalidate: 60 },
+    });
+    if (res && res.config && Array.isArray(res.levels) && res.levels.length > 0) {
+      return res;
+    }
+  } catch {
+    // Graceful fallback to default matrix
+  }
+
+  return DEFAULT_CALCULATOR_DATA;
+}
+
