@@ -1,7 +1,12 @@
 import { NAVIGATION_ITEMS } from "@/config/navigation";
 import { ModuleCard } from "./ModuleCard";
+import type { DashboardStatsResponse } from "@/lib/api";
 
-export function ModuleGrid() {
+interface ModuleGridProps {
+  stats?: DashboardStatsResponse | null;
+}
+
+export function ModuleGrid({ stats }: ModuleGridProps) {
   return (
     <section aria-label="Management Modules">
       {/* Header Row */}
@@ -16,10 +21,10 @@ export function ModuleGrid() {
         </div>
       </div>
 
-      {/* Grid of 9 Cards */}
+      {/* Grid of Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {NAVIGATION_ITEMS.map((item) => (
-          <ModuleCard key={item.id} item={item} />
+          <ModuleCard key={item.id} item={item} stats={stats} />
         ))}
       </div>
     </section>

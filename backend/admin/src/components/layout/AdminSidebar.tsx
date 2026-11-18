@@ -10,7 +10,8 @@ import {
   X,
 } from "lucide-react";
 import { BrandLogo } from "@/components/brand/BrandLogo";
-import { NAVIGATION_ITEMS } from "@/config/navigation";
+import { NAVIGATION_ITEMS, resolveNavigationBadge } from "@/config/navigation";
+import { getDashboardStats, type DashboardStatsResponse } from "@/lib/api";
 
 interface AdminSidebarProps {
   isCollapsed: boolean;
@@ -26,6 +27,24 @@ export function AdminSidebar({
   onCloseMobile,
 }: AdminSidebarProps) {
   const pathname = usePathname();
+
+  // Live dashboard counts for navigation badges
+  const [stats, setStats] = useState<DashboardStatsResponse | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    getDashboardStats()
+      .then((data) => {
+        if (isMounted) setStats(data);
+      })
+      .catch(() => {
+        // Silently preserve static fallbacks on auth error or offline
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Manage dropdown expansion overrides for items with children (defaults to expanded when pathname starts with item href)
   const [dropdownOverrides, setDropdownOverrides] = useState<Record<string, boolean>>({});
@@ -124,6 +143,7 @@ export function AdminSidebar({
             const Icon = item.icon;
             const active = isItemActive(item.href);
             const children = item.children;
+            const badgeText = resolveNavigationBadge(item, stats);
 
             // In Collapsed Mode: Render simple icon link
             if (isCollapsed) {
@@ -131,7 +151,7 @@ export function AdminSidebar({
                 <Link
                   key={item.id}
                   href={item.href}
-                  title={item.label}
+                  title={`${item.label}${badgeText ? ` (${badgeText})` : ""}`}
                   className={`group flex items-center justify-center px-0 py-2.5 text-xs transition-colors rounded-lg ${
                     active
                       ? "bg-orange text-white font-medium shadow-xs"
@@ -179,25 +199,38 @@ export function AdminSidebar({
                       </span>
                     </Link>
 
-                    <button
-                      type="button"
-                      aria-label={
-                        isOpen
-                          ? `Collapse ${item.label} menu`
-                          : `Expand ${item.label} menu`
-                      }
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toggleDropdown(item.id, item.href);
-                      }}
-                      className="p-1 rounded text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
-                    >
-                      <ChevronDown
-                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                          isOpen ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
+                    <div className="flex items-center gap-1.5 shrink-0 ml-1.5">
+                      {badgeText && (
+                        <span
+                          className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${
+                            active
+                              ? "bg-white/20 text-white"
+                              : "bg-white/5 text-slate-300 border border-white/10"
+                          }`}
+                        >
+                          {badgeText}
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        aria-label={
+                          isOpen
+                            ? `Collapse ${item.label} menu`
+                            : `Expand ${item.label} menu`
+                        }
+                        onClick={(e) => {
+                          e.preventDefault();
+                          toggleDropdown(item.id, item.href);
+                        }}
+                        className="p-1 rounded text-slate-400 hover:text-white hover:bg-white/10 transition-colors"
+                      >
+                        <ChevronDown
+                          className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                            isOpen ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+                    </div>
                   </div>
 
                   {/* Dropdown Children */}
@@ -235,23 +268,36 @@ export function AdminSidebar({
               <Link
                 key={item.id}
                 href={item.href}
-                className={`group flex items-center gap-3 px-3 py-2.5 text-xs transition-colors rounded-lg ${
+                className={`group flex items-center justify-between px-3 py-2.5 text-xs transition-colors rounded-lg ${
                   active
                     ? "bg-orange text-white font-medium shadow-xs"
                     : "text-slate-300 hover:bg-navy-hover hover:text-white"
                 }`}
               >
-                <Icon
-                  aria-hidden="true"
-                  className={`w-4 h-4 shrink-0 transition-transform ${
-                    active
-                      ? "text-white"
-                      : "text-slate-400 group-hover:text-white"
-                  }`}
-                />
-                <span className="truncate flex-1 tracking-tight">
-                  {item.label}
-                </span>
+                <div className="flex items-center gap-3 min-w-0 flex-1">
+                  <Icon
+                    aria-hidden="true"
+                    className={`w-4 h-4 shrink-0 transition-transform ${
+                      active
+                        ? "text-white"
+                        : "text-slate-400 group-hover:text-white"
+                    }`}
+                  />
+                  <span className="truncate tracking-tight">
+                    {item.label}
+                  </span>
+                </div>
+                {badgeText && (
+                  <span
+                    className={`text-[10px] px-1.5 py-0.5 rounded font-medium shrink-0 ml-1.5 ${
+                      active
+                        ? "bg-white/20 text-white"
+                        : "bg-white/5 text-slate-300 border border-white/10"
+                    }`}
+                  >
+                    {badgeText}
+                  </span>
+                )}
               </Link>
             );
           })}
@@ -324,6 +370,7 @@ export function AdminSidebar({
                 const Icon = item.icon;
                 const active = isItemActive(item.href);
                 const children = item.children;
+                const badgeText = resolveNavigationBadge(item, stats);
 
                 if (children && children.length > 0) {
                   const isOpen = isDropdownOpen(item.id, item.href);
@@ -346,22 +393,35 @@ export function AdminSidebar({
                             {item.label}
                           </span>
                         </Link>
-                        <button
-                          type="button"
-                          aria-label={
-                            isOpen
-                              ? `Collapse ${item.label} menu`
-                              : `Expand ${item.label} menu`
-                          }
-                          onClick={() => toggleDropdown(item.id, item.href)}
-                          className="p-1 text-slate-300 hover:text-white"
-                        >
-                          <ChevronDown
-                            className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                              isOpen ? "rotate-180" : ""
-                            }`}
-                          />
-                        </button>
+                        <div className="flex items-center gap-1.5">
+                          {badgeText && (
+                            <span
+                              className={`text-[10px] px-1.5 py-0.5 rounded ${
+                                active
+                                  ? "bg-white/20 text-white"
+                                  : "bg-white/5 text-slate-400 border border-white/10"
+                              }`}
+                            >
+                              {badgeText}
+                            </span>
+                          )}
+                          <button
+                            type="button"
+                            aria-label={
+                              isOpen
+                                ? `Collapse ${item.label} menu`
+                                : `Expand ${item.label} menu`
+                            }
+                            onClick={() => toggleDropdown(item.id, item.href)}
+                            className="p-1 text-slate-300 hover:text-white"
+                          >
+                            <ChevronDown
+                              className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                                isOpen ? "rotate-180" : ""
+                              }`}
+                            />
+                          </button>
+                        </div>
                       </div>
 
                       {/* Sub-items in mobile */}
@@ -410,15 +470,17 @@ export function AdminSidebar({
                       <Icon className="w-4 h-4 shrink-0" />
                       <span className="truncate font-medium">{item.label}</span>
                     </div>
-                    <span
-                      className={`text-[10px] px-1.5 py-0.5 rounded ${
-                        active
-                          ? "bg-white/20 text-white"
-                          : "bg-white/5 text-slate-400 border border-white/10"
-                      }`}
-                    >
-                      {item.badge}
-                    </span>
+                    {badgeText && (
+                      <span
+                        className={`text-[10px] px-1.5 py-0.5 rounded ${
+                          active
+                            ? "bg-white/20 text-white"
+                            : "bg-white/5 text-slate-400 border border-white/10"
+                        }`}
+                      >
+                        {badgeText}
+                      </span>
+                    )}
                   </Link>
                 );
               })}

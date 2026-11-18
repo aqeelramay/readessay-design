@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { WelcomePanel } from "@/components/dashboard/WelcomePanel";
-import { ModuleGrid } from "@/components/dashboard/ModuleGrid";
+import { DashboardOverview } from "@/components/dashboard/DashboardOverview";
 
 export const metadata: Metadata = {
   title: "Dashboard — ReadEssay Admin",
@@ -9,10 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default function DashboardPage() {
-  return (
-    <div className="space-y-8">
-      <WelcomePanel />
-      <ModuleGrid />
-    </div>
-  );
+  return <DashboardOverview />;
 }
+

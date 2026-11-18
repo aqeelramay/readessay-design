@@ -1,16 +1,22 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { ACCENT_STYLES, type NavigationItem } from "@/config/navigation";
-
+import {
+  ACCENT_STYLES,
+  resolveNavigationBadge,
+  type NavigationItem,
+} from "@/config/navigation";
+import type { DashboardStatsResponse } from "@/lib/api";
 
 interface ModuleCardProps {
   item: NavigationItem;
+  stats?: DashboardStatsResponse | null;
 }
 
-export function ModuleCard({ item }: ModuleCardProps) {
+export function ModuleCard({ item, stats }: ModuleCardProps) {
   const styles = ACCENT_STYLES[item.accent] ?? ACCENT_STYLES.orange;
   const Icon = item.icon;
   const isDashboard = item.id === "dashboard";
+  const badgeText = resolveNavigationBadge(item, stats);
 
   return (
     <Link
@@ -25,7 +31,13 @@ export function ModuleCard({ item }: ModuleCardProps) {
           >
             <Icon className="w-5 h-5" aria-hidden="true" />
           </div>
-
+          {badgeText && (
+            <span
+              className={`text-xs px-2.5 py-1 rounded-full font-semibold border ${styles.badgeBg} ${styles.badgeText} ${styles.badgeBorder}`}
+            >
+              {badgeText}
+            </span>
+          )}
         </div>
 
         {/* Content row: Title & description */}

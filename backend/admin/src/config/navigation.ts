@@ -11,6 +11,7 @@ import {
   Users,
   Calculator,
 } from "lucide-react";
+import type { DashboardStatsResponse } from "@/lib/dashboard-api";
 
 export type ModuleAccent =
   | "orange"
@@ -33,13 +34,39 @@ export interface NavigationItem {
   id: string;
   label: string;
   href: string;
-  // Mock placeholder metadata for UI shell stage — replace with NestJS API data later
-  badge: string;
+  badge?: string;
   description: string;
   action: string;
   accent: ModuleAccent;
   icon: LucideIcon;
   children?: readonly NavigationChildItem[];
+}
+
+/**
+ * Resolves live badge strings from PostgreSQL dashboard stats.
+ * Falls back cleanly to item.badge or empty when stats are loading.
+ */
+export function resolveNavigationBadge(
+  item: NavigationItem,
+  stats?: DashboardStatsResponse | null
+): string | undefined {
+  if (!stats) return item.badge;
+  switch (item.id) {
+    case "services":
+      return `${stats.services.totalServices} Services`;
+    case "reviews":
+      return stats.reviews.averageRating > 0
+        ? `${stats.reviews.averageRating} ★ (${stats.reviews.totalReviews})`
+        : `${stats.reviews.totalReviews} Reviews`;
+    case "samples":
+      return `${stats.samples.totalSamples} Exemplars`;
+    case "blog":
+      return `${stats.blog.totalPosts} Articles`;
+    case "calculator":
+      return `${stats.calculator.totalRateCells} Rates`;
+    default:
+      return item.badge;
+  }
 }
 
 /**
@@ -60,8 +87,7 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     id: "dashboard",
     label: "Dashboard",
     href: "/",
-    // Mock placeholder metadata for UI shell stage — replace with NestJS API data later
-    badge: "Current",
+    badge: "Overview",
     description:
       "Central administrative hub, operational overview, and workspace launchpad.",
     action: "Active Overview",
@@ -72,8 +98,7 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     id: "services",
     label: "Services",
     href: "/services",
-    // Mock placeholder metadata for UI shell stage — replace with NestJS API data later
-    badge: "6 Categories",
+    badge: "Services",
     description:
       "Manage academic writing service categories, sub-service hierarchies, and content.",
     action: "Configure Services",
@@ -96,8 +121,7 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     id: "reviews",
     label: "Reviews",
     href: "/reviews",
-    // Mock placeholder metadata for UI shell stage — replace with NestJS API data later
-    badge: "4.92 ★ (2.4k)",
+    badge: "Reviews",
     description:
       "Student testimonials, verified ratings, feedback moderation & client sentiment.",
     action: "Moderate Reviews",
@@ -108,8 +132,7 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     id: "samples",
     label: "Samples",
     href: "/samples",
-    // Mock placeholder metadata for UI shell stage — replace with NestJS API data later
-    badge: "128 Exemplars",
+    badge: "Exemplars",
     description:
       "Academic sample repository, plagiarism-checked exemplars & citations archive.",
     action: "Manage Repository",
@@ -132,8 +155,7 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     id: "top-experts",
     label: "Top Experts",
     href: "/top-experts",
-    // Mock placeholder metadata for UI shell stage — replace with NestJS API data later
-    badge: "42 PhD / MA",
+    badge: "Writers",
     description:
       "Vetted academic writers, credentials verification & workload balancing.",
     action: "View Writer Roster",
@@ -144,8 +166,7 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     id: "orders",
     label: "Orders",
     href: "/orders",
-    // Mock placeholder metadata for UI shell stage — replace with NestJS API data later
-    badge: "142 In Queue",
+    badge: "Queue",
     description:
       "Order fulfillment queue, customer briefs, deadlines & milestone tracking.",
     action: "Manage Order Queue",
@@ -156,7 +177,7 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     id: "calculator",
     label: "Order Pricing",
     href: "/calculator",
-    badge: "Matrix & Flow",
+    badge: "Rates",
     description:
       "Manage per-page rates, academic levels, deadlines & hero calculator flow.",
     action: "Manage Pricing",
@@ -190,8 +211,7 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     id: "pages",
     label: "Pages",
     href: "/pages",
-    // Mock placeholder metadata for UI shell stage — replace with NestJS API data later
-    badge: "22 Static Pages",
+    badge: "Static",
     description:
       "Static site page builder, policy documents, terms of service & SEO metadata.",
     action: "Edit Site Pages",
@@ -202,8 +222,7 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
     id: "users",
     label: "Users",
     href: "/users",
-    // Mock placeholder metadata for UI shell stage — replace with NestJS API data later
-    badge: "8,430 Users",
+    badge: "Users",
     description:
       "Client accounts, staff permissions, writer roles & RBAC access control.",
     action: "Manage Users & Roles",

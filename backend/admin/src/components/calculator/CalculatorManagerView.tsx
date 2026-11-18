@@ -18,11 +18,7 @@ import {
   FileSpreadsheet,
   Layers,
   ArrowRight,
-  ExternalLink,
   Info,
-  DollarSign,
-  Check,
-  X,
 } from "lucide-react";
 import {
   getAdminCalculatorData,
@@ -42,7 +38,6 @@ import {
   type CalculatorLevel,
   type CalculatorDeadline,
   type CalculatorPaperType,
-  type CalculatorRate,
 } from "@/lib/api";
 
 type ActiveTab = "matrix" | "flow" | "settings";
@@ -142,7 +137,53 @@ export function CalculatorManagerView() {
   };
 
   useEffect(() => {
-    loadData();
+    let isMounted = true;
+    getAdminCalculatorData()
+      .then((res) => {
+        if (!isMounted) return;
+        setData(res);
+        setConfigDraft(res.config);
+
+        const drafts: Record<string, number> = {};
+        res.rates.forEach((r) => {
+          drafts[`${r.levelId}_${r.deadlineId}`] = r.pricePerPage;
+        });
+        setRateDrafts(drafts);
+
+        if (res.config.defaultLevelSlug) {
+          setPreviewLevelSlug(res.config.defaultLevelSlug);
+        } else if (res.levels.length > 0) {
+          setPreviewLevelSlug(res.levels[0].slug);
+        }
+
+        if (res.config.defaultDeadlineSlug) {
+          setPreviewDeadlineSlug(res.config.defaultDeadlineSlug);
+        } else if (res.deadlines.length > 0) {
+          setPreviewDeadlineSlug(res.deadlines[0].slug);
+        }
+
+        if (res.services.length > 0) {
+          setPreviewServiceSlug(res.services[0].slug);
+        } else if (res.paperTypes.length > 0) {
+          setPreviewServiceSlug(res.paperTypes[0].slug);
+        }
+
+        if (res.config.defaultPages) {
+          setPreviewPages(res.config.defaultPages);
+        }
+        setIsLoading(false);
+      })
+      .catch((err: unknown) => {
+        if (!isMounted) return;
+        const msg = err instanceof Error ? err.message : "Failed to load calculator data";
+        setLoadError(msg);
+        showError(msg);
+        setIsLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Check if rate drafts differ from saved data
