@@ -2823,7 +2823,7 @@ export const DEFAULT_CALCULATOR_DATA: PublicCalculatorResponse = {
     wordsPerPage: 275,
     minPages: 1,
     maxPages: 200,
-    defaultPages: 2,
+    defaultPages: 1,
     defaultLevelSlug: 'undergraduate',
     defaultDeadlineSlug: '6-days',
     useServicesFromCatalog: true,

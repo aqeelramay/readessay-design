@@ -49,9 +49,9 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
       serviceSlug: serviceParam,
       academicLevel: levelParam || 'undergraduate',
       deadline: deadlineParam ? `${deadlineParam.replace(/-/g, ' ')}` : '',
-      wordCount: wordsParam ? `${wordsParam} words (${pagesParam} pages)` : '',
+      wordCount: wordsParam ? `${wordsParam} words (${pagesParam} ${pagesParam === '1' ? 'page' : 'pages'})` : '',
       message: estimateParam
-        ? `Order inquiry from price calculator: ${pagesParam} pages (${wordsParam} words), estimated at $${estimateParam} USD with ${deadlineParam.replace(/-/g, ' ')} turnaround.`
+        ? `Order inquiry from price calculator: ${pagesParam} ${pagesParam === '1' ? 'page' : 'pages'} (${wordsParam} words), estimated at $${estimateParam} USD with ${deadlineParam.replace(/-/g, ' ')} turnaround.`
         : '',
     };
   });
@@ -98,7 +98,7 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
     `• Academic Level: ${formData.academicLevel}\n` +
     `• Target Deadline: ${formData.deadline || 'Not specified'}\n` +
     `• Target Word Count: ${formData.wordCount || 'Not specified'}\n` +
-    (orderEstimate ? `• Calculator Estimate: $${orderEstimate.estimate} USD (${orderEstimate.pages} pages / ${orderEstimate.words} words)\n` : '') +
+    (orderEstimate ? `• Calculator Estimate: $${orderEstimate.estimate} USD (${orderEstimate.pages} ${orderEstimate.pages === '1' ? 'page' : 'pages'} / ${orderEstimate.words} words)\n` : '') +
     `• Phone/WhatsApp: ${formData.phone || 'Not specified'}\n` +
     `• Email: ${formData.email || 'Not specified'}\n\n` +
     `*Brief / Notes:*\n${formData.message || 'I would like to inquire about assignment help.'}`,
@@ -196,7 +196,7 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
               <span>Calculator Order Estimate Applied</span>
             </div>
             <p className="text-xs text-slate-600">
-              Configured for <strong className="text-[#243445]">{orderEstimate.pages} pages</strong> ({orderEstimate.words} words) &bull; Turnaround: <strong className="text-[#243445]">{orderEstimate.deadline.replace(/-/g, ' ')}</strong>
+              Configured for <strong className="text-[#243445]">{orderEstimate.pages} {orderEstimate.pages === '1' ? 'page' : 'pages'}</strong> ({orderEstimate.words} words) &bull; Turnaround: <strong className="text-[#243445]">{orderEstimate.deadline.replace(/-/g, ' ')}</strong>
             </p>
           </div>
           <div className="text-left sm:text-right shrink-0">

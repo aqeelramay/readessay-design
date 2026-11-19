@@ -77,7 +77,7 @@ export function CalculatorManagerView() {
   const [previewLevelSlug, setPreviewLevelSlug] = useState<string>("");
   const [previewServiceSlug, setPreviewServiceSlug] = useState<string>("");
   const [previewDeadlineSlug, setPreviewDeadlineSlug] = useState<string>("");
-  const [previewPages, setPreviewPages] = useState<number>(2);
+  const [previewPages, setPreviewPages] = useState<number>(1);
 
   function showToast(msg: string) {
     setToastMessage(msg);

@@ -88,7 +88,13 @@ export function PriceCalculatorWidget({
     return sortedDeadlines[6]?.slug || sortedDeadlines[0]?.slug || '6-days';
   });
 
-  const [pages, setPages] = useState<number>(() => config.defaultPages || 2);
+  const [pages, setPages] = useState<number>(() => {
+    if (typeof config.defaultPages === 'number' && config.defaultPages > 0) {
+      // Honor config.defaultPages unless it matches the legacy fallback of 2
+      return config.defaultPages === 2 ? 1 : Math.max(config.minPages || 1, config.defaultPages);
+    }
+    return 1;
+  });
 
   // Dynamic calculation
   const calculation = useMemo(() => {

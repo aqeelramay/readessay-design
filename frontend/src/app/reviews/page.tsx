@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ReviewsPage() {
-  const [{ reviews, stats }, calculatorData] = await Promise.all([
+  const [{ reviews }, calculatorData] = await Promise.all([
     fetchAllPublicReviews(),
     fetchPublicCalculator(),
   ]);
