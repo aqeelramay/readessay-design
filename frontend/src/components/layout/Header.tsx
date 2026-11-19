@@ -129,7 +129,7 @@ export default function Header({ serviceTree }: HeaderProps) {
               className="flex items-center gap-3 py-1"
               aria-label="ReadEssay Home"
             >
-              <div className="relative w-44 sm:w-48 h-14">
+              <div className="relative w-44 sm:w-48 h-20">
                 <Image
                   src="/images/readessay-logo.png"
                   alt="ReadEssay Logo"
@@ -164,9 +164,8 @@ export default function Header({ serviceTree }: HeaderProps) {
                   {/* Mega-Menu or Dropdown */}
                   {hasSub && (
                     <div
-                      className={`absolute top-full ${
-                        isMega ? '-left-16 w-[480px] p-5' : 'left-0 w-64 p-3'
-                      } bg-white text-[#243445] rounded-2xl shadow-xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50`}
+                      className={`absolute top-full ${isMega ? '-left-16 w-[480px] p-5' : 'left-0 w-64 p-3'
+                        } bg-white text-[#243445] rounded-2xl shadow-xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50`}
                     >
                       <div className={isMega ? 'grid grid-cols-2 gap-2' : 'space-y-1'}>
                         {service.subServices!.map((sub) => {
@@ -278,9 +277,8 @@ export default function Header({ serviceTree }: HeaderProps) {
                           className="p-1.5 text-slate-400 hover:text-[#FF641A]"
                         >
                           <ChevronDown
-                            className={`w-4 h-4 transition-transform duration-200 ${
-                              isOpen ? 'rotate-180 text-[#FF641A]' : ''
-                            }`}
+                            className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#FF641A]' : ''
+                              }`}
                           />
                         </button>
                       )}

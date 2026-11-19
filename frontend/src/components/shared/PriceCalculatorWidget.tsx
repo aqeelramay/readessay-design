@@ -168,11 +168,10 @@ export function PriceCalculatorWidget({
                   key={lvl.id}
                   type="button"
                   onClick={() => setSelectedLevelSlug(lvl.slug)}
-                  className={`py-2 px-1 text-center rounded-xl text-xs font-semibold transition-all truncate ${
-                    isSelected
+                  className={`py-2 px-1 text-center rounded-xl text-xs font-semibold transition-all truncate ${isSelected
                       ? 'bg-[#FF641A] text-white shadow-md shadow-[#FF641A]/25'
                       : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                  }`}
+                    }`}
                   title={lvl.name}
                 >
                   {lvl.name}
