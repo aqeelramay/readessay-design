@@ -142,10 +142,12 @@ export default function Header({ serviceTree }: HeaderProps) {
               const subServices = service.subServices || [];
               const count = subServices.length;
               const hasSub = count > 0;
+              // 1-4 -> 1 col | 5-8 -> 2 cols | 9-12 -> 3 cols | 13+ -> 4 cols (max 4 columns)
               const columnCount = Math.min(4, Math.max(1, Math.ceil(count / 4)));
-              const itemsPerColumn = count <= 16 ? 4 : Math.ceil(count / 4);
+              // Always ceil(count / columnCount) so 26 items across 4 cols = 7 rows/col (7, 7, 7, 5)
+              const rowsPerColumn = Math.ceil(count / columnCount);
               const columns = Array.from({ length: columnCount }, (_, colIndex) =>
-                subServices.slice(colIndex * itemsPerColumn, (colIndex + 1) * itemsPerColumn)
+                subServices.slice(colIndex * rowsPerColumn, (colIndex + 1) * rowsPerColumn)
               );
 
               return (
