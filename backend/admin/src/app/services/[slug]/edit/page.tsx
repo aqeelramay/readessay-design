@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { MainServiceForm } from "@/components/services/MainServiceForm";
 
@@ -21,7 +22,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function EditServicePage({ params }: PageProps) {
+async function EditServiceContent({ params }: PageProps) {
   const { slug } = await params;
   return <MainServiceForm serviceIdOrSlug={slug} />;
+}
+
+export default function EditServicePage({ params }: PageProps) {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-8 text-center text-text-secondary text-xs">
+          Loading service editor...
+        </div>
+      }
+    >
+      <EditServiceContent params={params} />
+    </Suspense>
+  );
 }

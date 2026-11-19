@@ -16,9 +16,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function EditSampleItemPage({ params }: PageProps) {
+async function EditSampleItemContent({ params }: PageProps) {
   const { id } = await params;
+  return <SampleItemForm sampleId={id} />;
+}
 
+export default function EditSampleItemPage({ params }: PageProps) {
   return (
     <Suspense
       fallback={
@@ -27,7 +30,7 @@ export default async function EditSampleItemPage({ params }: PageProps) {
         </div>
       }
     >
-      <SampleItemForm sampleId={id} />
+      <EditSampleItemContent params={params} />
     </Suspense>
   );
 }

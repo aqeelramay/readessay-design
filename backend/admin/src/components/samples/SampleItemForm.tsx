@@ -28,6 +28,7 @@ import {
   type SampleSection,
   type SampleStatus,
 } from "@/lib/api";
+import { API_BASE_URL } from "@/config/api";
 
 interface SampleItemFormProps {
   sample?: AcademicSample;
@@ -242,6 +243,11 @@ export function SampleItemForm({ sample: initialSample, sampleId }: SampleItemFo
     setError(null);
     setConfirmation(null);
 
+    if (isUploading) {
+      setError("Please wait for file upload to complete before saving.");
+      return;
+    }
+
     if (!title.trim()) {
       setError("Please provide a sample title.");
       return;
@@ -271,7 +277,6 @@ export function SampleItemForm({ sample: initialSample, sampleId }: SampleItemFo
         fileType: documentFile.fileType,
         fileSize: documentFile.fileSize,
         fileUrl: documentFile.fileUrl,
-        documentFile,
         status,
         displayOrder,
       };
@@ -404,6 +409,7 @@ export function SampleItemForm({ sample: initialSample, sampleId }: SampleItemFo
           if (files && files.length > 0) {
             handleFileUpload(files[0]);
           }
+          e.target.value = "";
         }}
       />
 
@@ -607,7 +613,11 @@ export function SampleItemForm({ sample: initialSample, sampleId }: SampleItemFo
                 {/* Actions */}
                 <div className="flex items-center gap-2 shrink-0">
                   <a
-                    href={documentFile.fileUrl}
+                    href={
+                      documentFile.fileUrl.startsWith("http") || documentFile.fileUrl.startsWith("//")
+                        ? documentFile.fileUrl
+                        : `${API_BASE_URL.replace(/\/api\/v1\/?$/, "")}${documentFile.fileUrl.startsWith("/") ? "" : "/"}${documentFile.fileUrl}`
+                    }
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface text-text-secondary hover:text-navy text-xs font-semibold transition-colors"

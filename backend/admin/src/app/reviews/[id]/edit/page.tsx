@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { ReviewForm } from "@/components/reviews/ReviewForm";
 
@@ -15,9 +16,23 @@ export async function generateMetadata({
   };
 }
 
-export default async function EditReviewPage({ params }: PageProps) {
+async function EditReviewContent({ params }: PageProps) {
   const { id } = await params;
   return <ReviewForm reviewId={id} />;
+}
+
+export default function EditReviewPage({ params }: PageProps) {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-8 text-center text-text-secondary text-xs">
+          Loading review editor...
+        </div>
+      }
+    >
+      <EditReviewContent params={params} />
+    </Suspense>
+  );
 }
 
 

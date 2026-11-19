@@ -222,9 +222,26 @@ export async function getAcademicSampleById(id: string): Promise<AcademicSample>
 export async function createAcademicSample(
   payload: CreateAcademicSamplePayload,
 ): Promise<AcademicSample> {
+  const { documentFile, ...rest } = payload;
+  const body = {
+    ...rest,
+    ...(rest.fileName || documentFile?.fileName
+      ? { fileName: rest.fileName ?? documentFile?.fileName }
+      : {}),
+    ...(rest.fileType || documentFile?.fileType
+      ? { fileType: rest.fileType ?? documentFile?.fileType }
+      : {}),
+    ...(rest.fileSize || documentFile?.fileSize
+      ? { fileSize: rest.fileSize ?? documentFile?.fileSize }
+      : {}),
+    ...(rest.fileUrl || documentFile?.fileUrl
+      ? { fileUrl: rest.fileUrl ?? documentFile?.fileUrl }
+      : {}),
+  };
+
   return apiRequest<AcademicSample>('/samples/items', {
     method: 'POST',
-    body: JSON.stringify(payload),
+    body: JSON.stringify(body),
   });
 }
 
@@ -232,9 +249,26 @@ export async function updateAcademicSample(
   id: string,
   payload: UpdateAcademicSamplePayload,
 ): Promise<AcademicSample> {
+  const { documentFile, ...rest } = payload;
+  const body = {
+    ...rest,
+    ...(rest.fileName || documentFile?.fileName
+      ? { fileName: rest.fileName ?? documentFile?.fileName }
+      : {}),
+    ...(rest.fileType || documentFile?.fileType
+      ? { fileType: rest.fileType ?? documentFile?.fileType }
+      : {}),
+    ...(rest.fileSize || documentFile?.fileSize
+      ? { fileSize: rest.fileSize ?? documentFile?.fileSize }
+      : {}),
+    ...(rest.fileUrl || documentFile?.fileUrl
+      ? { fileUrl: rest.fileUrl ?? documentFile?.fileUrl }
+      : {}),
+  };
+
   return apiRequest<AcademicSample>(`/samples/items/${id}`, {
     method: 'PATCH',
-    body: JSON.stringify(payload),
+    body: JSON.stringify(body),
   });
 }
 

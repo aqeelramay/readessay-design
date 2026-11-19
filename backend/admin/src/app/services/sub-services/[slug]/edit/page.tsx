@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { SubServiceForm } from "@/components/services/SubServiceForm";
 
@@ -20,7 +21,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function EditSubServicePage({ params }: PageProps) {
+async function EditSubServiceContent({ params }: PageProps) {
   const { slug } = await params;
   return <SubServiceForm subServiceIdOrSlug={slug} />;
+}
+
+export default function EditSubServicePage({ params }: PageProps) {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-8 text-center text-text-secondary text-xs">
+          Loading sub-service editor...
+        </div>
+      }
+    >
+      <EditSubServiceContent params={params} />
+    </Suspense>
+  );
 }

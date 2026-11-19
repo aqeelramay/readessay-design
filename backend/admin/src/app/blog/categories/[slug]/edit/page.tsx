@@ -16,9 +16,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function EditBlogCategoryPage({ params }: PageProps) {
+async function EditBlogCategoryContent({ params }: PageProps) {
   const { slug } = await params;
+  return <BlogCategoryForm categorySlug={slug} />;
+}
 
+export default function EditBlogCategoryPage({ params }: PageProps) {
   return (
     <Suspense
       fallback={
@@ -27,7 +30,7 @@ export default async function EditBlogCategoryPage({ params }: PageProps) {
         </div>
       }
     >
-      <BlogCategoryForm categorySlug={slug} />
+      <EditBlogCategoryContent params={params} />
     </Suspense>
   );
 }

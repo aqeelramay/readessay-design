@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { PublicSampleSection, PublicAcademicSample } from '@/lib/public-api';
 import AppIcon from '@/components/shared/AppIcon';
+import { API_BASE_URL } from '@/config/api';
 
 interface SamplesDirectoryClientProps {
   sections: PublicSampleSection[];
@@ -336,7 +337,11 @@ export default function SamplesDirectoryClient({ sections }: SamplesDirectoryCli
               {/* 3-Column Card Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {section.samples.map((sample: PublicAcademicSample) => {
-                  const docUrl = sample.documentFile?.fileUrl || sample.fileUrl || '#';
+                  const rawDocUrl = sample.documentFile?.fileUrl || sample.fileUrl || '#';
+                  const docUrl =
+                    rawDocUrl.startsWith('http') || rawDocUrl.startsWith('#') || rawDocUrl.startsWith('//')
+                      ? rawDocUrl
+                      : `${API_BASE_URL.replace(/\/api\/v1\/?$/, '')}${rawDocUrl.startsWith('/') ? '' : '/'}${rawDocUrl}`;
                   const docFormat = (sample.documentFile?.fileType || sample.fileType || 'PDF').toUpperCase();
                   const docSize = sample.documentFile?.fileSize || sample.fileSize || '1.2 MB';
 

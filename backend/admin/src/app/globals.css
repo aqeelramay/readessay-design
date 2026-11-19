@@ -2,6 +2,8 @@
 
 :root {
   color-scheme: light;
+  --font-geist-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-geist-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   --color-navy: #243445;
   --color-navy-dark: #1D2B39;
   --color-navy-hover: #2E4257;

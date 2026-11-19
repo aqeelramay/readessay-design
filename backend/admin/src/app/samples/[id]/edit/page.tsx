@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { SampleSectionForm } from "@/components/samples/SampleSectionForm";
 
@@ -15,7 +16,21 @@ export async function generateMetadata({
   };
 }
 
-export default async function EditSampleSectionPage({ params }: PageProps) {
+async function EditSampleSectionContent({ params }: PageProps) {
   const { id } = await params;
   return <SampleSectionForm sectionId={id} />;
+}
+
+export default function EditSampleSectionPage({ params }: PageProps) {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-8 text-center text-text-secondary text-xs">
+          Loading section editor...
+        </div>
+      }
+    >
+      <EditSampleSectionContent params={params} />
+    </Suspense>
+  );
 }
