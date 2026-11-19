@@ -34,18 +34,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ReviewsPage() {
-  const [{ reviews, stats }, calculatorData] = await Promise.all([
+  const [{ reviews }, calculatorData] = await Promise.all([
     fetchAllPublicReviews(),
     fetchPublicCalculator(),
   ]);
-
-  const totalReviewsCount = stats.totalReviews || reviews.length;
-  const avgRatingFormatted = stats.averageRating ? stats.averageRating.toFixed(1) : '4.8';
-
-  // Compute percentage for 5-star and 4-star breakdown
-  const breakdown = stats.ratingBreakdown || { 5: reviews.length, 4: 0, 3: 0, 2: 0, 1: 0 };
-  const fiveStarPercent = totalReviewsCount > 0 ? Math.round(((breakdown[5] || 0) / totalReviewsCount) * 100) : 92;
-  const fourStarPercent = totalReviewsCount > 0 ? Math.round(((breakdown[4] || 0) / totalReviewsCount) * 100) : 8;
 
   return (
     <div className="w-full bg-[#f8f9ff]">

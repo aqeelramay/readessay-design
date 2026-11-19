@@ -224,36 +224,36 @@ export function SubServiceForm({
   );
   const [heroH1, setHeroH1] = useState(
     subService?.heroH1 ??
-      "Professional Accounting & Financial Reporting Assignment Help for University Students"
+    "Professional Accounting & Financial Reporting Assignment Help for University Students"
   );
   const [heroSummary, setHeroSummary] = useState(
     subService?.heroSummary ??
-      "Master complex balance sheets, ledger reconciliations, cash-flow statements, and IFRS/GAAP standards with step-by-step analytical breakdowns."
+    "Master complex balance sheets, ledger reconciliations, cash-flow statements, and IFRS/GAAP standards with step-by-step analytical breakdowns."
   );
 
   // Specialized Assistance & Video
   const [saTagline, setSaTagline] = useState(
     subService?.specializedAssistance?.tagline ??
-      "Methodological Rigor & Technical Precision"
+    "Methodological Rigor & Technical Precision"
   );
   const [saHeading, setSaHeading] = useState(
     subService?.specializedAssistance?.heading ??
-      "Specialized Accounting Assistance Built Upon Exact Institutional Rubrics"
+    "Specialized Accounting Assistance Built Upon Exact Institutional Rubrics"
   );
   const [saBodyParagraphs, setSaBodyParagraphs] = useState(
     subService?.specializedAssistance?.bodyParagraphs ??
-      "Navigating advanced university accounting coursework requires balancing conceptual standards with granular numerical accuracy. Our specialized accounting educators assist undergraduate and postgraduate scholars through complex financial statements, corporate taxation calculations, managerial cost allocations, and statutory auditing case studies.\n\nEvery assignment solution includes complete double-entry ledger trails, formula-annotated calculation tables, and contextual business analysis memos that explain the strategic implications behind every number."
+    "Navigating advanced university accounting coursework requires balancing conceptual standards with granular numerical accuracy. Our specialized accounting educators assist undergraduate and postgraduate scholars through complex financial statements, corporate taxation calculations, managerial cost allocations, and statutory auditing case studies.\n\nEvery assignment solution includes complete double-entry ledger trails, formula-annotated calculation tables, and contextual business analysis memos that explain the strategic implications behind every number."
   );
   const [saCtaLabel, setSaCtaLabel] = useState(
     subService?.specializedAssistance?.ctaLabel ?? "Explore Accounting Solutions"
   );
   const [saCtaUrl, setSaCtaUrl] = useState(
     subService?.specializedAssistance?.ctaUrl ??
-      "/assignment-help/accounting"
+    "/assignment-help/accounting"
   );
   const [saYoutubeUrl, setSaYoutubeUrl] = useState(
     subService?.specializedAssistance?.youtubeUrl ??
-      "https://www.youtube.com/embed/OaqUwnjm9Xo"
+    "https://www.youtube.com/embed/OaqUwnjm9Xo"
   );
 
   // Detailed Solutions (Repeatable Cards)
@@ -262,11 +262,11 @@ export function SubServiceForm({
   );
   const [dsHeading, setDsHeading] = useState(
     subService?.detailedSolutions?.heading ??
-      "Targeted Accounting Problem-Solving Across 5 Core Fields"
+    "Targeted Accounting Problem-Solving Across 5 Core Fields"
   );
   const [dsIntro, setDsIntro] = useState(
     subService?.detailedSolutions?.intro ??
-      "From entry-level journal vouchers to advanced corporate valuations, our specialists handle every accounting sub-discipline with verified calculation accuracy."
+    "From entry-level journal vouchers to advanced corporate valuations, our specialists handle every accounting sub-discipline with verified calculation accuracy."
   );
   const [dsCards, setDsCards] = useState<SolutionCard[]>(
     subService?.detailedSolutions?.cards ?? [
@@ -303,11 +303,11 @@ export function SubServiceForm({
   );
   const [afHeading, setAfHeading] = useState(
     subService?.academicFields?.heading ??
-      "Structured Accounting Guidance by Academic Level"
+    "Structured Accounting Guidance by Academic Level"
   );
   const [afIntro, setAfIntro] = useState(
     subService?.academicFields?.intro ??
-      "Our assistance adapts strictly to the expectations, marking criteria, and academic rigor demanded by each qualification tier."
+    "Our assistance adapts strictly to the expectations, marking criteria, and academic rigor demanded by each qualification tier."
   );
   const [afLevels, setAfLevels] = useState<AcademicLevel[]>(
     subService?.academicFields?.levels ?? [
@@ -344,11 +344,11 @@ export function SubServiceForm({
   );
   const [accHeading, setAccHeading] = useState(
     subService?.accountabilitySection?.heading ??
-      "Accountability, Quality Safeguards & Featured Accounting Specialists"
+    "Accountability, Quality Safeguards & Featured Accounting Specialists"
   );
   const [accIntro, setAccIntro] = useState(
     subService?.accountabilitySection?.intro ??
-      "Every deliverable is scrutinized against rigorous accuracy protocols and authored by credentialed accounting practitioners."
+    "Every deliverable is scrutinized against rigorous accuracy protocols and authored by credentialed accounting practitioners."
   );
   const [accPillars, setAccPillars] = useState<AccountabilityPillar[]>(
     subService?.accountabilitySection?.pillars ?? [
@@ -411,11 +411,11 @@ export function SubServiceForm({
   );
   const [faqHeading, setFaqHeading] = useState(
     subService?.faqSection?.heading ??
-      "Frequently Asked Questions About Accounting Support"
+    "Frequently Asked Questions About Accounting Support"
   );
   const [faqIntro, setFaqIntro] = useState(
     subService?.faqSection?.intro ??
-      "Clear answers on spreadsheet deliveries, formula annotations, deadline management, and accounting standards."
+    "Clear answers on spreadsheet deliveries, formula annotations, deadline management, and accounting standards."
   );
   const [faqItems, setFaqItems] = useState<FAQItem[]>(
     subService?.faqSection?.items ?? [
@@ -845,7 +845,7 @@ export function SubServiceForm({
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-text-secondary hover:text-orange transition-colors mb-2"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>← Back to Sub-Services</span>
+            <span>Back to Sub-Services</span>
           </Link>
           <h1 className="text-2xl sm:text-[26px] font-bold text-text-primary tracking-tight">
             {isEditing ? `Edit Sub-Service: ${name || "Untitled"}` : "Add Sub-Service"}
@@ -876,8 +876,8 @@ export function SubServiceForm({
               {isSubmitting
                 ? "Saving..."
                 : isEditing
-                ? "Save Sub-Service"
-                : "Create Sub-Service"}
+                  ? "Save Sub-Service"
+                  : "Create Sub-Service"}
             </span>
           </button>
         </div>
@@ -1395,11 +1395,10 @@ export function SubServiceForm({
                                     onClick={() =>
                                       handleUpdateSolutionCard(idx, "accent", acc)
                                     }
-                                    className={`flex-1 py-1 px-2 rounded-md text-xs font-semibold border transition-all ${
-                                      isSelected
+                                    className={`flex-1 py-1 px-2 rounded-md text-xs font-semibold border transition-all ${isSelected
                                         ? `${accOpt.badge} ring-2 ring-orange/30 shadow-2xs`
                                         : "bg-surface border-border text-text-muted hover:text-text-primary"
-                                    }`}
+                                      }`}
                                   >
                                     {accOpt.label}
                                   </button>
@@ -1508,11 +1507,10 @@ export function SubServiceForm({
                 {afLevels.map((lvl, idx) => (
                   <div
                     key={lvl.id || idx}
-                    className={`p-4 rounded-xl border transition-all space-y-3 ${
-                      lvl.highlighted
+                    className={`p-4 rounded-xl border transition-all space-y-3 ${lvl.highlighted
                         ? "bg-orange/5 border-orange/40 ring-1 ring-orange/30"
                         : "bg-canvas/30 border-border"
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center justify-between gap-2 border-b border-border/60 pb-2.5">
                       <div className="flex items-center gap-2">
@@ -1736,11 +1734,10 @@ export function SubServiceForm({
                                     onClick={() =>
                                       handleUpdatePillar(idx, "accent", acc)
                                     }
-                                    className={`flex-1 py-1 px-2 rounded-md text-xs font-semibold border transition-all ${
-                                      isSelected
+                                    className={`flex-1 py-1 px-2 rounded-md text-xs font-semibold border transition-all ${isSelected
                                         ? `${accOpt.badge} ring-2 ring-orange/30 shadow-2xs`
                                         : "bg-surface border-border text-text-muted hover:text-text-primary"
-                                    }`}
+                                      }`}
                                   >
                                     {accOpt.label}
                                   </button>
@@ -2154,11 +2151,10 @@ export function SubServiceForm({
                     Meta Title
                   </label>
                   <span
-                    className={`text-[10px] font-mono ${
-                      metaTitle.length > 60
+                    className={`text-[10px] font-mono ${metaTitle.length > 60
                         ? "text-amber-600 font-bold"
                         : "text-text-muted"
-                    }`}
+                      }`}
                   >
                     {metaTitle.length}/60
                   </span>
@@ -2183,11 +2179,10 @@ export function SubServiceForm({
                     Meta Description
                   </label>
                   <span
-                    className={`text-[10px] font-mono ${
-                      metaDescription.length > 160
+                    className={`text-[10px] font-mono ${metaDescription.length > 160
                         ? "text-amber-600 font-bold"
                         : "text-text-muted"
-                    }`}
+                      }`}
                   >
                     {metaDescription.length}/160
                   </span>

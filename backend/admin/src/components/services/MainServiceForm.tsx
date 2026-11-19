@@ -269,7 +269,7 @@ export function MainServiceForm({ service, serviceIdOrSlug }: MainServiceFormPro
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-text-secondary hover:text-orange transition-colors mb-2"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>← Back to Services</span>
+            <span>Back to Services</span>
           </Link>
           <h1 className="text-2xl sm:text-[26px] font-bold text-text-primary tracking-tight">
             {isEditing ? `Edit Service: ${name || "Untitled"}` : "Add Service"}
@@ -304,8 +304,8 @@ export function MainServiceForm({ service, serviceIdOrSlug }: MainServiceFormPro
               {isSubmitting
                 ? "Saving..."
                 : isEditing
-                ? "Save Changes"
-                : "Create Service"}
+                  ? "Save Changes"
+                  : "Create Service"}
             </span>
           </button>
         </div>
@@ -392,11 +392,10 @@ export function MainServiceForm({ service, serviceIdOrSlug }: MainServiceFormPro
                             onClick={() => setIcon(opt.key)}
                             title={opt.label}
                             aria-label={`Select ${opt.label} icon`}
-                            className={`flex items-center justify-center p-2 rounded-lg border transition-all ${
-                              isSelected
+                            className={`flex items-center justify-center p-2 rounded-lg border transition-all ${isSelected
                                 ? "bg-orange/10 border-orange text-orange ring-2 ring-orange/30 shadow-2xs"
                                 : "bg-surface border-border text-text-secondary hover:text-text-primary hover:bg-canvas"
-                            }`}
+                              }`}
                           >
                             <ServiceIcon iconKey={opt.key} className="w-4 h-4 shrink-0" />
                           </button>

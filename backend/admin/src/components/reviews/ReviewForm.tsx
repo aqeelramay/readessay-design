@@ -244,7 +244,7 @@ export function ReviewForm({ review, reviewId }: ReviewFormProps) {
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-text-secondary hover:text-orange transition-colors mb-2"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>← Back to Reviews</span>
+            <span>Back to Reviews</span>
           </Link>
           <div className="flex items-center gap-3">
             <h1 className="text-2xl sm:text-[26px] font-bold text-text-primary tracking-tight">
@@ -285,8 +285,8 @@ export function ReviewForm({ review, reviewId }: ReviewFormProps) {
               {isSubmitting
                 ? "Saving..."
                 : isEditing
-                ? "Save Changes"
-                : "Save Review"}
+                  ? "Save Changes"
+                  : "Save Review"}
             </span>
           </button>
         </div>
@@ -357,11 +357,10 @@ export function ReviewForm({ review, reviewId }: ReviewFormProps) {
                         title={`${starVal} Star${starVal > 1 ? "s" : ""}`}
                       >
                         <Star
-                          className={`w-5 h-5 ${
-                            starVal <= rating
+                          className={`w-5 h-5 ${starVal <= rating
                               ? "fill-amber-400 text-amber-500"
                               : "text-slate-300"
-                          }`}
+                            }`}
                         />
                       </button>
                     ))}

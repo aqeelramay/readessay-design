@@ -32,7 +32,7 @@ export const metadata: Metadata = {
 };
 
 export default async function SamplesPage() {
-  const [{ sections, totalSamples }, calculatorData] = await Promise.all([
+  const [{ sections }, calculatorData] = await Promise.all([
     fetchPublicSamplesDirectory(),
     fetchPublicCalculator(),
   ]);

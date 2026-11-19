@@ -1,7 +1,6 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import Image from 'next/image';
 import {
   fetchPublicBlogCategories,
   fetchPublicBlogPosts,
@@ -30,8 +29,6 @@ export default async function BlogIndexPage() {
   ]);
 
   const posts = postsResponse.posts || [];
-  const featuredPost = posts[0] || null;
-  const regularPosts = posts.length > 1 ? posts.slice(1) : posts;
 
   return (
     <main className="w-full bg-[#FAFAFA] text-[#243445]">
@@ -75,95 +72,11 @@ export default async function BlogIndexPage() {
           </div>
         </section>
 
-        {/* FEATURED EDITOR'S PICK BANNER */}
-        {featuredPost && (
-          <section className="pt-12 pb-6 bg-[#F8FAFC]">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="bg-white rounded-3xl border border-slate-200/80 shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 items-center">
-                  {/* Left Column: Image */}
-                  <div className="lg:col-span-7 relative h-72 sm:h-96 lg:h-[420px] overflow-hidden bg-slate-100 group">
-                    <Image
-                      src={
-                        featuredPost.featuredImage?.url ||
-                        'https://lh3.googleusercontent.com/aida-public/AB6AXuBJ69LFSgBNZ2h1755hnc9BJm9FHy6LNw_PaKHfP_wc5tkz1yP34K1Lk1YBwJOfrvZ-2ECQV5PJi0tY4HxbXcVU20z2GhN6pCg-_LaEn8IZNxfUz-2IpGyTOH5P8TlEOlfqA6skHbT-kRl-dfou5sg8jMKI2dh0wCUA11CH2_kLtrq900VNrtteElaSf0dLpZyd7r7hoeqe8W_wjR1isaJ_1ZgQSyBiE3lhUC_pnE7n'
-                      }
-                      alt={featuredPost.featuredImage?.altText || featuredPost.title}
-                      fill
-                      priority
-                      sizes="(max-width: 1024px) 100vw, 58vw"
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
-                      unoptimized={featuredPost.featuredImage?.url?.startsWith('http://localhost:4000')}
-                    />
-                    <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
-                      <span className="bg-[#FF641A] text-white font-bold text-xs px-3.5 py-1.5 rounded-full uppercase tracking-wider shadow-md">
-                        Featured Masterclass
-                      </span>
-                      {featuredPost.category?.name && (
-                        <span className="bg-white/95 backdrop-blur-xs text-[#243445] font-semibold text-xs px-3 py-1.5 rounded-full shadow-xs">
-                          {featuredPost.category.name}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Right Column: Content */}
-                  <div className="lg:col-span-5 p-8 lg:p-10 flex flex-col justify-between space-y-6">
-                    <div className="space-y-4">
-                      <div className="flex items-center space-x-2 text-xs text-slate-400 font-medium">
-                        <span>{featuredPost.publishedAt || 'October 24, 2024'}</span>
-                        <span>•</span>
-                        <span>{featuredPost.readTime || '8 min read'}</span>
-                      </div>
-
-                      <h2 className="text-2xl sm:text-3xl font-bold text-[#243445] hover:text-[#FF641A] transition font-poppins leading-tight">
-                        <Link href={`/blog/${featuredPost.slug}`}>
-                          {featuredPost.title}
-                        </Link>
-                      </h2>
-
-                      {featuredPost.excerpt && (
-                        <p className="text-sm text-slate-600 leading-relaxed line-clamp-3">
-                          {featuredPost.excerpt}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 rounded-full bg-orange-100 text-[#FF641A] font-bold text-sm flex items-center justify-center">
-                          {featuredPost.author?.name ? featuredPost.author.name.charAt(0) : 'R'}
-                        </div>
-                        <div>
-                          <p className="text-xs font-bold text-[#243445]">
-                            {featuredPost.author?.name || 'Dr. David Moraine'}
-                          </p>
-                          <p className="text-[11px] text-slate-500">
-                            {featuredPost.author?.credentials || 'PhD, Oxford Alum'}
-                          </p>
-                        </div>
-                      </div>
-
-                      <Link
-                        href={`/blog/${featuredPost.slug}`}
-                        className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white text-xs font-bold transition shadow-md"
-                      >
-                        <span>Read Blueprint</span>
-                        <span>→</span>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
-
         {/* ARTICLES DIRECTORY SECTION */}
         <section className="py-12 lg:py-16 bg-[#F8FAFC] relative" id="blog-articles">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <BlogDirectoryClient
-              initialPosts={regularPosts}
+              initialPosts={posts}
               categories={categories}
               defaultCategorySlug="all"
             />

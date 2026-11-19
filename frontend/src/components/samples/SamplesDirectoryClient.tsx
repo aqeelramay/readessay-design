@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import Link from 'next/link';
 import { PublicSampleSection, PublicAcademicSample } from '@/lib/public-api';
 import AppIcon from '@/components/shared/AppIcon';
 import { API_BASE_URL } from '@/config/api';
