@@ -221,7 +221,7 @@ export default async function HomePage() {
                           className="p-3.5 rounded-xl bg-slate-50 hover:bg-[#FFF2EC] text-[#243445] hover:text-[#FF641A] transition-colors flex items-center gap-2.5 text-xs sm:text-sm font-medium border border-slate-100"
                         >
                           <Check className="w-4 h-4 text-[#FF641A] shrink-0" />
-                          <span className="line-clamp-1">{sub.title}</span>
+                          <span className="leading-snug">{sub.title}</span>
                         </Link>
                       ))}
                     </div>

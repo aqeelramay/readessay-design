@@ -24,14 +24,14 @@ interface HeaderProps {
 function getDropdownContainerClasses(columnCount: number): string {
   switch (columnCount) {
     case 1:
-      return 'w-64 left-0 p-3';
+      return 'w-80 left-0 p-4';
     case 2:
-      return 'w-[480px] -left-16 p-5';
+      return 'w-[680px] max-w-[92vw] left-1/2 -translate-x-1/2 p-5';
     case 3:
-      return 'w-[700px] -left-36 p-5';
+      return 'w-[1020px] max-w-[94vw] left-1/2 -translate-x-1/2 p-6';
     case 4:
     default:
-      return 'w-[920px] -left-64 p-6';
+      return 'w-[1360px] max-w-[96vw] left-1/2 -translate-x-1/2 p-6';
   }
 }
 
@@ -113,7 +113,7 @@ export default function Header({ serviceTree }: HeaderProps) {
       </div>
 
       {/* 2. Full-Width Main Navigation Bar with 3-Zone Layout */}
-      <nav className="w-full bg-[#FF641A] shadow-md text-white">
+      <nav className="w-full bg-[#FF641A] shadow-md text-white relative">
         <div className="w-full px-6 lg:px-12 h-20 flex items-center justify-between gap-6">
           {/* Left Zone: ReadEssay Logo */}
           <div className="flex items-center gap-4 shrink-0">
@@ -136,7 +136,7 @@ export default function Header({ serviceTree }: HeaderProps) {
           </div>
 
           {/* Center Zone: Dynamic Parent Services with Mega-Menus + Top Links */}
-          <div className="hidden xl:flex items-center gap-6 2xl:gap-7 whitespace-nowrap text-white font-medium text-sm">
+          <div className="hidden xl:flex items-center gap-6 2xl:gap-7 whitespace-nowrap text-white font-medium text-sm h-full">
             {/* Dynamic Parent Services directly rendered (NO generic 'Services' wrapper) */}
             {serviceTree.map((service) => {
               const subServices = service.subServices || [];
@@ -151,10 +151,15 @@ export default function Header({ serviceTree }: HeaderProps) {
               );
 
               return (
-                <div key={service.id} className="relative group py-6">
+                <div
+                  key={service.id}
+                  className={`group h-full flex items-center ${
+                    columnCount === 1 ? 'relative' : ''
+                  }`}
+                >
                   <Link
                     href={`/${service.slug}`}
-                    className="flex items-center gap-1 font-semibold text-white hover:text-white/80 transition-colors"
+                    className="flex items-center gap-1 font-semibold text-white hover:text-white/80 transition-colors py-6"
                   >
                     <span>{service.title}</span>
                     {hasSub && (
@@ -167,22 +172,22 @@ export default function Header({ serviceTree }: HeaderProps) {
                     <div
                       className={`absolute top-full ${getDropdownContainerClasses(
                         columnCount
-                      )} bg-white text-[#243445] rounded-2xl shadow-xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50`}
+                      )} bg-white text-[#243445] rounded-2xl shadow-xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50 whitespace-normal before:absolute before:-top-3 before:left-0 before:right-0 before:h-3 before:content-['']`}
                     >
-                      <div className={`grid gap-2 ${getDropdownGridCols(columnCount)}`}>
+                      <div className={`grid gap-x-5 gap-y-1.5 ${getDropdownGridCols(columnCount)}`}>
                         {columns.map((col, colIdx) => (
                           <div key={colIdx} className="space-y-1">
                             {col.map((sub) => (
                               <Link
                                 key={sub.id}
                                 href={`/${service.slug}/${sub.slug}`}
-                                className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#243445] hover:bg-slate-50 hover:text-[#FF641A] transition-colors group/item"
+                                className="flex items-start gap-2.5 px-3 py-2 rounded-xl text-[#243445] hover:bg-slate-50 hover:text-[#FF641A] transition-colors group/item"
                               >
                                 <AppIcon
                                   name={sub.icon || 'file_text'}
-                                  className="w-4 h-4 text-[#FF641A] shrink-0"
+                                  className="w-4 h-4 text-[#FF641A] shrink-0 mt-0.5"
                                 />
-                                <span className="text-xs sm:text-sm font-medium line-clamp-1">
+                                <span className="text-[13.5px] font-medium text-[#243445] group-hover/item:text-[#FF641A] leading-snug whitespace-normal">
                                   {sub.title}
                                 </span>
                               </Link>
@@ -199,28 +204,28 @@ export default function Header({ serviceTree }: HeaderProps) {
             {/* Top-Level Editorial Links */}
             <Link
               href="/reviews"
-              className="font-semibold text-white hover:text-white/80 transition-colors"
+              className="font-semibold text-white hover:text-white/80 transition-colors py-6"
             >
               Reviews
             </Link>
 
             <Link
               href="/samples"
-              className="font-semibold text-white hover:text-white/80 transition-colors"
+              className="font-semibold text-white hover:text-white/80 transition-colors py-6"
             >
               Samples
             </Link>
 
             <Link
               href="/blog"
-              className="font-semibold text-white hover:text-white/80 transition-colors"
+              className="font-semibold text-white hover:text-white/80 transition-colors py-6"
             >
               Blog
             </Link>
 
             <Link
               href="/about-us"
-              className="font-semibold text-white hover:text-white/80 transition-colors"
+              className="font-semibold text-white hover:text-white/80 transition-colors py-6"
             >
               Top Experts
             </Link>
