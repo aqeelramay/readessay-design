@@ -9,6 +9,7 @@ import {
   fetchPublicCalculator,
   DEFAULT_FAQS,
   resolveReviewAvatar,
+  ASSIGNMENT_DISCIPLINES,
 } from '@/lib/data-fetchers';
 import RatingCards from '@/components/shared/RatingCards';
 import UniversityMarquee from '@/components/shared/UniversityMarquee';
@@ -80,36 +81,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
   };
 }
-
-// 26 Disciplines Catalog extracted from design/services.html
-const ASSIGNMENT_DISCIPLINES = [
-  { slug: 'assignment-accounting', title: 'Accounting Assignment Help', icon: 'account_balance_wallet', desc: 'Master balance sheets, financial reporting, taxation, and auditing with accurate balance-matching solutions.' },
-  { slug: 'assignment-business', title: 'Business Assignment Help', icon: 'business_center', desc: 'Strategic analysis, marketing plans, MBA case evaluations, and corporate feasibility reports.' },
-  { slug: 'assignment-finance', title: 'Corporate Finance Assignment Help', icon: 'trending_up', desc: 'Advanced capital budgeting, DCF valuation models, M&A cases, and WACC calculations.' },
-  { slug: 'assignment-cs', title: 'CS Assignment Help', icon: 'terminal', desc: 'Clean and tested Python, Java, C++, SQL scripts, database ERDs, and algorithm documentation.' },
-  { slug: 'assignment-finance-general', title: 'Finance Assignment Help', icon: 'pie_chart', desc: 'Portfolio management, risk hedging, asset pricing, and financial statement ratio analysis.' },
-  { slug: 'assignment-history', title: 'History Assignment Help', icon: 'history_edu', desc: 'Primary source critiques, historiographical reviews, archival citations, and chronological thesis papers.' },
-  { slug: 'assignment-hr', title: 'Human Resource Assignment Help', icon: 'groups', desc: 'Talent acquisition models, workplace dispute resolution, OSHA policies, and HR strategy briefs.' },
-  { slug: 'assignment-humanities', title: 'Humanities Assignment Help', icon: 'auto_stories', desc: 'Deep textual synthesis, cultural critiques, ethics frameworks, and philosophy term essays.' },
-  { slug: 'assignment-management', title: 'Management Assignment Help', icon: 'business_center', desc: 'Organizational leadership frameworks, SWOT/PESTLE reviews, and supply chain logistics papers.' },
-  { slug: 'assignment-marketing', title: 'Marketing Assignment Help', icon: 'campaign', desc: 'Omnichannel consumer persona studies, brand positioning roadmaps, and digital marketing pitches.' },
-  { slug: 'assignment-math', title: 'Mathematics Assignment Help', icon: 'functions', desc: 'Discrete mathematics, differential calculus, vector algebra, and linear algebra step-by-step proofs.' },
-  { slug: 'assignment-mechanical', title: 'Mechanical Engineering Assignment Help', icon: 'precision_manufacturing', desc: 'Thermodynamics, fluid mechanics, CAD schematics, statics, and finite element analyses.' },
-  { slug: 'assignment-nursing', title: 'Nursing Assignment Help', icon: 'biotech', desc: 'Evidence-based nursing care plans, clinical pharmacology, epidemiology, and patient case notes.' },
-  { slug: 'assignment-operations', title: 'Operations Management Assignment Help', icon: 'factory', desc: 'Lean Six Sigma workflows, inventory modeling, bottleneck mitigation, and operations planning.' },
-  { slug: 'assignment-philosophy', title: 'Philosophy Assignment Help', icon: 'menu_book', desc: 'Epistemology, ethical moral dilemmas, existential treatises, and logical symbolic proofs.' },
-  { slug: 'assignment-physics', title: 'Physics Assignment Help', icon: 'biotech', desc: 'Classical mechanics, quantum physics, electromagnetism, and laboratory experiment reports.' },
-  { slug: 'assignment-political', title: 'Political Science Assignment Help', icon: 'gavel', desc: 'Geopolitics, constitutional law reviews, international relations, and public policy analyses.' },
-  { slug: 'assignment-programming', title: 'Programming Assignment Help', icon: 'code', desc: 'Bug-free code in React, Node, Django, Spring Boot, and C# with comprehensive unit test coverage.' },
-  { slug: 'assignment-psychology', title: 'Psychology Assignment Help', icon: 'psychology', desc: 'Cognitive behavioral assessments, DSM-5 case syntheses, and qualitative psychological papers.' },
-  { slug: 'assignment-science', title: 'Science Assignment Help', icon: 'biotech', desc: 'Biology genetics, organic chemistry reaction mechanisms, biochemistry, and lab analyses.' },
-  { slug: 'assignment-sociology', title: 'Sociology Assignment Help', icon: 'public', desc: 'Social stratification, demographic urbanization papers, and sociological research methodologies.' },
-  { slug: 'assignment-statistics', title: 'Statistics Assignment Help', icon: 'bar_chart', desc: 'SPSS regression analysis, ANOVA tests, R scripts, Python pandas, and hypothesis interpretations.' },
-  { slug: 'assignment-supply-chain', title: 'Supply Chain Assignment Help', icon: 'factory', desc: 'Procurement logistics, distribution networks, warehouse optimization, and supply forecasting.' },
-  { slug: 'assignment-hertfordshire', title: 'University of Hertfordshire Assignment Help', icon: 'school', desc: 'Tailored to Herts module rubrics, student handbook criteria, and localized grading standards.' },
-  { slug: 'assignment-greenwich', title: 'University of Greenwich Assignment Help', icon: 'school', desc: 'Greenwich faculty guidelines, Harvard reference standards, and course syllabus alignment.' },
-  { slug: 'assignment-coventry', title: 'Coventry University Assignment Help', icon: 'school', desc: 'CU Coventry modular course briefs, APA/Coventry Harvard styles, and seminar rubrics.' },
-];
 
 export default async function ServiceDetailPage({ params }: PageProps) {
   const { serviceSlug } = await params;
@@ -302,8 +273,8 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             </p>
           </div>
 
-          {/* Seeded Child Sub-Services */}
-          {service.subServices && service.subServices.length > 0 && (
+          {/* Seeded Child Sub-Services (for all services except Assignment Help) */}
+          {!isAssignmentHelp && service.subServices && service.subServices.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
               {service.subServices.map((sub) => (
                 <div
@@ -338,47 +309,38 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             </div>
           )}
 
-          {/* Full 26 Disciplines Catalog from design/services.html (when on Assignment Help) */}
+          {/* Full 26 Disciplines Catalog (rendered for Assignment Help) */}
           {isAssignmentHelp && (
-            <div className="mt-14 pt-10 border-t border-slate-100">
-              <div className="text-center max-w-2xl mx-auto mb-10">
-                <h3 className="font-heading text-xl sm:text-2xl font-bold text-[#243445]">
-                  Full Discipline Directory &amp; University Rubrics
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                  Connect with subject specialists across all collegiate faculties
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {ASSIGNMENT_DISCIPLINES.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="service-card group bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between border border-slate-100"
-                  >
-                    <div>
-                      <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
-                        <AppIcon name={item.icon} className="w-6 h-6" />
-                      </div>
-                      <h4 className="font-heading text-base font-bold text-[#243445] mb-2 group-hover:text-[#FF641A] transition-colors">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {ASSIGNMENT_DISCIPLINES.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="service-card group bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between border border-slate-100"
+                >
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                      <AppIcon name={item.icon} className="w-6 h-6" />
+                    </div>
+                    <h3 className="font-heading text-base font-bold text-[#243445] mb-2 group-hover:text-[#FF641A] transition-colors">
+                      <Link href={`/${service.slug}/${item.slug}`}>
                         {item.title}
-                      </h4>
-                      <p className="text-xs text-slate-600 leading-relaxed">
-                        {item.desc}
-                      </p>
-                    </div>
-                    <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
-                      <a
-                        href="#hero-calculator-slot"
-                        className="inline-flex items-center gap-1 text-xs text-[#FF641A] font-semibold hover:underline"
-                      >
-                        <span>Calculate Quote</span>
-                        <AppIcon name="arrow_forward" className="w-3.5 h-3.5" />
-                      </a>
-                    </div>
+                      </Link>
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      {item.desc}
+                    </p>
                   </div>
-                ))}
-              </div>
+                  <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
+                    <Link
+                      href={`/${service.slug}/${item.slug}`}
+                      className="inline-flex items-center gap-1 text-xs text-[#FF641A] font-semibold hover:underline"
+                    >
+                      <span>Explore Service</span>
+                      <AppIcon name="arrow_forward" className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>

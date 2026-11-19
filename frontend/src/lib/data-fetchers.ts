@@ -65,6 +65,35 @@ export const DEFAULT_FAQS: PublicFaqItem[] = [
   },
 ];
 
+export const ASSIGNMENT_DISCIPLINES = [
+  { slug: 'assignment-accounting', title: 'Accounting Assignment Help', icon: 'account_balance_wallet', desc: 'Master balance sheets, financial reporting, taxation, and auditing with accurate balance-matching solutions.' },
+  { slug: 'assignment-business', title: 'Business Assignment Help', icon: 'business_center', desc: 'Strategic analysis, marketing plans, MBA case evaluations, and corporate feasibility reports.' },
+  { slug: 'assignment-finance', title: 'Corporate Finance Assignment Help', icon: 'trending_up', desc: 'Advanced capital budgeting, DCF valuation models, M&A cases, and WACC calculations.' },
+  { slug: 'assignment-cs', title: 'CS Assignment Help', icon: 'terminal', desc: 'Clean and tested Python, Java, C++, SQL scripts, database ERDs, and algorithm documentation.' },
+  { slug: 'assignment-finance-general', title: 'Finance Assignment Help', icon: 'pie_chart', desc: 'Portfolio management, risk hedging, asset pricing, and financial statement ratio analysis.' },
+  { slug: 'assignment-history', title: 'History Assignment Help', icon: 'history_edu', desc: 'Primary source critiques, historiographical reviews, archival citations, and chronological thesis papers.' },
+  { slug: 'assignment-hr', title: 'Human Resource Assignment Help', icon: 'groups', desc: 'Talent acquisition models, workplace dispute resolution, OSHA policies, and HR strategy briefs.' },
+  { slug: 'assignment-humanities', title: 'Humanities Assignment Help', icon: 'auto_stories', desc: 'Deep textual synthesis, cultural critiques, ethics frameworks, and philosophy term essays.' },
+  { slug: 'assignment-management', title: 'Management Assignment Help', icon: 'business_center', desc: 'Organizational leadership frameworks, SWOT/PESTLE reviews, and supply chain logistics papers.' },
+  { slug: 'assignment-marketing', title: 'Marketing Assignment Help', icon: 'campaign', desc: 'Omnichannel consumer persona studies, brand positioning roadmaps, and digital marketing pitches.' },
+  { slug: 'assignment-math', title: 'Mathematics Assignment Help', icon: 'functions', desc: 'Discrete mathematics, differential calculus, vector algebra, and linear algebra step-by-step proofs.' },
+  { slug: 'assignment-mechanical', title: 'Mechanical Engineering Assignment Help', icon: 'precision_manufacturing', desc: 'Thermodynamics, fluid mechanics, CAD schematics, statics, and finite element analyses.' },
+  { slug: 'assignment-nursing', title: 'Nursing Assignment Help', icon: 'biotech', desc: 'Evidence-based nursing care plans, clinical pharmacology, epidemiology, and patient case notes.' },
+  { slug: 'assignment-operations', title: 'Operations Management Assignment Help', icon: 'factory', desc: 'Lean Six Sigma workflows, inventory modeling, bottleneck mitigation, and operations planning.' },
+  { slug: 'assignment-philosophy', title: 'Philosophy Assignment Help', icon: 'menu_book', desc: 'Epistemology, ethical moral dilemmas, existential treatises, and logical symbolic proofs.' },
+  { slug: 'assignment-physics', title: 'Physics Assignment Help', icon: 'biotech', desc: 'Classical mechanics, quantum physics, electromagnetism, and laboratory experiment reports.' },
+  { slug: 'assignment-political', title: 'Political Science Assignment Help', icon: 'gavel', desc: 'Geopolitics, constitutional law reviews, international relations, and public policy analyses.' },
+  { slug: 'assignment-programming', title: 'Programming Assignment Help', icon: 'code', desc: 'Bug-free code in React, Node, Django, Spring Boot, and C# with comprehensive unit test coverage.' },
+  { slug: 'assignment-psychology', title: 'Psychology Assignment Help', icon: 'psychology', desc: 'Cognitive behavioral assessments, DSM-5 case syntheses, and qualitative psychological papers.' },
+  { slug: 'assignment-science', title: 'Science Assignment Help', icon: 'biotech', desc: 'Biology genetics, organic chemistry reaction mechanisms, biochemistry, and lab analyses.' },
+  { slug: 'assignment-sociology', title: 'Sociology Assignment Help', icon: 'public', desc: 'Social stratification, demographic urbanization papers, and sociological research methodologies.' },
+  { slug: 'assignment-statistics', title: 'Statistics Assignment Help', icon: 'bar_chart', desc: 'SPSS regression analysis, ANOVA tests, R scripts, Python pandas, and hypothesis interpretations.' },
+  { slug: 'assignment-supply-chain', title: 'Supply Chain Assignment Help', icon: 'factory', desc: 'Procurement logistics, distribution networks, warehouse optimization, and supply forecasting.' },
+  { slug: 'assignment-hertfordshire', title: 'University of Hertfordshire Assignment Help', icon: 'school', desc: 'Tailored to Herts module rubrics, student handbook criteria, and localized grading standards.' },
+  { slug: 'assignment-greenwich', title: 'University of Greenwich Assignment Help', icon: 'school', desc: 'Greenwich faculty guidelines, Harvard reference standards, and course syllabus alignment.' },
+  { slug: 'assignment-coventry', title: 'Coventry University Assignment Help', icon: 'school', desc: 'CU Coventry modular course briefs, APA/Coventry Harvard styles, and seminar rubrics.' },
+];
+
 export const DEFAULT_SERVICES: PublicService[] = [
   {
     id: 'srv-online-class',
@@ -1529,6 +1558,36 @@ export async function fetchSubService(
           id: parentService.id,
           title: parentService.title,
           slug: parentService.slug,
+        },
+      };
+    }
+  }
+
+  // Fallback lookup for Assignment Help full 26-disciplines catalog
+  if (serviceSlug === 'assignment-help') {
+    const cleanSub = subServiceSlug.trim().toLowerCase();
+    const discipline = ASSIGNMENT_DISCIPLINES.find(
+      (d) =>
+        d.slug === cleanSub ||
+        d.slug === `assignment-${cleanSub}` ||
+        d.slug.replace(/^assignment-/, '') === cleanSub
+    );
+    if (discipline) {
+      return {
+        id: `sub-${discipline.slug}`,
+        title: discipline.title,
+        slug: discipline.slug,
+        icon: discipline.icon,
+        heroBadge: `Expert ${discipline.title} for Every Academic Level`,
+        heroTitle: `${discipline.title} to Achieve Better Grades with Confidence`,
+        heroSubtitle: discipline.desc,
+        shortDescription: discipline.desc,
+        content: `Rigorous academic guidance in ${discipline.title}. Our faculty experts provide step-by-step verified solutions, comprehensive Turnitin reports, and 24/7 dedicated support.`,
+        status: 'PUBLISHED',
+        service: {
+          id: parentService?.id || 'srv-assignment-help',
+          title: parentService?.title || 'Assignment Help',
+          slug: 'assignment-help',
         },
       };
     }
