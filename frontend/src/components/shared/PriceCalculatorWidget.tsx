@@ -15,18 +15,23 @@ import { DEFAULT_CALCULATOR_DATA } from '@/lib/data-fetchers';
 
 export interface PriceCalculatorWidgetProps {
   initialData?: PublicCalculatorResponse;
+  data?: PublicCalculatorResponse;
   initialServiceSlug?: string;
+  defaultServiceSlug?: string;
   className?: string;
 }
 
 export function PriceCalculatorWidget({
   initialData,
+  data: dataProp,
   initialServiceSlug,
+  defaultServiceSlug,
   className = '',
 }: PriceCalculatorWidgetProps) {
   const router = useRouter();
-  const data = initialData || DEFAULT_CALCULATOR_DATA;
+  const data = dataProp || initialData || DEFAULT_CALCULATOR_DATA;
   const config = data.config || DEFAULT_CALCULATOR_DATA.config;
+  const targetServiceSlug = defaultServiceSlug || initialServiceSlug;
 
   const sortedLevels = useMemo(() => {
     const list = data.levels && data.levels.length > 0 ? data.levels : DEFAULT_CALCULATOR_DATA.levels;
@@ -70,8 +75,8 @@ export function PriceCalculatorWidget({
   });
 
   const [selectedServiceSlug, setSelectedServiceSlug] = useState<string>(() => {
-    if (initialServiceSlug && availableServices.some((s) => s.slug === initialServiceSlug)) {
-      return initialServiceSlug;
+    if (targetServiceSlug && availableServices.some((s) => s.slug === targetServiceSlug)) {
+      return targetServiceSlug;
     }
     return availableServices[0]?.slug || 'essay-writing';
   });
@@ -331,3 +336,5 @@ export function PriceCalculatorWidget({
     </div>
   );
 }
+
+export default PriceCalculatorWidget;

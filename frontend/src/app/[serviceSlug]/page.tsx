@@ -12,9 +12,10 @@ import {
 } from '@/lib/data-fetchers';
 import RatingCards from '@/components/shared/RatingCards';
 import UniversityMarquee from '@/components/shared/UniversityMarquee';
+import TopExpertsCarousel from '@/components/shared/TopExpertsCarousel';
 import VerifiedGradesMarquee from '@/components/shared/VerifiedGradesMarquee';
 import FaqAccordion from '@/components/shared/FaqAccordion';
-import { PriceCalculatorWidget } from '@/components/shared/PriceCalculatorWidget';
+import PriceCalculatorWidget from '@/components/shared/PriceCalculatorWidget';
 import AppIcon from '@/components/shared/AppIcon';
 import JsonLd from '@/components/seo/JsonLd';
 import {
@@ -80,6 +81,36 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+// 26 Disciplines Catalog extracted from design/services.html
+const ASSIGNMENT_DISCIPLINES = [
+  { slug: 'assignment-accounting', title: 'Accounting Assignment Help', icon: 'account_balance_wallet', desc: 'Master balance sheets, financial reporting, taxation, and auditing with accurate balance-matching solutions.' },
+  { slug: 'assignment-business', title: 'Business Assignment Help', icon: 'business_center', desc: 'Strategic analysis, marketing plans, MBA case evaluations, and corporate feasibility reports.' },
+  { slug: 'assignment-finance', title: 'Corporate Finance Assignment Help', icon: 'trending_up', desc: 'Advanced capital budgeting, DCF valuation models, M&A cases, and WACC calculations.' },
+  { slug: 'assignment-cs', title: 'CS Assignment Help', icon: 'terminal', desc: 'Clean and tested Python, Java, C++, SQL scripts, database ERDs, and algorithm documentation.' },
+  { slug: 'assignment-finance-general', title: 'Finance Assignment Help', icon: 'pie_chart', desc: 'Portfolio management, risk hedging, asset pricing, and financial statement ratio analysis.' },
+  { slug: 'assignment-history', title: 'History Assignment Help', icon: 'history_edu', desc: 'Primary source critiques, historiographical reviews, archival citations, and chronological thesis papers.' },
+  { slug: 'assignment-hr', title: 'Human Resource Assignment Help', icon: 'groups', desc: 'Talent acquisition models, workplace dispute resolution, OSHA policies, and HR strategy briefs.' },
+  { slug: 'assignment-humanities', title: 'Humanities Assignment Help', icon: 'auto_stories', desc: 'Deep textual synthesis, cultural critiques, ethics frameworks, and philosophy term essays.' },
+  { slug: 'assignment-management', title: 'Management Assignment Help', icon: 'business_center', desc: 'Organizational leadership frameworks, SWOT/PESTLE reviews, and supply chain logistics papers.' },
+  { slug: 'assignment-marketing', title: 'Marketing Assignment Help', icon: 'campaign', desc: 'Omnichannel consumer persona studies, brand positioning roadmaps, and digital marketing pitches.' },
+  { slug: 'assignment-math', title: 'Mathematics Assignment Help', icon: 'functions', desc: 'Discrete mathematics, differential calculus, vector algebra, and linear algebra step-by-step proofs.' },
+  { slug: 'assignment-mechanical', title: 'Mechanical Engineering Assignment Help', icon: 'precision_manufacturing', desc: 'Thermodynamics, fluid mechanics, CAD schematics, statics, and finite element analyses.' },
+  { slug: 'assignment-nursing', title: 'Nursing Assignment Help', icon: 'biotech', desc: 'Evidence-based nursing care plans, clinical pharmacology, epidemiology, and patient case notes.' },
+  { slug: 'assignment-operations', title: 'Operations Management Assignment Help', icon: 'factory', desc: 'Lean Six Sigma workflows, inventory modeling, bottleneck mitigation, and operations planning.' },
+  { slug: 'assignment-philosophy', title: 'Philosophy Assignment Help', icon: 'menu_book', desc: 'Epistemology, ethical moral dilemmas, existential treatises, and logical symbolic proofs.' },
+  { slug: 'assignment-physics', title: 'Physics Assignment Help', icon: 'biotech', desc: 'Classical mechanics, quantum physics, electromagnetism, and laboratory experiment reports.' },
+  { slug: 'assignment-political', title: 'Political Science Assignment Help', icon: 'gavel', desc: 'Geopolitics, constitutional law reviews, international relations, and public policy analyses.' },
+  { slug: 'assignment-programming', title: 'Programming Assignment Help', icon: 'code', desc: 'Bug-free code in React, Node, Django, Spring Boot, and C# with comprehensive unit test coverage.' },
+  { slug: 'assignment-psychology', title: 'Psychology Assignment Help', icon: 'psychology', desc: 'Cognitive behavioral assessments, DSM-5 case syntheses, and qualitative psychological papers.' },
+  { slug: 'assignment-science', title: 'Science Assignment Help', icon: 'biotech', desc: 'Biology genetics, organic chemistry reaction mechanisms, biochemistry, and lab analyses.' },
+  { slug: 'assignment-sociology', title: 'Sociology Assignment Help', icon: 'public', desc: 'Social stratification, demographic urbanization papers, and sociological research methodologies.' },
+  { slug: 'assignment-statistics', title: 'Statistics Assignment Help', icon: 'bar_chart', desc: 'SPSS regression analysis, ANOVA tests, R scripts, Python pandas, and hypothesis interpretations.' },
+  { slug: 'assignment-supply-chain', title: 'Supply Chain Assignment Help', icon: 'factory', desc: 'Procurement logistics, distribution networks, warehouse optimization, and supply forecasting.' },
+  { slug: 'assignment-hertfordshire', title: 'University of Hertfordshire Assignment Help', icon: 'school', desc: 'Tailored to Herts module rubrics, student handbook criteria, and localized grading standards.' },
+  { slug: 'assignment-greenwich', title: 'University of Greenwich Assignment Help', icon: 'school', desc: 'Greenwich faculty guidelines, Harvard reference standards, and course syllabus alignment.' },
+  { slug: 'assignment-coventry', title: 'Coventry University Assignment Help', icon: 'school', desc: 'CU Coventry modular course briefs, APA/Coventry Harvard styles, and seminar rubrics.' },
+];
+
 export default async function ServiceDetailPage({ params }: PageProps) {
   const { serviceSlug } = await params;
 
@@ -89,7 +120,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
   const [service, reviews, calculatorData] = await Promise.all([
     fetchServiceBySlug(serviceSlug),
-    fetchFeaturedReviews({ serviceSlug, limit: 3 }),
+    fetchFeaturedReviews({ serviceSlug, limit: 6 }),
     fetchPublicCalculator(),
   ]);
 
@@ -97,9 +128,11 @@ export default async function ServiceDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  // Merge FAQs
+  // Merge service FAQs with fallback
   const combinedFaqs =
     service.faqs && service.faqs.length > 0 ? service.faqs : DEFAULT_FAQS;
+
+  const isAssignmentHelp = service.slug === 'assignment-help';
 
   return (
     <div className="w-full bg-[#FAFAFA] text-[#243445]">
@@ -122,7 +155,8 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           buildFaqPageSchema(combinedFaqs),
         ]}
       />
-      {/* 1. HERO SECTION */}
+
+      {/* 1. HERO SECTION (2-Column with Price Calculator on Right) */}
       <section className="relative w-full bg-white overflow-hidden py-12 lg:py-20 border-b border-slate-100">
         <div className="absolute -top-32 right-10 w-96 h-96 bg-[#FFF2EC] rounded-full blur-3xl pointer-events-none -z-0" />
         <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-slate-50 rounded-full blur-3xl pointer-events-none -z-0" />
@@ -148,7 +182,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                 <AppIcon name="verified_user" className="w-[18px] h-[18px]" filled />
                 <span>
                   {service.heroBadge ||
-                    'Professional Academic Assistance Tailored to Your Degree'}
+                    'Professional Assignment Help Designed Around Your Academic Needs'}
                 </span>
               </div>
 
@@ -159,7 +193,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               <p className="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed">
                 {service.heroSubtitle ||
                   service.shortDescription ||
-                  'Connect with verified doctoral experts who understand your syllabus, meet urgent deadlines, and secure top grades with complete privacy.'}
+                  'Get expert assignment help across multiple subjects from experienced academic specialists. Receive quality support, meet deadlines, and work towards better grades with confidence.'}
               </p>
 
               {/* 5 Value Checkmarks */}
@@ -221,12 +255,12 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               </div>
             </div>
 
-            {/* Right: Hero Price Calculator Widget */}
+            {/* Right: Live Price Calculator Widget */}
             <div className="lg:col-span-5">
               <div id="hero-calculator-slot" className="w-full">
                 <PriceCalculatorWidget
-                  initialData={calculatorData}
-                  initialServiceSlug={service.slug}
+                  data={calculatorData}
+                  defaultServiceSlug={service.slug}
                 />
               </div>
             </div>
@@ -234,453 +268,407 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* 2. RATINGS & TRUST BAR */}
+      {/* 2. REUSED HOMEPAGE TRUST BARS (Rating Cards & University Marquee) */}
       <section className="w-full bg-slate-50 py-10 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-8">
           <RatingCards />
-          <UniversityMarquee />
+          <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col items-center text-center">
+            <div className="text-xl font-bold text-[#FF641A] flex items-center justify-center gap-2 mb-2 font-heading">
+              <AppIcon name="groups" className="w-6 h-6" />
+              <span>Connect with Seniors</span>
+            </div>
+            <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto mb-6 text-center">
+              10,000+ Students across American, Australian, Canadian and Middle East Universities. Connect to ask anything. Absolutely Free. Fast.
+            </p>
+            <UniversityMarquee />
+          </div>
         </div>
       </section>
 
-      {/* 3. OVERVIEW & STATS SECTION */}
-      <section className="py-16 lg:py-24 w-full bg-white">
+      {/* 3. SUB-SERVICES / SPECIALIZATION MODULES GRID */}
+      <section className="py-16 lg:py-24 w-full bg-white border-b border-slate-100" id="assignment-services">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          {/* Header & 3 Key Stat Counters */}
-          <div className="text-center max-w-4xl mx-auto mb-12 space-y-3">
-            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-[#243445] leading-tight">
-              Online {service.title} Support in UK, US &amp; Global Universities
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <span className="text-xs font-bold text-[#FF641A] tracking-wider uppercase">
+              Comprehensive Subject Specializations
+            </span>
+            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-[#243445] mt-2">
+              {isAssignmentHelp
+                ? 'Explore Our Assignment Help Services Across Core Disciplines'
+                : `Explore Specialized ${service.title} Modules`}
             </h2>
-            <p className="text-sm md:text-base text-slate-600">
-              Get Rid Of All Confusions With Our Expert Writers
+            <p className="text-slate-600 text-sm sm:text-base mt-3">
+              Browse our specialized solutions tailored for undergraduate, postgraduate, and university-specific curricula.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-6">
-              <div className="w-16 h-16 rounded-2xl bg-[#FFF2EC] flex items-center justify-center text-[#FF641A] shrink-0">
-                <AppIcon name="task_alt" className="w-8 h-8" />
-              </div>
-              <div>
-                <span className="font-heading text-2xl lg:text-3xl font-bold text-[#243445] tracking-tight block">
-                  1,352,241
-                </span>
-                <p className="text-sm font-medium text-slate-500">Orders Delivered</p>
-              </div>
-            </div>
-
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-6">
-              <div className="w-16 h-16 rounded-2xl bg-[#ECFDF5] flex items-center justify-center text-[#059669] shrink-0">
-                <AppIcon name="star" className="w-8 h-8" filled />
-              </div>
-              <div>
-                <span className="font-heading text-2xl lg:text-3xl font-bold text-[#243445] tracking-tight block">
-                  4.9 / 5.0
-                </span>
-                <p className="text-sm font-medium text-slate-500">5 Star Rating</p>
-              </div>
-            </div>
-
-            <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-6">
-              <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center text-[#243445] shrink-0">
-                <AppIcon name="workspace_premium" className="w-8 h-8" />
-              </div>
-              <div>
-                <span className="font-heading text-2xl lg:text-3xl font-bold text-[#243445] tracking-tight block">
-                  5,079+
-                </span>
-                <p className="text-sm font-medium text-slate-500">PhD Experts</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Editorial Overview Narrative + Video Card */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center gap-2 text-[#FF641A] text-xs font-bold uppercase tracking-wider">
-                <span>Specialized Academic Assistance</span>
-              </div>
-              <h3 className="font-heading text-2xl sm:text-3xl font-bold text-[#243445] leading-snug">
-                Dedicated Assistance in {service.title}
-              </h3>
-              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
-                {service.content ||
-                  `Does the conception of reasoning compound questions of ${service.title} fear the blood of your nerves? This service is particularly designed to calm students' anxieties and provide mathematically and contextually accurate solutions.`}
-              </p>
-              <p className="text-sm md:text-base text-slate-600 leading-relaxed">
-                Our specialists hold doctorates and master’s degrees from premier US, UK, and Australian institutions. When you assign your requirements to ReadEssay, we guarantee on-time completion, strict adherence to institutional rubrics, and 100% Turnitin-verified originality.
-              </p>
-              <div className="pt-2">
-                <a
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white text-sm font-semibold shadow-md transition-colors"
-                  href="https://wa.me/923138400066"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span>Get Help Now</span>
-                  <AppIcon name="arrow_forward" className="w-4 h-4" />
-                </a>
-              </div>
-            </div>
-
-            {/* Video Player Card */}
-            <div className="lg:col-span-6">
-              <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-lg border border-slate-200 bg-slate-900">
-                <iframe
-                  className="w-full h-full"
-                  src="https://www.youtube.com/embed/OaqUwnjm9Xo"
-                  title={`${service.title} Walkthrough`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. SUB-SERVICES EXPLORATION GRID (WHEN SUB-SERVICES EXIST) */}
-      {service.subServices && service.subServices.length > 0 && (
-        <section className="py-16 lg:py-24 w-full bg-slate-50 border-y border-slate-100">
-          <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-              <span className="text-xs uppercase tracking-wider text-[#FF641A] font-bold">
-                Detailed Solutions
-              </span>
-              <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-[#243445] leading-tight">
-                Explore Specialized {service.title} Modules
-              </h2>
-              <p className="text-sm md:text-base text-slate-600">
-                We hold a squad of over 5,500 dedicated academic professionals holding specialist degrees in each respective sub-branch.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Seeded Child Sub-Services */}
+          {service.subServices && service.subServices.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
               {service.subServices.map((sub) => (
                 <div
                   key={sub.id}
-                  className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between border border-slate-100 group"
+                  className="bg-white rounded-2xl p-6 shadow-md hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300 flex flex-col justify-between border border-slate-100 group"
                 >
-                  <div className="space-y-4">
-                    <div className="w-14 h-14 rounded-2xl bg-[#FFF2EC] flex items-center justify-center text-[#FF641A] group-hover:scale-105 transition-transform">
-                      <AppIcon
-                        name={
-                          sub.slug.includes('stat')
-                            ? 'analytics'
-                            : sub.slug.includes('cs')
-                            ? 'terminal'
-                            : sub.slug.includes('business')
-                            ? 'business_center'
-                            : sub.slug.includes('account')
-                            ? 'query_stats'
-                            : 'fact_check'
-                        }
-                        className="w-7 h-7"
-                      />
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                      <AppIcon name={sub.icon || 'edit_document'} className="w-6 h-6" />
                     </div>
-                    <h3 className="font-heading text-xl font-bold text-[#243445] leading-snug">
-                      <Link
-                        href={`/${service.slug}/${sub.slug}`}
-                        className="hover:text-[#FF641A] transition-colors"
-                      >
+                    <h3 className="font-heading text-lg font-bold text-[#243445] mb-2 group-hover:text-[#FF641A] transition-colors">
+                      <Link href={`/${service.slug}/${sub.slug}`}>
                         {sub.title}
                       </Link>
                     </h3>
-                    <p className="text-sm text-slate-600 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-3">
                       {sub.shortDescription ||
-                        `Acquire rigorous assistance on complex assignments, research projects, and exam preparations for ${sub.title}.`}
+                        `Master ${sub.title} assignments with verified doctoral mentoring and step-by-step solutions.`}
                     </p>
                   </div>
-
-                  <div className="pt-6 mt-6 border-t border-slate-100">
+                  <div className="pt-4 mt-4 border-t border-slate-100">
                     <Link
                       href={`/${service.slug}/${sub.slug}`}
-                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#FF641A] group-hover:text-[#E8540E] transition-colors"
+                      className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-[#FF641A] group-hover:text-[#E8540E] font-semibold transition-colors"
                     >
                       <span>Explore Service</span>
-                      <AppIcon
-                        name="arrow_forward"
-                        className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                      />
+                      <AppIcon name="arrow_forward" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
-        </section>
-      )}
+          )}
 
-      {/* 5. ACADEMIC LEVEL GUIDANCE (3-COLUMN CARDS) */}
-      <section className="py-16 lg:py-24 w-full bg-white">
+          {/* Full 26 Disciplines Catalog from design/services.html (when on Assignment Help) */}
+          {isAssignmentHelp && (
+            <div className="mt-14 pt-10 border-t border-slate-100">
+              <div className="text-center max-w-2xl mx-auto mb-10">
+                <h3 className="font-heading text-xl sm:text-2xl font-bold text-[#243445]">
+                  Full Discipline Directory &amp; University Rubrics
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                  Connect with subject specialists across all collegiate faculties
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {ASSIGNMENT_DISCIPLINES.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="service-card group bg-white rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between border border-slate-100"
+                  >
+                    <div>
+                      <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
+                        <AppIcon name={item.icon} className="w-6 h-6" />
+                      </div>
+                      <h4 className="font-heading text-base font-bold text-[#243445] mb-2 group-hover:text-[#FF641A] transition-colors">
+                        {item.title}
+                      </h4>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        {item.desc}
+                      </p>
+                    </div>
+                    <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
+                      <a
+                        href="#hero-calculator-slot"
+                        className="inline-flex items-center gap-1 text-xs text-[#FF641A] font-semibold hover:underline"
+                      >
+                        <span>Calculate Quote</span>
+                        <AppIcon name="arrow_forward" className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* 4. EDITORIAL CONTENT, CORE ACADEMIC SOLUTIONS & 6 PILLARS */}
+      <section className="w-full bg-slate-50 py-16 lg:py-24 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <span className="text-xs uppercase tracking-wider text-[#FF641A] font-bold">
-              Respective Academic Fields
+          {/* Core Academic Solutions Header */}
+          <div className="text-center max-w-4xl mx-auto mb-14">
+            <span className="text-xs font-bold uppercase tracking-wider text-[#FF641A]">
+              Core Academic Solutions
             </span>
-            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-[#243445] leading-tight">
-              One-Click Online Guide for All Academic Standards
+            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl text-[#243445] mt-2 leading-tight font-bold">
+              Achieving success was never so easy. Get started with the best online class services today and make your academic journey stress-free!
             </h2>
-            <p className="text-sm md:text-base text-slate-600">
-              Our expert team fulfills assigned tasks within time limits customized to your precise academic benchmark.
+            <p className="text-sm sm:text-base text-slate-600 mt-3">
+              Select your service module to lock in dedicated doctoral-level assistance today.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 flex flex-col justify-start">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="w-10 h-10 rounded-full bg-[#FF641A] text-white flex items-center justify-center font-heading font-bold text-lg">
-                    1
-                  </span>
-                  <span className="px-3 py-1 rounded-full bg-slate-100 text-xs font-semibold text-slate-600">
-                    High School &amp; A-Levels
-                  </span>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            <div className="bg-white rounded-2xl p-6 shadow-md flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-slate-100">
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-4">
+                  <AppIcon name="description" className="w-5 h-5" />
                 </div>
-                <h3 className="font-heading text-xl font-bold text-[#243445]">
-                  High and Public Held Schools
+                <h3 className="font-heading text-base font-bold text-[#243445] mb-2">
+                  Pay to do My Assignment Help
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                  If you’re tired and have multiple coursework lined up, don’t fret. ReadEssay has writers trained across all disciplines ready to cater to urgent guidelines.
+                </p>
+              </div>
+              <Link
+                href="/assignment-help"
+                className="w-full py-2.5 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white text-xs font-bold text-center transition-colors shadow-sm block"
+              >
+                Order Now
+              </Link>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 shadow-md flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-slate-100">
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-slate-100 text-[#243445] flex items-center justify-center mb-4">
+                  <AppIcon name="verified_user" className="w-5 h-5" />
+                </div>
+                <h3 className="font-heading text-base font-bold text-[#243445] mb-2">
+                  Online Protected Exam Help
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                  Are online proctored exams too stressful? Deadlines intimidating? Find verified experts ready to take assessments with total privacy under Honorlock &amp; Proctorio.
+                </p>
+              </div>
+              <Link
+                href="/exam-help"
+                className="w-full py-2.5 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white text-xs font-bold text-center transition-colors shadow-sm block"
+              >
+                Order Now
+              </Link>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 shadow-md flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-slate-100">
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-[#243445] text-white flex items-center justify-center mb-4">
+                  <AppIcon name="school" className="w-5 h-5" />
+                </div>
+                <h3 className="font-heading text-base font-bold text-[#243445] mb-2">
+                  Take My Class Help
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                  Lengthy coursework and endless discussions can overwhelm busy schedules. ReadEssay is ready to share the entire term workload for guaranteed A/B grades.
+                </p>
+              </div>
+              <Link
+                href="/online-class-help"
+                className="w-full py-2.5 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white text-xs font-bold text-center transition-colors shadow-sm block"
+              >
+                Order Now
+              </Link>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 shadow-md flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-slate-100">
+              <div>
+                <div className="w-10 h-10 rounded-xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-4">
+                  <AppIcon name="quiz" className="w-5 h-5" />
+                </div>
+                <h3 className="font-heading text-base font-bold text-[#243445] mb-2">
+                  Do my Online Quiz &amp; Test Help
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4">
+                  College and high school virtual facilities test knowledge under strict timers. Let our subject experts handle your weekly tests and secure top scores.
+                </p>
+              </div>
+              <Link
+                href="/homework-help"
+                className="w-full py-2.5 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white text-xs font-bold text-center transition-colors shadow-sm block"
+              >
+                Order Now
+              </Link>
+            </div>
+          </div>
+
+          {/* Why Choose ReadEssay (6 Pillars) */}
+          <div className="pt-8">
+            <div className="text-center max-w-3xl mx-auto mb-14">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#FF641A]">
+                Uncompromising Quality
+              </span>
+              <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl text-[#243445] mt-2 font-bold">
+                Why Choose ReadEssay?
+              </h2>
+              <p className="text-sm sm:text-base text-slate-600 mt-3">
+                ReadEssay provides robust services at the most competitive, transparent rates. Here is what establishes our standing among thousands of collegiate students:
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="bg-white p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-slate-100">
+                <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-5">
+                  <AppIcon name="star" className="w-6 h-6" filled />
+                </div>
+                <h3 className="font-heading text-lg font-bold text-[#243445] mb-2">
+                  High-Quality Work
                 </h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  Initial Cambridge curriculum, IB diplomas, and A-Levels scenarios are solved with great clarity to provide strong foundational marks.
+                  We deliver only high-quality services. When you hand over your work, it is in safe hands with well-researched, accurate, and properly formatted submissions.
+                </p>
+              </div>
+
+              <div className="bg-white p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-slate-100">
+                <div className="w-12 h-12 rounded-xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-5">
+                  <AppIcon name="fact_check" className="w-6 h-6" />
+                </div>
+                <h3 className="font-heading text-lg font-bold text-[#243445] mb-2">
+                  100% Original Content
+                </h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  We understand the cost of submitting plagiarized work. No plagiarism, no AI shortcuts; only custom solutions crafted according to your precise prompt.
+                </p>
+              </div>
+
+              <div className="bg-white p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-slate-100">
+                <div className="w-12 h-12 rounded-xl bg-slate-100 text-[#243445] flex items-center justify-center mb-5">
+                  <AppIcon name="lock" className="w-6 h-6" />
+                </div>
+                <h3 className="font-heading text-lg font-bold text-[#243445] mb-2">
+                  100% Confidential
+                </h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  Your personal information, login credentials, and academic details remain protected under strict domestic VPN security and privacy agreements.
+                </p>
+              </div>
+
+              <div className="bg-white p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-slate-100">
+                <div className="w-12 h-12 rounded-xl bg-[#243445] text-white flex items-center justify-center mb-5">
+                  <AppIcon name="price_check" className="w-6 h-6" />
+                </div>
+                <h3 className="font-heading text-lg font-bold text-[#243445] mb-2">
+                  Affordable Pricing
+                </h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  Looking for an affordable provider? ReadEssay offers upfront, honest pricing starting from $5.50 with zero surprise costs or hidden platform fees.
+                </p>
+              </div>
+
+              <div className="bg-white p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-slate-100">
+                <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-5">
+                  <AppIcon name="support_agent" className="w-6 h-6" />
+                </div>
+                <h3 className="font-heading text-lg font-bold text-[#243445] mb-2">
+                  Live Chat Support
+                </h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  Our support team is online 24/7 to resolve questions, handle sudden deadline changes, and relay instructions straight to your assigned tutor.
+                </p>
+              </div>
+
+              <div className="bg-white p-8 rounded-2xl shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-slate-100">
+                <div className="w-12 h-12 rounded-xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-5">
+                  <AppIcon name="psychology" className="w-6 h-6" />
+                </div>
+                <h3 className="font-heading text-lg font-bold text-[#243445] mb-2">
+                  Skilled Subject Experts
+                </h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  From STEM, Python, and Statistics to Nursing and Business, our specialists possess advanced degrees and extensive teaching backgrounds.
                 </p>
               </div>
             </div>
+          </div>
 
-            <div className="bg-white rounded-2xl p-8 shadow-sm border-2 border-[#FF641A]/30 flex flex-col justify-start relative">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="w-10 h-10 rounded-full bg-[#243445] text-white flex items-center justify-center font-heading font-bold text-lg">
-                    2
-                  </span>
-                  <span className="px-3 py-1 rounded-full bg-[#FFF2EC] text-xs font-semibold text-[#FF641A]">
-                    Undergrad &amp; College
-                  </span>
-                </div>
-                <h3 className="font-heading text-xl font-bold text-[#243445]">
-                  Graded Colleges &amp; Universities
-                </h3>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  In-depth analysis of variables, term papers, literature reviews, and journal submissions evaluated against collegiate grading rubrics.
-                </p>
-              </div>
+          {/* 4-Step Order Workflow */}
+          <div className="mt-20 pt-10 border-t border-slate-200">
+            <div className="text-center max-w-3xl mx-auto mb-14">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#FF641A]">
+                Seamless Process
+              </span>
+              <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl text-[#243445] mt-2 font-bold">
+                How It Works: 4 Easy Steps
+              </h2>
             </div>
 
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 flex flex-col justify-start">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="w-10 h-10 rounded-full bg-[#059669] text-white flex items-center justify-center font-heading font-bold text-lg">
-                    3
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { step: '01', title: 'Submit Requirements', desc: 'Share your assignment brief, rubric criteria, formatting style, and deadline.' },
+                { step: '02', title: 'Expert Allocation', desc: 'We pair your coursework with a vetted Ph.D. scholar specializing in your exact field.' },
+                { step: '03', title: 'Drafting & Dual-Audit', desc: 'Your paper is drafted from scratch with verified calculations and Turnitin similarity checks.' },
+                { step: '04', title: 'Delivery & Revisions', desc: 'Receive your completed report and raw data files ahead of schedule with free revisions.' },
+              ].map((st, i) => (
+                <div key={i} className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 relative">
+                  <span className="text-3xl font-extrabold text-[#FF641A]/20 font-heading block mb-2">
+                    {st.step}
                   </span>
-                  <span className="px-3 py-1 rounded-full bg-slate-100 text-xs font-semibold text-slate-600">
-                    Post-Grad &amp; PhD
-                  </span>
+                  <h4 className="font-heading font-bold text-base text-[#243445] mb-2">
+                    {st.title}
+                  </h4>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    {st.desc}
+                  </p>
                 </div>
-                <h3 className="font-heading text-xl font-bold text-[#243445]">
-                  Post-Graduates and Ph.D. Programs
-                </h3>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  Complex study of econometric indicators, variance modeling, empirical data analysis, and publication-ready dissertation chapters.
-                </p>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* 6. ELITE SPECIALIST TEAM */}
-      <section className="py-16 lg:py-24 w-full bg-slate-50 border-y border-slate-100">
+      {/* PROMOTIONAL BANNER */}
+      <section className="w-full relative overflow-hidden py-16 bg-[#243445] text-white">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div>
+            <span className="text-xs uppercase tracking-wider text-[#FF641A] font-bold">
+              Fast Turnaround Guaranteed
+            </span>
+            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl text-white mt-1 font-bold">
+              Get your papers created by real professionals!
+            </h2>
+            <p className="text-sm sm:text-base text-slate-300 mt-2">
+              Join thousands of university students scoring A and B grades this semester.
+            </p>
+          </div>
+          <a
+            href="https://wa.me/923138400066"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-8 py-4 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white font-bold text-sm shadow-xl whitespace-nowrap transition-transform hover:scale-105"
+          >
+            Place Your Order
+          </a>
+        </div>
+      </section>
+
+      {/* 5. REUSED HOMEPAGE FACULTY SECTION (<TopExpertsCarousel />) */}
+      <section className="py-16 lg:py-24 w-full bg-white border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+          <div className="text-center max-w-3xl mx-auto mb-12">
             <span className="text-xs uppercase tracking-wider text-[#FF641A] font-bold">
               Accountability at Work
             </span>
-            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-[#243445] leading-tight">
-              Task Helpers Accountability at Work
+            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-[#243445] mt-2">
+              Meet Our Verified Doctoral Specialists
             </h2>
-            <p className="text-sm md:text-base text-slate-600">
-              Meet our bench of verified doctorate scholars dedicated to delivering academic excellence.
+            <p className="text-sm md:text-base text-slate-600 mt-2">
+              Our faculty scholars hold degrees from premier global universities and have guided over 10,000 students to Dean&apos;s List grades.
             </p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-[#FFF2EC] flex items-center justify-center text-[#FF641A]">
-                <AppIcon name="psychology" className="w-7 h-7" />
-              </div>
-              <h3 className="font-heading text-xl font-bold text-[#243445]">
-                Ph.D. Intellectuals
-              </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                The best scholars from Oxford, Edinburgh, Melbourne, and University of Florida are hired to conduct assignments with high rigor.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-[#ECFDF5] flex items-center justify-center text-[#059669]">
-                <AppIcon name="public" className="w-7 h-7" />
-              </div>
-              <h3 className="font-heading text-xl font-bold text-[#243445]">
-                Indigenous Regional Writers
-              </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Our mentors are trained in specific national curricula (US APA, UK Harvard/OSCOLA, Australian guidelines) for accurate contextual mastery.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-4">
-              <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-[#243445]">
-                <AppIcon name="hub" className="w-7 h-7" />
-              </div>
-              <h3 className="font-heading text-xl font-bold text-[#243445]">
-                Subject Branch Hub
-              </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Specialized sub-field experts ensure that from quantitative modeling to qualitative synthesis, your work is authored by a subject authority.
-              </p>
-            </div>
-          </div>
-
-          {/* Expert Profile Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex items-center gap-5">
-              <div className="w-20 h-20 rounded-full overflow-hidden relative shrink-0">
-                <Image
-                  src="/images/female-expert1.jpg"
-                  alt="Dr. Alan Crawford"
-                  fill
-                  className="object-cover"
-                  sizes="80px"
-                />
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <h4 className="font-heading text-sm font-bold text-[#243445]">
-                    Dr. Alan Crawford, Ph.D.
-                  </h4>
-                  <span className="px-2 py-0.5 rounded bg-[#ECFDF5] text-[#059669] text-[10px] font-bold">
-                    Verified
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500">
-                  12+ Years Experience • Oxford Fellow
-                </p>
-                <div className="flex flex-col text-xs text-[#FF641A] font-medium">
-                  <span>★ 4.98 Rating</span>
-                  <span className="text-slate-500">840+ Papers Delivered</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex items-center gap-5">
-              <div className="w-20 h-20 rounded-full overflow-hidden relative shrink-0">
-                <Image
-                  src="/images/male-expert1.jpg"
-                  alt="Elena Morales"
-                  fill
-                  className="object-cover"
-                  sizes="80px"
-                />
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <h4 className="font-heading text-sm font-bold text-[#243445]">
-                    Elena Morales, M.Sc.
-                  </h4>
-                  <span className="px-2 py-0.5 rounded bg-[#ECFDF5] text-[#059669] text-[10px] font-bold">
-                    Verified
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500">
-                  9+ Years Experience • STEM Specialist
-                </p>
-                <div className="flex flex-col text-xs text-[#FF641A] font-medium">
-                  <span>★ 4.96 Rating</span>
-                  <span className="text-slate-500">620+ Papers Delivered</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex items-center gap-5">
-              <div className="w-20 h-20 rounded-full overflow-hidden relative shrink-0">
-                <Image
-                  src="/images/female-expert2.jpg"
-                  alt="Marcus Vance"
-                  fill
-                  className="object-cover"
-                  sizes="80px"
-                />
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <h4 className="font-heading text-sm font-bold text-[#243445]">
-                    Marcus Vance, Ph.D.
-                  </h4>
-                  <span className="px-2 py-0.5 rounded bg-[#ECFDF5] text-[#059669] text-[10px] font-bold">
-                    Verified
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500">
-                  11+ Years Experience • Empirical Research
-                </p>
-                <div className="flex flex-col text-xs text-[#FF641A] font-medium">
-                  <span>★ 4.97 Rating</span>
-                  <span className="text-slate-500">710+ Papers Delivered</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-12 text-center">
-            <Link
-              href="/about-us"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#243445] hover:bg-slate-800 text-white text-sm sm:text-base font-semibold transition-colors"
-            >
-              <span>Meet Our Experts</span>
-              <AppIcon name="arrow_forward" className="w-[18px] h-[18px]" />
-            </Link>
-          </div>
+          <TopExpertsCarousel />
         </div>
       </section>
 
-      {/* 7. VERIFIED STUDENT TESTIMONIAL SPOTLIGHT */}
-      <section className="py-16 lg:py-24 w-full bg-white">
-        <div className="max-w-5xl mx-auto px-6 lg:px-12">
-          <div className="bg-[#243445] text-white rounded-3xl p-8 md:p-14 shadow-xl relative overflow-hidden mb-12">
-            <AppIcon
-              name="format_quote"
-              className="w-[140px] h-[140px] text-white/5 absolute -right-6 -bottom-6 pointer-events-none select-none"
-            />
-            <div className="relative z-10 space-y-6">
-              <div className="flex items-center gap-3">
-                <div className="flex text-amber-400">
-                  {[...Array(5)].map((_, i) => (
-                    <AppIcon key={i} name="star" className="w-5 h-5" filled />
-                  ))}
-                </div>
-                <span className="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold">
-                  Verified Coursework Grade Outcome
-                </span>
-              </div>
-              <blockquote className="font-heading text-xl sm:text-2xl lg:text-[28px] font-medium leading-snug italic text-white/95">
-                &ldquo;I got my {service.title} task done by a verified professional and this raised my grade from B+ to A in my final assessment.&rdquo;
-              </blockquote>
-              <div className="flex items-center gap-4 pt-4">
-                <div className="w-12 h-12 rounded-full bg-[#FF641A] flex items-center justify-center text-white font-bold text-lg font-heading">
-                  TY
-                </div>
-                <div>
-                  <p className="font-heading text-lg font-bold text-white">Taylor Yates</p>
-                  <p className="text-xs text-white/70">Verified Student • 2026 Cohort</p>
-                </div>
-              </div>
-            </div>
+      {/* 6. VERIFIED STUDENT TESTIMONIALS (With "More Reviews" -> /reviews) */}
+      <section className="py-16 lg:py-24 w-full bg-slate-50 border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <span className="text-xs uppercase tracking-wider text-[#FF641A] font-bold">
+              Student Testimonials
+            </span>
+            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-[#243445] mt-2">
+              Success Stories Directly From Our Clients
+            </h2>
+            <p className="text-sm md:text-base text-slate-600 mt-2">
+              ReadEssay is the trusted partner for college learners worldwide. See what real students say after partnering with our subject scholars:
+            </p>
           </div>
 
-          {/* Testimonial Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
             {reviews.map((rev, idx) => (
               <div
                 key={rev.id || idx}
-                className="bg-slate-50 p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between"
+                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-shadow"
               >
                 <div>
                   <div className="flex items-center gap-1 text-[#FF641A] mb-3">
@@ -692,7 +680,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                     &ldquo;{rev.comment}&rdquo;
                   </p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
                   <div className="w-10 h-10 rounded-full overflow-hidden relative shrink-0 bg-slate-200">
                     <Image
                       src={resolveReviewAvatar(null, idx)}
@@ -706,7 +694,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                     <span className="font-heading font-bold text-sm text-[#243445] block">
                       {rev.clientName}
                     </span>
-                    <span className="text-xs text-slate-500">{rev.serviceTitle}</span>
+                    <span className="text-xs text-slate-500">{rev.serviceTitle || service.title}</span>
                   </div>
                 </div>
               </div>
@@ -725,8 +713,8 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* 8. VERIFIED GRADES EVIDENCE SHOWCASE */}
-      <section className="w-full bg-slate-50 py-16 lg:py-24 border-t border-slate-100">
+      {/* 7. REUSED VERIFIED GRADES MARQUEE (With "View All Samples" -> /samples) */}
+      <section className="w-full bg-white py-16 lg:py-24 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-8">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
@@ -739,7 +727,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               </h2>
             </div>
             <div className="flex items-center gap-3">
-              <span className="px-4 py-2 rounded-xl bg-white font-medium text-xs sm:text-sm text-[#243445] shadow-sm">
+              <span className="px-4 py-2 rounded-xl bg-slate-50 font-medium text-xs sm:text-sm text-[#243445] shadow-sm border border-slate-100">
                 Canvas Gradebook
               </span>
               <span className="px-4 py-2 rounded-xl bg-[#ECFDF5] font-bold text-xs sm:text-sm text-[#059669]">
@@ -749,21 +737,11 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           </div>
 
           <VerifiedGradesMarquee />
-
-          <div className="text-center pt-6">
-            <Link
-              href="/samples"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#059669] hover:bg-emerald-600 text-white text-sm sm:text-base font-semibold shadow-md transition-colors"
-            >
-              <span>View All Samples</span>
-              <AppIcon name="arrow_forward" className="w-[18px] h-[18px]" />
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* 9. CORE QUALITY GUARANTEES (2x3 GRID) */}
-      <section className="py-16 lg:py-24 w-full bg-white border-t border-slate-100">
+      {/* 8. CORE QUALITY GUARANTEES (2x3 GRID) */}
+      <section className="py-16 lg:py-24 w-full bg-slate-50 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
             <span className="text-xs uppercase tracking-wider text-[#FF641A] font-bold">
@@ -798,7 +776,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                 Plagiarism-Free Work
               </h3>
               <p className="text-sm text-slate-600 leading-relaxed">
-                It is against our core values to deliver any project without screening. All work is 100% original and verified through industry-grade Turnitin scanners.
+                It is against our core values to deliver any project without screening. All work is 100% original and verified through industry-grade scanners.
               </p>
             </div>
 
@@ -853,8 +831,8 @@ export default async function ServiceDetailPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* 10. FREQUENTLY ASKED QUESTIONS (FAQ) */}
-      <section className="w-full bg-slate-50 py-16 lg:py-24 border-t border-slate-100">
+      {/* 9. FREQUENTLY ASKED QUESTIONS (FAQ) */}
+      <section className="w-full bg-white py-16 lg:py-24 border-b border-slate-100">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
             <span className="text-xs uppercase tracking-wider text-[#FF641A] font-bold">
@@ -869,28 +847,11 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           </div>
 
           <FaqAccordion items={combinedFaqs} />
-
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
-            <Link
-              href="/samples"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white hover:bg-slate-100 text-[#243445] text-sm font-semibold transition-colors border border-slate-200"
-            >
-              <AppIcon name="description" className="w-[18px] h-[18px]" />
-              <span>View All Samples</span>
-            </Link>
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white text-sm font-semibold shadow-md transition-colors"
-            >
-              <AppIcon name="support_agent" className="w-[18px] h-[18px]" />
-              <span>Contact Support</span>
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* 11. DIRECT HOTLINES & FINAL CALL TO ACTION */}
-      <section className="w-full bg-white py-16 lg:py-24 border-t border-slate-100">
+      {/* 10. DIRECT HOTLINES & FINAL CALL TO ACTION BANNER */}
+      <section className="w-full bg-slate-50 py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="bg-[#243445] text-white rounded-3xl p-8 lg:p-14 relative overflow-hidden shadow-2xl">
             <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-[#FF641A]/20 rounded-full blur-3xl pointer-events-none" />
@@ -903,7 +864,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                   Excel your academic journey today with ReadEssay’s {service.title} solutions.
                 </h2>
                 <p className="text-slate-300 text-sm sm:text-base mt-4 leading-relaxed max-w-2xl">
-                  Don’t let coursework weigh you down. Ordering from ReadEssay is absolutely safe, confidential, and backed by a 100% money-back guarantee.
+                  Don’t let coursework weigh you down. We are your partners in your academic journey. Ordering from ReadEssay is absolutely safe, confidential, and backed by a 100% money-back guarantee.
                 </p>
 
                 <div className="flex flex-wrap items-center gap-4 sm:gap-6 mt-8 pt-4">

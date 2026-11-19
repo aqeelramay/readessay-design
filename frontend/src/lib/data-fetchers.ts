@@ -333,13 +333,61 @@ export const DEFAULT_SERVICES: PublicService[] = [
           'Does the conception of reasoning the compound questions of accounting fears the blood of your nerves and gives a sense of relaxation after the appropriate acknowledgment? This website is particularly made to calm students’ fear and give them the best solution. The complexity can be tinctured from financial-cost-tax accounting. Our experts are extremely devoted and committed to their assigned work.',
         status: 'PUBLISHED',
         features: [
-          'Cost-System Accounting Task Help (volume-profit analysis, activity-based costing, flexible budgeting)',
-          'Tax Accounting Problem-Solutions (corporate tax, income tax, property tax calculations)',
-          'Finance Accounting Task Help (budgeting, balance sheets, machine costing, financial graphs)',
-          'Forensic Complex Situations Task (corporate solvency, bankruptcy analysis, audit trails)',
-          'Audit Aspect of Accounting Assistance (absorption vs. variable costing, internal & external audits)',
+          '100% Authentic Mode of Payment',
+          'Customized Accounting Task as Sample for Free',
+          'No Copied Material: 99.9% Plagiarism-Free',
+          'Fastest and Immediate Delivery of Mail',
+          'Excel Spreadsheets with Active Dynamic Formulas',
         ],
-        faqs: DEFAULT_FAQS,
+        processSteps: [
+          {
+            stepNumber: 1,
+            title: 'Upload Requirements & Rubrics',
+            description:
+              'Submit your accounting problem set, trial balance data, or corporate case study with required GAAP/IFRS standards.',
+          },
+          {
+            stepNumber: 2,
+            title: 'Doctoral CPA Matching',
+            description:
+              'We allocate a certified accountant or university lecturer experienced in your specific accounting branch.',
+          },
+          {
+            stepNumber: 3,
+            title: 'Dynamic Excel & Narrative Solutions',
+            description:
+              'Specialists build balanced worksheets, formula derivations, ledger accounts, and explanatory write-ups.',
+          },
+          {
+            stepNumber: 4,
+            title: 'Dual-Audit Quality Verification',
+            description:
+              'A senior reviewer verifies balance sheet reconciliation and Turnitin originality before on-time delivery.',
+          },
+        ],
+        faqs: [
+          {
+            question:
+              '1. Can your accounting experts solve assignments in Microsoft Excel with working formulas?',
+            answer:
+              'Yes, absolutely. Most university accounting modules require dynamic Excel spreadsheets showing formulas for depreciation, NPV, CVP analysis, or ledger summations. We provide clean, fully documented Excel files along with narrative Word reports.',
+          },
+          {
+            question: '2. Do you follow US GAAP or International IFRS standards?',
+            answer:
+              'We follow whichever standard is mandated by your institution. When ordering, simply specify whether your course is grounded in US GAAP, IFRS, UK FRS 102, or Australian AASB standards, and our regional specialists will formulate the balance sheets accordingly.',
+          },
+          {
+            question: '3. What if my balance sheet or trial balance does not balance?',
+            answer:
+              'Every accounting paper undergoes a dual-audit verification process by a senior reviewer before delivery. In the rare event of any discrepancy, we provide unlimited free revisions until your working papers are 100% accurate and aligned.',
+          },
+          {
+            question: '4. How fast can I receive an urgent accounting assignment?',
+            answer:
+              'Our express turnaround team handles emergency requests in as little as 6 to 12 hours. We have accounting specialists active 24/7 across multiple global time zones ready to begin immediately upon order placement.',
+          },
+        ],
         createdAt: '',
         updatedAt: '',
       },
@@ -1465,7 +1513,15 @@ export async function fetchSubService(
   // Fallback lookup
   const parentService = DEFAULT_SERVICES.find((s) => s.slug === serviceSlug);
   if (parentService && parentService.subServices) {
-    const sub = parentService.subServices.find((ss) => ss.slug === subServiceSlug);
+    const cleanSub = subServiceSlug.trim().toLowerCase();
+    const sub = parentService.subServices.find(
+      (ss) =>
+        ss.slug === cleanSub ||
+        ss.slug === `assignment-${cleanSub}` ||
+        ss.slug === cleanSub.replace(/^assignment-/, '') ||
+        ss.slug === `hw-${cleanSub}` ||
+        ss.slug === cleanSub.replace(/^hw-/, '')
+    );
     if (sub) {
       return {
         ...sub,

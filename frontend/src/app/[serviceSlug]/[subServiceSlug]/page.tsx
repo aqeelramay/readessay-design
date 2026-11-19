@@ -7,13 +7,16 @@ import {
   fetchServiceBySlug,
   fetchServiceTree,
   fetchFeaturedReviews,
+  fetchPublicCalculator,
   DEFAULT_FAQS,
   resolveReviewAvatar,
 } from '@/lib/data-fetchers';
 import RatingCards from '@/components/shared/RatingCards';
 import UniversityMarquee from '@/components/shared/UniversityMarquee';
+import TopExpertsCarousel from '@/components/shared/TopExpertsCarousel';
 import VerifiedGradesMarquee from '@/components/shared/VerifiedGradesMarquee';
 import FaqAccordion from '@/components/shared/FaqAccordion';
+import PriceCalculatorWidget from '@/components/shared/PriceCalculatorWidget';
 import AppIcon from '@/components/shared/AppIcon';
 import JsonLd from '@/components/seo/JsonLd';
 import {
@@ -76,7 +79,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description:
       subService.seoDescription ||
       subService.shortDescription ||
-      `Get top-rated ${subService.title} from verified doctoral experts at ReadEssay. 100% original Turnitin-verified research.`,
+      `Get top-rated ${subService.title} from verified doctoral experts at ReadEssay. 100% original Turnitin-verified research, 24/7 support, and guaranteed grades.`,
     alternates: {
       canonical: `https://readessay.com/${serviceSlug}/${subService.slug}`,
     },
@@ -90,31 +93,66 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+// 5 Specialized Rubrics Blueprint from design/service-detail.html
 const DEFAULT_RUBRIC_CARDS = [
   {
     icon: 'query_stats',
     title: 'Cost-System Accounting Task Help',
-    desc: 'Volume-profit analysis, activity-based costing, tools for planning & control, flexible budgeting, variance analysis, and capacity optimization.',
+    desc: 'Do your limited knowledge plunge you in problematic questions of volume-profit analysis, activity-based costing, tools for planning and control, flexible budgeting, variance analysis, inventory costing, and capacity optimization? Get expert advice from doctoral specialists to resolve the most challenging calculations.',
   },
   {
     icon: 'receipt_long',
     title: 'Tax Accounting Problem-Solutions',
-    desc: 'Property, income, and corporate tax computation, real-time corporate filing simulations, and HMRC/IRS compliance frameworks.',
+    desc: 'Covering all respective fields of property, income, and corporate tax computation. We assist students with real-time corporate filing simulations, UK HMRC & US IRS compliance frameworks, and specified ticklish taxation questions.',
   },
   {
     icon: 'account_balance',
     title: 'Finance Accounting Task Help',
-    desc: 'Budgeting models, preparation of financial statements, balance sheet totals, inventory accounting, and capital asset depreciation schedules.',
+    desc: 'Budgeting models, preparation of financial statements, balance sheet totals, machine cost financing schedules, stock inventory management, and financial ratio projections with zero copied material.',
   },
   {
     icon: 'security',
     title: 'Forensic Complex Situations Task',
-    desc: 'Publicly listed company solvency declarations, bankruptcy resolution, auditing fraud detection, and evidence matrices.',
+    desc: 'Case studies involving solvency declarations between publicly listed corporations, bankruptcy resolution, auditing fraud detection, and evidence matrices solved to yield high-scoring academic papers.',
   },
   {
     icon: 'fact_check',
     title: 'Audit Aspect of Accounting Assistance',
-    desc: 'Absorption vs. variable costing, operational budgeting techniques, standard costing vs. variance, and internal corporate audit governance.',
+    desc: 'Guidance on absorption vs. variable costing, operational budgeting techniques, standard costing vs. variance analysis, internal/external audit governance reports, and corporate sustainability records.',
+  },
+];
+
+// 6 Core Quality Guarantees from design/service-detail.html
+const CORE_GUARANTEES = [
+  {
+    icon: 'workspace_premium',
+    title: 'Best Quality Assignments & Papers',
+    desc: 'The writers hired by ReadEssay are experienced specialists. This assures intensive research behind each order, designed specifically to secure high grades.',
+  },
+  {
+    icon: 'task_alt',
+    title: 'Plagiarism-Free Work',
+    desc: 'It is against our core values to deliver any project without screening. All work is 100% original and verified through industry-grade scanners.',
+  },
+  {
+    icon: 'find_in_page',
+    title: 'Proofreading & Revisions',
+    desc: 'Specialized editors inspect every document prior to final submission. We ensure zero grammatical, formatting, or contextual errors remain.',
+  },
+  {
+    icon: 'alarm_on',
+    title: 'Meeting All Deadlines',
+    desc: 'Our writers complete assignments at least 24 hours prior to your cutoff whenever possible, eliminating anxiety and giving you ample time for review.',
+  },
+  {
+    icon: 'headset_mic',
+    title: '24/7 Customer Support Availability',
+    desc: 'Regardless of your time zone, log onto ReadEssay any time. Our responsive operators provide instant answers and seamless order status updates.',
+  },
+  {
+    icon: 'published_with_changes',
+    title: 'On-Time Delivery & Free Revisions',
+    desc: 'Even after delivery, you have continuous access to fast adjustments. Writers make any required instructor amendments without additional fees.',
   },
 ];
 
@@ -125,9 +163,10 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const [subService, parentService] = await Promise.all([
+  const [subService, parentService, calculatorData] = await Promise.all([
     fetchSubService(serviceSlug, subServiceSlug),
     fetchServiceBySlug(serviceSlug),
+    fetchPublicCalculator(),
   ]);
 
   if (!subService) {
@@ -139,16 +178,33 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
 
   // Sibling sub-services (excluding this one)
   const siblingSubServices =
-    parentService?.subServices?.filter((s) => s.slug !== subServiceSlug) || [];
+    parentService?.subServices?.filter(
+      (s) => s.slug !== subServiceSlug && s.slug !== subService.slug,
+    ) || [];
 
   const reviews = await fetchFeaturedReviews({
     serviceSlug,
     subServiceSlug,
-    limit: 3,
+    limit: 4,
   });
 
   const combinedFaqs =
     subService.faqs && subService.faqs.length > 0 ? subService.faqs : DEFAULT_FAQS;
+
+  // Use subService.features if provided, or default to the 5 rubric cards
+  const rubricCards =
+    subService.features && subService.features.length >= 3
+      ? subService.features.map((f, idx) => {
+          const defaultCard = DEFAULT_RUBRIC_CARDS[idx % DEFAULT_RUBRIC_CARDS.length];
+          const title = typeof f === 'string' ? f : ((f as unknown as { title?: string }).title || defaultCard.title);
+          const desc = typeof f === 'string' ? defaultCard.desc : ((f as unknown as { description?: string }).description || defaultCard.desc);
+          return {
+            icon: defaultCard.icon,
+            title,
+            desc,
+          };
+        })
+      : DEFAULT_RUBRIC_CARDS;
 
   return (
     <div className="w-full bg-[#FAFAFA] text-[#243445]">
@@ -157,7 +213,7 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
           buildBreadcrumbSchema([
             { name: 'Home', url: '/' },
             { name: parentTitle, url: `/${serviceSlug}` },
-            { name: subService.title, url: `/${serviceSlug}/${subServiceSlug}` },
+            { name: subService.title, url: `/${serviceSlug}/${subService.slug}` },
           ]),
           buildServiceSchema({
             name: subService.title,
@@ -165,11 +221,12 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
               subService.shortDescription ||
               subService.heroSubtitle ||
               `${subService.title} academic coursework support under ${parentTitle}.`,
-            url: `/${serviceSlug}/${subServiceSlug}`,
+            url: `/${serviceSlug}/${subService.slug}`,
           }),
           buildFaqPageSchema(combinedFaqs),
         ]}
       />
+
       {/* 1. HERO SECTION */}
       <section className="relative w-full bg-white overflow-hidden py-12 lg:py-20 border-b border-slate-100">
         <div className="absolute -top-32 right-10 w-96 h-96 bg-[#FFF2EC] rounded-full blur-3xl pointer-events-none -z-0" />
@@ -215,7 +272,7 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
               <p className="text-base sm:text-lg text-slate-600 max-w-2xl leading-relaxed">
                 {subService.heroSubtitle ||
                   subService.shortDescription ||
-                  `Get reliable ${subService.title} from experienced doctoral specialists. Receive expert guidance to tackle complex topics, pass proctored assessments, and meet your deadlines.`}
+                  `Get reliable ${subService.title.toLowerCase()} from experienced subject specialists. From fundamental concepts to advanced applied coursework, receive expert guidance to tackle complex topics and meet your deadlines.`}
               </p>
 
               {/* 5 Value Checkmarks */}
@@ -277,51 +334,33 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
               </div>
             </div>
 
-            {/* Right: Reserved Calculator Slot */}
+            {/* Right: Live Price Calculator Widget */}
             <div className="lg:col-span-5">
-              <div
-                id="hero-calculator-slot"
-                className="w-full min-h-[420px] rounded-3xl bg-slate-50/80 border-2 border-dashed border-slate-200 p-8 flex flex-col items-center justify-center text-center relative overflow-hidden"
-              >
-                <div className="w-16 h-16 rounded-2xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-4 shadow-sm">
-                  <AppIcon name="calculate" className="w-8 h-8" />
-                </div>
-                <h3 className="font-heading text-xl font-bold text-[#243445] mb-2">
-                  Calculate Order Price
-                </h3>
-                <p className="text-sm text-slate-500 max-w-sm mb-6">
-                  Instant estimate tailored to your exact {subService.title} requirements.
-                </p>
-                <a
-                  href="https://wa.me/923138400066"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#243445] text-white text-sm font-semibold hover:bg-slate-800 transition-colors"
-                >
-                  <span>Request Instant Quote</span>
-                  <AppIcon name="arrow_forward" className="w-4 h-4" />
-                </a>
-                <div className="mt-4 flex items-center gap-4 text-xs text-slate-500 font-medium">
-                  <span className="flex items-center gap-1">
-                    <AppIcon name="check" className="w-3 h-3 text-[#059669]" />
-                    Zero Obligation
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <AppIcon name="check" className="w-3 h-3 text-[#059669]" />
-                    Instant Match
-                  </span>
-                </div>
+              <div id="hero-calculator-slot" className="w-full">
+                <PriceCalculatorWidget
+                  data={calculatorData}
+                  defaultServiceSlug={parentService?.slug || 'assignment-help'}
+                />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. RATINGS & TRUST BAR */}
+      {/* 2. REUSED HOMEPAGE TRUST BARS (Rating Cards & Connect with Seniors) */}
       <section className="w-full bg-slate-50 py-10 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-8">
           <RatingCards />
-          <UniversityMarquee />
+          <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col items-center text-center">
+            <div className="text-xl font-bold text-[#FF641A] flex items-center justify-center gap-2 mb-2 font-heading">
+              <AppIcon name="groups" className="w-6 h-6" />
+              <span>Connect with Seniors</span>
+            </div>
+            <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto mb-6 text-center">
+              10,000+ Students across American, Australian, Canadian and Middle East Universities. Connect to ask anything. Absolutely Free. Fast.
+            </p>
+            <UniversityMarquee />
+          </div>
         </div>
       </section>
 
@@ -380,10 +419,10 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-6 space-y-6">
               <div className="inline-flex items-center gap-2 text-[#FF641A] text-xs font-bold uppercase tracking-wider">
-                <span>Specialized Module Assistance</span>
+                <span>Specialized Assistance</span>
               </div>
               <h3 className="font-heading text-2xl sm:text-3xl font-bold text-[#243445] leading-snug">
-                Rigorous Guidance in {subService.title}
+                Rigorous Guidance in {subService.title} Tasks
               </h3>
               <p className="text-sm md:text-base text-slate-600 leading-relaxed">
                 {subService.content ||
@@ -411,7 +450,7 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
                 <iframe
                   className="w-full h-full"
                   src="https://www.youtube.com/embed/OaqUwnjm9Xo"
-                  title={`${subService.title} Walkthrough`}
+                  title={`Assistance in ${subService.title} Tasks`}
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                 />
@@ -421,7 +460,7 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* 4. DETAILED SOLUTIONS & RUBRIC CHECKLIST */}
+      {/* 4. DETAILED SOLUTIONS & RUBRIC CARDS */}
       <section className="py-16 lg:py-24 w-full bg-slate-50 border-y border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
@@ -431,28 +470,33 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
             <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-[#243445] leading-tight">
               Acquire Assistance in {subService.title} for Detailed Solutions
             </h2>
-            <p className="text-sm md:text-base text-slate-600">
-              We hold a bench of over 5,500 professionals who hold specialist degrees in respective branches. Look upon to clear your queries and realize the expertise of our team.
+            <p className="text-sm md:text-base text-slate-600 leading-relaxed">
+              We are holding up the squad of 5,500+ professionals who hold specialist degrees in respective branches. Look upon to clear your queries and realize the expertise of our team.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {DEFAULT_RUBRIC_CARDS.map((card, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-start border border-slate-100"
-              >
-                <div className="space-y-4">
-                  <div className="w-14 h-14 rounded-2xl bg-[#FFF2EC] flex items-center justify-center text-[#FF641A]">
-                    <AppIcon name={card.icon} className="w-7 h-7" />
+            {rubricCards.map((card, idx) => {
+              const isWide = idx === 4 && rubricCards.length === 5;
+              return (
+                <div
+                  key={idx}
+                  className={`bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-start border border-slate-100 ${
+                    isWide ? 'md:col-span-2 lg:col-span-2' : ''
+                  }`}
+                >
+                  <div className="space-y-4">
+                    <div className="w-14 h-14 rounded-2xl bg-[#FFF2EC] flex items-center justify-center text-[#FF641A]">
+                      <AppIcon name={card.icon} className="w-7 h-7" />
+                    </div>
+                    <h3 className="font-heading text-xl font-bold text-[#243445] leading-snug">
+                      {card.title}
+                    </h3>
+                    <p className="text-sm text-slate-600 leading-relaxed">{card.desc}</p>
                   </div>
-                  <h3 className="font-heading text-xl font-bold text-[#243445] leading-snug">
-                    {card.title}
-                  </h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">{card.desc}</p>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -533,7 +577,7 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* 6. SUBJECT-MATTER EXPERT PROFILE CARDS */}
+      {/* 6. SUBJECT-MATTER EXPERT PROFILE CARDS & ACCOUNTABILITY AT WORK */}
       <section className="py-16 lg:py-24 w-full bg-slate-50 border-y border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
@@ -544,11 +588,11 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
               Task Helpers Accountability at Work
             </h2>
             <p className="text-sm md:text-base text-slate-600">
-              Meet our assigned specialists for {subService.title}.
+              Is your consciousness pondering whether the expert will be able to perform your task diligently? Meet our assigned specialists for {subService.title}.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-4">
               <div className="w-14 h-14 rounded-2xl bg-[#FFF2EC] flex items-center justify-center text-[#FF641A]">
                 <AppIcon name="psychology" className="w-7 h-7" />
@@ -586,173 +630,159 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
             </div>
           </div>
 
-          {/* Expert Profiles */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex items-center gap-5">
-              <div className="w-20 h-20 rounded-full overflow-hidden relative shrink-0">
-                <Image
-                  src="/images/female-expert1.jpg"
-                  alt="Dr. Alan Crawford"
-                  fill
-                  className="object-cover"
-                  sizes="80px"
-                />
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <h4 className="font-heading text-sm font-bold text-[#243445]">
-                    Dr. Alan Crawford, Ph.D.
-                  </h4>
-                  <span className="px-2 py-0.5 rounded bg-[#ECFDF5] text-[#059669] text-[10px] font-bold">
-                    Verified
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500">
-                  12+ Years Experience • Oxford Fellow
-                </p>
-                <div className="flex flex-col text-xs text-[#FF641A] font-medium">
-                  <span>★ 4.98 Rating</span>
-                  <span className="text-slate-500">840+ Papers Delivered</span>
-                </div>
-              </div>
+          {/* Reused Homepage Top Experts Carousel */}
+          <div className="space-y-8">
+            <TopExpertsCarousel />
+            <div className="text-center pt-2">
+              <Link
+                href="/about-us"
+                className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#243445] hover:bg-slate-800 text-white text-sm sm:text-base font-semibold transition-colors"
+              >
+                <span>Meet Our Experts</span>
+                <AppIcon name="arrow_forward" className="w-[18px] h-[18px]" />
+              </Link>
             </div>
-
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex items-center gap-5">
-              <div className="w-20 h-20 rounded-full overflow-hidden relative shrink-0">
-                <Image
-                  src="/images/male-expert1.jpg"
-                  alt="Elena Morales"
-                  fill
-                  className="object-cover"
-                  sizes="80px"
-                />
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <h4 className="font-heading text-sm font-bold text-[#243445]">
-                    Elena Morales, M.Sc.
-                  </h4>
-                  <span className="px-2 py-0.5 rounded bg-[#ECFDF5] text-[#059669] text-[10px] font-bold">
-                    Verified
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500">
-                  9+ Years Experience • STEM Specialist
-                </p>
-                <div className="flex flex-col text-xs text-[#FF641A] font-medium">
-                  <span>★ 4.96 Rating</span>
-                  <span className="text-slate-500">620+ Papers Delivered</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex items-center gap-5">
-              <div className="w-20 h-20 rounded-full overflow-hidden relative shrink-0">
-                <Image
-                  src="/images/female-expert2.jpg"
-                  alt="Marcus Vance"
-                  fill
-                  className="object-cover"
-                  sizes="80px"
-                />
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <h4 className="font-heading text-sm font-bold text-[#243445]">
-                    Marcus Vance, Ph.D.
-                  </h4>
-                  <span className="px-2 py-0.5 rounded bg-[#ECFDF5] text-[#059669] text-[10px] font-bold">
-                    Verified
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500">
-                  11+ Years Experience • Empirical Research
-                </p>
-                <div className="flex flex-col text-xs text-[#FF641A] font-medium">
-                  <span>★ 4.97 Rating</span>
-                  <span className="text-slate-500">710+ Papers Delivered</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-12 text-center">
-            <Link
-              href="/about-us"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#243445] hover:bg-slate-800 text-white text-sm sm:text-base font-semibold transition-colors"
-            >
-              <span>Meet Our Experts</span>
-              <AppIcon name="arrow_forward" className="w-[18px] h-[18px]" />
-            </Link>
           </div>
         </div>
       </section>
 
-      {/* 7. STUDENT TESTIMONIALS */}
+      {/* 7. VERIFIED STUDENT TESTIMONIAL SPOTLIGHT */}
       <section className="py-16 lg:py-24 w-full bg-white">
         <div className="max-w-5xl mx-auto px-6 lg:px-12">
+          <div className="bg-[#243445] text-white rounded-3xl p-8 md:p-14 shadow-xl relative overflow-hidden">
+            <AppIcon
+              name="format_quote"
+              className="w-36 h-36 text-white/5 absolute -right-6 -bottom-6 pointer-events-none select-none"
+            />
+            <div className="relative z-10 space-y-6">
+              <div className="flex items-center gap-3">
+                <div className="flex text-amber-400 gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <AppIcon key={i} name="star" className="w-5 h-5 text-amber-400" filled />
+                  ))}
+                </div>
+                <span className="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold">
+                  Verified Coursework Grade Outcome
+                </span>
+              </div>
+              <blockquote className="font-heading text-xl sm:text-2xl lg:text-[28px] font-medium leading-snug italic text-white/95">
+                &ldquo;I got my assignment done by cost-accounting professional and thus this raised my grade form B+ to A in cost system subject at University of Australia.&rdquo;
+              </blockquote>
+              <div className="flex items-center gap-4 pt-4">
+                <div className="w-12 h-12 rounded-full bg-[#FF641A] flex items-center justify-center text-white font-bold text-lg font-heading">
+                  TY
+                </div>
+                <div>
+                  <p className="font-heading text-lg font-bold text-white">Taylor Yates</p>
+                  <p className="text-xs text-white/70">Accountant</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. ADDITIONAL CORE GUARANTEES & FEATURES ("Additional Incentives") */}
+      <section className="py-16 lg:py-24 w-full bg-slate-50 border-y border-slate-100">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
             <span className="text-xs uppercase tracking-wider text-[#FF641A] font-bold">
-              Student Testimonials
+              Additional Incentives
             </span>
             <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-[#243445] leading-tight">
-              Success Stories for {subService.title}
+              Performing {subService.title} Tasks with Additional Incentives in Hand
             </h2>
             <p className="text-sm md:text-base text-slate-600">
-              See what real university students say after completing their coursework with our doctoral mentors:
+              Here is the list of additional essential elements provided for students:
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            {reviews.map((rev, idx) => (
-              <div
-                key={rev.id || idx}
-                className="bg-slate-50 p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center gap-1 text-[#FF641A] mb-3">
-                    {[...Array(5)].map((_, i) => (
-                      <AppIcon key={i} name="star" className="w-[18px] h-[18px]" filled />
-                    ))}
-                  </div>
-                  <p className="text-slate-700 text-sm italic mb-6 leading-relaxed">
-                    &ldquo;{rev.comment}&rdquo;
-                  </p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full overflow-hidden relative shrink-0 bg-slate-200">
-                    <Image
-                      src={resolveReviewAvatar(null, idx)}
-                      alt={rev.clientName}
-                      fill
-                      className="object-cover"
-                      sizes="40px"
-                    />
-                  </div>
-                  <div>
-                    <span className="font-heading font-bold text-sm text-[#243445] block">
-                      {rev.clientName}
-                    </span>
-                    <span className="text-xs text-slate-500">{rev.serviceTitle}</span>
-                  </div>
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+              <div className="w-12 h-12 rounded-xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center">
+                <AppIcon name="verified" className="w-6 h-6" filled />
               </div>
-            ))}
-          </div>
+              <h3 className="font-heading font-semibold text-[#243445] text-lg leading-snug">
+                100% Authentic Mode of Payment
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                The mode of payment is secured with 256-bit SSL encryption. We support debit/credit cards, PayPal, and bank transfers with zero hidden platform fees.
+              </p>
+            </div>
 
-          <div className="text-center">
-            <Link
-              href="/reviews"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white text-sm sm:text-base font-semibold shadow-md transition-colors"
-            >
-              <span>More Reviews</span>
-              <AppIcon name="arrow_forward" className="w-[18px] h-[18px]" />
-            </Link>
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+              <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center">
+                <AppIcon name="file_present" className="w-6 h-6" />
+              </div>
+              <h3 className="font-heading font-semibold text-[#243445] text-lg leading-snug">
+                Customized Task as Sample for Free
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                A wide range of verified coursework samples is available for free inspection, helping you evaluate writing quality and citation formatting upfront.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+              <div className="w-12 h-12 rounded-xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center">
+                <AppIcon name="content_paste_search" className="w-6 h-6" />
+              </div>
+              <h3 className="font-heading font-semibold text-[#243445] text-lg leading-snug">
+                No Copied Material: 99.9% Plagiarism-Free
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                All solutions are synthesized from ground up using primary literature. Turnitin similarity reports are generated alongside every delivery.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+              <div className="w-12 h-12 rounded-xl bg-slate-100 text-[#243445] flex items-center justify-center">
+                <AppIcon name="schedule" className="w-6 h-6" />
+              </div>
+              <h3 className="font-heading font-semibold text-[#243445] text-lg leading-snug">
+                Fastest and Immediate Delivery
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                Orders are delivered directly to your inbox with hours to spare before your institutional deadline, leaving ample time for thorough review.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 8. SIBLING SUB-SERVICES EXPLORATION */}
+      {/* 9. FAST TURNAROUND PROMOTIONAL BANNER */}
+      <section className="w-full relative overflow-hidden py-16 bg-[#243445] text-white">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/fast-turnaround-bg.jpg"
+            alt="Academic Support Background Banner"
+            fill
+            className="object-cover object-center opacity-25"
+          />
+        </div>
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+          <div>
+            <span className="text-xs uppercase tracking-wider text-[#FF641A] font-bold">
+              Fast Turnaround Guaranteed
+            </span>
+            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-white mt-1">
+              Get your papers created by real professionals!
+            </h2>
+            <p className="text-slate-300 text-sm sm:text-base mt-2">
+              Join thousands of university students scoring A and B grades this semester.
+            </p>
+          </div>
+          <a
+            className="px-8 py-4 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white font-semibold text-sm sm:text-base shadow-xl whitespace-nowrap transition-transform hover:scale-105"
+            href="https://wa.me/923138400066"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Place Your Order
+          </a>
+        </div>
+      </section>
+
+      {/* 10. SIBLING SUB-SERVICES EXPLORATION */}
       {siblingSubServices.length > 0 && (
         <section className="py-16 lg:py-24 w-full bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-12">
@@ -808,8 +838,72 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
         </section>
       )}
 
-      {/* 8. VERIFIED GRADES EVIDENCE SHOWCASE */}
-      <section className="w-full bg-slate-50 py-16 lg:py-24 border-t border-slate-100">
+      {/* 11. CLIENT SUCCESS STORIES & VERIFIED TESTIMONIALS */}
+      <section className="py-16 lg:py-24 w-full bg-slate-50 border-t border-slate-100">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+            <span className="text-xs uppercase tracking-wider text-[#FF641A] font-bold">
+              Student Testimonials
+            </span>
+            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-[#243445] leading-tight">
+              Success Stories for {subService.title}
+            </h2>
+            <p className="text-sm md:text-base text-slate-600">
+              See what real university students say after completing their coursework with our doctoral mentors:
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {reviews.map((rev, idx) => (
+              <div
+                key={rev.id || idx}
+                className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col justify-between hover:-translate-y-1 hover:shadow-md transition-all"
+              >
+                <div>
+                  <div className="flex items-center gap-1 text-[#FF641A] mb-3">
+                    {[...Array(5)].map((_, i) => (
+                      <AppIcon key={i} name="star" className="w-[18px] h-[18px]" filled />
+                    ))}
+                  </div>
+                  <p className="text-slate-700 text-sm italic mb-6 leading-relaxed">
+                    &ldquo;{rev.comment}&rdquo;
+                  </p>
+                </div>
+                <div className="flex items-center gap-3 pt-3 border-t border-slate-100">
+                  <div className="w-10 h-10 rounded-full overflow-hidden relative shrink-0 bg-slate-200">
+                    <Image
+                      src={resolveReviewAvatar(null, idx)}
+                      alt={rev.clientName}
+                      fill
+                      className="object-cover"
+                      sizes="40px"
+                    />
+                  </div>
+                  <div>
+                    <span className="font-heading font-bold text-sm text-[#243445] block">
+                      {rev.clientName}
+                    </span>
+                    <span className="text-xs text-slate-500">{rev.serviceTitle}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <Link
+              href="/reviews"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white text-sm sm:text-base font-semibold shadow-md transition-colors"
+            >
+              <span>More Reviews</span>
+              <AppIcon name="arrow_forward" className="w-[18px] h-[18px]" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 12. VERIFIED GRADES EVIDENCE SHOWCASE (REUSED HOMEPAGE MARQUEE) */}
+      <section className="w-full bg-white py-16 lg:py-24 border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-8">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
@@ -822,7 +916,7 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
               </h2>
             </div>
             <div className="flex items-center gap-3">
-              <span className="px-4 py-2 rounded-xl bg-white font-medium text-xs sm:text-sm text-[#243445] shadow-sm">
+              <span className="px-4 py-2 rounded-xl bg-slate-100 font-medium text-xs sm:text-sm text-[#243445] shadow-sm">
                 Canvas Gradebook
               </span>
               <span className="px-4 py-2 rounded-xl bg-[#ECFDF5] font-bold text-xs sm:text-sm text-[#059669]">
@@ -845,7 +939,41 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* 9. FREQUENTLY ASKED QUESTIONS (FAQ) */}
+      {/* 13. CORE QUALITY GUARANTEES (6 CARDS) */}
+      <section className="w-full bg-slate-50 py-16 lg:py-24 border-t border-slate-100">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <span className="text-xs uppercase tracking-wider text-[#FF641A] font-bold">
+              Unmatched Standards
+            </span>
+            <h2 className="font-heading text-2xl sm:text-3xl lg:text-4xl font-bold text-[#243445] mt-2">
+              Core Quality Guarantees
+            </h2>
+            <p className="text-slate-600 text-sm sm:text-base mt-3">
+              Our service commitment ensures every single assignment or test assistance request is delivered under airtight guarantees.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {CORE_GUARANTEES.map((g, idx) => (
+              <div
+                key={idx}
+                className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:-translate-y-1 hover:shadow-lg transition-all duration-200"
+              >
+                <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-5">
+                  <AppIcon name={g.icon} className="w-6 h-6" />
+                </div>
+                <h3 className="font-heading text-xl font-bold text-[#243445] mb-2">
+                  {g.title}
+                </h3>
+                <p className="text-sm text-slate-600 leading-relaxed">{g.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 14. FREQUENTLY ASKED QUESTIONS (FAQ) */}
       <section className="w-full bg-white py-16 lg:py-24 border-t border-slate-100">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -881,8 +1009,67 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* 10. DIRECT HOTLINES & FINAL CALL TO ACTION */}
+      {/* 15. CLOSING CONVERSION BANNER (Deep Navy Card) */}
       <section className="w-full bg-slate-50 py-16 lg:py-24 border-t border-slate-100">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="bg-[#243445] rounded-3xl p-10 md:p-16 text-center text-white relative overflow-hidden shadow-2xl">
+            <div className="absolute -top-24 -left-24 w-80 h-80 bg-[#FF641A]/20 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-24 -right-24 w-80 h-80 bg-[#059669]/20 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="relative z-10 max-w-3xl mx-auto space-y-6">
+              <span className="px-4 py-1.5 rounded-full bg-[#FF641A]/20 text-[#FF641A] text-xs uppercase tracking-wider font-bold">
+                No More Calculation Anxiety
+              </span>
+              <h2 className="font-heading text-3xl md:text-5xl font-bold tracking-tight leading-tight">
+                Ready to Master Your {subService.title} Coursework?
+              </h2>
+              <p className="text-base md:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed">
+                Get instant expert solutions created by verified CPAs and Ph.D. scholars. Lift your grades, secure complete peace of mind, and receive 30% off your first order today.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+                <a
+                  className="px-8 py-4 rounded-full bg-[#FF641A] text-white font-semibold text-sm shadow-lg hover:bg-[#E8540E] transition-all transform hover:-translate-y-0.5"
+                  href="https://wa.me/923138400066"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Place Your Order Now
+                </a>
+                <a
+                  className="px-7 py-4 rounded-full bg-[#059669] text-white font-semibold text-sm shadow-md hover:bg-emerald-600 transition-all flex items-center gap-2"
+                  href="https://wa.me/923138400066"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <AppIcon name="chat" className="w-5 h-5" />
+                  <span>Talk to an Expert on WhatsApp</span>
+                </a>
+              </div>
+              <div className="flex flex-wrap items-center justify-center gap-6 pt-6 text-xs text-slate-400">
+                <span className="flex items-center gap-1.5">
+                  <AppIcon name="check_circle" className="w-4 h-4 text-[#059669]" filled />
+                  Plagiarism Free
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <AppIcon name="check_circle" className="w-4 h-4 text-[#059669]" filled />
+                  Best Price Guarantee
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <AppIcon name="check_circle" className="w-4 h-4 text-[#059669]" filled />
+                  100% Money Back
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <AppIcon name="check_circle" className="w-4 h-4 text-[#059669]" filled />
+                  24/7 Live Support
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 16. DIRECT HOTLINES & FINAL CALL TO ACTION */}
+      <section className="w-full bg-white py-16 lg:py-24 border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="bg-[#243445] text-white rounded-3xl p-8 lg:p-14 relative overflow-hidden shadow-2xl">
             <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-[#FF641A]/20 rounded-full blur-3xl pointer-events-none" />
