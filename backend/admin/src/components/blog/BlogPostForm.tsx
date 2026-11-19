@@ -116,7 +116,7 @@ export function BlogPostForm({
   // Card 2: Article Editorial Content (Rich Text)
   const [contentHtml, setContentHtml] = useState(
     initialPost?.contentHtml ??
-      `<h2>1. Understanding Core Academic Frameworks</h2>
+    `<h2>1. Understanding Core Academic Frameworks</h2>
 <p>Provide a foundational overview of this topic, establishing scholarly relevance and theoretical grounding. Articulate the empirical void and state the central thesis clearly.</p>
 
 <h2>2. Methodological Coherence &amp; Evaluation</h2>
@@ -143,15 +143,15 @@ export function BlogPostForm({
   );
   const [authorRoleSubtitle, setAuthorRoleSubtitle] = useState(
     initialPost?.author?.roleSubtitle ??
-      "Senior Academic Research Faculty • Verified ReadEssay Advisor"
+    "Senior Academic Research Faculty • Verified ReadEssay Advisor"
   );
   const [authorExperienceLine, setAuthorExperienceLine] = useState(
     initialPost?.author?.experienceLine ??
-      "Senior Research Fellow • 14+ Years Postgraduate Advising"
+    "Senior Research Fellow • 14+ Years Postgraduate Advising"
   );
   const [authorBio, setAuthorBio] = useState(
     initialPost?.author?.bio ??
-      "Doctorate in Educational Research with over a decade of graduate defense committee advisory."
+    "Doctorate in Educational Research with over a decade of graduate defense committee advisory."
   );
 
   // Card 4: Article FAQs
@@ -501,7 +501,7 @@ export function BlogPostForm({
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-text-secondary hover:text-orange transition-colors mb-2"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>← Back to All Posts</span>
+            <span>Back to All Posts</span>
           </Link>
           <h1 className="text-2xl sm:text-[26px] font-bold text-text-primary tracking-tight">
             {isEditing ? `Edit Post: ${postData?.title || title}` : "Add Blog Post"}
@@ -535,8 +535,8 @@ export function BlogPostForm({
               {isSubmitting
                 ? "Saving..."
                 : isEditing
-                ? "Save Changes"
-                : "Publish Post"}
+                  ? "Save Changes"
+                  : "Publish Post"}
             </span>
           </button>
         </div>
@@ -1037,15 +1037,14 @@ export function BlogPostForm({
                           key={s}
                           type="button"
                           onClick={() => setStatus(s)}
-                          className={`py-2 px-3 rounded-lg border text-xs font-semibold capitalize transition-all ${
-                            isSelected
+                          className={`py-2 px-3 rounded-lg border text-xs font-semibold capitalize transition-all ${isSelected
                               ? s === "published"
                                 ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-1 ring-emerald-600"
                                 : s === "draft"
-                                ? "border-amber-600 bg-amber-50 text-amber-800 ring-1 ring-amber-600"
-                                : "border-slate-500 bg-slate-100 text-slate-800 ring-1 ring-slate-500"
+                                  ? "border-amber-600 bg-amber-50 text-amber-800 ring-1 ring-amber-600"
+                                  : "border-slate-500 bg-slate-100 text-slate-800 ring-1 ring-slate-500"
                               : "border-border text-text-secondary hover:bg-canvas"
-                          }`}
+                            }`}
                         >
                           {s}
                         </button>
@@ -1084,11 +1083,10 @@ export function BlogPostForm({
                       return (
                         <label
                           key={item.id}
-                          className={`flex items-start gap-2 p-2 rounded-lg border text-xs cursor-pointer transition-colors ${
-                            isChecked
+                          className={`flex items-start gap-2 p-2 rounded-lg border text-xs cursor-pointer transition-colors ${isChecked
                               ? "bg-orange/5 border-orange/40 text-navy font-medium"
                               : "bg-canvas border-border text-text-secondary hover:bg-surface"
-                          }`}
+                            }`}
                         >
                           <input
                             type="checkbox"
@@ -1140,11 +1138,10 @@ export function BlogPostForm({
                     Meta Title
                   </label>
                   <span
-                    className={`text-[11px] font-mono ${
-                      metaTitle.length > 60
+                    className={`text-[11px] font-mono ${metaTitle.length > 60
                         ? "text-red-500 font-bold"
                         : "text-text-secondary"
-                    }`}
+                      }`}
                   >
                     {metaTitle.length}/60
                   </span>
@@ -1164,11 +1161,10 @@ export function BlogPostForm({
                     Meta Description
                   </label>
                   <span
-                    className={`text-[11px] font-mono ${
-                      metaDescription.length > 160
+                    className={`text-[11px] font-mono ${metaDescription.length > 160
                         ? "text-red-500 font-bold"
                         : "text-text-secondary"
-                    }`}
+                      }`}
                   >
                     {metaDescription.length}/160
                   </span>
