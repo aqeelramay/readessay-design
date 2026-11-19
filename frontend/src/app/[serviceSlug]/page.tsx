@@ -15,6 +15,7 @@ import UniversityMarquee from '@/components/shared/UniversityMarquee';
 import VerifiedGradesMarquee from '@/components/shared/VerifiedGradesMarquee';
 import FaqAccordion from '@/components/shared/FaqAccordion';
 import { PriceCalculatorWidget } from '@/components/shared/PriceCalculatorWidget';
+import AppIcon from '@/components/shared/AppIcon';
 import JsonLd from '@/components/seo/JsonLd';
 import {
   buildBreadcrumbSchema,
@@ -144,7 +145,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
             {/* Left: Copy & Value Props */}
             <div className="lg:col-span-7 flex flex-col space-y-6">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFF2EC] text-[#FF641A] text-xs sm:text-sm font-semibold self-start border border-[#FF641A]/10">
-                <span className="material-symbols-outlined text-[18px]">verified_user</span>
+                <AppIcon name="verified_user" className="w-[18px] h-[18px]" filled />
                 <span>
                   {service.heroBadge ||
                     'Professional Academic Assistance Tailored to Your Degree'}
@@ -164,41 +165,31 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               {/* 5 Value Checkmarks */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 pb-2">
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]">
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-sm sm:text-base text-[#243445] font-medium">
                     100% Unique Content
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]">
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-sm sm:text-base text-[#243445] font-medium">
                     Strong Attention to deadlines
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]">
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-sm sm:text-base text-[#243445] font-medium">
                     24/7 Support handled with professionalism
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]">
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-sm sm:text-base text-[#243445] font-medium">
                     100% Money Back Guarantee
                   </span>
                 </div>
                 <div className="flex items-center gap-3 sm:col-span-2">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]">
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-sm sm:text-base text-[#243445] font-medium">
                     Revisions as per your Desires!
                   </span>
@@ -224,7 +215,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span className="material-symbols-outlined text-[20px]">chat</span>
+                  <AppIcon name="chat" className="w-5 h-5" />
                   <span>Live Chat with Expert</span>
                 </a>
               </div>
@@ -267,7 +258,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-6">
               <div className="w-16 h-16 rounded-2xl bg-[#FFF2EC] flex items-center justify-center text-[#FF641A] shrink-0">
-                <span className="material-symbols-outlined text-[32px]">task_alt</span>
+                <AppIcon name="task_alt" className="w-8 h-8" />
               </div>
               <div>
                 <span className="font-heading text-2xl lg:text-3xl font-bold text-[#243445] tracking-tight block">
@@ -279,7 +270,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-6">
               <div className="w-16 h-16 rounded-2xl bg-[#ECFDF5] flex items-center justify-center text-[#059669] shrink-0">
-                <span className="material-symbols-outlined text-[32px]">star</span>
+                <AppIcon name="star" className="w-8 h-8" filled />
               </div>
               <div>
                 <span className="font-heading text-2xl lg:text-3xl font-bold text-[#243445] tracking-tight block">
@@ -291,7 +282,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-6">
               <div className="w-16 h-16 rounded-2xl bg-slate-100 flex items-center justify-center text-[#243445] shrink-0">
-                <span className="material-symbols-outlined text-[32px]">workspace_premium</span>
+                <AppIcon name="workspace_premium" className="w-8 h-8" />
               </div>
               <div>
                 <span className="font-heading text-2xl lg:text-3xl font-bold text-[#243445] tracking-tight block">
@@ -326,7 +317,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                   rel="noopener noreferrer"
                 >
                   <span>Get Help Now</span>
-                  <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                  <AppIcon name="arrow_forward" className="w-4 h-4" />
                 </a>
               </div>
             </div>
@@ -371,17 +362,20 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                 >
                   <div className="space-y-4">
                     <div className="w-14 h-14 rounded-2xl bg-[#FFF2EC] flex items-center justify-center text-[#FF641A] group-hover:scale-105 transition-transform">
-                      <span className="material-symbols-outlined text-[28px]">
-                        {sub.slug.includes('stat')
-                          ? 'analytics'
-                          : sub.slug.includes('cs')
-                          ? 'terminal'
-                          : sub.slug.includes('business')
-                          ? 'business_center'
-                          : sub.slug.includes('account')
-                          ? 'query_stats'
-                          : 'fact_check'}
-                      </span>
+                      <AppIcon
+                        name={
+                          sub.slug.includes('stat')
+                            ? 'analytics'
+                            : sub.slug.includes('cs')
+                            ? 'terminal'
+                            : sub.slug.includes('business')
+                            ? 'business_center'
+                            : sub.slug.includes('account')
+                            ? 'query_stats'
+                            : 'fact_check'
+                        }
+                        className="w-7 h-7"
+                      />
                     </div>
                     <h3 className="font-heading text-xl font-bold text-[#243445] leading-snug">
                       <Link
@@ -403,9 +397,10 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                       className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#FF641A] group-hover:text-[#E8540E] transition-colors"
                     >
                       <span>Explore Service</span>
-                      <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">
-                        arrow_forward
-                      </span>
+                      <AppIcon
+                        name="arrow_forward"
+                        className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                      />
                     </Link>
                   </div>
                 </div>
@@ -509,7 +504,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
             <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-4">
               <div className="w-14 h-14 rounded-2xl bg-[#FFF2EC] flex items-center justify-center text-[#FF641A]">
-                <span className="material-symbols-outlined text-[28px]">psychology</span>
+                <AppIcon name="psychology" className="w-7 h-7" />
               </div>
               <h3 className="font-heading text-xl font-bold text-[#243445]">
                 Ph.D. Intellectuals
@@ -521,7 +516,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
             <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-4">
               <div className="w-14 h-14 rounded-2xl bg-[#ECFDF5] flex items-center justify-center text-[#059669]">
-                <span className="material-symbols-outlined text-[28px]">public</span>
+                <AppIcon name="public" className="w-7 h-7" />
               </div>
               <h3 className="font-heading text-xl font-bold text-[#243445]">
                 Indigenous Regional Writers
@@ -533,7 +528,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
             <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-100 space-y-4">
               <div className="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-[#243445]">
-                <span className="material-symbols-outlined text-[28px]">hub</span>
+                <AppIcon name="hub" className="w-7 h-7" />
               </div>
               <h3 className="font-heading text-xl font-bold text-[#243445]">
                 Subject Branch Hub
@@ -640,7 +635,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#243445] hover:bg-slate-800 text-white text-sm sm:text-base font-semibold transition-colors"
             >
               <span>Meet Our Experts</span>
-              <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+              <AppIcon name="arrow_forward" className="w-[18px] h-[18px]" />
             </Link>
           </div>
         </div>
@@ -650,16 +645,15 @@ export default async function ServiceDetailPage({ params }: PageProps) {
       <section className="py-16 lg:py-24 w-full bg-white">
         <div className="max-w-5xl mx-auto px-6 lg:px-12">
           <div className="bg-[#243445] text-white rounded-3xl p-8 md:p-14 shadow-xl relative overflow-hidden mb-12">
-            <span className="material-symbols-outlined text-[140px] text-white/5 absolute -right-6 -bottom-6 pointer-events-none select-none">
-              format_quote
-            </span>
+            <AppIcon
+              name="format_quote"
+              className="w-[140px] h-[140px] text-white/5 absolute -right-6 -bottom-6 pointer-events-none select-none"
+            />
             <div className="relative z-10 space-y-6">
               <div className="flex items-center gap-3">
                 <div className="flex text-amber-400">
                   {[...Array(5)].map((_, i) => (
-                    <span key={i} className="material-symbols-outlined text-[20px]">
-                      star
-                    </span>
+                    <AppIcon key={i} name="star" className="w-5 h-5" filled />
                   ))}
                 </div>
                 <span className="px-3 py-1 rounded-full bg-white/10 text-white text-xs font-semibold">
@@ -691,9 +685,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                 <div>
                   <div className="flex items-center gap-1 text-[#FF641A] mb-3">
                     {[...Array(5)].map((_, i) => (
-                      <span key={i} className="material-symbols-outlined text-[18px]">
-                        star
-                      </span>
+                      <AppIcon key={i} name="star" className="w-[18px] h-[18px]" filled />
                     ))}
                   </div>
                   <p className="text-slate-700 text-sm italic mb-6 leading-relaxed">
@@ -727,7 +719,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white text-sm sm:text-base font-semibold shadow-md transition-colors"
             >
               <span>More Reviews</span>
-              <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+              <AppIcon name="arrow_forward" className="w-[18px] h-[18px]" />
             </Link>
           </div>
         </div>
@@ -739,7 +731,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ECFDF5] text-[#059669] text-xs font-semibold mb-2">
-                <span className="material-symbols-outlined text-[16px]">verified</span>
+                <AppIcon name="verified" className="w-4 h-4" filled />
                 <span>Live Academic Evidence</span>
               </div>
               <h2 className="font-heading text-2xl sm:text-3xl font-bold text-[#243445]">
@@ -764,7 +756,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#059669] hover:bg-emerald-600 text-white text-sm sm:text-base font-semibold shadow-md transition-colors"
             >
               <span>View All Samples</span>
-              <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+              <AppIcon name="arrow_forward" className="w-[18px] h-[18px]" />
             </Link>
           </div>
         </div>
@@ -788,7 +780,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">workspace_premium</span>
+                <AppIcon name="workspace_premium" className="w-[26px] h-[26px]" />
               </div>
               <h3 className="font-heading text-xl font-bold text-[#243445] mb-2">
                 Best Quality Assignments &amp; Papers
@@ -800,7 +792,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 rounded-xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">task_alt</span>
+                <AppIcon name="task_alt" className="w-[26px] h-[26px]" />
               </div>
               <h3 className="font-heading text-xl font-bold text-[#243445] mb-2">
                 Plagiarism-Free Work
@@ -812,7 +804,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 rounded-xl bg-slate-100 text-[#243445] flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">find_in_page</span>
+                <AppIcon name="find_in_page" className="w-[26px] h-[26px]" />
               </div>
               <h3 className="font-heading text-xl font-bold text-[#243445] mb-2">
                 Proofreading &amp; Revisions
@@ -824,7 +816,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 rounded-xl bg-[#243445] text-white flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">alarm_on</span>
+                <AppIcon name="alarm_on" className="w-[26px] h-[26px]" />
               </div>
               <h3 className="font-heading text-xl font-bold text-[#243445] mb-2">
                 Meeting All Deadlines
@@ -836,7 +828,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">headset_mic</span>
+                <AppIcon name="headset_mic" className="w-[26px] h-[26px]" />
               </div>
               <h3 className="font-heading text-xl font-bold text-[#243445] mb-2">
                 24/7 Customer Support Availability
@@ -848,7 +840,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
 
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 rounded-xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">published_with_changes</span>
+                <AppIcon name="published_with_changes" className="w-[26px] h-[26px]" />
               </div>
               <h3 className="font-heading text-xl font-bold text-[#243445] mb-2">
                 On-Time Delivery &amp; Free Revisions
@@ -883,14 +875,14 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               href="/samples"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white hover:bg-slate-100 text-[#243445] text-sm font-semibold transition-colors border border-slate-200"
             >
-              <span className="material-symbols-outlined text-[18px]">description</span>
+              <AppIcon name="description" className="w-[18px] h-[18px]" />
               <span>View All Samples</span>
             </Link>
             <Link
               href="/contact"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white text-sm font-semibold shadow-md transition-colors"
             >
-              <span className="material-symbols-outlined text-[18px]">support_agent</span>
+              <AppIcon name="support_agent" className="w-[18px] h-[18px]" />
               <span>Contact Support</span>
             </Link>
           </div>
@@ -919,9 +911,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                     className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800/80 text-white hover:bg-slate-700 transition-colors border border-slate-700"
                     href="tel:+923138400066"
                   >
-                    <span className="material-symbols-outlined text-[#FF641A] text-[22px]">
-                      phone_iphone
-                    </span>
+                    <AppIcon name="phone_iphone" className="w-[22px] h-[22px] text-[#FF641A]" />
                     <div>
                       <span className="text-[10px] block uppercase tracking-wider text-slate-400">
                         PK WhatsApp Hotline
@@ -934,9 +924,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                     className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800/80 text-white hover:bg-slate-700 transition-colors border border-slate-700"
                     href="tel:+447460674811"
                   >
-                    <span className="material-symbols-outlined text-[#FF641A] text-[22px]">
-                      call
-                    </span>
+                    <AppIcon name="call" className="w-[22px] h-[22px] text-[#FF641A]" />
                     <div>
                       <span className="text-[10px] block uppercase tracking-wider text-slate-400">
                         UK Support Desk
@@ -949,9 +937,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                     className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800/80 text-white hover:bg-slate-700 transition-colors border border-slate-700"
                     href="mailto:support@readessay.com"
                   >
-                    <span className="material-symbols-outlined text-[#FF641A] text-[22px]">
-                      mail
-                    </span>
+                    <AppIcon name="mail" className="w-[22px] h-[22px] text-[#FF641A]" />
                     <div>
                       <span className="text-[10px] block uppercase tracking-wider text-slate-400">
                         Official Email

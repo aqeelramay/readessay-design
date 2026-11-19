@@ -10,6 +10,7 @@ import {
 } from '@/lib/data-fetchers';
 import JsonLd from '@/components/seo/JsonLd';
 import { buildBreadcrumbSchema } from '@/lib/schema';
+import AppIcon from '@/components/shared/AppIcon';
 
 interface BlogCategoryPageProps {
   params: Promise<{ slug: string }>;
@@ -295,9 +296,7 @@ export default async function BlogCategoryPage({
                       className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800 text-white hover:bg-slate-700 transition-colors"
                       href="tel:+923138400066"
                     >
-                      <span className="material-symbols-outlined text-[#FF641A] text-[22px]">
-                        phone_iphone
-                      </span>
+                      <AppIcon name="phone_iphone" className="w-[22px] h-[22px] text-[#FF641A]" />
                       <div>
                         <span className="text-[10px] block uppercase tracking-wider text-slate-400">
                           PK WhatsApp Hotline
@@ -309,9 +308,7 @@ export default async function BlogCategoryPage({
                       className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800 text-white hover:bg-slate-700 transition-colors"
                       href="tel:+447460674811"
                     >
-                      <span className="material-symbols-outlined text-[#FF641A] text-[22px]">
-                        call
-                      </span>
+                      <AppIcon name="call" className="w-[22px] h-[22px] text-[#FF641A]" />
                       <div>
                         <span className="text-[10px] block uppercase tracking-wider text-slate-400">
                           UK Support Desk
@@ -323,9 +320,7 @@ export default async function BlogCategoryPage({
                       className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800 text-white hover:bg-slate-700 transition-colors"
                       href="mailto:support@readessay.com"
                     >
-                      <span className="material-symbols-outlined text-[#FF641A] text-[22px]">
-                        mail
-                      </span>
+                      <AppIcon name="mail" className="w-[22px] h-[22px] text-[#FF641A]" />
                       <div>
                         <span className="text-[10px] block uppercase tracking-wider text-slate-400">
                           Official Email

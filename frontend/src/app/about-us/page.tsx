@@ -6,6 +6,7 @@ import RatingCards from '@/components/shared/RatingCards';
 import UniversityMarquee from '@/components/shared/UniversityMarquee';
 import JsonLd from '@/components/seo/JsonLd';
 import { buildBreadcrumbSchema } from '@/lib/schema';
+import AppIcon from '@/components/shared/AppIcon';
 
 export const metadata: Metadata = {
   title: 'About Us | ReadEssay - Premier Scholastic Support & PhD Mentorship',
@@ -126,7 +127,7 @@ export default function AboutUsPage() {
               {/* Left Column: Hero Copy */}
               <div className="lg:col-span-7 space-y-6">
                 <div className="inline-flex items-center gap-2 bg-orange-100 text-[#FF641A] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
-                  <span className="material-symbols-outlined text-[16px]">school</span>
+                  <AppIcon name="school" className="w-4 h-4" />
                   <span>Empowering Academic Excellence Worldwide</span>
                 </div>
 
@@ -143,15 +144,15 @@ export default function AboutUsPage() {
                 {/* Trust Badges Bar */}
                 <div className="flex flex-wrap items-center gap-3 pt-1">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-[#059669] border border-emerald-200 text-xs font-semibold">
-                    <span className="material-symbols-outlined text-[16px]">verified</span>
+                    <AppIcon name="verified" className="w-4 h-4 text-[#059669]" filled />
                     <span>100% Plagiarism-Free • Turnitin Verified</span>
                   </span>
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-[#059669] border border-emerald-200 text-xs font-semibold">
-                    <span className="material-symbols-outlined text-[16px]">psychology</span>
+                    <AppIcon name="psychology" className="w-4 h-4 text-[#059669]" />
                     <span>Zero-AI Human Scholarship Guarantee</span>
                   </span>
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 text-[#059669] border border-emerald-200 text-xs font-semibold">
-                    <span className="material-symbols-outlined text-[16px]">lock</span>
+                    <AppIcon name="lock" className="w-4 h-4 text-[#059669]" />
                     <span>Strict 256-Bit NDA Privacy</span>
                   </span>
                 </div>
@@ -250,7 +251,7 @@ export default function AboutUsPage() {
               {/* Left Column: Narrative */}
               <div className="lg:col-span-7 space-y-6">
                 <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#FF641A]">
-                  <span className="material-symbols-outlined text-[16px]">flag</span>
+                  <AppIcon name="flag" className="w-4 h-4" />
                   <span>Who We Are &amp; Core Philosophy</span>
                 </div>
 
@@ -305,7 +306,7 @@ export default function AboutUsPage() {
               <div className="bg-white p-8 sm:p-10 rounded-3xl shadow-sm border border-slate-200/80 flex flex-col justify-between space-y-6">
                 <div className="space-y-4">
                   <div className="w-14 h-14 rounded-2xl bg-orange-100 text-[#FF641A] flex items-center justify-center">
-                    <span className="material-symbols-outlined text-[30px]">eye_tracking</span>
+                    <AppIcon name="eye_tracking" className="w-[30px] h-[30px]" />
                   </div>
                   <h3 className="text-xl sm:text-2xl font-bold text-[#243445] font-poppins">
                     OUR VISION
@@ -328,7 +329,7 @@ export default function AboutUsPage() {
               <div className="bg-white p-8 sm:p-10 rounded-3xl shadow-sm border border-slate-200/80 flex flex-col justify-between space-y-6">
                 <div className="space-y-4">
                   <div className="w-14 h-14 rounded-2xl bg-emerald-100 text-[#059669] flex items-center justify-center">
-                    <span className="material-symbols-outlined text-[30px]">verified</span>
+                    <AppIcon name="verified" className="w-[30px] h-[30px]" filled />
                   </div>
                   <h3 className="text-xl sm:text-2xl font-bold text-[#243445] font-poppins">
                     OUR VALUES
@@ -387,7 +388,7 @@ export default function AboutUsPage() {
                       />
                       <div className="absolute top-3 left-3 z-10">
                         <span className="bg-emerald-600 text-white font-bold text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wider shadow-sm flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[13px]">check_circle</span>
+                          <AppIcon name="check_circle" className="w-3.5 h-3.5" filled />
                           <span>{expert.badge}</span>
                         </span>
                       </div>
@@ -465,7 +466,7 @@ export default function AboutUsPage() {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div className="w-12 h-12 rounded-2xl bg-orange-100 text-[#FF641A] flex items-center justify-center">
-                        <span className="material-symbols-outlined text-[24px]">{step.icon}</span>
+                        <AppIcon name={step.icon} className="w-6 h-6" />
                       </div>
                       <span className="text-2xl font-bold font-poppins text-slate-300">
                         {step.number}
@@ -482,7 +483,7 @@ export default function AboutUsPage() {
                   </div>
 
                   <div className="pt-2 text-[11px] text-[#059669] font-bold flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px]">check</span>
+                    <AppIcon name="check" className="w-3.5 h-3.5" />
                     <span>Verified Milestone</span>
                   </div>
                 </div>

@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { PublicService } from '@/lib/public-api';
+import AppIcon from '@/components/shared/AppIcon';
 
 interface ContactFormClientProps {
   services?: PublicService[];
@@ -11,59 +12,49 @@ interface ContactFormClientProps {
 export default function ContactFormClient({ services = [] }: ContactFormClientProps) {
   const searchParams = useSearchParams();
 
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    serviceSlug: '',
-    academicLevel: 'undergraduate',
-    deadline: '',
-    wordCount: '',
-    message: '',
-  });
-
-  const [orderEstimate, setOrderEstimate] = useState<{
+  const [orderEstimate] = useState<{
     service: string;
     level: string;
     deadline: string;
     pages: string;
     words: string;
     estimate: string;
-  } | null>(null);
-
-  // Sync with searchParams from Calculator
-  useEffect(() => {
-    if (!searchParams) return;
-    const serviceParam = searchParams.get('service') || '';
-    const levelParam = searchParams.get('level') || '';
-    const deadlineParam = searchParams.get('deadline') || '';
-    const pagesParam = searchParams.get('pages') || '';
-    const wordsParam = searchParams.get('words') || '';
+  } | null>(() => {
+    if (!searchParams) return null;
     const estimateParam = searchParams.get('estimate') || '';
+    if (!estimateParam) return null;
+    return {
+      service: searchParams.get('service') || '',
+      level: searchParams.get('level') || '',
+      deadline: searchParams.get('deadline') || '',
+      pages: searchParams.get('pages') || '',
+      words: searchParams.get('words') || '',
+      estimate: estimateParam,
+    };
+  });
 
-    if (estimateParam) {
-      setOrderEstimate({
-        service: serviceParam,
-        level: levelParam,
-        deadline: deadlineParam,
-        pages: pagesParam,
-        words: wordsParam,
-        estimate: estimateParam,
-      });
+  const [formData, setFormData] = useState(() => {
+    const serviceParam = searchParams?.get('service') || '';
+    const levelParam = searchParams?.get('level') || '';
+    const deadlineParam = searchParams?.get('deadline') || '';
+    const pagesParam = searchParams?.get('pages') || '';
+    const wordsParam = searchParams?.get('words') || '';
+    const estimateParam = searchParams?.get('estimate') || '';
 
-      setFormData((prev) => ({
-        ...prev,
-        serviceSlug: serviceParam || prev.serviceSlug,
-        academicLevel: levelParam || prev.academicLevel,
-        deadline: deadlineParam ? `${deadlineParam.replace(/-/g, ' ')}` : prev.deadline,
-        wordCount: wordsParam ? `${wordsParam} words (${pagesParam} pages)` : prev.wordCount,
-        message: prev.message
-          ? prev.message
-          : `Order inquiry from price calculator: ${pagesParam} pages (${wordsParam} words), estimated at $${estimateParam} USD with ${deadlineParam.replace(/-/g, ' ')} turnaround.`,
-      }));
-    }
-  }, [searchParams]);
+    return {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      serviceSlug: serviceParam,
+      academicLevel: levelParam || 'undergraduate',
+      deadline: deadlineParam ? `${deadlineParam.replace(/-/g, ' ')}` : '',
+      wordCount: wordsParam ? `${wordsParam} words (${pagesParam} pages)` : '',
+      message: estimateParam
+        ? `Order inquiry from price calculator: ${pagesParam} pages (${wordsParam} words), estimated at $${estimateParam} USD with ${deadlineParam.replace(/-/g, ' ')} turnaround.`
+        : '',
+    };
+  });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -100,18 +91,17 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
 
   // Generate pre-filled WhatsApp message
   const whatsappText = encodeURIComponent(
-    `Hello ReadEssay Support! My name is ${formData.firstName || '[Name]'} ${
-      formData.lastName || ''
+    `Hello ReadEssay Support! My name is ${formData.firstName || '[Name]'} ${formData.lastName || ''
     }.\n\n` +
-      `*Inquiry Details:*\n` +
-      `• Service: ${formData.serviceSlug || 'General Inquiry'}\n` +
-      `• Academic Level: ${formData.academicLevel}\n` +
-      `• Target Deadline: ${formData.deadline || 'Not specified'}\n` +
-      `• Target Word Count: ${formData.wordCount || 'Not specified'}\n` +
-      (orderEstimate ? `• Calculator Estimate: $${orderEstimate.estimate} USD (${orderEstimate.pages} pages / ${orderEstimate.words} words)\n` : '') +
-      `• Phone/WhatsApp: ${formData.phone || 'Not specified'}\n` +
-      `• Email: ${formData.email || 'Not specified'}\n\n` +
-      `*Brief / Notes:*\n${formData.message || 'I would like to inquire about assignment help.'}`,
+    `*Inquiry Details:*\n` +
+    `• Service: ${formData.serviceSlug || 'General Inquiry'}\n` +
+    `• Academic Level: ${formData.academicLevel}\n` +
+    `• Target Deadline: ${formData.deadline || 'Not specified'}\n` +
+    `• Target Word Count: ${formData.wordCount || 'Not specified'}\n` +
+    (orderEstimate ? `• Calculator Estimate: $${orderEstimate.estimate} USD (${orderEstimate.pages} pages / ${orderEstimate.words} words)\n` : '') +
+    `• Phone/WhatsApp: ${formData.phone || 'Not specified'}\n` +
+    `• Email: ${formData.email || 'Not specified'}\n\n` +
+    `*Brief / Notes:*\n${formData.message || 'I would like to inquire about assignment help.'}`,
   );
 
   const whatsappUrl = `https://wa.me/923138400066?text=${whatsappText}`;
@@ -120,7 +110,7 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
     return (
       <div className="bg-white p-8 sm:p-12 rounded-3xl shadow-xl border border-slate-100 text-center space-y-6">
         <div className="w-16 h-16 rounded-full bg-emerald-100 text-[#059669] flex items-center justify-center mx-auto text-3xl font-bold">
-          <span className="material-symbols-outlined text-[36px]">check_circle</span>
+          <AppIcon name="check_circle" className="w-9 h-9" filled />
         </div>
 
         <div className="space-y-2">
@@ -137,7 +127,7 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
         {/* WhatsApp Fast Track Shortcut */}
         <div className="p-5 rounded-2xl bg-orange-50/70 border border-orange-100 max-w-md mx-auto text-left space-y-3">
           <div className="flex items-center gap-2 text-xs font-bold text-[#FF641A] uppercase tracking-wide">
-            <span className="material-symbols-outlined text-[16px]">bolt</span>
+            <AppIcon name="bolt" className="w-4 h-4" />
             <span>Need an Instant Response?</span>
           </div>
           <p className="text-xs text-slate-600 leading-relaxed">
@@ -186,7 +176,7 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
       {/* Form Header */}
       <div className="space-y-1">
         <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#FF641A]">
-          <span className="material-symbols-outlined text-[16px]">edit_note</span>
+          <AppIcon name="edit_note" className="w-4 h-4" />
           <span>Direct Scholastic Request</span>
         </div>
         <h2 className="font-poppins font-bold text-2xl sm:text-3xl text-[#243445] tracking-tight">
@@ -202,7 +192,7 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
         <div className="p-4 sm:p-5 rounded-2xl bg-orange-50/80 border border-orange-200/90 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
           <div className="space-y-0.5">
             <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#FF641A]">
-              <span className="material-symbols-outlined text-[16px]">calculate</span>
+              <AppIcon name="calculate" className="w-4 h-4" />
               <span>Calculator Order Estimate Applied</span>
             </div>
             <p className="text-xs text-slate-600">
@@ -220,7 +210,7 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
 
       {errorMsg && (
         <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-center gap-2">
-          <span className="material-symbols-outlined text-[18px]">error</span>
+          <AppIcon name="error" className="w-[18px] h-[18px]" />
           <span>{errorMsg}</span>
         </div>
       )}
@@ -339,9 +329,10 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
                   <option value="general-inquiry">Other Academic Guidance Questions</option>
                 </optgroup>
               </select>
-              <span className="material-symbols-outlined pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">
-                expand_more
-              </span>
+              <AppIcon
+                name="expand_more"
+                className="w-5 h-5 pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+              />
             </div>
           </div>
 
@@ -365,9 +356,10 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
                 <option value="college">College / A-Level / IB</option>
                 <option value="high-school">High School</option>
               </select>
-              <span className="material-symbols-outlined pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[20px]">
-                expand_more
-              </span>
+              <AppIcon
+                name="expand_more"
+                className="w-5 h-5 pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+              />
             </div>
           </div>
         </div>
@@ -429,9 +421,7 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
 
         {/* Reassurance Statement */}
         <div className="flex items-start gap-3 p-4 bg-emerald-50/60 border border-emerald-100 rounded-2xl">
-          <span className="material-symbols-outlined text-[#059669] text-[20px] shrink-0 mt-0.5">
-            verified_user
-          </span>
+          <AppIcon name="verified_user" className="w-5 h-5 text-[#059669] shrink-0 mt-0.5" filled />
           <p className="text-xs text-slate-600 leading-relaxed">
             Your information is protected by our{' '}
             <strong className="text-[#243445]">100% strict Non-Disclosure Agreement (NDA)</strong> and
@@ -452,7 +442,7 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
             ) : (
               <>
                 <span>Submit Inquiry</span>
-                <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+                <AppIcon name="arrow_forward" className="w-[18px] h-[18px]" />
               </>
             )}
           </button>
@@ -463,7 +453,7 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
             rel="noopener noreferrer"
             className="w-full sm:w-auto px-6 py-4 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-md shrink-0"
           >
-            <span className="material-symbols-outlined text-[18px]">chat</span>
+            <AppIcon name="chat" className="w-[18px] h-[18px]" />
             <span>Send via WhatsApp</span>
           </a>
         </div>

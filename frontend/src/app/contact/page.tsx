@@ -6,6 +6,7 @@ import ContactFormClient from '@/components/contact/ContactFormClient';
 import FaqAccordion from '@/components/shared/FaqAccordion';
 import JsonLd from '@/components/seo/JsonLd';
 import { buildBreadcrumbSchema, buildFaqPageSchema } from '@/lib/schema';
+import AppIcon from '@/components/shared/AppIcon';
 
 export const metadata: Metadata = {
   title: 'Contact Us | ReadEssay - 24/7 Academic Support & WhatsApp Desk',
@@ -88,7 +89,7 @@ export default async function ContactPage() {
 
             {/* Eyebrow Pill */}
             <div className="inline-flex items-center gap-2 bg-orange-100 text-[#FF641A] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4 shadow-xs">
-              <span className="material-symbols-outlined text-[16px]">schedule</span>
+              <AppIcon name="schedule" className="w-4 h-4" />
               <span>24/7 STUDENT SUPPORT DESK</span>
             </div>
 
@@ -131,16 +132,14 @@ export default async function ContactPage() {
                     className="group bg-white p-5 rounded-2xl shadow-xs hover:shadow-md border border-slate-200/80 transition-all duration-200 flex items-start gap-4"
                   >
                     <div className="w-12 h-12 rounded-full bg-emerald-100 text-[#059669] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                      <span className="material-symbols-outlined text-[24px]">chat</span>
+                      <AppIcon name="chat" className="w-6 h-6" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] font-bold uppercase tracking-wider text-[#059669]">
                           WhatsApp Direct Desk
                         </span>
-                        <span className="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-[#059669] transition-colors">
-                          arrow_outward
-                        </span>
+                        <AppIcon name="arrow_outward" className="w-4 h-4 text-slate-400 group-hover:text-[#059669] transition-colors" />
                       </div>
                       <div className="font-poppins font-bold text-lg text-[#243445] mt-0.5 tracking-tight group-hover:text-[#059669] transition-colors">
                         +92 3138400066
@@ -158,16 +157,14 @@ export default async function ContactPage() {
                     className="group bg-white p-5 rounded-2xl shadow-xs hover:shadow-md border border-slate-200/80 transition-all duration-200 flex items-start gap-4"
                   >
                     <div className="w-12 h-12 rounded-full bg-orange-100 text-[#FF641A] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                      <span className="material-symbols-outlined text-[24px]">call</span>
+                      <AppIcon name="call" className="w-6 h-6" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
                           Helpline (UK &amp; Global)
                         </span>
-                        <span className="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-[#FF641A] transition-colors">
-                          arrow_outward
-                        </span>
+                        <AppIcon name="arrow_outward" className="w-4 h-4 text-slate-400 group-hover:text-[#FF641A] transition-colors" />
                       </div>
                       <div className="font-poppins font-bold text-lg text-[#243445] mt-0.5 tracking-tight group-hover:text-[#FF641A] transition-colors">
                         +44 7460 674811
@@ -185,16 +182,14 @@ export default async function ContactPage() {
                     className="group bg-white p-5 rounded-2xl shadow-xs hover:shadow-md border border-slate-200/80 transition-all duration-200 flex items-start gap-4"
                   >
                     <div className="w-12 h-12 rounded-full bg-slate-100 text-[#243445] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                      <span className="material-symbols-outlined text-[24px]">mail</span>
+                      <AppIcon name="mail" className="w-6 h-6" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
                           Official Inquiries &amp; Support
                         </span>
-                        <span className="material-symbols-outlined text-[16px] text-slate-400 group-hover:text-[#243445] transition-colors">
-                          arrow_outward
-                        </span>
+                        <AppIcon name="arrow_outward" className="w-4 h-4 text-slate-400 group-hover:text-[#243445] transition-colors" />
                       </div>
                       <div className="font-poppins font-bold text-lg text-[#243445] mt-0.5 tracking-tight">
                         support@readessay.com
@@ -209,7 +204,7 @@ export default async function ContactPage() {
                   {/* Card 4: Web Platform Portal */}
                   <div className="bg-white p-5 rounded-2xl shadow-xs border border-slate-200/80 flex items-start gap-4">
                     <div className="w-12 h-12 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center shrink-0">
-                      <span className="material-symbols-outlined text-[24px]">language</span>
+                      <AppIcon name="language" className="w-6 h-6" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
@@ -234,9 +229,7 @@ export default async function ContactPage() {
                 {/* Corporate Operating Entity Card */}
                 <div className="bg-slate-100/80 p-5 rounded-2xl border border-slate-200 text-xs text-slate-600 space-y-2">
                   <div className="flex items-center gap-2 font-bold text-[#243445]">
-                    <span className="material-symbols-outlined text-[18px] text-[#FF641A]">
-                      corporate_fare
-                    </span>
+                    <AppIcon name="corporate_fare" className="w-[18px] h-[18px] text-[#FF641A]" />
                     <span>Corporate Entity &amp; Registered Office</span>
                   </div>
                   <p className="leading-relaxed">
@@ -292,7 +285,7 @@ export default async function ContactPage() {
                     <p className="text-xs text-slate-600 leading-relaxed">{item.answer}</p>
                   </div>
                   <div className={`pt-2 flex items-center gap-1.5 text-xs font-bold ${item.tagColor}`}>
-                    <span className="material-symbols-outlined text-[16px]">{item.icon}</span>
+                    <AppIcon name={item.icon} className="w-4 h-4" />
                     <span>{item.tag}</span>
                   </div>
                 </div>

@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
 import { PublicReview } from '@/lib/public-api';
 import { resolveReviewAvatar } from '@/lib/data-fetchers';
+import AppIcon from '@/components/shared/AppIcon';
 
 interface ReviewsFilterGridProps {
   initialReviews: PublicReview[];
@@ -92,9 +93,10 @@ export default function ReviewsFilterGrid({ initialReviews }: ReviewsFilterGridP
         <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4">
           {/* Search Input */}
           <div className="relative flex-1">
-            <span className="material-symbols-outlined text-[20px] text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
-              search
-            </span>
+            <AppIcon
+              name="search"
+              className="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+            />
             <input
               type="text"
               value={searchQuery}
@@ -109,7 +111,7 @@ export default function ReviewsFilterGrid({ initialReviews }: ReviewsFilterGridP
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
                 aria-label="Clear search"
               >
-                <span className="material-symbols-outlined text-[16px]">close</span>
+                <AppIcon name="close" className="w-4 h-4" />
               </button>
             )}
           </div>
@@ -141,9 +143,10 @@ export default function ReviewsFilterGrid({ initialReviews }: ReviewsFilterGridP
                   </>
                 )}
               </select>
-              <span className="material-symbols-outlined text-[18px] text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
-                expand_more
-              </span>
+              <AppIcon
+                name="expand_more"
+                className="w-[18px] h-[18px] text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"
+              />
             </div>
           </div>
         </div>
@@ -204,7 +207,7 @@ export default function ReviewsFilterGrid({ initialReviews }: ReviewsFilterGridP
                 onClick={resetFilters}
                 className="text-xs font-semibold text-[#FF641A] hover:underline flex items-center gap-1"
               >
-                <span className="material-symbols-outlined text-[14px]">refresh</span>
+                <AppIcon name="refresh" className="w-3.5 h-3.5" />
                 Reset
               </button>
             )}
@@ -232,15 +235,14 @@ export default function ReviewsFilterGrid({ initialReviews }: ReviewsFilterGridP
                       {Array.from({ length: 5 }).map((_, starIdx) => {
                         const filled = starIdx < Math.round(review.rating);
                         return (
-                          <span
+                          <AppIcon
                             key={starIdx}
-                            className={`material-symbols-outlined text-[18px] ${
+                            name="star"
+                            className={`w-[18px] h-[18px] ${
                               filled ? 'text-[#FF641A]' : 'text-slate-200'
                             }`}
-                            style={{ fontVariationSettings: '"FILL" 1' }}
-                          >
-                            star
-                          </span>
+                            filled={filled}
+                          />
                         );
                       })}
                     </div>
@@ -310,7 +312,7 @@ export default function ReviewsFilterGrid({ initialReviews }: ReviewsFilterGridP
         /* Empty State */
         <div className="bg-white rounded-3xl p-12 text-center border border-slate-200/80 shadow-sm max-w-xl mx-auto space-y-4">
           <div className="w-16 h-16 rounded-full bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mx-auto">
-            <span className="material-symbols-outlined text-[32px]">filter_alt_off</span>
+            <AppIcon name="filter_alt_off" className="w-8 h-8" />
           </div>
           <h3 className="font-heading font-bold text-xl text-[#243445]">
             No matching reviews found
@@ -323,7 +325,7 @@ export default function ReviewsFilterGrid({ initialReviews }: ReviewsFilterGridP
             onClick={resetFilters}
             className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#FF641A] text-white font-semibold text-sm hover:bg-[#E8540E] transition-colors shadow-sm"
           >
-            <span className="material-symbols-outlined text-[18px]">refresh</span>
+            <AppIcon name="refresh" className="w-[18px] h-[18px]" />
             Clear All Filters
           </button>
         </div>

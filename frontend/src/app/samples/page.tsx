@@ -7,6 +7,7 @@ import VerifiedGradesMarquee from '@/components/shared/VerifiedGradesMarquee';
 import FaqAccordion from '@/components/shared/FaqAccordion';
 import JsonLd from '@/components/seo/JsonLd';
 import { buildBreadcrumbSchema, buildFaqPageSchema } from '@/lib/schema';
+import AppIcon from '@/components/shared/AppIcon';
 
 export const metadata: Metadata = {
   title: 'Download Free Academic Samples & Coursework Models | ReadEssay',
@@ -45,7 +46,7 @@ export default async function SamplesPage() {
           <Link href="/" className="hover:text-[#FF641A] transition-colors">
             Home
           </Link>
-          <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+          <AppIcon name="chevron_right" className="w-3.5 h-3.5" />
           <span className="text-[#243445] font-semibold">Samples</span>
         </div>
       </nav>
@@ -60,7 +61,7 @@ export default async function SamplesPage() {
             {/* Left: Copy & Value Props */}
             <div className="lg:col-span-7 flex flex-col space-y-6">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFF2EC] text-[#FF641A] text-xs sm:text-sm font-semibold self-start border border-[#FF641A]/20">
-                <span className="material-symbols-outlined text-[16px]">folder_special</span>
+                <AppIcon name="folder_special" className="w-4 h-4" filled />
                 <span>Academic Excellence Exemplified • Downloadable Models</span>
               </div>
 
@@ -75,27 +76,19 @@ export default async function SamplesPage() {
               {/* 4 Academic Integrity Badges */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 pb-2">
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]" style={{ fontVariationSettings: '"FILL" 1' }}>
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-xs sm:text-sm text-[#243445] font-medium">100% Confidential</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]" style={{ fontVariationSettings: '"FILL" 1' }}>
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-xs sm:text-sm text-[#243445] font-medium">0% Turnitin Plagiarism</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]" style={{ fontVariationSettings: '"FILL" 1' }}>
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-xs sm:text-sm text-[#243445] font-medium">Free Access</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]" style={{ fontVariationSettings: '"FILL" 1' }}>
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-xs sm:text-sm text-[#243445] font-medium">Money-Back Pledge</span>
                 </div>
               </div>
@@ -117,7 +110,7 @@ export default async function SamplesPage() {
                   className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#FF641A] text-white font-semibold text-sm shadow-md hover:bg-[#E8540E] transition-all hover:-translate-y-0.5"
                   href="/services"
                 >
-                  <span className="material-symbols-outlined text-[20px]">shopping_cart</span>
+                  <AppIcon name="shopping_cart" className="w-5 h-5" filled />
                   <span>Order Bespoke Paper</span>
                 </Link>
               </div>
@@ -150,7 +143,7 @@ export default async function SamplesPage() {
                   <div className="space-y-2.5 pt-2">
                     <div className="flex items-center justify-between p-3 rounded-xl bg-slate-800/80 border border-slate-700 text-xs">
                       <span className="flex items-center gap-2 text-slate-300">
-                        <span className="material-symbols-outlined text-[#FF641A] text-[18px]">verified</span>
+                        <AppIcon name="verified" className="w-[18px] h-[18px] text-[#FF641A]" filled />
                         Peer-Reviewed References
                       </span>
                       <span className="text-[#059669] font-bold">100% Verified</span>
@@ -158,7 +151,7 @@ export default async function SamplesPage() {
 
                     <div className="flex items-center justify-between p-3 rounded-xl bg-slate-800/80 border border-slate-700 text-xs">
                       <span className="flex items-center gap-2 text-slate-300">
-                        <span className="material-symbols-outlined text-[#FF641A] text-[18px]">fact_check</span>
+                        <AppIcon name="fact_check" className="w-[18px] h-[18px] text-[#FF641A]" filled />
                         Plagiarism Threshold
                       </span>
                       <span className="text-[#059669] font-bold">0% AI / Safe</span>
@@ -166,7 +159,7 @@ export default async function SamplesPage() {
 
                     <div className="flex items-center justify-between p-3 rounded-xl bg-slate-800/80 border border-slate-700 text-xs">
                       <span className="flex items-center gap-2 text-slate-300">
-                        <span className="material-symbols-outlined text-[#FF641A] text-[18px]">shield</span>
+                        <AppIcon name="shield" className="w-[18px] h-[18px] text-[#FF641A]" filled />
                         Student Privacy Scrub
                       </span>
                       <span className="text-[#059669] font-bold">Anonymized</span>
@@ -188,7 +181,7 @@ export default async function SamplesPage() {
       <section className="w-full max-w-7xl mx-auto px-6 lg:px-12 -mt-6 mb-8 z-20 relative">
         <div className="bg-white rounded-2xl p-6 sm:p-7 shadow-sm border border-slate-200/80 flex flex-col md:flex-row items-start md:items-center gap-5">
           <div className="w-12 h-12 rounded-2xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center shrink-0">
-            <span className="material-symbols-outlined text-[28px]">shield_lock</span>
+            <AppIcon name="shield_lock" className="w-7 h-7" />
           </div>
           <div className="flex-1 space-y-1">
             <div className="flex flex-wrap items-center gap-2">
@@ -215,7 +208,7 @@ export default async function SamplesPage() {
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
               <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#059669] bg-[#ECFDF5] px-3 py-1 rounded-full mb-2">
-                <span className="material-symbols-outlined text-[16px]">verified</span>
+                <AppIcon name="verified" className="w-4 h-4" filled />
                 Live Academic Evidence
               </div>
               <h2 className="font-heading text-2xl sm:text-3xl font-bold text-[#243445]">
@@ -230,7 +223,7 @@ export default async function SamplesPage() {
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white text-xs font-bold transition-colors shadow-sm shrink-0"
             >
               <span>Read Student Reviews</span>
-              <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+              <AppIcon name="arrow_forward" className="w-4 h-4" />
             </Link>
           </div>
 
@@ -280,7 +273,7 @@ export default async function SamplesPage() {
                     className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800 text-white hover:bg-slate-700 transition-colors border border-slate-700"
                     href="tel:+923138400066"
                   >
-                    <span className="material-symbols-outlined text-[#FF641A] text-[22px]">phone_iphone</span>
+                    <AppIcon name="phone_iphone" className="w-[22px] h-[22px] text-[#FF641A]" />
                     <div>
                       <span className="text-[10px] block uppercase tracking-wider text-slate-400">PK WhatsApp Hotline</span>
                       <span className="text-xs font-bold">+92 3138400066</span>
@@ -290,7 +283,7 @@ export default async function SamplesPage() {
                     className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800 text-white hover:bg-slate-700 transition-colors border border-slate-700"
                     href="tel:+447460674811"
                   >
-                    <span className="material-symbols-outlined text-[#FF641A] text-[22px]">call</span>
+                    <AppIcon name="call" className="w-[22px] h-[22px] text-[#FF641A]" />
                     <div>
                       <span className="text-[10px] block uppercase tracking-wider text-slate-400">UK Support Desk</span>
                       <span className="text-xs font-bold">+44 7460 674811</span>
@@ -300,7 +293,7 @@ export default async function SamplesPage() {
                     className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800 text-white hover:bg-slate-700 transition-colors border border-slate-700"
                     href="mailto:support@readessay.com"
                   >
-                    <span className="material-symbols-outlined text-[#FF641A] text-[22px]">mail</span>
+                    <AppIcon name="mail" className="w-[22px] h-[22px] text-[#FF641A]" />
                     <div>
                       <span className="text-[10px] block uppercase tracking-wider text-slate-400">Official Email</span>
                       <span className="text-xs font-bold">support@readessay.com</span>

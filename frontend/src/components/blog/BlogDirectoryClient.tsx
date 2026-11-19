@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PublicBlogPost, PublicBlogCategory } from '@/lib/public-api';
+import AppIcon from '@/components/shared/AppIcon';
 
 interface BlogDirectoryClientProps {
   initialPosts: PublicBlogPost[];
@@ -57,9 +58,10 @@ export default function BlogDirectoryClient({
                 placeholder="Search academic guides, topics, authors..."
                 className="w-full pl-11 pr-4 py-3 rounded-full bg-white border border-slate-200 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FF641A] focus:border-transparent transition shadow-xs"
               />
-              <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-[20px] pointer-events-none">
-                search
-              </span>
+              <AppIcon
+                name="search"
+                className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+              />
               {searchQuery && (
                 <button
                   type="button"

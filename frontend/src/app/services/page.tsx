@@ -14,6 +14,7 @@ import VerifiedGradesMarquee from '@/components/shared/VerifiedGradesMarquee';
 import FaqAccordion from '@/components/shared/FaqAccordion';
 import { PriceCalculatorWidget } from '@/components/shared/PriceCalculatorWidget';
 import JsonLd from '@/components/seo/JsonLd';
+import AppIcon from '@/components/shared/AppIcon';
 import {
   buildBreadcrumbSchema,
   buildServiceSchema,
@@ -241,7 +242,7 @@ export default async function ServicesPage() {
             {/* Left: Copy & Value Props */}
             <div className="lg:col-span-7 flex flex-col space-y-6">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFF2EC] text-[#FF641A] text-xs sm:text-sm font-semibold self-start border border-[#FF641A]/10">
-                <span className="material-symbols-outlined text-[18px]">verified_user</span>
+                <AppIcon name="verified_user" className="w-[18px] h-[18px]" filled />
                 <span>Professional Assignment Help Designed Around Your Academic Needs</span>
               </div>
 
@@ -258,41 +259,31 @@ export default async function ServicesPage() {
               {/* 5 Value Checkmarks */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 pb-2">
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]">
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-sm sm:text-base text-[#243445] font-medium">
                     100% Unique Content
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]">
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-sm sm:text-base text-[#243445] font-medium">
                     Strong Attention to deadlines
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]">
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-sm sm:text-base text-[#243445] font-medium">
                     24/7 Support handled with professionalism
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]">
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-sm sm:text-base text-[#243445] font-medium">
                     100% Money Back Guarantee
                   </span>
                 </div>
                 <div className="flex items-center gap-3 sm:col-span-2">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]">
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-sm sm:text-base text-[#243445] font-medium">
                     Revisions as per your Desires!
                   </span>
@@ -318,7 +309,7 @@ export default async function ServicesPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <span className="material-symbols-outlined text-[20px]">chat</span>
+                  <AppIcon name="chat" className="w-5 h-5" />
                   <span>Live Chat with Expert</span>
                 </a>
               </div>
@@ -365,15 +356,18 @@ export default async function ServicesPage() {
               >
                 <div>
                   <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
-                    <span className="material-symbols-outlined text-[26px]">
-                      {service.slug.includes('exam')
-                        ? 'verified_user'
-                        : service.slug.includes('class')
-                        ? 'school'
-                        : service.slug.includes('homework')
-                        ? 'quiz'
-                        : 'description'}
-                    </span>
+                    <AppIcon
+                      name={
+                        service.slug.includes('exam')
+                          ? 'verified_user'
+                          : service.slug.includes('class')
+                          ? 'school'
+                          : service.slug.includes('homework')
+                          ? 'quiz'
+                          : 'description'
+                      }
+                      className="w-[26px] h-[26px]"
+                    />
                   </div>
                   {service.badgeLabel && (
                     <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#FFF2EC] text-[#FF641A] text-xs font-semibold mb-2">
@@ -419,9 +413,10 @@ export default async function ServicesPage() {
                     className="inline-flex items-center gap-1.5 text-sm font-bold text-[#FF641A] group-hover:text-[#E8540E] transition-colors"
                   >
                     <span>Explore {service.title}</span>
-                    <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">
-                      arrow_forward
-                    </span>
+                    <AppIcon
+                      name="arrow_forward"
+                      className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                    />
                   </Link>
                 </div>
               </div>
@@ -453,7 +448,7 @@ export default async function ServicesPage() {
               >
                 <div>
                   <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
-                    <span className="material-symbols-outlined text-[26px]">{disc.icon}</span>
+                    <AppIcon name={disc.icon} className="w-[26px] h-[26px]" />
                   </div>
                   <h3 className="font-heading text-lg font-bold text-[#243445] mb-2">
                     <Link href={`/${disc.slug}`} className="hover:text-[#FF641A] transition-colors">
@@ -468,9 +463,10 @@ export default async function ServicesPage() {
                     className="inline-flex items-center gap-1.5 text-sm text-[#FF641A] group-hover:text-[#E8540E] font-semibold transition-colors"
                   >
                     <span>Explore Service</span>
-                    <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">
-                      arrow_forward
-                    </span>
+                    <AppIcon
+                      name="arrow_forward"
+                      className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                    />
                   </Link>
                 </div>
               </div>
@@ -483,7 +479,7 @@ export default async function ServicesPage() {
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white text-sm sm:text-base font-semibold shadow-md transition-colors"
             >
               <span>Explore Assignment Help Directory</span>
-              <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+              <AppIcon name="arrow_forward" className="w-[18px] h-[18px]" />
             </Link>
           </div>
         </div>
@@ -508,7 +504,7 @@ export default async function ServicesPage() {
             <div className="bg-white rounded-2xl p-6 shadow-md flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-slate-100">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-4">
-                  <span className="material-symbols-outlined text-[22px]">description</span>
+                  <AppIcon name="description" className="w-[22px] h-[22px]" />
                 </div>
                 <h3 className="font-heading text-lg font-bold text-[#243445] mb-2">
                   Pay to do My Assignment Help
@@ -521,7 +517,7 @@ export default async function ServicesPage() {
                   href="/assignment-help"
                 >
                   <span>Continue Reading</span>
-                  <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                  <AppIcon name="arrow_forward" className="w-4 h-4" />
                 </Link>
               </div>
               <a
@@ -537,7 +533,7 @@ export default async function ServicesPage() {
             <div className="bg-white rounded-2xl p-6 shadow-md flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-slate-100">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-slate-100 text-[#243445] flex items-center justify-center mb-4">
-                  <span className="material-symbols-outlined text-[22px]">verified_user</span>
+                  <AppIcon name="verified_user" className="w-[22px] h-[22px]" filled />
                 </div>
                 <h3 className="font-heading text-lg font-bold text-[#243445] mb-2">
                   Online Protected Exam Help
@@ -550,7 +546,7 @@ export default async function ServicesPage() {
                   href="/exam-help"
                 >
                   <span>Continue Reading</span>
-                  <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                  <AppIcon name="arrow_forward" className="w-4 h-4" />
                 </Link>
               </div>
               <a
@@ -566,7 +562,7 @@ export default async function ServicesPage() {
             <div className="bg-white rounded-2xl p-6 shadow-md flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-slate-100">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-[#243445] text-white flex items-center justify-center mb-4">
-                  <span className="material-symbols-outlined text-[22px]">school</span>
+                  <AppIcon name="school" className="w-[22px] h-[22px]" />
                 </div>
                 <h3 className="font-heading text-lg font-bold text-[#243445] mb-2">
                   Take My Class Help
@@ -579,7 +575,7 @@ export default async function ServicesPage() {
                   href="/online-class-help"
                 >
                   <span>Continue Reading</span>
-                  <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                  <AppIcon name="arrow_forward" className="w-4 h-4" />
                 </Link>
               </div>
               <a
@@ -595,7 +591,7 @@ export default async function ServicesPage() {
             <div className="bg-white rounded-2xl p-6 shadow-md flex flex-col justify-between hover:-translate-y-1 hover:shadow-xl transition-all duration-200 border border-slate-100">
               <div>
                 <div className="w-10 h-10 rounded-xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-4">
-                  <span className="material-symbols-outlined text-[22px]">quiz</span>
+                  <AppIcon name="quiz" className="w-[22px] h-[22px]" />
                 </div>
                 <h3 className="font-heading text-lg font-bold text-[#243445] mb-2">
                   Do my Online Quiz &amp; Test Help
@@ -608,7 +604,7 @@ export default async function ServicesPage() {
                   href="/homework-help"
                 >
                   <span>Continue Reading</span>
-                  <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                  <AppIcon name="arrow_forward" className="w-4 h-4" />
                 </Link>
               </div>
               <a
@@ -642,7 +638,7 @@ export default async function ServicesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-200 border border-slate-100">
               <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">grade</span>
+                <AppIcon name="grade" className="w-[26px] h-[26px]" filled />
               </div>
               <h3 className="font-heading text-xl font-bold text-[#243445] mb-2">
                 High-Quality Work
@@ -654,7 +650,7 @@ export default async function ServicesPage() {
 
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-200 border border-slate-100">
               <div className="w-12 h-12 rounded-xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">fact_check</span>
+                <AppIcon name="fact_check" className="w-[26px] h-[26px]" filled />
               </div>
               <h3 className="font-heading text-xl font-bold text-[#243445] mb-2">
                 100% Original Content
@@ -666,7 +662,7 @@ export default async function ServicesPage() {
 
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-200 border border-slate-100">
               <div className="w-12 h-12 rounded-xl bg-slate-100 text-[#243445] flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">lock</span>
+                <AppIcon name="lock" className="w-[26px] h-[26px]" />
               </div>
               <h3 className="font-heading text-xl font-bold text-[#243445] mb-2">
                 100% Confidential
@@ -678,7 +674,7 @@ export default async function ServicesPage() {
 
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-200 border border-slate-100">
               <div className="w-12 h-12 rounded-xl bg-[#243445] text-white flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">price_check</span>
+                <AppIcon name="price_check" className="w-[26px] h-[26px]" />
               </div>
               <h3 className="font-heading text-xl font-bold text-[#243445] mb-2">
                 Affordable Pricing
@@ -690,7 +686,7 @@ export default async function ServicesPage() {
 
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-200 border border-slate-100">
               <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">support_agent</span>
+                <AppIcon name="support_agent" className="w-[26px] h-[26px]" />
               </div>
               <h3 className="font-heading text-xl font-bold text-[#243445] mb-2">
                 Live Chat Support
@@ -702,7 +698,7 @@ export default async function ServicesPage() {
 
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-200 border border-slate-100">
               <div className="w-12 h-12 rounded-xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">psychology</span>
+                <AppIcon name="psychology" className="w-[26px] h-[26px]" />
               </div>
               <h3 className="font-heading text-xl font-bold text-[#243445] mb-2">
                 Skilled Subject Experts
@@ -930,9 +926,7 @@ export default async function ServicesPage() {
                 <div>
                   <div className="flex items-center gap-1 text-[#FF641A] mb-3">
                     {[...Array(5)].map((_, i) => (
-                      <span key={i} className="material-symbols-outlined text-[18px]">
-                        star
-                      </span>
+                      <AppIcon key={i} name="star" className="w-[18px] h-[18px] text-[#FF641A]" filled />
                     ))}
                   </div>
                   <p className="text-slate-700 text-sm italic mb-6 leading-relaxed">
@@ -966,7 +960,7 @@ export default async function ServicesPage() {
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white text-sm sm:text-base font-semibold shadow-md transition-colors"
             >
               <span>More Reviews</span>
-              <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+              <AppIcon name="arrow_forward" className="w-[18px] h-[18px]" />
             </Link>
           </div>
         </div>
@@ -978,7 +972,7 @@ export default async function ServicesPage() {
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#ECFDF5] text-[#059669] text-xs font-semibold mb-2">
-                <span className="material-symbols-outlined text-[16px]">verified</span>
+                <AppIcon name="verified" className="w-4 h-4" filled />
                 <span>Live Academic Evidence</span>
               </div>
               <h2 className="font-heading text-2xl sm:text-3xl font-bold text-[#243445]">
@@ -1003,7 +997,7 @@ export default async function ServicesPage() {
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#059669] hover:bg-emerald-600 text-white text-sm sm:text-base font-semibold shadow-md transition-colors"
             >
               <span>View All Samples</span>
-              <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+              <AppIcon name="arrow_forward" className="w-[18px] h-[18px]" />
             </Link>
           </div>
         </div>
@@ -1031,14 +1025,14 @@ export default async function ServicesPage() {
               href="/samples"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-slate-100 hover:bg-slate-200 text-[#243445] text-sm font-semibold transition-colors"
             >
-              <span className="material-symbols-outlined text-[18px]">description</span>
+              <AppIcon name="description" className="w-[18px] h-[18px]" />
               <span>View All Samples</span>
             </Link>
             <Link
               href="/contact"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white text-sm font-semibold shadow-md transition-colors"
             >
-              <span className="material-symbols-outlined text-[18px]">support_agent</span>
+              <AppIcon name="support_agent" className="w-[18px] h-[18px]" />
               <span>Contact Support</span>
             </Link>
           </div>
@@ -1067,9 +1061,7 @@ export default async function ServicesPage() {
                     className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800/80 text-white hover:bg-slate-700 transition-colors border border-slate-700"
                     href="tel:+923138400066"
                   >
-                    <span className="material-symbols-outlined text-[#FF641A] text-[22px]">
-                      phone_iphone
-                    </span>
+                    <AppIcon name="phone_iphone" className="w-[22px] h-[22px] text-[#FF641A]" />
                     <div>
                       <span className="text-[10px] block uppercase tracking-wider text-slate-400">
                         PK WhatsApp Hotline
@@ -1082,9 +1074,7 @@ export default async function ServicesPage() {
                     className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800/80 text-white hover:bg-slate-700 transition-colors border border-slate-700"
                     href="tel:+447460674811"
                   >
-                    <span className="material-symbols-outlined text-[#FF641A] text-[22px]">
-                      call
-                    </span>
+                    <AppIcon name="call" className="w-[22px] h-[22px] text-[#FF641A]" />
                     <div>
                       <span className="text-[10px] block uppercase tracking-wider text-slate-400">
                         UK Support Desk
@@ -1097,9 +1087,7 @@ export default async function ServicesPage() {
                     className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800/80 text-white hover:bg-slate-700 transition-colors border border-slate-700"
                     href="mailto:support@readessay.com"
                   >
-                    <span className="material-symbols-outlined text-[#FF641A] text-[22px]">
-                      mail
-                    </span>
+                    <AppIcon name="mail" className="w-[22px] h-[22px] text-[#FF641A]" />
                     <div>
                       <span className="text-[10px] block uppercase tracking-wider text-slate-400">
                         Official Email

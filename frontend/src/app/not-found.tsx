@@ -1,11 +1,12 @@
 import Link from 'next/link';
+import AppIcon from '@/components/shared/AppIcon';
 
 export default function NotFound() {
   return (
     <div className="w-full min-h-[70vh] bg-[#FAFAFA] flex items-center justify-center py-16 px-6">
       <div className="max-w-2xl mx-auto text-center space-y-8 bg-white p-8 sm:p-12 rounded-3xl shadow-sm border border-slate-100">
         <div className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-[#FFF2EC] text-[#FF641A] mx-auto shadow-sm">
-          <span className="material-symbols-outlined text-[44px]">search_off</span>
+          <AppIcon name="search_off" className="w-11 h-11" />
         </div>
 
         <div className="space-y-3">
@@ -26,9 +27,7 @@ export default function NotFound() {
             href="/"
             className="flex items-center gap-3 p-4 rounded-xl bg-slate-50 hover:bg-[#FFF2EC] text-[#243445] hover:text-[#FF641A] transition-colors border border-slate-100 group"
           >
-            <span className="material-symbols-outlined text-[#FF641A] text-[24px]">
-              home
-            </span>
+            <AppIcon name="home" className="w-6 h-6 text-[#FF641A]" />
             <div>
               <span className="font-heading font-bold text-sm block">Homepage</span>
               <span className="text-xs text-slate-500">Return to main storefront</span>
@@ -39,9 +38,7 @@ export default function NotFound() {
             href="/services"
             className="flex items-center gap-3 p-4 rounded-xl bg-slate-50 hover:bg-[#FFF2EC] text-[#243445] hover:text-[#FF641A] transition-colors border border-slate-100 group"
           >
-            <span className="material-symbols-outlined text-[#FF641A] text-[24px]">
-              apps
-            </span>
+            <AppIcon name="apps" className="w-6 h-6 text-[#FF641A]" />
             <div>
               <span className="font-heading font-bold text-sm block">Browse Services</span>
               <span className="text-xs text-slate-500">Explore 26+ subject disciplines</span>
@@ -52,9 +49,7 @@ export default function NotFound() {
             href="/reviews"
             className="flex items-center gap-3 p-4 rounded-xl bg-slate-50 hover:bg-[#FFF2EC] text-[#243445] hover:text-[#FF641A] transition-colors border border-slate-100 group"
           >
-            <span className="material-symbols-outlined text-[#FF641A] text-[24px]">
-              star
-            </span>
+            <AppIcon name="star" className="w-6 h-6 text-[#FF641A]" filled />
             <div>
               <span className="font-heading font-bold text-sm block">Student Reviews</span>
               <span className="text-xs text-slate-500">Verified feedback and ratings</span>
@@ -65,9 +60,7 @@ export default function NotFound() {
             href="/samples"
             className="flex items-center gap-3 p-4 rounded-xl bg-slate-50 hover:bg-[#FFF2EC] text-[#243445] hover:text-[#FF641A] transition-colors border border-slate-100 group"
           >
-            <span className="material-symbols-outlined text-[#FF641A] text-[24px]">
-              description
-            </span>
+            <AppIcon name="description" className="w-6 h-6 text-[#FF641A]" />
             <div>
               <span className="font-heading font-bold text-sm block">Academic Samples</span>
               <span className="text-xs text-slate-500">View real exemplar papers</span>
@@ -81,7 +74,7 @@ export default function NotFound() {
             href="/services"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white text-sm sm:text-base font-semibold shadow-md transition-colors"
           >
-            <span className="material-symbols-outlined text-[18px]">arrow_back</span>
+            <AppIcon name="arrow_back" className="w-[18px] h-[18px]" />
             <span>Browse All Services</span>
           </Link>
           <a
@@ -90,7 +83,7 @@ export default function NotFound() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#059669] hover:bg-emerald-600 text-white text-sm sm:text-base font-semibold shadow-md transition-colors"
           >
-            <span className="material-symbols-outlined text-[18px]">chat</span>
+            <AppIcon name="chat" className="w-[18px] h-[18px]" />
             <span>WhatsApp Concierge</span>
           </a>
         </div>

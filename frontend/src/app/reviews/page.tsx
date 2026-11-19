@@ -9,6 +9,7 @@ import FaqAccordion from '@/components/shared/FaqAccordion';
 import ReviewsFilterGrid from '@/components/reviews/ReviewsFilterGrid';
 import JsonLd from '@/components/seo/JsonLd';
 import { buildBreadcrumbSchema, buildFaqPageSchema } from '@/lib/schema';
+import AppIcon from '@/components/shared/AppIcon';
 
 export const metadata: Metadata = {
   title: 'Student Reviews & Ratings - Genuine Experiences | ReadEssay',
@@ -55,7 +56,7 @@ export default async function ReviewsPage() {
           <Link href="/" className="hover:text-[#FF641A] transition-colors">
             Home
           </Link>
-          <span className="material-symbols-outlined text-[14px]">chevron_right</span>
+          <AppIcon name="chevron_right" className="w-3.5 h-3.5" />
           <span className="text-[#243445] font-semibold">Reviews</span>
         </div>
       </nav>
@@ -70,7 +71,7 @@ export default async function ReviewsPage() {
             {/* Left: Copy & Value Props */}
             <div className="lg:col-span-7 flex flex-col space-y-6">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFF2EC] text-[#FF641A] text-xs sm:text-sm font-semibold self-start border border-[#FF641A]/20">
-                <span className="material-symbols-outlined text-[16px]">verified</span>
+                <AppIcon name="verified" className="w-4 h-4" filled />
                 <span>Real Experiences. Honest Feedback. Trusted Academic Support.</span>
               </div>
 
@@ -85,33 +86,23 @@ export default async function ReviewsPage() {
               {/* 5 Value Checkmarks */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 pb-2">
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]" style={{ fontVariationSettings: '"FILL" 1' }}>
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-sm text-[#243445] font-medium">100% Unique Content</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]" style={{ fontVariationSettings: '"FILL" 1' }}>
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-sm text-[#243445] font-medium">Strong Attention to deadlines</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]" style={{ fontVariationSettings: '"FILL" 1' }}>
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-sm text-[#243445] font-medium">24/7 Support handled with professionalism</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]" style={{ fontVariationSettings: '"FILL" 1' }}>
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-sm text-[#243445] font-medium">100% Money Back Guarantee</span>
                 </div>
                 <div className="flex items-center gap-3 sm:col-span-2">
-                  <span className="material-symbols-outlined text-[#059669] text-[20px]" style={{ fontVariationSettings: '"FILL" 1' }}>
-                    check_circle
-                  </span>
+                  <AppIcon name="check_circle" className="w-5 h-5 text-[#059669]" filled />
                   <span className="text-sm text-[#243445] font-medium">Revisions as per your Desires!</span>
                 </div>
               </div>
@@ -133,7 +124,7 @@ export default async function ReviewsPage() {
                   className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#FF641A] text-white font-semibold text-sm shadow-md hover:bg-[#E8540E] transition-all hover:-translate-y-0.5"
                   href="/services"
                 >
-                  <span className="material-symbols-outlined text-[20px]">explore</span>
+                  <AppIcon name="explore" className="w-5 h-5" />
                   <span>Browse All Services</span>
                 </Link>
               </div>
@@ -168,16 +159,14 @@ export default async function ReviewsPage() {
                   <div className="border-l border-slate-200 pl-6 space-y-1">
                     <div className="flex items-center space-x-1 text-[#FF641A]">
                       {Array.from({ length: 5 }).map((_, i) => (
-                        <span key={i} className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: '"FILL" 1' }}>
-                          star
-                        </span>
+                        <AppIcon key={i} name="star" className="w-5 h-5 text-[#FF641A]" filled />
                       ))}
                     </div>
                     <span className="text-xs font-bold text-[#243445] block">
                       Based on {totalReviewsCount}+ Authenticated Reviews
                     </span>
                     <span className="text-[11px] text-[#059669] font-medium flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[14px]">verified</span>
+                      <AppIcon name="verified" className="w-3.5 h-3.5" filled />
                       100% Verified Customer Identities
                     </span>
                   </div>
@@ -210,11 +199,11 @@ export default async function ReviewsPage() {
 
                 <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                   <span className="flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-[#059669] text-[16px]">security</span>
+                    <AppIcon name="security" className="w-4 h-4 text-[#059669]" />
                     Encrypted SSL Reviews
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-[#059669] text-[16px]">thumb_up</span>
+                    <AppIcon name="thumb_up" className="w-4 h-4 text-[#059669]" />
                     99.4% Student Approval
                   </span>
                 </div>
@@ -265,7 +254,7 @@ export default async function ReviewsPage() {
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
               <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#059669] bg-[#ECFDF5] px-3 py-1 rounded-full mb-2">
-                <span className="material-symbols-outlined text-[16px]">verified</span>
+                <AppIcon name="verified" className="w-4 h-4" filled />
                 Verified Evidence
               </div>
               <h2 className="font-heading text-2xl sm:text-3xl font-bold text-[#243445]">
@@ -280,7 +269,7 @@ export default async function ReviewsPage() {
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white text-xs font-bold transition-colors shadow-sm shrink-0"
             >
               <span>View All Samples</span>
-              <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+              <AppIcon name="arrow_forward" className="w-4 h-4" />
             </Link>
           </div>
 
@@ -306,7 +295,7 @@ export default async function ReviewsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 border border-slate-100">
               <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">workspace_premium</span>
+                <AppIcon name="workspace_premium" className="w-[26px] h-[26px]" />
               </div>
               <h3 className="font-heading font-bold text-lg text-[#243445] mb-2">
                 Best Quality Assignments &amp; Papers
@@ -318,7 +307,7 @@ export default async function ReviewsPage() {
 
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 border border-slate-100">
               <div className="w-12 h-12 rounded-xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">task_alt</span>
+                <AppIcon name="task_alt" className="w-[26px] h-[26px]" />
               </div>
               <h3 className="font-heading font-bold text-lg text-[#243445] mb-2">
                 Plagiarism-Free Work
@@ -330,7 +319,7 @@ export default async function ReviewsPage() {
 
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 border border-slate-100">
               <div className="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">find_in_page</span>
+                <AppIcon name="find_in_page" className="w-[26px] h-[26px]" />
               </div>
               <h3 className="font-heading font-bold text-lg text-[#243445] mb-2">
                 Proofreading &amp; Revisions
@@ -342,7 +331,7 @@ export default async function ReviewsPage() {
 
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 border border-slate-100">
               <div className="w-12 h-12 rounded-xl bg-[#243445] text-white flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">alarm_on</span>
+                <AppIcon name="alarm_on" className="w-[26px] h-[26px]" />
               </div>
               <h3 className="font-heading font-bold text-lg text-[#243445] mb-2">
                 Meeting All Deadlines
@@ -354,7 +343,7 @@ export default async function ReviewsPage() {
 
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 border border-slate-100">
               <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">headset_mic</span>
+                <AppIcon name="headset_mic" className="w-[26px] h-[26px]" />
               </div>
               <h3 className="font-heading font-bold text-lg text-[#243445] mb-2">
                 24/7 Customer Support Availability
@@ -366,7 +355,7 @@ export default async function ReviewsPage() {
 
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-200 border border-slate-100">
               <div className="w-12 h-12 rounded-xl bg-[#ECFDF5] text-[#059669] flex items-center justify-center mb-5">
-                <span className="material-symbols-outlined text-[26px]">published_with_changes</span>
+                <AppIcon name="published_with_changes" className="w-[26px] h-[26px]" />
               </div>
               <h3 className="font-heading font-bold text-lg text-[#243445] mb-2">
                 On-Time Delivery &amp; Free Revisions
@@ -563,7 +552,7 @@ export default async function ReviewsPage() {
                     className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800 text-white hover:bg-slate-700 transition-colors border border-slate-700"
                     href="tel:+923138400066"
                   >
-                    <span className="material-symbols-outlined text-[#FF641A] text-[22px]">phone_iphone</span>
+                    <AppIcon name="phone_iphone" className="w-[22px] h-[22px] text-[#FF641A]" />
                     <div>
                       <span className="text-[10px] block uppercase tracking-wider text-slate-400">PK WhatsApp Hotline</span>
                       <span className="text-xs font-bold">+92 3138400066</span>
@@ -573,7 +562,7 @@ export default async function ReviewsPage() {
                     className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800 text-white hover:bg-slate-700 transition-colors border border-slate-700"
                     href="tel:+447460674811"
                   >
-                    <span className="material-symbols-outlined text-[#FF641A] text-[22px]">call</span>
+                    <AppIcon name="call" className="w-[22px] h-[22px] text-[#FF641A]" />
                     <div>
                       <span className="text-[10px] block uppercase tracking-wider text-slate-400">UK Support Desk</span>
                       <span className="text-xs font-bold">+44 7460 674811</span>
@@ -583,7 +572,7 @@ export default async function ReviewsPage() {
                     className="flex items-center gap-3 px-5 py-3 rounded-full bg-slate-800 text-white hover:bg-slate-700 transition-colors border border-slate-700"
                     href="mailto:support@readessay.com"
                   >
-                    <span className="material-symbols-outlined text-[#FF641A] text-[22px]">mail</span>
+                    <AppIcon name="mail" className="w-[22px] h-[22px] text-[#FF641A]" />
                     <div>
                       <span className="text-[10px] block uppercase tracking-wider text-slate-400">Official Email</span>
                       <span className="text-xs font-bold">support@readessay.com</span>

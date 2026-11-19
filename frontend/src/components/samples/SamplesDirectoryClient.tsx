@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { PublicSampleSection, PublicAcademicSample } from '@/lib/public-api';
+import AppIcon from '@/components/shared/AppIcon';
 
 interface SamplesDirectoryClientProps {
   sections: PublicSampleSection[];
@@ -180,9 +181,10 @@ export default function SamplesDirectoryClient({ sections }: SamplesDirectoryCli
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
             {/* Search Input */}
             <div className="lg:col-span-5 relative">
-              <span className="material-symbols-outlined text-[20px] text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
-                search
-              </span>
+              <AppIcon
+                name="search"
+                className="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
+              />
               <input
                 type="text"
                 value={searchQuery}
@@ -197,7 +199,7 @@ export default function SamplesDirectoryClient({ sections }: SamplesDirectoryCli
                   className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
                   aria-label="Clear search"
                 >
-                  <span className="material-symbols-outlined text-[16px]">close</span>
+                  <AppIcon name="close" className="w-4 h-4" />
                 </button>
               )}
             </div>
@@ -216,9 +218,10 @@ export default function SamplesDirectoryClient({ sections }: SamplesDirectoryCli
                   </option>
                 ))}
               </select>
-              <span className="material-symbols-outlined text-[18px] text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
-                expand_more
-              </span>
+              <AppIcon
+                name="expand_more"
+                className="w-[18px] h-[18px] text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"
+              />
             </div>
 
             {/* Citation Style Dropdown */}
@@ -235,9 +238,10 @@ export default function SamplesDirectoryClient({ sections }: SamplesDirectoryCli
                   </option>
                 ))}
               </select>
-              <span className="material-symbols-outlined text-[18px] text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
-                expand_more
-              </span>
+              <AppIcon
+                name="expand_more"
+                className="w-[18px] h-[18px] text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"
+              />
             </div>
 
             {/* Format Toggle (All / PDF / DOCX) */}
@@ -290,7 +294,7 @@ export default function SamplesDirectoryClient({ sections }: SamplesDirectoryCli
                 onClick={resetFilters}
                 className="text-[#FF641A] hover:underline font-bold flex items-center gap-1"
               >
-                <span className="material-symbols-outlined text-[14px]">refresh</span>
+                <AppIcon name="refresh" className="w-3.5 h-3.5" />
                 Reset All Filters
               </button>
             )}
@@ -311,7 +315,7 @@ export default function SamplesDirectoryClient({ sections }: SamplesDirectoryCli
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b border-slate-200">
                 <div className="max-w-3xl space-y-1">
                   <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#FF641A]">
-                    <span className="material-symbols-outlined text-[16px]">folder_open</span>
+                    <AppIcon name="folder_open" className="w-4 h-4" />
                     Discipline Portfolio
                   </div>
                   <h2 className="font-heading text-2xl lg:text-3xl font-bold text-[#243445]">
@@ -323,7 +327,7 @@ export default function SamplesDirectoryClient({ sections }: SamplesDirectoryCli
                 </div>
                 <div className="shrink-0">
                   <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200">
-                    <span className="material-symbols-outlined text-[14px] text-[#059669]">check_circle</span>
+                    <AppIcon name="check_circle" className="w-3.5 h-3.5 text-[#059669]" filled />
                     {section.samples.length} Exemplar{section.samples.length === 1 ? '' : 's'}
                   </span>
                 </div>
@@ -345,7 +349,7 @@ export default function SamplesDirectoryClient({ sections }: SamplesDirectoryCli
                         {/* Card Header: Pages + Format Badge */}
                         <div className="flex items-center justify-between mb-4">
                           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-[#243445] text-xs font-semibold">
-                            <span className="material-symbols-outlined text-[14px] text-[#FF641A]">description</span>
+                            <AppIcon name="description" className="w-3.5 h-3.5 text-[#FF641A]" />
                             {sample.pageCount} {sample.pageCount === 1 ? 'Page' : 'Pages'}
                           </span>
 
@@ -356,7 +360,7 @@ export default function SamplesDirectoryClient({ sections }: SamplesDirectoryCli
                                 : 'bg-blue-50 text-blue-600 border border-blue-200/60'
                             }`}
                           >
-                            <span className="material-symbols-outlined text-[12px]">attachment</span>
+                            <AppIcon name="attachment" className="w-3 h-3" />
                             {docFormat} • {docSize}
                           </span>
                         </div>
@@ -414,7 +418,7 @@ export default function SamplesDirectoryClient({ sections }: SamplesDirectoryCli
                           download={sample.fileName || undefined}
                         >
                           <span>View Sample</span>
-                          <span className="material-symbols-outlined text-[16px]">visibility</span>
+                          <AppIcon name="visibility" className="w-4 h-4" />
                         </a>
 
                         <Link
@@ -422,7 +426,7 @@ export default function SamplesDirectoryClient({ sections }: SamplesDirectoryCli
                           className="inline-flex items-center gap-1 text-xs font-bold text-slate-600 hover:text-[#FF641A] transition-colors"
                         >
                           <span>Order Similar</span>
-                          <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+                          <AppIcon name="arrow_forward" className="w-3.5 h-3.5" />
                         </Link>
                       </div>
                     </article>
@@ -435,7 +439,7 @@ export default function SamplesDirectoryClient({ sections }: SamplesDirectoryCli
           /* Empty State */
           <div className="bg-white rounded-3xl p-12 text-center border border-slate-200/80 shadow-sm max-w-xl mx-auto space-y-4 my-12">
             <div className="w-16 h-16 rounded-full bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center mx-auto">
-              <span className="material-symbols-outlined text-[32px]">folder_off</span>
+              <AppIcon name="folder_off" className="w-8 h-8" />
             </div>
             <h3 className="font-heading font-bold text-xl text-[#243445]">
               No academic samples match your filters
@@ -448,7 +452,7 @@ export default function SamplesDirectoryClient({ sections }: SamplesDirectoryCli
               onClick={resetFilters}
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#FF641A] text-white font-semibold text-sm hover:bg-[#E8540E] transition-colors shadow-sm"
             >
-              <span className="material-symbols-outlined text-[18px]">refresh</span>
+              <AppIcon name="refresh" className="w-[18px] h-[18px]" />
               Reset All Filters
             </button>
           </div>
