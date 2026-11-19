@@ -1,12 +1,17 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { fetchAllPublicReviews, REVIEWS_FAQS } from '@/lib/data-fetchers';
+import {
+  fetchAllPublicReviews,
+  fetchPublicCalculator,
+  REVIEWS_FAQS,
+} from '@/lib/data-fetchers';
 import RatingCards from '@/components/shared/RatingCards';
 import UniversityMarquee from '@/components/shared/UniversityMarquee';
 import VerifiedGradesMarquee from '@/components/shared/VerifiedGradesMarquee';
 import FaqAccordion from '@/components/shared/FaqAccordion';
 import ReviewsFilterGrid from '@/components/reviews/ReviewsFilterGrid';
+import { PriceCalculatorWidget } from '@/components/shared/PriceCalculatorWidget';
 import JsonLd from '@/components/seo/JsonLd';
 import { buildBreadcrumbSchema, buildFaqPageSchema } from '@/lib/schema';
 import AppIcon from '@/components/shared/AppIcon';
@@ -29,7 +34,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ReviewsPage() {
-  const { reviews, stats } = await fetchAllPublicReviews();
+  const [{ reviews, stats }, calculatorData] = await Promise.all([
+    fetchAllPublicReviews(),
+    fetchPublicCalculator(),
+  ]);
 
   const totalReviewsCount = stats.totalReviews || reviews.length;
   const avgRatingFormatted = stats.averageRating ? stats.averageRating.toFixed(1) : '4.8';
@@ -50,16 +58,7 @@ export default async function ReviewsPage() {
           buildFaqPageSchema(REVIEWS_FAQS),
         ]}
       />
-      {/* BREADCRUMB */}
-      <nav aria-label="Breadcrumb" className="w-full bg-white border-b border-slate-200/80 py-3">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 flex items-center gap-2 text-xs text-slate-500 font-medium">
-          <Link href="/" className="hover:text-[#FF641A] transition-colors">
-            Home
-          </Link>
-          <AppIcon name="chevron_right" className="w-3.5 h-3.5" />
-          <span className="text-[#243445] font-semibold">Reviews</span>
-        </div>
-      </nav>
+
 
       {/* HERO SECTION */}
       <section className="relative w-full bg-white overflow-hidden py-12 lg:py-20 border-b border-slate-100">
@@ -67,6 +66,16 @@ export default async function ReviewsPage() {
         <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-blue-50/60 rounded-full blur-3xl pointer-events-none -z-0" />
 
         <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+          {/* BREADCRUMB */}
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-slate-500 mb-8">
+
+            <Link href="/" className="hover:text-[#FF641A] transition-colors">
+              Home
+            </Link>
+            <AppIcon name="chevron_right" className="w-3.5 h-3.5" />
+            <span className="text-[#243445] font-semibold">Reviews</span>
+
+          </nav>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left: Copy & Value Props */}
             <div className="lg:col-span-7 flex flex-col space-y-6">
@@ -132,81 +141,8 @@ export default async function ReviewsPage() {
 
             {/* Right: Aggregate Rating & KPI Summary Card */}
             <div className="lg:col-span-5">
-              <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200/80 relative">
-                <div className="absolute -top-3.5 right-6 bg-[#FF641A] text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
-                  Verified Summary
-                </div>
-
-                <div className="flex flex-col mb-6">
-                  <span className="text-xs font-semibold text-[#FF641A] uppercase tracking-wider">
-                    Aggregate Student Feedback
-                  </span>
-                  <h2 className="font-heading text-2xl font-bold text-[#243445] mt-1">
-                    Student Rating Score
-                  </h2>
-                  <p className="text-xs text-slate-500 mt-1">
-                    Consolidated score across direct portal orders, AS Reviews, Sitejabber, and Trustpilot.
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-6 p-5 rounded-2xl bg-[#f8f9ff] border border-slate-100 mb-6">
-                  <div className="text-center shrink-0">
-                    <span className="font-heading text-4xl sm:text-5xl font-extrabold text-[#243445] block">
-                      {avgRatingFormatted}
-                    </span>
-                    <span className="text-xs text-slate-400 font-medium">out of 5.0</span>
-                  </div>
-                  <div className="border-l border-slate-200 pl-6 space-y-1">
-                    <div className="flex items-center space-x-1 text-[#FF641A]">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <AppIcon key={i} name="star" className="w-5 h-5 text-[#FF641A]" filled />
-                      ))}
-                    </div>
-                    <span className="text-xs font-bold text-[#243445] block">
-                      Based on {totalReviewsCount}+ Authenticated Reviews
-                    </span>
-                    <span className="text-[11px] text-[#059669] font-medium flex items-center gap-1">
-                      <AppIcon name="verified" className="w-3.5 h-3.5" filled />
-                      100% Verified Customer Identities
-                    </span>
-                  </div>
-                </div>
-
-                {/* Rating Distribution Bars */}
-                <div className="space-y-2.5">
-                  <div className="flex items-center gap-3 text-xs">
-                    <span className="w-14 font-semibold text-slate-600">5 Stars</span>
-                    <div className="flex-1 h-2.5 rounded-full bg-slate-100 overflow-hidden">
-                      <div className="h-full bg-[#FF641A] rounded-full" style={{ width: `${fiveStarPercent}%` }} />
-                    </div>
-                    <span className="w-10 text-right font-bold text-slate-600">{fiveStarPercent}%</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-xs">
-                    <span className="w-14 font-semibold text-slate-600">4 Stars</span>
-                    <div className="flex-1 h-2.5 rounded-full bg-slate-100 overflow-hidden">
-                      <div className="h-full bg-[#FF641A]/70 rounded-full" style={{ width: `${fourStarPercent}%` }} />
-                    </div>
-                    <span className="w-10 text-right font-bold text-slate-600">{fourStarPercent}%</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-xs opacity-50">
-                    <span className="w-14 font-semibold text-slate-600">3 Stars</span>
-                    <div className="flex-1 h-2.5 rounded-full bg-slate-100 overflow-hidden">
-                      <div className="h-full bg-slate-300 rounded-full" style={{ width: '0%' }} />
-                    </div>
-                    <span className="w-10 text-right font-bold text-slate-600">0%</span>
-                  </div>
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                  <span className="flex items-center gap-1.5">
-                    <AppIcon name="security" className="w-4 h-4 text-[#059669]" />
-                    Encrypted SSL Reviews
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <AppIcon name="thumb_up" className="w-4 h-4 text-[#059669]" />
-                    99.4% Student Approval
-                  </span>
-                </div>
+              <div id="hero-calculator-slot" className="w-full">
+                <PriceCalculatorWidget initialData={calculatorData} />
               </div>
             </div>
           </div>

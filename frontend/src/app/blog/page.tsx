@@ -34,7 +34,7 @@ export default async function BlogIndexPage() {
   const regularPosts = posts.length > 1 ? posts.slice(1) : posts;
 
   return (
-    <main className="w-full pt-28 bg-[#F8FAFC]">
+    <main className="w-full bg-[#FAFAFA] text-[#243445]">
       <JsonLd
         data={buildBreadcrumbSchema([
           { name: 'Home', url: '/' },

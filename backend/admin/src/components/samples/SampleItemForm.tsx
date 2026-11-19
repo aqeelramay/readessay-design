@@ -115,14 +115,14 @@ export function SampleItemForm({ sample: initialSample, sampleId }: SampleItemFo
   // Document File Attachment
   const [documentFile, setDocumentFile] = useState<AcademicSampleFile | null>(
     initialSample?.documentFile ??
-      (initialSample?.fileUrl
-        ? {
-            fileName: initialSample.fileName ?? "Exemplar_Academic_Paper.pdf",
-            fileType: initialSample.fileType ?? "PDF",
-            fileSize: initialSample.fileSize ?? "1.8 MB",
-            fileUrl: initialSample.fileUrl,
-          }
-        : null)
+    (initialSample?.fileUrl
+      ? {
+        fileName: initialSample.fileName ?? "Exemplar_Academic_Paper.pdf",
+        fileType: initialSample.fileType ?? "PDF",
+        fileSize: initialSample.fileSize ?? "1.8 MB",
+        fileUrl: initialSample.fileUrl,
+      }
+      : null)
   );
 
   const [status, setStatus] = useState<SampleStatus>(
@@ -285,10 +285,12 @@ export function SampleItemForm({ sample: initialSample, sampleId }: SampleItemFo
         const updated = await updateAcademicSample(currentId, payload);
         setSample(updated);
         setConfirmation(`Sample "${title}" updated successfully.`);
+        router.refresh();
       } else {
-        const created = await createAcademicSample(payload);
+        await createAcademicSample(payload);
         setConfirmation(`Sample "${title}" created successfully.`);
-        router.push(`/samples/items/${created.id}/edit`);
+        router.push("/samples/items");
+        router.refresh();
       }
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (err: unknown) {
@@ -318,7 +320,7 @@ export function SampleItemForm({ sample: initialSample, sampleId }: SampleItemFo
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-text-secondary hover:text-orange transition-colors mb-2"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>← Back to All Samples</span>
+            <span>Back to All Samples</span>
           </Link>
           <h1 className="text-2xl sm:text-[26px] font-bold text-text-primary tracking-tight">
             {isEditing
@@ -351,8 +353,8 @@ export function SampleItemForm({ sample: initialSample, sampleId }: SampleItemFo
               {isSubmitting
                 ? "Saving..."
                 : isEditing
-                ? "Save Changes"
-                : "Create Sample"}
+                  ? "Save Changes"
+                  : "Create Sample"}
             </span>
           </button>
         </div>
@@ -588,11 +590,10 @@ export function SampleItemForm({ sample: initialSample, sampleId }: SampleItemFo
               <div className="p-4 rounded-xl border border-border bg-canvas/80 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div className="flex items-center gap-3">
                   <div
-                    className={`w-10 h-10 rounded-lg flex items-center justify-center text-xs font-bold font-mono ${
-                      documentFile.fileType === "PDF"
+                    className={`w-10 h-10 rounded-lg flex items-center justify-center text-xs font-bold font-mono ${documentFile.fileType === "PDF"
                         ? "bg-red-100 text-red-700 border border-red-200"
                         : "bg-blue-100 text-blue-700 border border-blue-200"
-                    }`}
+                      }`}
                   >
                     {documentFile.fileType}
                   </div>
@@ -782,15 +783,14 @@ export function SampleItemForm({ sample: initialSample, sampleId }: SampleItemFo
                           key={s}
                           type="button"
                           onClick={() => setStatus(s)}
-                          className={`py-2 px-3 rounded-lg border text-xs font-semibold capitalize transition-all ${
-                            isSelected
+                          className={`py-2 px-3 rounded-lg border text-xs font-semibold capitalize transition-all ${isSelected
                               ? s === "active"
                                 ? "border-emerald-600 bg-emerald-50 text-emerald-800 ring-1 ring-emerald-600"
                                 : s === "draft"
-                                ? "border-amber-600 bg-amber-50 text-amber-800 ring-1 ring-amber-600"
-                                : "border-slate-500 bg-slate-100 text-slate-800 ring-1 ring-slate-500"
+                                  ? "border-amber-600 bg-amber-50 text-amber-800 ring-1 ring-amber-600"
+                                  : "border-slate-500 bg-slate-100 text-slate-800 ring-1 ring-slate-500"
                               : "border-border text-text-secondary hover:bg-canvas"
-                          }`}
+                            }`}
                         >
                           {s}
                         </button>

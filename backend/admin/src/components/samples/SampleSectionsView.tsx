@@ -115,7 +115,7 @@ export function SampleSectionsView() {
           className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-orange hover:bg-orange-hover text-white text-sm font-semibold shadow-xs transition-colors focus:outline-none focus:ring-2 focus:ring-orange/40 shrink-0"
         >
           <Plus className="w-4 h-4" />
-          <span>+ Add Section</span>
+          <span>Add Section</span>
         </Link>
       </div>
 
@@ -191,11 +191,10 @@ export function SampleSectionsView() {
                 key={tab.id}
                 type="button"
                 onClick={() => setStatusFilter(tab.id)}
-                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                  statusFilter === tab.id
+                className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${statusFilter === tab.id
                     ? "bg-surface text-text-primary font-semibold shadow-2xs"
                     : "text-text-secondary hover:text-text-primary"
-                }`}
+                  }`}
               >
                 {tab.label}
               </button>

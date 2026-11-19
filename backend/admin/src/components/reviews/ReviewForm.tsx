@@ -11,8 +11,6 @@ import {
   Sliders,
   Star,
   MessageSquareQuote,
-  UserCheck,
-  Check,
   BookOpen,
   RefreshCw,
 } from "lucide-react";
@@ -35,7 +33,6 @@ export interface ReviewInitialData extends Partial<ReviewItem> {
   reviewBody?: string;
   courseLabel?: string;
   avatarUrl?: string | null;
-  verified?: boolean;
   displayOrder?: number;
 }
 
@@ -79,9 +76,6 @@ export function ReviewForm({ review, reviewId }: ReviewFormProps) {
     review?.reviewerName || review?.studentName || ""
   );
   const [rating, setRating] = useState<number>(review?.rating ?? 5);
-  const [isVerified, setIsVerified] = useState<boolean>(
-    review?.isVerified ?? review?.verified ?? true
-  );
   const [isFeatured, setIsFeatured] = useState<boolean>(review?.isFeatured ?? false);
   const [title, setTitle] = useState(review?.title || review?.quoteHeadline || "");
   const [comment, setComment] = useState(review?.comment || review?.reviewBody || "");
@@ -90,7 +84,6 @@ export function ReviewForm({ review, reviewId }: ReviewFormProps) {
     review?.subject || review?.courseLabel?.replace(/^Course:\s*/i, "") || ""
   );
   const [paperType, setPaperType] = useState(review?.paperType || "Essay");
-  const [orderRef, setOrderRef] = useState(review?.orderRef || "");
   const [reviewerAvatar, setReviewerAvatar] = useState(
     review?.reviewerAvatar || review?.avatarUrl || ""
   );
@@ -136,14 +129,12 @@ export function ReviewForm({ review, reviewId }: ReviewFormProps) {
         setCurrentId(data.id);
         setReviewerName(data.reviewerName || data.studentName || "");
         setRating(data.rating ?? 5);
-        setIsVerified(data.isVerified ?? data.verified ?? true);
         setIsFeatured(Boolean(data.isFeatured));
         setTitle(data.title || data.quoteHeadline || "");
         setComment(data.comment || data.reviewBody || "");
         setAcademicLevel(data.academicLevel || "Undergraduate");
         setSubject(data.subject || data.courseLabel?.replace(/^Course:\s*/i, "") || "");
         setPaperType(data.paperType || "Essay");
-        setOrderRef(data.orderRef || "");
         setReviewerAvatar(data.reviewerAvatar || data.avatarUrl || "");
         setReviewerInitials(data.reviewerInitials || "");
         setServiceId(data.serviceId || "");
@@ -203,10 +194,8 @@ export function ReviewForm({ review, reviewId }: ReviewFormProps) {
       rating: Number(rating) || 5,
       title: title.trim() || null,
       comment: comment.trim(),
-      orderRef: orderRef.trim() || null,
       serviceId: serviceId && serviceId.trim() ? serviceId.trim() : null,
       subServiceId: subServiceId && subServiceId.trim() ? subServiceId.trim() : null,
-      isVerified,
       isFeatured,
       sortOrder: Number(sortOrder) || 0,
       reviewDate: reviewDate ? new Date(reviewDate).toISOString() : null,
@@ -347,14 +336,13 @@ export function ReviewForm({ review, reviewId }: ReviewFormProps) {
                     Review Card Details
                   </h2>
                   <p className="text-xs text-text-secondary mt-0.5">
-                    Configure client testimonial, star rating, verified badge, and academic scope.
+                    Configure client testimonial, star rating, and academic scope.
                   </p>
                 </div>
               </div>
 
-              {/* Top Control Bar: Rating Stars & Verified Badge */}
-              <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl border border-border bg-canvas/40">
-                {/* Interactive Star Rating Selector */}
+              {/* Top Control Bar: Interactive Star Rating Selector */}
+              <div className="p-4 rounded-xl border border-border bg-canvas/40">
                 <div>
                   <span className="block text-xs font-semibold text-text-primary mb-1.5">
                     Rating Star <span className="text-rose-500">*</span>
@@ -381,31 +369,6 @@ export function ReviewForm({ review, reviewId }: ReviewFormProps) {
                       ({rating}/5 Stars)
                     </span>
                   </div>
-                </div>
-
-                {/* Verified Student Checkbox */}
-                <div>
-                  <span className="block text-xs font-semibold text-text-primary mb-1.5">
-                    Verification Badge
-                  </span>
-                  <label className="inline-flex items-center gap-2 cursor-pointer select-none">
-                    <input
-                      type="checkbox"
-                      checked={isVerified}
-                      onChange={(e) => setIsVerified(e.target.checked)}
-                      className="w-4 h-4 text-orange rounded border-border focus:ring-orange/30 accent-orange"
-                    />
-                    <span className="text-xs font-medium text-text-primary flex items-center gap-1">
-                      <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
-                      Verified Student Status
-                    </span>
-                    {isVerified && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                        <Check className="w-2.5 h-2.5 text-emerald-600" />
-                        <span>Active</span>
-                      </span>
-                    )}
-                  </label>
                 </div>
               </div>
 
@@ -447,7 +410,7 @@ export function ReviewForm({ review, reviewId }: ReviewFormProps) {
               </div>
 
               {/* Client Info Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
                 {/* Client Name */}
                 <div>
                   <label
@@ -482,24 +445,6 @@ export function ReviewForm({ review, reviewId }: ReviewFormProps) {
                     onChange={(e) => setSubject(e.target.value)}
                     placeholder="e.g., Corporate Finance"
                     className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange"
-                  />
-                </div>
-
-                {/* Order Reference */}
-                <div>
-                  <label
-                    htmlFor="order-ref"
-                    className="block text-xs font-semibold text-text-primary mb-1.5"
-                  >
-                    Order Ref Badge
-                  </label>
-                  <input
-                    id="order-ref"
-                    type="text"
-                    value={orderRef}
-                    onChange={(e) => setOrderRef(e.target.value)}
-                    placeholder="e.g., #RE-4821"
-                    className="w-full bg-surface border border-border rounded-lg px-3 py-2 text-xs sm:text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-orange/30 focus:border-orange font-mono"
                   />
                 </div>
               </div>
