@@ -13,47 +13,40 @@ import {
   ShieldCheck,
   Headphones,
   Award,
-  GraduationCap,
-  Laptop,
-  Lock,
-  HelpCircle,
-  Clock,
-  BarChart2,
-  Code,
-  Briefcase,
-  Calculator,
-  BookOpen,
-  FlaskConical,
-  FileText,
-  TrendingUp,
-  Cpu,
-  DollarSign,
-  type LucideIcon,
 } from 'lucide-react';
 import { PublicService } from '@/lib/public-api';
+import AppIcon from '@/components/shared/AppIcon';
 
 interface HeaderProps {
   serviceTree: PublicService[];
 }
 
-function getSubServiceIcon(title: string): LucideIcon {
-  const t = title.toLowerCase();
-  if (t.includes('class') || t.includes('college')) return GraduationCap;
-  if (t.includes('course') || t.includes('laptop')) return Laptop;
-  if (t.includes('protected') || t.includes('exam')) return Lock;
-  if (t.includes('quiz') || t.includes('test')) return HelpCircle;
-  if (t.includes('proctor') || t.includes('time')) return Clock;
-  if (t.includes('stat') || t.includes('analytic')) return BarChart2;
-  if (t.includes('cs') || t.includes('code') || t.includes('computer')) return Code;
-  if (t.includes('business') || t.includes('mgmt')) return Briefcase;
-  if (t.includes('account') || t.includes('math')) return Calculator;
-  if (t.includes('humanities') || t.includes('book')) return BookOpen;
-  if (t.includes('science') || t.includes('chem') || t.includes('bio')) return FlaskConical;
-  if (t.includes('essay') || t.includes('write')) return FileText;
-  if (t.includes('econ') || t.includes('trend')) return TrendingUp;
-  if (t.includes('engineer')) return Cpu;
-  if (t.includes('finance')) return DollarSign;
-  return FileText;
+function getDropdownContainerClasses(columnCount: number): string {
+  switch (columnCount) {
+    case 1:
+      return 'w-64 left-0 p-3';
+    case 2:
+      return 'w-[480px] -left-16 p-5';
+    case 3:
+      return 'w-[700px] -left-36 p-5';
+    case 4:
+    default:
+      return 'w-[920px] -left-64 p-6';
+  }
+}
+
+function getDropdownGridCols(columnCount: number): string {
+  switch (columnCount) {
+    case 1:
+      return 'grid-cols-1';
+    case 2:
+      return 'grid-cols-2';
+    case 3:
+      return 'grid-cols-3';
+    case 4:
+    default:
+      return 'grid-cols-4';
+  }
 }
 
 export default function Header({ serviceTree }: HeaderProps) {
@@ -146,8 +139,14 @@ export default function Header({ serviceTree }: HeaderProps) {
           <div className="hidden xl:flex items-center gap-6 2xl:gap-7 whitespace-nowrap text-white font-medium text-sm">
             {/* Dynamic Parent Services directly rendered (NO generic 'Services' wrapper) */}
             {serviceTree.map((service) => {
-              const hasSub = service.subServices && service.subServices.length > 0;
-              const isMega = hasSub && service.subServices!.length > 3;
+              const subServices = service.subServices || [];
+              const count = subServices.length;
+              const hasSub = count > 0;
+              const columnCount = Math.min(4, Math.max(1, Math.ceil(count / 4)));
+              const itemsPerColumn = count <= 16 ? 4 : Math.ceil(count / 4);
+              const columns = Array.from({ length: columnCount }, (_, colIndex) =>
+                subServices.slice(colIndex * itemsPerColumn, (colIndex + 1) * itemsPerColumn)
+              );
 
               return (
                 <div key={service.id} className="relative group py-6">
@@ -161,28 +160,33 @@ export default function Header({ serviceTree }: HeaderProps) {
                     )}
                   </Link>
 
-                  {/* Mega-Menu or Dropdown */}
+                  {/* Dynamic Dropdown / Mega-Menu */}
                   {hasSub && (
                     <div
-                      className={`absolute top-full ${isMega ? '-left-16 w-[480px] p-5' : 'left-0 w-64 p-3'
-                        } bg-white text-[#243445] rounded-2xl shadow-xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50`}
+                      className={`absolute top-full ${getDropdownContainerClasses(
+                        columnCount
+                      )} bg-white text-[#243445] rounded-2xl shadow-xl border border-slate-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 z-50`}
                     >
-                      <div className={isMega ? 'grid grid-cols-2 gap-2' : 'space-y-1'}>
-                        {service.subServices!.map((sub) => {
-                          const IconComp = getSubServiceIcon(sub.title);
-                          return (
-                            <Link
-                              key={sub.id}
-                              href={`/${service.slug}/${sub.slug}`}
-                              className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-[#243445] hover:bg-slate-50 hover:text-[#FF641A] transition-colors group/item"
-                            >
-                              <IconComp className="w-4 h-4 text-[#FF641A] shrink-0" />
-                              <span className="text-xs sm:text-sm font-medium line-clamp-1">
-                                {sub.title}
-                              </span>
-                            </Link>
-                          );
-                        })}
+                      <div className={`grid gap-2 ${getDropdownGridCols(columnCount)}`}>
+                        {columns.map((col, colIdx) => (
+                          <div key={colIdx} className="space-y-1">
+                            {col.map((sub) => (
+                              <Link
+                                key={sub.id}
+                                href={`/${service.slug}/${sub.slug}`}
+                                className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-[#243445] hover:bg-slate-50 hover:text-[#FF641A] transition-colors group/item"
+                              >
+                                <AppIcon
+                                  name={sub.icon || 'file_text'}
+                                  className="w-4 h-4 text-[#FF641A] shrink-0"
+                                />
+                                <span className="text-xs sm:text-sm font-medium line-clamp-1">
+                                  {sub.title}
+                                </span>
+                              </Link>
+                            ))}
+                          </div>
+                        ))}
                       </div>
                     </div>
                   )}
@@ -286,20 +290,20 @@ export default function Header({ serviceTree }: HeaderProps) {
 
                     {hasSub && isOpen && (
                       <div className="pl-3 pt-1 pb-2 space-y-1.5 border-l-2 border-[#FF641A]/30 ml-1 mt-1">
-                        {service.subServices!.map((sub) => {
-                          const IconComp = getSubServiceIcon(sub.title);
-                          return (
-                            <Link
-                              key={sub.id}
-                              href={`/${service.slug}/${sub.slug}`}
-                              onClick={() => setMobileMenuOpen(false)}
-                              className="flex items-center gap-2 text-xs text-slate-600 hover:text-[#FF641A] py-1"
-                            >
-                              <IconComp className="w-3.5 h-3.5 text-[#FF641A]" />
-                              <span>{sub.title}</span>
-                            </Link>
-                          );
-                        })}
+                        {service.subServices!.map((sub) => (
+                          <Link
+                            key={sub.id}
+                            href={`/${service.slug}/${sub.slug}`}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="flex items-center gap-2 text-xs text-slate-600 hover:text-[#FF641A] py-1"
+                          >
+                            <AppIcon
+                              name={sub.icon || 'file_text'}
+                              className="w-3.5 h-3.5 text-[#FF641A] shrink-0"
+                            />
+                            <span>{sub.title}</span>
+                          </Link>
+                        ))}
                       </div>
                     )}
                   </div>
