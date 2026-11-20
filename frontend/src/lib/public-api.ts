@@ -526,3 +526,60 @@ export async function getPublicCalculator(
   return apiClient<PublicCalculatorResponse>('/calculator/public', options);
 }
 
+// ============================================================================
+// Top Expert Interfaces
+// ============================================================================
+
+export interface PublicExpert {
+  id: string;
+  name: string;
+  slug: string;
+  roleTitle: string;
+  university: string;
+  degree: string;
+  avatarUrl: string;
+  rating: number;
+  completedOrders: number;
+  successRate: string;
+  experienceYears: number;
+  bio: string;
+  specialties: string[];
+  featuredReviewQuote?: string | null;
+  featuredReviewAuthor?: string | null;
+  isFeatured?: boolean;
+  displayOrder?: number;
+  status?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+/**
+ * Fetch published top experts with optional filters
+ */
+export async function getPublicExperts(
+  params?: { featured?: boolean; specialty?: string },
+  options?: RequestOptions,
+): Promise<PublicExpert[]> {
+  const query = new URLSearchParams();
+  if (params?.featured !== undefined) {
+    query.set('featured', String(params.featured));
+  }
+  if (params?.specialty) {
+    query.set('specialty', params.specialty);
+  }
+  const queryString = query.toString();
+  const endpoint = `/experts/public${queryString ? `?${queryString}` : ''}`;
+  return apiClient<PublicExpert[]>(endpoint, options);
+}
+
+/**
+ * Fetch single published top expert by slug
+ */
+export async function getPublicExpertBySlug(
+  slug: string,
+  options?: RequestOptions,
+): Promise<PublicExpert> {
+  return apiClient<PublicExpert>(`/experts/public/${encodeURIComponent(slug)}`, options);
+}
+
+

@@ -28,6 +28,7 @@ import {
   fetchServiceTree,
   fetchFeaturedReviews,
   fetchPublicCalculator,
+  fetchPublicExperts,
   resolveReviewAvatar,
   DEFAULT_FAQS,
 } from '@/lib/data-fetchers';
@@ -42,11 +43,12 @@ import { buildFaqPageSchema } from '@/lib/schema';
 import AppIcon from '@/components/shared/AppIcon';
 
 export default async function HomePage() {
-  // Fetch live services tree, reviews and calculator data on the server with ISR caching
-  const [serviceTree, reviews, calculatorData] = await Promise.all([
+  // Fetch live services tree, reviews, calculator data and top experts on the server with ISR caching
+  const [serviceTree, reviews, calculatorData, experts] = await Promise.all([
     fetchServiceTree(),
     fetchFeaturedReviews(),
     fetchPublicCalculator(),
+    fetchPublicExperts(),
   ]);
 
   // Select 2 main services for the Comprehensive Subject Matrix
@@ -815,7 +817,7 @@ export default async function HomePage() {
           </div>
 
           {/* Interactive Experts Carousel */}
-          <TopExpertsCarousel />
+          <TopExpertsCarousel experts={experts} />
         </div>
       </section>
 

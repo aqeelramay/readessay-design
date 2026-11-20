@@ -64,6 +64,9 @@ export function resolveNavigationBadge(
       return `${stats.blog.totalPosts} Articles`;
     case "calculator":
       return `${stats.calculator.totalRateCells} Rates`;
+    case "top-experts":
+    case "experts":
+      return stats.experts ? `${stats.experts.totalExperts} Experts` : item.badge;
     default:
       return item.badge;
   }
@@ -154,8 +157,8 @@ export const NAVIGATION_ITEMS: readonly NavigationItem[] = [
   {
     id: "top-experts",
     label: "Top Experts",
-    href: "/top-experts",
-    badge: "Writers",
+    href: "/experts",
+    badge: "Experts",
     description:
       "Vetted academic writers, credentials verification & workload balancing.",
     action: "View Writer Roster",

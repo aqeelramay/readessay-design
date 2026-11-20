@@ -1,4 +1,4 @@
-import { PublicBlogPost } from './public-api';
+import { PublicBlogPost, PublicExpert } from './public-api';
 
 export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL || 'https://readessay.com'
@@ -199,3 +199,38 @@ export function buildArticleSchema(post: PublicBlogPost) {
     },
   };
 }
+
+/**
+ * Person schema builder for Top Experts
+ */
+export function buildPersonSchema(expert: PublicExpert) {
+  const expertUrl = `${SITE_URL}/top-experts/${expert.slug}`;
+  const avatarUrl = expert.avatarUrl
+    ? expert.avatarUrl.startsWith('http')
+      ? expert.avatarUrl
+      : `${SITE_URL}${expert.avatarUrl.startsWith('/') ? expert.avatarUrl : `/${expert.avatarUrl}`}`
+    : `${SITE_URL}/images/readessay-logo.png`;
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': `${expertUrl}#person`,
+    name: expert.name,
+    jobTitle: expert.roleTitle,
+    honorificSuffix: expert.degree,
+    image: avatarUrl,
+    description: expert.bio,
+    worksFor: {
+      '@type': 'EducationalOrganization',
+      name: 'ReadEssay',
+      url: SITE_URL,
+    },
+    alumniOf: {
+      '@type': 'EducationalOrganization',
+      name: expert.university,
+    },
+    knowsAbout: expert.specialties,
+    url: expertUrl,
+  };
+}
+

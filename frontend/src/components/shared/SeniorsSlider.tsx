@@ -2,8 +2,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
-import { ArrowRight, Star, GraduationCap, CheckCircle } from 'lucide-react';
+import { Star, GraduationCap, CheckCircle } from 'lucide-react';
 
 interface SeniorExpert {
   id: string;

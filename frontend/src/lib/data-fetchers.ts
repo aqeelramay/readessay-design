@@ -10,6 +10,7 @@ import {
   PublicBlogPost,
   PublicBlogPostsResponse,
   PublicCalculatorResponse,
+  PublicExpert,
   getPublicServiceTree,
   getPublicServiceBySlug,
   getPublicSubService,
@@ -20,6 +21,8 @@ import {
   getPublicBlogPosts,
   getPublicBlogPostBySlug,
   getPublicCalculator,
+  getPublicExperts,
+  getPublicExpertBySlug,
 } from './public-api';
 
 export const DEFAULT_FAQS: PublicFaqItem[] = [
@@ -2934,4 +2937,209 @@ export async function fetchPublicCalculator(): Promise<PublicCalculatorResponse>
 
   return DEFAULT_CALCULATOR_DATA;
 }
+
+// ============================================================================
+// Top Experts Data & Fetchers
+// ============================================================================
+
+export const DEFAULT_EXPERTS: PublicExpert[] = [
+  {
+    id: 'exp-1',
+    name: 'Dr. Alan Crawford',
+    slug: 'dr-alan-crawford',
+    roleTitle: 'Senior Forensic Accounting & Auditing Specialist',
+    university: 'Oxford University',
+    degree: 'Ph.D., CPA',
+    avatarUrl: '/images/male-expert1.jpg',
+    rating: 4.99,
+    completedOrders: 1420,
+    successRate: '99.8%',
+    experienceYears: 10,
+    bio: 'Dr. Alan Crawford is a seasoned academic and forensic accounting specialist with over a decade of teaching and practical auditing experience. He holds a Ph.D. from Oxford University and is a certified CPA, specializing in complex ledger reconciliations, forensic audit investigations, and international corporate reporting standards.',
+    specialties: ['Forensic Accounting', 'Auditing', 'Corporate Finance', 'IFRS & GAAP'],
+    featuredReviewQuote: 'Dr. Crawford helped me master my advanced forensic accounting coursework with unmatched clarity and precision.',
+    featuredReviewAuthor: 'David K., Oxford M.Sc. Student',
+    isFeatured: true,
+    displayOrder: 1,
+    status: 'published',
+  },
+  {
+    id: 'exp-2',
+    name: 'Dr. Elena Morales',
+    slug: 'dr-elena-morales',
+    roleTitle: 'Corporate Finance & Econometrics Specialist',
+    university: 'LSE (London School of Economics)',
+    degree: 'M.Sc., CMA',
+    avatarUrl: '/images/female-expert1.jpg',
+    rating: 4.98,
+    completedOrders: 1150,
+    successRate: '99.5%',
+    experienceYears: 8,
+    bio: 'Dr. Elena Morales combines theoretical rigor with financial market acumen. With credentials from LSE, she specializes in quantitative econometrics, corporate capital structure, derivative pricing, and applied statistical modeling.',
+    specialties: ['Corporate Finance', 'Econometrics', 'Financial Modeling', 'Portfolio Management'],
+    featuredReviewQuote: 'Elena broke down our econometrics regression models step-by-step. Scored top marks in our cohort!',
+    featuredReviewAuthor: 'Sophia M., LSE Graduate',
+    isFeatured: true,
+    displayOrder: 2,
+    status: 'published',
+  },
+  {
+    id: 'exp-3',
+    name: 'Prof. David Sterling',
+    slug: 'prof-david-sterling',
+    roleTitle: 'Computer Science, AI & Systems Architect',
+    university: 'MIT / Stanford University',
+    degree: 'Ph.D., AI Systems',
+    avatarUrl: '/images/male-expert2.jpg',
+    rating: 4.99,
+    completedOrders: 1840,
+    successRate: '99.9%',
+    experienceYears: 12,
+    bio: 'Prof. David Sterling is an expert in computational intelligence, distributed cloud systems, and algorithmic development. Holding a Ph.D. in AI Systems, he has mentored hundreds of students through complex software engineering, neural networks, and algorithmic problem sets.',
+    specialties: ['Computer Science', 'Python & AI', 'Machine Learning', 'Data Structures', 'Cloud Systems'],
+    featuredReviewQuote: 'David’s code was clean, fully commented, and passed every automated unit test suite effortlessly.',
+    featuredReviewAuthor: 'James R., Stanford CS Senior',
+    isFeatured: true,
+    displayOrder: 3,
+    status: 'published',
+  },
+  {
+    id: 'exp-4',
+    name: 'Dr. Sarah Jenkins',
+    slug: 'dr-sarah-jenkins',
+    roleTitle: 'Behavioral Psychology & Healthcare Specialist',
+    university: 'University of Queensland',
+    degree: 'Ph.D., Clinical Psychology',
+    avatarUrl: '/images/female-expert2.jpg',
+    rating: 4.97,
+    completedOrders: 980,
+    successRate: '99.4%',
+    experienceYears: 7,
+    bio: 'Dr. Sarah Jenkins specializes in clinical psychology, public healthcare administration, and empirical qualitative analysis. She provides structured mentorship in research methodology, clinical trial designs, and behavioral health diagnostics.',
+    specialties: ['Behavioral Psychology', 'Healthcare Management', 'Clinical Research', 'Cognitive Neuroscience'],
+    featuredReviewQuote: 'Her guidance through my healthcare capstone thesis was incredible. Thoughtful, empathetic, and academically impeccable.',
+    featuredReviewAuthor: 'Emily T., UQ Healthcare Student',
+    isFeatured: true,
+    displayOrder: 4,
+    status: 'published',
+  },
+  {
+    id: 'exp-5',
+    name: 'Dr. Marcus Vance',
+    slug: 'dr-marcus-vance',
+    roleTitle: 'Pure & Applied Mathematics Specialist',
+    university: 'Florida International University',
+    degree: 'Ph.D., Pure & Applied Mathematics',
+    avatarUrl: '/images/male-expert1.jpg',
+    rating: 4.99,
+    completedOrders: 1210,
+    successRate: '99.7%',
+    experienceYears: 9,
+    bio: 'Dr. Marcus Vance holds a doctorate in Pure and Applied Mathematics. His domain spans discrete mathematical logic, algebraic geometry, cryptographic algorithms, and multi-variable calculus problem sets.',
+    specialties: ['Mathematics', 'Advanced Calculus', 'Cryptography', 'Linear Algebra', 'Differential Equations'],
+    featuredReviewQuote: 'Marcus transformed my fear of advanced differential equations into pure confidence. Outstanding tutor.',
+    featuredReviewAuthor: 'Liam B., FIU Mathematics Major',
+    isFeatured: true,
+    displayOrder: 5,
+    status: 'published',
+  },
+  {
+    id: 'exp-6',
+    name: 'Dr. Rachel Kim',
+    slug: 'dr-rachel-kim',
+    roleTitle: 'Biochemistry & Molecular Analysis Specialist',
+    university: 'American University of the Middle East',
+    degree: 'Ph.D., Organic Chemistry',
+    avatarUrl: '/images/female-expert1.jpg',
+    rating: 4.98,
+    completedOrders: 890,
+    successRate: '99.6%',
+    experienceYears: 6,
+    bio: 'Dr. Rachel Kim is an active researcher in molecular synthesis and bio-organic mechanisms. She assists students across collegiate chemistry, biochemical kinetics, NMR spectroscopy, and laboratory paper formulations.',
+    specialties: ['Biochemistry', 'Organic Chemistry', 'Molecular Biology', 'Spectroscopic Analysis'],
+    featuredReviewQuote: 'Rachel made organic synthesis retro-analysis crystal clear. Her annotated diagrams were lifesavers.',
+    featuredReviewAuthor: 'Amina S., AUM Pre-Med Student',
+    isFeatured: true,
+    displayOrder: 6,
+    status: 'published',
+  },
+];
+
+export const TOP_EXPERTS_FAQS: PublicFaqItem[] = [
+  {
+    question: 'How are ReadEssay academic experts vetted and selected?',
+    answer:
+      'Every expert undergoes a rigorous multi-stage credentialing process: verified Ph.D. or Master’s degrees from top accredited global universities, a proctored subject proficiency examination, and an initial probation period with dual-audited deliverables.',
+  },
+  {
+    question: 'Can I communicate directly with my assigned expert?',
+    answer:
+      'Yes! Through our dedicated academic dashboard and 24/7 WhatsApp concierge desk, you can relay lecture notes, professor rubrics, and feedback directly to your assigned expert in real-time.',
+  },
+  {
+    question: 'What happens if my professor requests revisions on the coursework?',
+    answer:
+      'All deliverables come with unlimited complimentary revisions. Submit your professor’s amendment notes within your revision window, and your expert will refine the work to perfection within 12 to 24 hours.',
+  },
+  {
+    question: 'Are deliverables guaranteed to be original and AI-free?',
+    answer:
+      '100%. Every paper is crafted entirely from scratch. Before release, it passes our internal Turnitin non-repository similarity and AI-detection filters, ensuring a 0% AI index and complete originality with an audit certificate.',
+  },
+  {
+    question: 'How do I hire a specific specialist from the directory?',
+    answer:
+      'Click "Hire Expert" on any specialist’s profile or card. Your inquiry will automatically link that scholar to your order brief, and our academic coordinators will allocate them immediately.',
+  },
+];
+
+/**
+ * Server Component fetcher for Top Experts with ISR caching & offline fallback.
+ */
+export async function fetchPublicExperts(params?: {
+  featured?: boolean;
+  specialty?: string;
+}): Promise<PublicExpert[]> {
+  try {
+    const data = await getPublicExperts(params, {
+      next: { revalidate: 60, tags: ['experts'] },
+    });
+    if (Array.isArray(data) && data.length > 0) {
+      return data;
+    }
+  } catch (err) {
+    console.warn('fetchPublicExperts: Failed to fetch from API, falling back to defaults:', err);
+  }
+
+  let list = [...DEFAULT_EXPERTS];
+  if (params?.featured) {
+    list = list.filter((e) => e.isFeatured);
+  }
+  if (params?.specialty) {
+    const s = params.specialty.toLowerCase();
+    list = list.filter((e) =>
+      e.specialties.some((spec) => spec.toLowerCase().includes(s)),
+    );
+  }
+  return list;
+}
+
+/**
+ * Server Component fetcher for a single Expert by slug.
+ */
+export async function fetchExpertBySlug(slug: string): Promise<PublicExpert | null> {
+  try {
+    const expert = await getPublicExpertBySlug(slug, {
+      next: { revalidate: 60, tags: [`expert-${slug}`] },
+    });
+    if (expert && expert.slug) {
+      return expert;
+    }
+  } catch (err) {
+    console.warn(`fetchExpertBySlug: Failed to fetch "${slug}" from API, checking defaults:`, err);
+  }
+
+  return DEFAULT_EXPERTS.find((e) => e.slug === slug) || null;
+}
+
 

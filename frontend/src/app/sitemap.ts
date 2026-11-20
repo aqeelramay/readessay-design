@@ -3,6 +3,7 @@ import {
   fetchServiceTree,
   fetchPublicBlogCategories,
   fetchPublicBlogPosts,
+  fetchPublicExperts,
 } from '@/lib/data-fetchers';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -52,6 +53,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.7,
+    },
+    {
+      url: `${siteUrl}/top-experts`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.85,
     },
   ];
 
@@ -124,5 +131,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('sitemap.ts: Blog posts retrieval warning:', err);
   }
 
-  return [...staticRoutes, ...serviceRoutes, ...categoryRoutes, ...postRoutes];
+  // Dynamic Top Expert routes
+  const expertRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const experts = await fetchPublicExperts();
+    if (Array.isArray(experts)) {
+      for (const exp of experts) {
+        if (!exp.slug) continue;
+        expertRoutes.push({
+          url: `${siteUrl}/top-experts/${exp.slug}`,
+          lastModified: exp.updatedAt ? new Date(exp.updatedAt) : now,
+          changeFrequency: 'monthly',
+          priority: 0.8,
+        });
+      }
+    }
+  } catch (err) {
+    console.error('sitemap.ts: Top experts retrieval warning:', err);
+  }
+
+  return [
+    ...staticRoutes,
+    ...serviceRoutes,
+    ...categoryRoutes,
+    ...postRoutes,
+    ...expertRoutes,
+  ];
 }

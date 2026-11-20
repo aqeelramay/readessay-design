@@ -83,12 +83,19 @@ export interface DashboardRecentActivity {
   samples: DashboardRecentSample[];
 }
 
+export interface DashboardExpertsStats {
+  totalExperts: number;
+  publishedExperts: number;
+  featuredExperts: number;
+}
+
 export interface DashboardStatsResponse {
   services: DashboardServicesStats;
   reviews: DashboardReviewsStats;
   samples: DashboardSamplesStats;
   blog: DashboardBlogStats;
   calculator: DashboardCalculatorStats;
+  experts?: DashboardExpertsStats;
   recent: DashboardRecentActivity;
 }
 

@@ -224,7 +224,7 @@ export default function Header({ serviceTree }: HeaderProps) {
             </Link>
 
             <Link
-              href="/about-us"
+              href="/top-experts"
               className="font-semibold text-white hover:text-white/80 transition-colors py-6"
             >
               Top Experts
@@ -343,7 +343,7 @@ export default function Header({ serviceTree }: HeaderProps) {
               </Link>
 
               <Link
-                href="/about-us"
+                href="/top-experts"
                 onClick={() => setMobileMenuOpen(false)}
                 className="text-base font-bold text-[#243445] hover:text-[#FF641A] py-2 border-b border-slate-100"
               >

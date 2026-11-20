@@ -913,6 +913,101 @@ export function Breadcrumbs() {
     );
   }
 
+  // /experts/new -> Admin Panel > Top Experts > Add Expert
+  if (pathname === "/experts/new") {
+    return (
+      <nav aria-label="Breadcrumbs" className="flex items-center text-xs sm:text-sm">
+        <ol className="flex items-center space-x-1.5 sm:space-x-2">
+          <li>
+            <Link
+              href="/"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Admin Panel
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li>
+            <Link
+              href="/experts"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Top Experts
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li aria-current="page">
+            <span className="text-white font-semibold">Add Expert</span>
+          </li>
+        </ol>
+      </nav>
+    );
+  }
+
+  // /experts/[id]/edit -> Admin Panel > Top Experts > Edit Expert
+  const expertEditMatch = pathname.match(/^\/experts\/([^/]+)\/edit$/);
+  if (expertEditMatch) {
+    return (
+      <nav aria-label="Breadcrumbs" className="flex items-center text-xs sm:text-sm">
+        <ol className="flex items-center space-x-1.5 sm:space-x-2">
+          <li>
+            <Link
+              href="/"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Admin Panel
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li>
+            <Link
+              href="/experts"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Top Experts
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li aria-current="page">
+            <span className="text-white font-semibold">Edit Expert</span>
+          </li>
+        </ol>
+      </nav>
+    );
+  }
+
+  // /experts -> Admin Panel > Top Experts
+  if (pathname === "/experts") {
+    return (
+      <nav aria-label="Breadcrumbs" className="flex items-center text-xs sm:text-sm">
+        <ol className="flex items-center space-x-1.5 sm:space-x-2">
+          <li>
+            <Link
+              href="/"
+              className="text-slate-300 hover:text-white transition-colors font-medium"
+            >
+              Admin Panel
+            </Link>
+          </li>
+          <li aria-hidden="true" className="text-slate-500 text-xs select-none">
+            &gt;
+          </li>
+          <li aria-current="page">
+            <span className="text-white font-semibold">Top Experts</span>
+          </li>
+        </ol>
+      </nav>
+    );
+  }
+
   // Fallback to default
   const currentItem =
     NAVIGATION_ITEMS.find((item) =>
