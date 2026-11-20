@@ -336,7 +336,7 @@ export default function SeniorsSlider() {
       </div>
 
       {/* Action Button linking to /about-us */}
-      <div className="mt-8 text-center">
+      {/* <div className="mt-8 text-center">
         <Link
           href="/about-us"
           className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white font-bold text-sm shadow-md transition-all transform hover:-translate-y-0.5"
@@ -344,7 +344,7 @@ export default function SeniorsSlider() {
           <span>Meet Our Experts</span>
           <ArrowRight className="w-4 h-4" />
         </Link>
-      </div>
+      </div> */}
     </div>
   );
 }

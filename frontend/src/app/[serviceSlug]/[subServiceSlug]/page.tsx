@@ -195,15 +195,15 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
   const rubricCards =
     subService.features && subService.features.length >= 3
       ? subService.features.map((f, idx) => {
-          const defaultCard = DEFAULT_RUBRIC_CARDS[idx % DEFAULT_RUBRIC_CARDS.length];
-          const title = typeof f === 'string' ? f : ((f as unknown as { title?: string }).title || defaultCard.title);
-          const desc = typeof f === 'string' ? defaultCard.desc : ((f as unknown as { description?: string }).description || defaultCard.desc);
-          return {
-            icon: defaultCard.icon,
-            title,
-            desc,
-          };
-        })
+        const defaultCard = DEFAULT_RUBRIC_CARDS[idx % DEFAULT_RUBRIC_CARDS.length];
+        const title = typeof f === 'string' ? f : ((f as unknown as { title?: string }).title || defaultCard.title);
+        const desc = typeof f === 'string' ? defaultCard.desc : ((f as unknown as { description?: string }).description || defaultCard.desc);
+        return {
+          icon: defaultCard.icon,
+          title,
+          desc,
+        };
+      })
       : DEFAULT_RUBRIC_CARDS;
 
   return (
@@ -481,9 +481,8 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
               return (
                 <div
                   key={idx}
-                  className={`bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-start border border-slate-100 ${
-                    isWide ? 'md:col-span-2 lg:col-span-2' : ''
-                  }`}
+                  className={`bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-start border border-slate-100 ${isWide ? 'md:col-span-2 lg:col-span-2' : ''
+                    }`}
                 >
                   <div className="space-y-4">
                     <div className="w-14 h-14 rounded-2xl bg-[#FFF2EC] flex items-center justify-center text-[#FF641A]">
@@ -633,7 +632,7 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
           {/* Reused Homepage Top Experts Carousel */}
           <div className="space-y-8">
             <TopExpertsCarousel />
-            <div className="text-center pt-2">
+            {/* <div className="text-center pt-2">
               <Link
                 href="/about-us"
                 className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#243445] hover:bg-slate-800 text-white text-sm sm:text-base font-semibold transition-colors"
@@ -641,7 +640,7 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
                 <span>Meet Our Experts</span>
                 <AppIcon name="arrow_forward" className="w-[18px] h-[18px]" />
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>
@@ -927,7 +926,7 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
 
           <VerifiedGradesMarquee />
 
-          <div className="text-center pt-6">
+          {/* <div className="text-center pt-6">
             <Link
               href="/samples"
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-[#059669] hover:bg-emerald-600 text-white text-sm sm:text-base font-semibold shadow-md transition-colors"
@@ -935,7 +934,7 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
               <span>View All Samples</span>
               <AppIcon name="arrow_forward" className="w-[18px] h-[18px]" />
             </Link>
-          </div>
+          </div> */}
         </div>
       </section>
 
@@ -990,7 +989,7 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
 
           <FaqAccordion items={combinedFaqs} />
 
-          <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
+          {/* <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/samples"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-slate-100 hover:bg-slate-200 text-[#243445] text-sm font-semibold transition-colors"
@@ -1005,12 +1004,12 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
               <AppIcon name="support_agent" className="w-[18px] h-[18px]" />
               <span>Contact Support</span>
             </Link>
-          </div>
+          </div> */}
         </div>
       </section>
 
       {/* 15. CLOSING CONVERSION BANNER (Deep Navy Card) */}
-      <section className="w-full bg-slate-50 py-16 lg:py-24 border-t border-slate-100">
+      {/* <section className="w-full bg-slate-50 py-16 lg:py-24 border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <div className="bg-[#243445] rounded-3xl p-10 md:p-16 text-center text-white relative overflow-hidden shadow-2xl">
             <div className="absolute -top-24 -left-24 w-80 h-80 bg-[#FF641A]/20 rounded-full blur-3xl pointer-events-none" />
@@ -1066,7 +1065,7 @@ export default async function SubServiceDetailPage({ params }: PageProps) {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* 16. DIRECT HOTLINES & FINAL CALL TO ACTION */}
       <section className="w-full bg-white py-16 lg:py-24 border-t border-slate-100">

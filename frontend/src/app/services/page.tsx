@@ -361,10 +361,10 @@ export default async function ServicesPage() {
                         service.slug.includes('exam')
                           ? 'verified_user'
                           : service.slug.includes('class')
-                          ? 'school'
-                          : service.slug.includes('homework')
-                          ? 'quiz'
-                          : 'description'
+                            ? 'school'
+                            : service.slug.includes('homework')
+                              ? 'quiz'
+                              : 'description'
                       }
                       className="w-[26px] h-[26px]"
                     />
