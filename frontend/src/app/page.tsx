@@ -39,6 +39,7 @@ import FaqAccordion from '@/components/shared/FaqAccordion';
 import { PriceCalculatorWidget } from '@/components/shared/PriceCalculatorWidget';
 import JsonLd from '@/components/seo/JsonLd';
 import { buildFaqPageSchema } from '@/lib/schema';
+import AppIcon from '@/components/shared/AppIcon';
 
 export default async function HomePage() {
   // Fetch live services tree, reviews and calculator data on the server with ISR caching
@@ -47,6 +48,20 @@ export default async function HomePage() {
     fetchFeaturedReviews(),
     fetchPublicCalculator(),
   ]);
+
+  // Select 2 main services for the Comprehensive Subject Matrix
+  // Prefer assignment-help and homework-help so each card is richly populated
+  const preferredSlugs = ['assignment-help', 'homework-help'];
+  const preferredServices = preferredSlugs
+    .map((slug) => serviceTree.find((s) => s.slug === slug))
+    .filter((s): s is (typeof serviceTree)[number] => Boolean(s));
+
+  const matrixServices =
+    preferredServices.length >= 2
+      ? preferredServices.slice(0, 2)
+      : serviceTree.filter((s) => (s.subServices?.length ?? 0) >= 4).length >= 2
+        ? serviceTree.filter((s) => (s.subServices?.length ?? 0) >= 4).slice(0, 2)
+        : serviceTree.slice(0, 2);
 
   return (
     <div className="w-full flex flex-col">
@@ -181,64 +196,68 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-            {serviceTree.map((service) => (
-              <div
-                key={service.id}
-                className="bg-white rounded-2xl p-8 shadow-md border border-slate-200/80 flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between pb-6 border-b border-slate-100">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center font-bold">
-                        <GraduationCap className="w-6 h-6" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {matrixServices.map((service) => {
+              const displayedSubServices = (service.subServices ?? []).slice(0, 4);
+
+              return (
+                <div
+                  key={service.id}
+                  className="bg-white rounded-2xl p-8 shadow-md border border-slate-200/80 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="flex items-center justify-between pb-6 border-b border-slate-100">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-[#FFF2EC] text-[#FF641A] flex items-center justify-center font-bold">
+                          <GraduationCap className="w-6 h-6" />
+                        </div>
+                        <div>
+                          <h3 className="font-heading font-bold text-xl text-[#243445]">
+                            <Link href={`/${service.slug}`} className="hover:text-[#FF641A] transition-colors">
+                              {service.title}
+                            </Link>
+                          </h3>
+                          <p className="text-xs text-slate-500 mt-0.5">
+                            {service.shortDescription || 'Fast turnaround, doctoral problem sets & guidance'}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="font-heading font-bold text-xl text-[#243445]">
-                          <Link href={`/${service.slug}`} className="hover:text-[#FF641A] transition-colors">
-                            {service.title}
-                          </Link>
-                        </h3>
-                        <p className="text-xs text-slate-500 mt-0.5">
-                          {service.shortDescription || 'Fast turnaround, doctoral problem sets & guidance'}
-                        </p>
-                      </div>
+                      {service.subServices && service.subServices.length > 0 && (
+                        <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-medium shrink-0">
+                          {service.subServices.length} Modules
+                        </span>
+                      )}
                     </div>
-                    {service.subServices && service.subServices.length > 0 && (
-                      <span className="px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-medium shrink-0">
-                        {service.subServices.length} Modules
-                      </span>
+
+                    {/* Clickable Sub-Service Pills (strictly max 4 arranged in a clean 2x2 grid) */}
+                    {displayedSubServices.length > 0 && (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-6">
+                        {displayedSubServices.map((sub) => (
+                          <Link
+                            key={sub.id}
+                            href={`/${service.slug}/${sub.slug}`}
+                            className="p-3.5 rounded-xl bg-slate-50 hover:bg-[#FFF2EC] text-[#243445] hover:text-[#FF641A] transition-colors flex items-center gap-2.5 text-xs sm:text-sm font-medium border border-slate-100"
+                          >
+                            <Check className="w-4 h-4 text-[#FF641A] shrink-0" />
+                            <span className="leading-snug">{sub.title}</span>
+                          </Link>
+                        ))}
+                      </div>
                     )}
                   </div>
-
-                  {/* Clickable Sub-Service Pills */}
-                  {service.subServices && service.subServices.length > 0 && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-6">
-                      {service.subServices.map((sub) => (
-                        <Link
-                          key={sub.id}
-                          href={`/${service.slug}/${sub.slug}`}
-                          className="p-3.5 rounded-xl bg-slate-50 hover:bg-[#FFF2EC] text-[#243445] hover:text-[#FF641A] transition-colors flex items-center gap-2.5 text-xs sm:text-sm font-medium border border-slate-100"
-                        >
-                          <Check className="w-4 h-4 text-[#FF641A] shrink-0" />
-                          <span className="leading-snug">{sub.title}</span>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          {/* Section Action Button */}
-          <div className="mt-12 text-center">
+          {/* Centered Unconditional More Services CTA Button */}
+          <div className="mt-12 flex items-center justify-center">
             <Link
               href="/services"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white font-bold text-sm shadow-md transition-all transform hover:-translate-y-0.5"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#FF641A] px-7 py-3.5 text-sm font-semibold text-white shadow-sm hover:bg-[#e55612] transition-colors"
             >
               <span>More Services</span>
-              <ArrowRight className="w-4 h-4" />
+              <AppIcon name="arrow_forward" className="w-4 h-4" />
             </Link>
           </div>
         </div>
