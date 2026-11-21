@@ -21,8 +21,8 @@ async function EditExpertContent({ params }: PageProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white tracking-tight">Edit Academic Expert</h1>
-        <p className="text-slate-400 text-xs sm:text-sm mt-1">
+        <h1 className="text-2xl font-bold text-[#243445] tracking-tight">Edit Academic Expert</h1>
+        <p className="text-slate-500 text-xs sm:text-sm mt-1">
           Update verified specialist profile, credentials, and spotlight settings.
         </p>
       </div>
@@ -35,7 +35,7 @@ export default function EditExpertPage({ params }: PageProps) {
   return (
     <Suspense
       fallback={
-        <div className="p-8 text-center text-slate-400 text-xs">
+        <div className="p-8 text-center text-slate-500 text-xs">
           Loading expert editor...
         </div>
       }

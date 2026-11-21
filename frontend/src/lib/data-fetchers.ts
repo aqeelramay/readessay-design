@@ -3087,9 +3087,9 @@ export const TOP_EXPERTS_FAQS: PublicFaqItem[] = [
       '100%. Every paper is crafted entirely from scratch. Before release, it passes our internal Turnitin non-repository similarity and AI-detection filters, ensuring a 0% AI index and complete originality with an audit certificate.',
   },
   {
-    question: 'How do I hire a specific specialist from the directory?',
+    question: 'How do I connect with a specific specialist from the directory?',
     answer:
-      'Click "Hire Expert" on any specialist’s profile or card. Your inquiry will automatically link that scholar to your order brief, and our academic coordinators will allocate them immediately.',
+      'View the specialist’s profile to review their research background and academic credentials, or reach out to our 24/7 academic coordinators via WhatsApp or Live Chat to request priority matching with that scholar.',
   },
 ];
 

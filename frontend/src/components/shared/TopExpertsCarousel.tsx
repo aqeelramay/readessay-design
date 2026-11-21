@@ -121,22 +121,12 @@ export default function TopExpertsCarousel({ experts }: TopExpertsCarouselProps 
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <Link
-                    href={`/top-experts/${expert.slug}`}
-                    className="flex-1 py-2.5 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white font-bold text-xs text-center transition-colors shadow-sm block"
-                  >
-                    View Profile
-                  </Link>
-                  <Link
-                    href={`/contact?expert=${encodeURIComponent(
-                      expert.name,
-                    )}&service=${encodeURIComponent(expert.specialties?.[0] || '')}`}
-                    className="py-2.5 px-3 rounded-full border border-slate-200 hover:border-[#059669] hover:bg-emerald-50 text-slate-700 hover:text-[#059669] font-bold text-xs text-center transition-colors shadow-2xs block"
-                  >
-                    Hire
-                  </Link>
-                </div>
+                <Link
+                  href={`/top-experts/${expert.slug}`}
+                  className="w-full py-2.5 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white font-bold text-xs text-center transition-colors shadow-sm block"
+                >
+                  View Profile
+                </Link>
               </div>
             );
           })}

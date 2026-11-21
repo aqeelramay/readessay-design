@@ -134,7 +134,7 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
 
   if (isLoading) {
     return (
-      <div className="p-16 text-center rounded-2xl bg-slate-900 border border-slate-800 text-slate-400 space-y-3">
+      <div className="p-16 text-center rounded-2xl bg-white border border-slate-200 text-slate-500 shadow-2xs space-y-3">
         <RefreshCw className="w-8 h-8 animate-spin mx-auto text-[#FF641A]" />
         <p className="text-sm">Loading expert details...</p>
       </div>
@@ -150,11 +150,12 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
     }
   };
 
-  const handleRemoveSpecialty = (spec: string) => {
-    setSpecialties(specialties.filter((s) => s !== spec));
+  // Remove Specialty Tag
+  const handleRemoveSpecialty = (specToRemove: string) => {
+    setSpecialties(specialties.filter((s) => s !== specToRemove));
   };
 
-  // Avatar upload handler
+  // Upload Avatar File
   const handleAvatarFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -166,37 +167,37 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
       setAvatarUrl(res.url);
     } catch (err: unknown) {
       setErrorMsg(
-        err instanceof Error ? err.message : "Failed to upload avatar image."
+        err instanceof Error ? err.message : "Failed to upload avatar photo."
       );
     } finally {
       setIsUploadingAvatar(false);
+      e.target.value = "";
     }
   };
 
-  // Form Submission
+  // Submit Handler
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
 
-    // Validation
     if (!name.trim()) {
-      setErrorMsg("Expert Name is required.");
+      setErrorMsg("Full name is required.");
       return;
     }
     if (!roleTitle.trim()) {
-      setErrorMsg("Role Title is required.");
+      setErrorMsg("Role title is required.");
       return;
     }
     if (!university.trim()) {
-      setErrorMsg("University is required.");
+      setErrorMsg("University / institution is required.");
       return;
     }
     if (!degree.trim()) {
-      setErrorMsg("Degree & Credentials is required.");
+      setErrorMsg("Degree & credentials are required.");
       return;
     }
     if (!bio.trim()) {
-      setErrorMsg("Academic Bio is required.");
+      setErrorMsg("Academic biography is required.");
       return;
     }
     if (specialties.length === 0) {
@@ -204,29 +205,30 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
       return;
     }
 
+    setIsSaving(true);
+
     const payload: CreateExpertPayload = {
       name: name.trim(),
       slug: slug.trim() || undefined,
       roleTitle: roleTitle.trim(),
       university: university.trim(),
       degree: degree.trim(),
-      avatarUrl: avatarUrl.trim() || null,
-      rating: Number(rating),
-      completedOrders: Number(completedOrders),
-      successRate: successRate.trim() || "98.5%",
-      experienceYears: Number(experienceYears),
+      experienceYears: Number(experienceYears) || 1,
+      avatarUrl: avatarUrl.trim() || "/images/male-expert1.jpg",
+      rating: Number(rating) || 5.0,
+      completedOrders: Number(completedOrders) || 100,
+      successRate: successRate.trim() || "99.0%",
       bio: bio.trim(),
       specialties,
-      featuredReviewQuote: featuredReviewQuote.trim() || null,
-      featuredReviewAuthor: featuredReviewAuthor.trim() || null,
+      featuredReviewQuote: featuredReviewQuote.trim() || undefined,
+      featuredReviewAuthor: featuredReviewAuthor.trim() || undefined,
       isFeatured,
-      displayOrder: Number(displayOrder),
-      status,
+      displayOrder: Number(displayOrder) || 1,
+      status: status || "published",
     };
 
-    setIsSaving(true);
     try {
-      if ((isEdit || expertId) && currentId) {
+      if (isEdit && currentId) {
         await updateExpert(currentId, payload);
       } else {
         await createExpert(payload);
@@ -247,7 +249,7 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
       <div className="flex items-center justify-between gap-4">
         <Link
           href="/experts"
-          className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-[#FF641A] transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Experts Roster</span>
@@ -255,14 +257,14 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
         <div className="flex items-center gap-2.5">
           <Link
             href="/experts"
-            className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold transition-colors"
+            className="px-4 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-colors shadow-2xs"
           >
             Cancel
           </Link>
           <button
             type="submit"
             disabled={isSaving}
-            className="px-5 py-2 rounded-xl bg-[#FF641A] hover:bg-[#E8540E] text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-[#FF641A]/20 transition-colors disabled:opacity-50 cursor-pointer"
+            className="px-5 py-2 rounded-xl bg-[#FF641A] hover:bg-[#e55612] text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-colors disabled:opacity-50 cursor-pointer"
           >
             {isSaving && <RefreshCw className="w-3.5 h-3.5 animate-spin" />}
             <span>{isSaving ? "Saving..." : isEdit ? "Update Expert" : "Create Expert"}</span>
@@ -272,26 +274,26 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
 
       {/* Error alert */}
       {errorMsg && (
-        <div className="p-4 rounded-xl bg-rose-950/40 border border-rose-800/60 text-rose-300 text-xs flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+        <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
           <span>{errorMsg}</span>
         </div>
       )}
 
       {/* Section 1: Basic Identity & Credentials */}
-      <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-5">
-        <h2 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+      <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-5">
+        <h2 className="text-sm font-bold text-[#243445] uppercase tracking-wider flex items-center gap-2">
           <GraduationCap className="w-4 h-4 text-[#FF641A]" />
           <span>1. Academic Faculty Credentials</span>
         </h2>
 
         {/* Avatar Upload Block */}
         <div>
-          <label className="block text-xs font-medium text-slate-300 mb-2">
+          <label className="block text-xs font-semibold text-[#243445] mb-2">
             Expert Avatar / Portrait Photo
           </label>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <div className="relative w-20 h-20 rounded-full overflow-hidden bg-slate-800 border-2 border-slate-700 shrink-0">
+            <div className="relative w-20 h-20 rounded-full overflow-hidden bg-slate-100 border-2 border-slate-200 shrink-0 shadow-2xs">
               {avatarUrl ? (
                 <Image
                   src={avatarUrl}
@@ -301,7 +303,7 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
                   className="object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold text-lg bg-slate-800">
+                <div className="w-full h-full flex items-center justify-center text-[#243445] font-bold text-lg bg-slate-100">
                   {name ? name.slice(0, 2).toUpperCase() : "EXP"}
                 </div>
               )}
@@ -309,7 +311,7 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
 
             <div className="flex-1 space-y-2 w-full">
               <div className="flex items-center gap-2">
-                <label className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 cursor-pointer transition-colors inline-flex items-center gap-1.5">
+                <label className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium border border-slate-300 cursor-pointer transition-colors inline-flex items-center gap-1.5 shadow-2xs">
                   <Upload className="w-3.5 h-3.5 text-[#FF641A]" />
                   <span>{isUploadingAvatar ? "Uploading..." : "Upload New Photo"}</span>
                   <input
@@ -324,7 +326,7 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
                   <button
                     type="button"
                     onClick={() => setAvatarUrl("")}
-                    className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-rose-950/40 text-slate-400 hover:text-rose-400 text-xs font-medium border border-slate-700 transition-colors"
+                    className="px-2.5 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 text-xs font-medium border border-red-200 transition-colors cursor-pointer"
                   >
                     Remove
                   </button>
@@ -335,9 +337,9 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
                 placeholder="Or paste relative image path or URL (e.g. /images/male-expert1.jpg)"
                 value={avatarUrl}
                 onChange={(e) => setAvatarUrl(e.target.value)}
-                className="w-full px-3 py-1.5 bg-slate-800/80 border border-slate-700 rounded-lg text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-[#FF641A]"
+                className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-[#243445] text-xs placeholder:text-slate-400 focus:outline-none focus:border-[#FF641A] focus:ring-2 focus:ring-[#FF641A]/20 transition-all"
               />
-              <p className="text-[11px] text-slate-400">
+              <p className="text-[11px] text-slate-500">
                 Recommended: Square image (at least 400×400px), JPG/PNG/WebP, max 5MB.
               </p>
             </div>
@@ -346,7 +348,7 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-[#243445] mb-1.5">
               Full Name *
             </label>
             <input
@@ -354,18 +356,13 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
               required
               placeholder="e.g. Dr. Alan Crawford"
               value={name}
-              onChange={(e) => {
-                setName(e.target.value);
-                if (!isEdit && !slug) {
-                  // auto slug preview
-                }
-              }}
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-[#FF641A]"
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-[#243445] text-xs placeholder:text-slate-400 focus:outline-none focus:border-[#FF641A] focus:ring-2 focus:ring-[#FF641A]/20 transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-[#243445] mb-1.5">
               URL Slug (Optional / Auto-generated)
             </label>
             <input
@@ -373,12 +370,12 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
               placeholder="e.g. dr-alan-crawford"
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-[#FF641A]"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-[#243445] text-xs placeholder:text-slate-400 focus:outline-none focus:border-[#FF641A] focus:ring-2 focus:ring-[#FF641A]/20 transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-[#243445] mb-1.5">
               Role / Professional Title *
             </label>
             <input
@@ -387,12 +384,12 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
               placeholder="e.g. Senior Forensic Accounting & Auditing Specialist"
               value={roleTitle}
               onChange={(e) => setRoleTitle(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-[#FF641A]"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-[#243445] text-xs placeholder:text-slate-400 focus:outline-none focus:border-[#FF641A] focus:ring-2 focus:ring-[#FF641A]/20 transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-[#243445] mb-1.5">
               Degree &amp; Credentials *
             </label>
             <input
@@ -401,12 +398,12 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
               placeholder="e.g. Ph.D., CPA or M.Sc., CMA"
               value={degree}
               onChange={(e) => setDegree(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-[#FF641A]"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-[#243445] text-xs placeholder:text-slate-400 focus:outline-none focus:border-[#FF641A] focus:ring-2 focus:ring-[#FF641A]/20 transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-[#243445] mb-1.5">
               Alma Mater / University *
             </label>
             <input
@@ -415,12 +412,12 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
               placeholder="e.g. Oxford University or MIT / Stanford University"
               value={university}
               onChange={(e) => setUniversity(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-[#FF641A]"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-[#243445] text-xs placeholder:text-slate-400 focus:outline-none focus:border-[#FF641A] focus:ring-2 focus:ring-[#FF641A]/20 transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-[#243445] mb-1.5">
               Years of Academic Experience
             </label>
             <input
@@ -429,22 +426,22 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
               max={50}
               value={experienceYears}
               onChange={(e) => setExperienceYears(parseInt(e.target.value) || 1)}
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs focus:outline-none focus:border-[#FF641A]"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-[#243445] text-xs focus:outline-none focus:border-[#FF641A] focus:ring-2 focus:ring-[#FF641A]/20 transition-all"
             />
           </div>
         </div>
       </div>
 
       {/* Section 2: Performance Metrics */}
-      <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
-        <h2 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-          <Star className="w-4 h-4 text-amber-400" />
+      <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-4">
+        <h2 className="text-sm font-bold text-[#243445] uppercase tracking-wider flex items-center gap-2">
+          <Star className="w-4 h-4 text-amber-500" />
           <span>2. Performance &amp; Trust Metrics</span>
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-[#243445] mb-1.5">
               Student Rating (Max 5.0)
             </label>
             <input
@@ -454,12 +451,12 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
               max="5.0"
               value={rating}
               onChange={(e) => setRating(parseFloat(e.target.value) || 4.9)}
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs focus:outline-none focus:border-[#FF641A]"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-[#243445] text-xs focus:outline-none focus:border-[#FF641A] focus:ring-2 focus:ring-[#FF641A]/20 transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-[#243445] mb-1.5">
               Completed Papers / Orders
             </label>
             <input
@@ -467,12 +464,12 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
               min={1}
               value={completedOrders}
               onChange={(e) => setCompletedOrders(parseInt(e.target.value) || 100)}
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs focus:outline-none focus:border-[#FF641A]"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-[#243445] text-xs focus:outline-none focus:border-[#FF641A] focus:ring-2 focus:ring-[#FF641A]/20 transition-all"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-[#243445] mb-1.5">
               On-Time Success Rate
             </label>
             <input
@@ -480,22 +477,22 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
               placeholder="e.g. 99.8%"
               value={successRate}
               onChange={(e) => setSuccessRate(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs focus:outline-none focus:border-[#FF641A]"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-[#243445] text-xs focus:outline-none focus:border-[#FF641A] focus:ring-2 focus:ring-[#FF641A]/20 transition-all"
             />
           </div>
         </div>
       </div>
 
       {/* Section 3: Subject Specialties & Academic Bio */}
-      <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
-        <h2 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-          <Award className="w-4 h-4 text-purple-400" />
+      <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-4">
+        <h2 className="text-sm font-bold text-[#243445] uppercase tracking-wider flex items-center gap-2">
+          <Award className="w-4 h-4 text-purple-600" />
           <span>3. Specialties &amp; Comprehensive Bio</span>
         </h2>
 
         {/* Tag Input for Specialties */}
         <div>
-          <label className="block text-xs font-medium text-slate-300 mb-1">
+          <label className="block text-xs font-semibold text-[#243445] mb-1.5">
             Subject Specialties * (Add at least one)
           </label>
           <div className="flex items-center gap-2 mb-2">
@@ -510,12 +507,12 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
                   handleAddSpecialty();
                 }
               }}
-              className="flex-1 px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-[#FF641A]"
+              className="flex-1 px-3 py-2 bg-white border border-slate-300 rounded-lg text-[#243445] text-xs placeholder:text-slate-400 focus:outline-none focus:border-[#FF641A] focus:ring-2 focus:ring-[#FF641A]/20 transition-all"
             />
             <button
               type="button"
               onClick={handleAddSpecialty}
-              className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1 border border-slate-700"
+              className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-semibold flex items-center gap-1 border border-slate-200 transition-colors cursor-pointer"
             >
               <Plus className="w-3.5 h-3.5" />
               <span>Add</span>
@@ -527,13 +524,13 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
               {specialties.map((spec) => (
                 <span
                   key={spec}
-                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 text-slate-200 text-xs border border-slate-700"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-orange-50 text-[#FF641A] text-xs font-semibold border border-orange-200/80"
                 >
                   <span>{spec}</span>
                   <button
                     type="button"
                     onClick={() => handleRemoveSpecialty(spec)}
-                    className="text-slate-400 hover:text-rose-400 transition-colors cursor-pointer"
+                    className="text-[#FF641A]/70 hover:text-red-600 transition-colors cursor-pointer"
                   >
                     <X className="w-3 h-3" />
                   </button>
@@ -547,7 +544,7 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
 
         {/* Bio Textarea */}
         <div>
-          <label className="block text-xs font-medium text-slate-300 mb-1">
+          <label className="block text-xs font-semibold text-[#243445] mb-1.5">
             Academic Biography &amp; Field Overview *
           </label>
           <textarea
@@ -556,7 +553,7 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
             placeholder="Detailed academic summary, university teaching history, and subject mentoring methodology..."
             value={bio}
             onChange={(e) => setBio(e.target.value)}
-            className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-[#FF641A] leading-relaxed"
+            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-[#243445] text-xs placeholder:text-slate-400 focus:outline-none focus:border-[#FF641A] focus:ring-2 focus:ring-[#FF641A]/20 leading-relaxed transition-all"
           />
           <div className="flex justify-end text-[11px] text-slate-500 mt-1">
             <span>{bio.length} characters</span>
@@ -565,14 +562,14 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
       </div>
 
       {/* Section 4: Student Feedback Spotlight */}
-      <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
-        <h2 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+      <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-4">
+        <h2 className="text-sm font-bold text-[#243445] uppercase tracking-wider flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-[#FF641A]" />
           <span>4. Featured Student Endorsement (Optional)</span>
         </h2>
 
         <div>
-          <label className="block text-xs font-medium text-slate-300 mb-1">
+          <label className="block text-xs font-semibold text-[#243445] mb-1.5">
             Featured Testimonial / Review Quote
           </label>
           <textarea
@@ -580,12 +577,12 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
             placeholder="e.g. Dr. Crawford helped me master my advanced forensic accounting coursework with unmatched clarity and precision."
             value={featuredReviewQuote}
             onChange={(e) => setFeaturedReviewQuote(e.target.value)}
-            className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-[#FF641A]"
+            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-[#243445] text-xs placeholder:text-slate-400 focus:outline-none focus:border-[#FF641A] focus:ring-2 focus:ring-[#FF641A]/20 transition-all"
           />
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-slate-300 mb-1">
+          <label className="block text-xs font-semibold text-[#243445] mb-1.5">
             Endorser / Student Credential
           </label>
           <input
@@ -593,27 +590,27 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
             placeholder="e.g. David K., Oxford M.Sc. Student"
             value={featuredReviewAuthor}
             onChange={(e) => setFeaturedReviewAuthor(e.target.value)}
-            className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs placeholder:text-slate-500 focus:outline-none focus:border-[#FF641A]"
+            className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-[#243445] text-xs placeholder:text-slate-400 focus:outline-none focus:border-[#FF641A] focus:ring-2 focus:ring-[#FF641A]/20 transition-all"
           />
         </div>
       </div>
 
       {/* Section 5: Visibility & Ordering Settings */}
-      <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
-        <h2 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+      <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-4">
+        <h2 className="text-sm font-bold text-[#243445] uppercase tracking-wider flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
           <span>5. Publishing &amp; Display Order</span>
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-[#243445] mb-1.5">
               Publication Status
             </label>
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs focus:outline-none focus:border-[#FF641A]"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-[#243445] text-xs font-medium focus:outline-none focus:border-[#FF641A] focus:ring-2 focus:ring-[#FF641A]/20 transition-all cursor-pointer"
             >
               <option value="published">Published (Visible Live)</option>
               <option value="draft">Draft (Hidden)</option>
@@ -621,7 +618,7 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-[#243445] mb-1.5">
               Display Sequence Order
             </label>
             <input
@@ -629,7 +626,7 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
               min={1}
               value={displayOrder}
               onChange={(e) => setDisplayOrder(parseInt(e.target.value) || 1)}
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-xs focus:outline-none focus:border-[#FF641A]"
+              className="w-full px-3 py-2 bg-white border border-slate-300 rounded-lg text-[#243445] text-xs focus:outline-none focus:border-[#FF641A] focus:ring-2 focus:ring-[#FF641A]/20 transition-all"
             />
           </div>
 
@@ -639,9 +636,9 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
                 type="checkbox"
                 checked={isFeatured}
                 onChange={(e) => setIsFeatured(e.target.checked)}
-                className="w-4 h-4 rounded border-slate-700 text-[#FF641A] focus:ring-[#FF641A] bg-slate-800"
+                className="w-4 h-4 rounded border-slate-300 text-[#FF641A] focus:ring-[#FF641A] bg-white cursor-pointer"
               />
-              <span className="text-xs font-semibold text-slate-200">
+              <span className="text-xs font-semibold text-[#243445]">
                 Feature on Homepage Slider &amp; Spotlight
               </span>
             </label>
@@ -650,17 +647,17 @@ export function ExpertForm({ initialData, expertId, isEdit = false }: ExpertForm
       </div>
 
       {/* Bottom Action Buttons */}
-      <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+      <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
         <Link
           href="/experts"
-          className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-xs font-semibold transition-colors"
+          className="px-5 py-2.5 rounded-xl bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold transition-colors shadow-2xs"
         >
           Cancel
         </Link>
         <button
           type="submit"
           disabled={isSaving}
-          className="px-6 py-2.5 rounded-xl bg-[#FF641A] hover:bg-[#E8540E] text-white text-xs font-semibold flex items-center gap-1.5 shadow-md shadow-[#FF641A]/20 transition-colors disabled:opacity-50 cursor-pointer"
+          className="px-6 py-2.5 rounded-xl bg-[#FF641A] hover:bg-[#e55612] text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-colors disabled:opacity-50 cursor-pointer"
         >
           {isSaving && <RefreshCw className="w-3.5 h-3.5 animate-spin" />}
           <span>{isSaving ? "Saving..." : isEdit ? "Update Expert" : "Create Expert"}</span>

@@ -137,7 +137,6 @@ export default function TopExpertsDirectoryClient({
               typeof expert.rating === 'number'
                 ? expert.rating.toFixed(2)
                 : String(expert.rating);
-            const primarySpecialty = expert.specialties?.[0] || '';
 
             return (
               <div
@@ -228,21 +227,13 @@ export default function TopExpertsDirectoryClient({
                 </div>
 
                 {/* Card Actions */}
-                <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
+                <div className="pt-2 border-t border-slate-100">
                   <Link
                     href={`/top-experts/${expert.slug}`}
-                    className="flex-1 py-2.5 px-3 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white font-bold text-xs text-center transition-colors shadow-xs flex items-center justify-center gap-1.5"
+                    className="w-full py-2.5 px-4 rounded-full bg-[#FF641A] hover:bg-[#E8540E] text-white font-bold text-xs text-center transition-colors shadow-xs flex items-center justify-center gap-1.5"
                   >
                     <span>View Profile</span>
                     <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                  <Link
-                    href={`/contact?expert=${encodeURIComponent(
-                      expert.name,
-                    )}&service=${encodeURIComponent(primarySpecialty)}`}
-                    className="py-2.5 px-4 rounded-full border border-slate-200 hover:border-[#059669] hover:bg-emerald-50 text-slate-700 hover:text-[#059669] font-bold text-xs text-center transition-colors shadow-2xs"
-                  >
-                    Hire
                   </Link>
                 </div>
               </div>

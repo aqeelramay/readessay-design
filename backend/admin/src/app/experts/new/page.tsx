@@ -10,8 +10,8 @@ export default function NewExpertPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white tracking-tight">Add Academic Expert</h1>
-        <p className="text-slate-400 text-xs sm:text-sm mt-1">
+        <h1 className="text-2xl font-bold text-[#243445] tracking-tight">Add Academic Expert</h1>
+        <p className="text-slate-500 text-xs sm:text-sm mt-1">
           Register new verified subject specialists, degrees, and performance credentials.
         </p>
       </div>

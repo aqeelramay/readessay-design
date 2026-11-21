@@ -33,8 +33,6 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
     };
   });
 
-  const expertParam = searchParams?.get('expert') || '';
-
   const [formData, setFormData] = useState(() => {
     const serviceParam = searchParams?.get('service') || '';
     const levelParam = searchParams?.get('level') || '';
@@ -42,17 +40,10 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
     const pagesParam = searchParams?.get('pages') || '';
     const wordsParam = searchParams?.get('words') || '';
     const estimateParam = searchParams?.get('estimate') || '';
-    const expParam = searchParams?.get('expert') || '';
 
-    let initialMessage = '';
-    if (expParam) {
-      initialMessage = `I would like to hire academic specialist ${expParam} for my coursework / assignment.`;
-      if (estimateParam) {
-        initialMessage += ` Order inquiry: ${pagesParam} ${pagesParam === '1' ? 'page' : 'pages'} (${wordsParam} words), estimated at $${estimateParam} USD with ${deadlineParam.replace(/-/g, ' ')} turnaround.`;
-      }
-    } else if (estimateParam) {
-      initialMessage = `Order inquiry from price calculator: ${pagesParam} ${pagesParam === '1' ? 'page' : 'pages'} (${wordsParam} words), estimated at $${estimateParam} USD with ${deadlineParam.replace(/-/g, ' ')} turnaround.`;
-    }
+    const initialMessage = estimateParam
+      ? `Order inquiry from price calculator: ${pagesParam} ${pagesParam === '1' ? 'page' : 'pages'} (${wordsParam} words), estimated at $${estimateParam} USD with ${deadlineParam.replace(/-/g, ' ')} turnaround.`
+      : '';
 
     return {
       firstName: '',
@@ -105,7 +96,6 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
     `Hello ReadEssay Support! My name is ${formData.firstName || '[Name]'} ${formData.lastName || ''
     }.\n\n` +
     `*Inquiry Details:*\n` +
-    (expertParam ? `• Requested Specialist: ${expertParam}\n` : '') +
     `• Service: ${formData.serviceSlug || 'General Inquiry'}\n` +
     `• Academic Level: ${formData.academicLevel}\n` +
     `• Target Deadline: ${formData.deadline || 'Not specified'}\n` +
@@ -215,26 +205,6 @@ export default function ContactFormClient({ services = [] }: ContactFormClientPr
             <span className="text-xs text-slate-500 font-semibold block">Total Estimate</span>
             <span className="text-xl sm:text-2xl font-black text-[#FF641A] font-poppins">
               ${orderEstimate.estimate} USD
-            </span>
-          </div>
-        </div>
-      )}
-
-      {expertParam && (
-        <div className="p-4 sm:p-5 rounded-2xl bg-emerald-50/80 border border-emerald-200/90 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
-          <div className="space-y-0.5">
-            <div className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#059669]">
-              <AppIcon name="school" className="w-4 h-4" />
-              <span>Dedicated Subject Specialist Requested</span>
-            </div>
-            <p className="text-xs text-slate-600">
-              You are requesting priority assignment matching with <strong className="text-[#243445]">{expertParam}</strong>.
-            </p>
-          </div>
-          <div className="text-left sm:text-right shrink-0">
-            <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#059669] bg-white px-3 py-1.5 rounded-full border border-emerald-200 shadow-xs">
-              <AppIcon name="check_circle" className="w-3.5 h-3.5 text-[#059669]" filled />
-              <span>Specialist Available</span>
             </span>
           </div>
         </div>
